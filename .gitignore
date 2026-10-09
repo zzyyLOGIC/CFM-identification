@@ -1,0 +1,49 @@
+# Python bytecode / caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Virtual environments / local environment files
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.*
+
+# Jupyter / IDE state
+.ipynb_checkpoints/
+.virtual_documents/
+.vscode/
+.idea/
+
+# Runtime outputs and caches
+outputs/
+.cache/
+cache/
+*.log
+
+# Model checkpoints / large local artifacts
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+
+# Generated notebook exports
+notebooks/*.html
+
+# Build / packaging artifacts
+build/
+dist/
+*.egg-info/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
