@@ -6,11 +6,11 @@
 
 `main` 是稳定分支。学生不得直接 push `main`；所有改动通过 Pull Request 审核。
 
-第一轮任务建议统一从冻结 tag 开始：
+从最新主分支创建任务分支：
 
 ```bash
-git fetch origin --tags
-git checkout -b task/01-short-description student-task1-baseline
+git fetch origin
+git checkout -b task/01-short-description origin/main
 ```
 
 branch 命名建议：
@@ -139,7 +139,8 @@ git commit -m "Your meaningful commit message"
 git push -u origin <your-branch-name>
 ```
 
-然后在 GitHub 创建 **Draft Pull Request**。自查完成后再标记为 **Ready for review**。
+然后在 GitHub 创建指向本仓库 `main` 的 **Draft Pull Request**。自查完成后再标记为 **Ready for review**。
+如果没有本仓库的写权限，请先 Fork，在自己的 Fork 中创建分支并提交，再向本仓库发起 PR。
 
 PR 必须使用仓库模板，至少写清楚：
 
@@ -154,6 +155,16 @@ PR 必须使用仓库模板，至少写清楚：
 - 已知限制。
 
 ## 8. Review 结果
+
+`main` 的合并要求如下：
+
+- 至少一次批准，并且必须获得 `.github/CODEOWNERS` 中负责人 `@zzyyLOGIC` 的批准；学生之间互相批准不能替代负责人审核。
+- GitHub Actions 的 `tests` 检查通过，且分支已包含最新 `main`。
+- 新代码提交后，原有批准失效，需要重新审核；所有 review 对话必须解决。
+- 禁止强制推送和删除 `main`；上述保护同样适用于管理员。
+
+审核通过不会自动合并，由负责人执行 Merge。GitHub 不允许作者批准自己的 PR；维护者自己提交改动时，
+也需要其他合资格审核者。当前仅指定一名代码负责人，如需维护者之间交叉审核，应先配置其他可信任的代码负责人。
 
 PR 有三种正常结果：
 
@@ -176,9 +187,7 @@ PR 是 review unit；`main` 是稳定 product/research codebase。
 
 ## 9. 保持与 main 同步
 
-第一轮任务统一从 `student-task1-baseline` 起步即可，不要求频繁 rebase。
-
-后续长期任务在 review 前如果 main 已发生较大变化，可以：
+合并前必须与最新 `main` 同步。如果其他 PR 已先合并，可以：
 
 ```bash
 git fetch origin
