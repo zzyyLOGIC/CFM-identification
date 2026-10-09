@@ -1,6 +1,6 @@
-# Causal-IDFM: Identification
+# CFM-identification
 
-本仓库是 **Causal-IDFM 项目的 Identification 组件仓库**。当前开发重点不是同时维护
+本仓库是 **CFM 项目的 Identification 组件仓库**。当前开发重点不是同时维护
 Estimation 与 Policy，而是把 population-level causal identification 做成一个稳定、可扩展、
 可验证的独立模块，并通过一个共享的 ER300 demo 验证它能够正确向下游 Estimation / Policy
 交付结果。
@@ -255,7 +255,7 @@ Identification core。
 ```bash
 git init
 git add .
-git commit -m "Initialize Causal-IDFM Identification baseline"
+git commit -m "Initialize CFM-identification baseline"
 git branch -M main
 git remote add origin <YOUR_GITHUB_REPOSITORY_URL>
 git push -u origin main

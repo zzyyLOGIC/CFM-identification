@@ -1,4 +1,4 @@
-# Contributing to Causal-IDFM Identification
+# Contributing to CFM-identification
 
 本文件描述学生与维护者的基本 GitHub 协作流程。
 
