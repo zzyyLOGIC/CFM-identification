@@ -1,0 +1,33 @@
+# Single dependency entry point for research/ (Python 3.10+).
+# From research/: python -m pip install -r requirements.txt
+# Keep an existing compatible CUDA/MUSA PyTorch build; do not use --upgrade
+# unless intentionally changing the environment. torch_musa is supplied by
+# the MUSA platform environment, not installed by this cross-platform file.
+
+# Contracts, population identification and scalar estimation.
+numpy>=1.24
+pydantic>=2.0
+scipy>=1.10
+pandas>=2.0
+
+# PFN training/inference, task caches, graphs and figures.
+torch>=2.0
+networkx>=2.5
+matplotlib>=3.7,<4
+filelock>=3.12
+
+# Migrated evaluation baselines, including causalPFN retrieval and HyperSCI.
+scikit-learn>=1.3
+torch-geometric==2.6.1
+
+# Research tests. The main pipeline smoke test itself uses stdlib unittest.
+pytest>=8.0
+
+# Executable teaching notebooks (select this environment as the notebook kernel).
+nbformat>=5.9,<6
+nbclient>=0.9,<1
+ipykernel>=6.29,<8
+nbconvert>=7,<8
+
+# stales/ contains historical sources, not separately maintained environments.
+# Archived UI/notebook/CDFM/solver extras are outside the current pipeline.
