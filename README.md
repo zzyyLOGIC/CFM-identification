@@ -176,22 +176,22 @@ Task / network experiment
 → Policy
 ```
 
-仓库不会提交正式模型 checkpoint，因此该 notebook **默认已经设置为**：
+Notebook 已保存使用预训练权重运行后的图表和中间结果，可直接阅读。默认模式为：
 
 ```python
-MODE = "dense_smoke"
+MODE = "checkpoint"
 ```
 
-新 clone 后可以直接 `Run All`；该模式会现场训练一个极小模型来验证完整接口，而不是评价正式
-Estimation 性能。若你本地已有兼容 checkpoint，可以手动切换为 `MODE="checkpoint"`，并通过
-`CHECKPOINT` 或环境变量 `CAUSALCFM_CHECKPOINT` 指定本地路径。
-运行产生的 `outputs/` 不进入 Git。
+本次展示沿用预训练权重对应的固定 ER300 网络（连边概率 0.02、905 条边）和数据生成设置。
+权重不进入 Git；重新 `Run All` 前，需要将匹配的 `model_best.pt` 放到
+`checkpoints/er_estimation_demo/`，或通过 `CHECKPOINT` / 环境变量 `CAUSALCFM_CHECKPOINT`
+指定权重路径。阅读已保存的结果不需要本地权重。
 
-**为什么不带预训练权重也能运行？** Estimation 的源码仍保留在 `pfn_pipeline/estimation.py`、
-`pfn_pipeline/pfn.py` 和 `pfn_pipeline/_internal/estimation/`。`dense_smoke` 使用同一张固定 ER300
-图，先调用 `train_model()` 训练极小模型，再调用 `load_checkpoint()` 加载本次生成的权重，随后完成
-`estimate_effects()` 和 `optimize_offline()`。这里没有省略 Estimation，只是不用预先下载正式权重。
-本次训练仅使用 2 个训练任务、1 个 epoch，用于检查接口，不代表正式模型精度。
+没有预训练权重时，可选择 `MODE = "dense_smoke"` 验证流程。该模式使用另一张连边概率 0.5
+的固定 ER300 图，现场训练极小模型（2 个训练任务、1 个 epoch），再完成估计与决策。
+它仅用于接口检查，不能复现本次预训练展示的数值，也不代表正式模型精度。
+Estimation 源码仍保留在 `pfn_pipeline/estimation.py`、`pfn_pipeline/pfn.py` 和
+`pfn_pipeline/_internal/estimation/`。运行产生的 `outputs/` 不进入 Git。
 
 > Notebook 中的 Estimation / Policy 结果是 integration demonstration；Identification 的数学
 > 正确性仍由 theorem-backed code 与 tests 负责，而不是由 PFN 输出决定。
