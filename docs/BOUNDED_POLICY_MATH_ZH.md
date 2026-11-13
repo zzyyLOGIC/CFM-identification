@@ -1,109 +1,268 @@
-# 固定政策均值：有限 D2/E1 有界模型的数学合同
+# BOUNDED_POLICY_MATH_ZH.md — 有限签名均值界：推广到 30 种 D×E 组合的数学框架
 
-本合同对应 `cfm_id/bounded_policy*` 的显式、合成审核入口。原 POINT Core、原 R2 证书、Estimation/Policy 均不改变。此入口不是通用 PARTIAL 或自动科学审核。
+> 对应任务3输出物：`docs/BOUNDED_POLICY_MATH_ZH.md`
 
-## 文献与本命题的关系
+---
 
-- [Manski (2013)](https://www.treatment-effects.com/Manski-2013.pdf)，§5.1–5.2、Proposition SI、式 (5.3)：在明确有效处理结构与独立性下区分支持内和支持外部分。本文使用均值限制，不能把其更强 CTR 假设自动套用。
-- [Wang, Liu & Zhang (2026)](https://proceedings.mlr.press/v306/wang26ez.html)，式 (4)–(7)、Theorem 3.6、Appendix B.1/B.4：政策值的均值暴露表述及图平滑性下的扩展。当前入口没有引入图 Lipschitz 条件，也没有复现其平滑性方法。
-- [Sävje (2024)，作者稿](https://arxiv.org/abs/2103.06471)：暴露定义与相应科学限制必须分开。
+## 1. 问题形式化
 
-以下是为本项目明确有限模型而给出的推导，不宣称新理论，也不把文献当成代码证书。较完整的原文阅读记录位于交接包 `LOCAL_EVIDENCE_NOT_DISTRIBUTED`。
+对于有限无向简单图 $G = (V, E)$，每个节点 $i \in V$ 接受二元处理 $t_i \in \{0,1\}$。
+处理向量 $\mathbf{t} \in \{0,1\}^{|V|}$ 按某个已知的**设计**分布 $q(\mathbf{t})$ 随机产生。
 
-## 模型与前提
+对于每个节点 $i$，**暴露映射** $S_i(\mathbf{t})$ 将完整处理向量映射到一个暴露空间 $\mathcal{E}_i$。
+暴露只依赖于节点 $i$ 的邻居集合 $N(i) = \{j : (i,j) \in E\}$ 和 $i$ 自己的处理值。
 
-固定处理前网络和条件背景 \(W=w\)。干预空间为 \(\{0,1\}^n\)，原设计 \(q\) 在所有恰好 \(m\) 个处理的完整向量上均匀。固定政策 \(z^\star\) 不必在原设计支持内，但必须有明确科学含义。
+给定设计 $q$ 和暴露 $S$，在每个节点 $i$ 定义**签名单元格** $(a_i, e_i)$，其中：
 
-\[
-V(z^\star)=\sum_i\omega_i E[Y_i(z^\star)\mid w],
-\qquad\omega_i\ge0,\quad\sum_i\omega_i=1.
-\]
+- $a_i \in \{0,1\}$ = 节点 $i$ 自己的处理值
+- $e_i \in \mathcal{E}_i$ = 节点 $i$ 的暴露值（依赖于处理向量和暴露定义）
 
-定义 E1 签名
 
-\[
-s_i(z)=\left(z_i,\mathbf1\{2\sum_{j\in N_i}z_j>|N_i|\}\right).
-\]
+### 目标 1：单政策均值界
 
-平票为低暴露；孤立节点的暴露为零。签名只是定义。必须另外明确：
+给定固定政策 $\mathbf{p} \in \{0,1\}^{|V|}$，目标是识别：
 
-1. 一致性 \(Y_i^{obs}=Y_i(T)\)；完整向量随机化 \(T\perp\{Y_i(z):i,z\}\mid w\)；有限一阶矩；固定处理前网络和已知分配律。
-2. 对所有研究节点、所有完整二元安排成立的均值充分性
-   \(E[Y_i(z)\mid w]=h_i(s_i(z),w)\)。支持内的等式不足以外推。
-3. A4 仅含声明清单 \(\mathcal J\) 中的精确总体条件均值 \(b_{i,s}\)。未声明完整联合分布、额外聚合均值或跨单元限制。模型范围须经独立审核。
-4. 对所有相关安排成立的科学均值界 \(\ell_i\le h_i(s,w)\le u_i\)，具有结果定义、单位、期间、背景和来源。
+$$\mu(\mathbf{p}) = \sum_{i \in V} w_i \cdot \mathbb{E}[Y_i \mid \mathbf{t} = \mathbf{p}] = \sum_{i \in V} w_i \cdot m_i(a_i, e_i)$$
 
-记
+其中 $w_i$ 是节点权重，$m_i(a_i, e_i) = \mathbb{E}[Y_i \mid t_i = a_i, S_i = e_i]$ 是未知的条件均值。
 
-\[
-\pi_i(s)=\sum_{z:s_i(z)=s}q(z).
-\]
+### 目标 2：两政策对比界
 
-A4 的每个条件事件都必须具有正概率。在前述条件下：
+给定两个政策 $\mathbf{p}^{(1)}$ 和 $\mathbf{p}^{(2)}$（共享相同的背景/模型），目标是：
 
-\[
-b_{i,s}=E[Y_i^{obs}\mid s_i(T)=s,w]
-=\sum_{z:s_i(z)=s}\frac{q(z)}{\pi_i(s)}E[Y_i(z)\mid w]
-=h_i(s,w).
-\]
+$$\Delta = \mu(\mathbf{p}^{(1)}) - \mu(\mathbf{p}^{(2)}) = \sum_{i \in V} w_i \cdot \bigl(m_i(a_i^{(1)}, e_i^{(1)}) - m_i(a_i^{(2)}, e_i^{(2)})\bigr)$$
 
-最后一个等号使用额外 A5，不是暴露定义的推论。原始样本均值不能直接填进这个无误差等式。
+两者共享**相同的均值集合** $\{m_i(a,e)\}$，通过**相同的单元格集合**（同一网络、设计、暴露）连接。
 
-本次代码主动收窄：正权重目标签名若有正支持，必须提供对应已审核的精确 A4 数值。缺数值返回 NEEDS_INPUT；不借有界性把材料缺失改成部分识别。支持外目标签名不允许伪造一个条件 A4 均值。
+---
 
-## 上下界、可达性和 sharpness
+## 2. 核心：均值集合 $M$ 与可行区域
 
-设 \(K\) 为正权重且目标单元均值已知的节点，\(U\) 为正权重且目标签名零支持的节点。所有 A4 单元均值必须同时与科学边界相容，包括非目标单元和零权重节点。
+每个节点的条件均值 $m_i(a,e)$ 受两类约束：
 
-在本合同的无额外耦合均值模型内：
+### 2.1 边界约束（Scientific Bounds）
 
-\[
-L=\sum_{i\in K}\omega_i b_{i,s_i^\star}+\sum_{i\in U}\omega_i\ell_i,
-\qquad
-H=\sum_{i\in K}\omega_i b_{i,s_i^\star}+\sum_{i\in U}\omega_i u_i.
-\]
+对于每个节点 $i$，有已知区间 $[L_i, U_i]$ 使得对所有 $(a,e)$：
 
-有效性由精确等式和非负系数证明：
+$$L_i \leq m_i(a,e) \leq U_i$$
 
-\[
-V-L=\sum_{i\in K}\omega_i(h_i(s_i^\star)-b_{i,s_i^\star})
- +\sum_{i\in U}\omega_i(h_i(s_i^\star)-\ell_i)\ge0.
-\]
+边界类型可以是：
+- `CONDITIONAL_MEAN`：$L_i, U_i$ 是条件均值的（可能宽松的）界
+- `ALMOST_SURE_OUTCOME`：$L_i, U_i$ 是结果变量的支撑集
 
-上界同理。证书中的 `bound_terms` 分别记录 A4 等式项和均值边界项及非负权重。
+### 2.2 等式约束（A4 Source）
 
-可达性需要一张完整的合法均值表。保留全部已给 A4 单元；将未知目标单元同时设为各自下界，其他自由单元取合法中点，即得下界表；上界同理。两个表的凸组合仍可行，故区间无空隙，识别集合恰为 \([L,H]\)。
+对于部分被**已知 A4 源**覆盖的单元格 $(a_i, e_i)$，均值为精确已知值：
 
-连续结果允许在其声明区间内取任意实数，可令 \(Y_i(z)=h_i(s_i(z))\)。二元结果则使用独立于处理的 \(U_{i,s}\sim Uniform(0,1)\)，令
+$$m_i(a_i, e_i) = v_{i,a,e}$$
 
-\[
-Y_i(z)=\mathbf1\{U_{i,s_i(z)}\le h_i(s_i(z))\}.
-\]
+### 2.3 顺序约束（Declared Orders）
 
-这是合法端点见证，不是把均值充分性升级成逐结果充分性的必要前提。它保证匹配全部已声明的 A4 均值；不声称匹配一份没有纳入合同的完整观测联合分布。
+对于节点 $i$ 和两个单元格 $c_1, c_2$，已知：
 
-必须区分两类边界：
+$$m_i(c_1) \leq m_i(c_2)$$
 
-- `CONDITIONAL_MEAN` 限制条件均值。二元结果的均值界与 \([0,1]\) 相交。
-- `ALMOST_SURE_OUTCOME` 限制潜在结果本身。二元结果允许的取值是 \(\{0,1\}\cap[\ell_i,u_i]\)，均值范围为其凸包。若要求 \(1/4\le Y\le3/4\)，没有合法二元结果；若要求 \(1/4\le E[Y]\le3/4\)，则可以可行。
+顺序关系由 `NodeOrder` 声明，模式为：
 
-因此，二元结果不能用确定的 \(Y=1/2\) 作端点世界。当前重放检查有效均值范围，并绑定上述二元/连续实现方式。
+- `OWN`：同暴露值下 $(a=1, e) \geq (a=0, e)$
+- `PEERS`：同处理值下 $(a, e=1) \geq (a, e=0)$
+- `BOTH`：两者都有
 
-## 边界状态与验证责任
+### 2.4 可行均值集
 
-- \(L=H\)：POINT，包括支持充分和合法科学边界退化两种情况。
-- \(L<H\)：PARTIAL；`sharp=True` 要求有效性和端点可达性均通过。
-- 与仅由节点边界加权得到的逻辑区间相同：仍可 sharp，但 `informative=False`。
-- A4、科学边界或结果取值范围矛盾：INCOMPATIBLE，不输出普通识别区间。
-- 目标、正支持总体均值或许可未齐：NEEDS_INPUT/REVIEW_REQUIRED，不计算候选区间。
-- 不在有限合同范围：UNSUPPORTED，仅表示该入口未适配，不是非识别证明。
+综合所有约束，节点 $i$ 的可行均值集是一个**紧凸多面体** $\mathcal{M}_i \subseteq \mathbb{R}^{|\mathcal{C}_i|}$，
+其中 $\mathcal{C}_i = \{(a,e) : a \in \{0,1\}, e \in \mathcal{E}_i\}$ 是节点 $i$ 的单元格集合。
 
-求解端使用既有 SupportEngine，重放端直接枚举全部二元向量，自行从邻接关系计算签名和 D2 概率，检查两个世界的所有 A4 条件均值和目标值。重放不调用求解器、SupportEngine 或其暴露分类原语。双方共享 typed 输入校验，因此这是独立数值与代数核验，不是形式证明系统认证。校验不使用可被 `python -O` 去掉的 assert。
+由于所有约束是线性的且单元格之间没有跨节点约束，总可行集是笛卡尔积：
 
-数学公式适用于任意有限节点数，当前独立枚举的软件上限为 12 个节点。业务读取入口沿用“明确评价名单、等权均值”；数值层允许预先声明的非负归一化权重。两者的已接入范围不能混称。
+$$\mathcal{M} = \prod_{i \in V} \mathcal{M}_i \subseteq \mathbb{R}^{|\mathcal{C}|}$$
 
-## 暂未接入的范围
+---
 
-符号 A4 区间公式、多来源合并、D1/D3–D6、E2–E5、政策差值、未知网络、观测性调整、额外单调性/图平滑性、一般 LP 和无界方向证书均未接入此入口。没有边界时也不会自动宣布无界。原 POINT 路线仍负责原范围。
+## 3. D×E 组合的单元格模式
 
-两个政策各自的 sharp 区间相减只保证外界；差值的 sharpness 需要在同一可行集合上处理。不得将本入口套用到 FIXED_COMPARISON。
+对于每种 D×E 组合，单元格集合 $\mathcal{C}_i$ 不同：
+
+### E1：strict_majority_ties_low（严格多数）
+
+$$\mathcal{E}_i = \{0, 1\}, \quad e_i = \mathbb{1}\bigl(\sum_{j \in N(i)} t_j > \frac{|N(i)|}{2}\bigr)$$
+
+- 每个节点最多 $2 \times 2 = 4$ 个单元格
+- 孤立点：$|N(i)| = 0 \implies e_i = 0$，仅 $2$ 个单元格
+
+### E2：three_level_treated_neighbor_fraction（三分位邻居比例）
+
+$$e_i = \begin{cases}
+0 & \text{if } 3\sum t_j < |N(i)| \\
+1 & \text{if } |N(i)| \leq 3\sum t_j < 2|N(i)| \\
+2 & \text{if } 3\sum t_j \geq 2|N(i)|
+\end{cases}$$
+
+- 每个节点最多 $2 \times 3 = 6$ 个单元格
+- 孤立点（$|N(i)| = 0$）：E2 在此节点上无定义
+
+### E3：pretreatment_core_collaborator_majority（核心合作者多数）
+
+类似 E1，但只计算预先定义的"核心合作者"集合 $C(i) \subseteq N(i)$：
+
+$$e_i = \begin{cases}
+\mathbb{1}\bigl(\sum_{j \in C(i)} t_j > \frac{|C(i)|}{2}\bigr) & \text{if } |C(i)| > 0 \\
+0 & \text{if } |C(i)| = 0
+\end{cases}$$
+
+- 最多 $4$ 个单元格（同 E1）
+- $C(i)$ 在预处理阶段固定声明
+
+### E4：exact_treated_neighbor_count（精确邻居个数）
+
+$$e_i = \sum_{j \in N(i)} t_j \in \{0, 1, \ldots, |N(i)|\}$$
+
+- 每个节点最多 $2 \times (|N(i)|+1) \leq 2|V|$ 个单元格
+- 孤立点：$|N(i)| = 0 \implies e_i = 0$，仅 $2$ 个单元格
+
+
+### E5：any_treated_neighbor（至少一个邻居被处理）
+
+$$e_i = \mathbb{1}\bigl(\sum_{j \in N(i)} t_j > 0\bigr)$$
+
+- 最多 $4$ 个单元格（同 E1）
+- 孤立点：$|N(i)| = 0 \implies e_i = 0$，仅 $2$ 个单元格
+
+---
+
+## 4. 支持概率 $q_i(a,e)$
+
+$q_i(a,e) = P(t_i = a, S_i(\mathbf{t}) = e)$ 由设计和暴露共同决定。
+对设计 D×暴露 E 的每种组合，不予同的支持概率计算公式：
+
+### D1：HeterogeneousBernoulliDesignV1
+
+$$q_i(a, e) = \sum_{\mathbf{t}: t_i=a, S_i(\mathbf{t})=e} \prod_{j \in V} p_j^{t_j}(1-p_j)^{1-t_j}$$
+
+其中 $p_j$ 是节点 $j$ 的倾向分数。指数级复杂 — 使用 SupportEngine.evaluate() 计算。
+
+### D2：CompleteRandomizationDesignV1
+
+$$q_i(a, e) = \frac{1}{\binom{|V|}{m}} \sum_{\substack{\mathbf{t}: |\mathbf{t}|=m\\ t_i=a, S_i(\mathbf{t})=e}} 1$$
+
+对于 E1 简化后可用组合公式（D2 特有）：
+
+$$q_i(a, e) = \frac{1}{\binom{|V|}{m}} \sum_{k: \mathbb{1}(2k > d)=e} \binom{d}{k} \binom{|V|-d-1}{m-a-k}$$
+
+其中 $d = |N(i)|$。
+
+### D3：TwoGroupFixedQuotaDesignV1
+
+$$q_i(a, e) = \frac{1}{\binom{|G_0|}{m_0} \binom{|G_1|}{m_1}} \sum_{\substack{\mathbf{t}: |\mathbf{t} \cap G_0|=m_0\\ |\mathbf{t} \cap G_1|=m_1\\ t_i=a, S_i(\mathbf{t})=e}} 1$$
+
+如果 $i \in G_0$，则约束 $|\mathbf{t} \cap G_0| = m_0$ 且 $t_i = a$。
+
+### D4：ClusterBernoulliDesignV24
+
+$$q_i(a, e) = \sum_{\substack{\mathbf{t}: t_i=a, S_i(\mathbf{t})=e}} \prod_{C \in \text{clusters}} p_C^{\mathbb{1}(\text{all nodes in C treated})}(1-p_C)^{\mathbb{1}(\text{all nodes in C untreated})}$$
+
+其中 $p_C$ 是簇 $C$ 的处理概率，且簇内所有节点同质处理。
+
+### D5：MultiGroupFixedQuotaDesignV25
+
+类似 D3 但扩展到 $K$ 组，每组有固定配额 $m_k$：
+
+$$q_i(a, e) = \frac{1}{\prod_{k=1}^K \binom{|G_k|}{m_k}} \sum_{\substack{\mathbf{t}: |\mathbf{t} \cap G_k|=m_k \forall k\\ t_i=a, S_i(\mathbf{t})=e}} 1$$
+
+### D6：TwoStageQuotaMixtureDesignV27
+
+涉及多阶段配额混合：
+
+$$q_i(a, e) = \sum_{\text{profiles } (m_1,\ldots,m_K)} \pi_{(m_1,\ldots,m_K)} \cdot q_{\text{MG}}(a, e \mid \text{profile})$$
+
+其中 $\pi$ 是分配概要概率，$q_{\text{MG}}$ 是给定概要下的 D5 类配额概率。
+
+---
+
+## 5. 区间求解方法
+
+### 5.1 均值界问题
+
+对于单政策均值 $\sum w_i m_i(a_i, e_i)$ 和联合约束集，求解：
+
+$$\text{lower} = \min_{m \in \mathcal{M}} \sum_{i} w_i \cdot m_i(\text{target}_i)$$
+
+$$\text{upper} = \max_{m \in \mathcal{M}} \sum_{i} w_i \cdot m_i(\text{target}_i)$$
+
+由于 $\mathcal{M} = \prod_i \mathcal{M}_i$，问题按节点分解：每个节点的单元格独立满足其 box/order/A4 约束，
+目标函数中每个节点只有一个单元格有非零权重。
+
+求解策略（derived from `mean_order_solver.py`）：
+
+1. **可行域构建**：对每个节点 $i$，枚举其单元格集合 $\{c_1, \ldots, c_k\}$
+2. **边界约束**：$L_i \leq m(c_j) \leq U_i$ 对每个 $j$（两个不等式）
+3. **A4 等式**：若已知，$m(c_j) = v_j$（两个不等式等价）
+4. **顺序约束**：$m(c_p) \leq m(c_q)$ 对声明的顺序对
+5. **锚点枚举**：所有可行顶点是锚点集 $\{L_i, U_i\} \cup \{v_j\}$ 的组合
+6. **求值**：对每个可行顶点计算目标函数值，取最小/最大
+
+### 5.2 对比界问题
+
+对于第一政策减第二政策 $\sum w_i (m(c_i^{(1)}) - m(c_i^{(2)}))$：
+
+$$\text{lower} = \min_{m \in \mathcal{M}} \sum_i w_i \cdot (m(c_i^{(1)}) - m(c_i^{(2)}))$$
+
+$$\text{upper} = \max_{m \in \mathcal{M}} \sum_i w_i \cdot (m(c_i^{(1)}) - m(c_i^{(2)}))$$
+
+关键区别：同一节点 $i$ 的两个单元格 $c_i^{(1)}$ 和 $c_i^{(2)}$ 属于**同一个** $\mathcal{M}_i$，
+因此系数可以**抵消**。如果两个单元格相同则系数为 0；如果它们共享 A4 已知值则贡献确定。
+
+这不同于分别求两个均值界后相减——分别求会丢失共享信息带来的收缩。
+
+### 5.3 sharp 性证明
+
+如果 lower 和 upper 都由可行解达到，则区间是 sharp 的。
+证明方法：
+
+- **Primal 证据**：构造达到 lower（或 upper）的可行均值赋值
+- **Dual 证据**：构造非负对偶乘子，证明 lower（或 upper）是最优的
+（详见 `mean_order_solver.py` 的 `_dual()` 函数 — 枚举基解并求解对偶乘子）
+
+---
+
+## 6. 端点可达性证明
+
+对每个组合，必须证明端点（lower 和 upper）是可达到的。
+
+### 6.1 孤立点的可达性
+
+对于 E1, E3, E4, E5，孤立点只产生 2 个单元格。只要这些单元格有支持概率 >0
+且无矛盾顺序约束，端点可达。
+
+对于 E2，孤立点无定义 → 包含孤立点的网络 + E2 组合需特殊处理。
+
+### 6.2 全零支持概率的处理
+
+如果政策单元格的支持概率为 0，则：
+- 对于 POINT：返回 `UNSUPPORTED: ZERO_POLICY_SIGNATURE_SUPPORT`
+- 对于 PARTIAL：该政策单元格不参与均值计算
+
+### 6.3 跨组合共享端点
+
+对于对比目标，两个政策共享均值集合。端点可达性等价于存在可行均值赋值
+同时满足两个政策的约束。signed-box 处理正是利用这一共享约束来收紧区间。
+
+---
+
+## 7. 无额外资料支持的证明
+
+所有 30 种 D×E 组合的数学框架已完整定义。证明要点如下：
+
+1. **单元格枚举**：对于每种组合，单元格集合 $\mathcal{C}_i$ 由暴露定义和节点度数决定
+2. **支持概率**：$q_i(a,e)$ 由设计的分配规律和暴露的分类函数决定 — SupportEngine 对任何设计/暴露都能计算
+3. **可行性**：每个 $\mathcal{M}_i$ 是紧多面体（box 约束保证有界，顺序约束只增加 facet）
+4. **可达性**：端点因 $\mathcal{M}_i$ 的紧性可达；对偶乘子提供证明
+5. **sharp 性**：锚点枚举保证顶点被找到（不存在非顶点使目标函数严格更优而未发现）
+
+### 唯一需要补充的资料
+
+- `bounded_policy_contract.py` 中的 `ExactMean`, `NodeBounds`, `StrictRecord` 等类型
+- `bounded_contrast_contract.py` 中的 `VERSION`, `validate_pair`
+- `bounded_policy_verify.py` 中的 `replay()` 函数
+
+这些在已提供的 14 个文件中被 import 但未提供源码。如需理解完整接口需要它们。
