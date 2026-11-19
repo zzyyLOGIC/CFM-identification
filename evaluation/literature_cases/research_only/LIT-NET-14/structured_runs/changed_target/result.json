@@ -1,0 +1,854 @@
+{
+  "state": "POINT",
+  "reason_code": null,
+  "backend_called": true,
+  "independent_replay": true,
+  "mathematical_claim": {
+    "kind": "POINT",
+    "representation": "NATIVE_NETWORK_OBSERVED_FUNCTIONAL",
+    "target": {
+      "node_order": [
+        "农1",
+        "农2",
+        "农3",
+        "农4",
+        "农5",
+        "农6",
+        "农7",
+        "农8"
+      ],
+      "population": [
+        "农5",
+        "农6",
+        "农7"
+      ],
+      "unit_weights": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "1/3",
+        "1/3",
+        "1/3",
+        "0"
+      ],
+      "treatment": "按安排做示范记1，其余记0",
+      "outcome": "下一期化肥强度相对上一期的变化，单位为塞迪每株",
+      "context": "示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象",
+      "kind": "FINITE_POLICY_MEAN",
+      "policies": [
+        {
+          "assignment": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "weight": "1/2"
+        },
+        {
+          "assignment": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "weight": "1/2"
+        }
+      ]
+    },
+    "target_fingerprint": "762a2857693f381b4dca127dbf729e69053523f2f47a97c3142550008edc602a",
+    "expression": "1/2 * (1/3 * E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)] + 1/3 * E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)] + 1/3 * E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)]) + 1/2 * (1/3 * E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)] + 1/3 * E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)] + 1/3 * E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)])",
+    "numeric_value": null
+  },
+  "certificate": {
+    "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+    "status": "POINT",
+    "verification_status": "VERIFIED",
+    "target_fingerprint": "762a2857693f381b4dca127dbf729e69053523f2f47a97c3142550008edc602a",
+    "policy_support": [
+      {
+        "assignment": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "policy_probability": "1/2",
+        "experimental_assignment_probability": "1/256",
+        "fixed_policy_certificate": "74c8b616eedb4273a46e7d7ac28c0a7bc1a3ab08050e86b31811f967d61ab043"
+      },
+      {
+        "assignment": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "policy_probability": "1/2",
+        "experimental_assignment_probability": "1/256",
+        "fixed_policy_certificate": "0b3a3c59096b1f7c662e738df1381f99acdd982f694b37cf031687d9d13ec0f0"
+      }
+    ],
+    "identified_functional": "1/2 * (1/3 * E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)] + 1/3 * E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)] + 1/3 * E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)]) + 1/2 * (1/3 * E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)] + 1/3 * E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)] + 1/3 * E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)])",
+    "certificate_sha256": "a825a2b00d11c352325406678414d4f4917fe65812f1cc9abb46abe13b4c628a",
+    "estimation_request": null,
+    "warning": "Finite mixture of full-assignment population means; no PFN value is estimated"
+  },
+  "answers": [
+    {
+      "method": "R1B_FINITE_POLICY",
+      "mathematical_claim": {
+        "kind": "POINT",
+        "representation": "NATIVE_NETWORK_OBSERVED_FUNCTIONAL",
+        "target": {
+          "node_order": [
+            "农1",
+            "农2",
+            "农3",
+            "农4",
+            "农5",
+            "农6",
+            "农7",
+            "农8"
+          ],
+          "population": [
+            "农5",
+            "农6",
+            "农7"
+          ],
+          "unit_weights": [
+            "0",
+            "0",
+            "0",
+            "0",
+            "1/3",
+            "1/3",
+            "1/3",
+            "0"
+          ],
+          "treatment": "按安排做示范记1，其余记0",
+          "outcome": "下一期化肥强度相对上一期的变化，单位为塞迪每株",
+          "context": "示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象",
+          "kind": "FINITE_POLICY_MEAN",
+          "policies": [
+            {
+              "assignment": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "weight": "1/2"
+            },
+            {
+              "assignment": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0
+              ],
+              "weight": "1/2"
+            }
+          ]
+        },
+        "target_fingerprint": "762a2857693f381b4dca127dbf729e69053523f2f47a97c3142550008edc602a",
+        "expression": "1/2 * (1/3 * E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)] + 1/3 * E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)] + 1/3 * E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)]) + 1/2 * (1/3 * E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)] + 1/3 * E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)] + 1/3 * E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)])",
+        "numeric_value": null
+      },
+      "certificate": {
+        "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+        "status": "POINT",
+        "verification_status": "VERIFIED",
+        "target_fingerprint": "762a2857693f381b4dca127dbf729e69053523f2f47a97c3142550008edc602a",
+        "policy_support": [
+          {
+            "assignment": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0
+            ],
+            "policy_probability": "1/2",
+            "experimental_assignment_probability": "1/256",
+            "fixed_policy_certificate": "74c8b616eedb4273a46e7d7ac28c0a7bc1a3ab08050e86b31811f967d61ab043"
+          },
+          {
+            "assignment": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "policy_probability": "1/2",
+            "experimental_assignment_probability": "1/256",
+            "fixed_policy_certificate": "0b3a3c59096b1f7c662e738df1381f99acdd982f694b37cf031687d9d13ec0f0"
+          }
+        ],
+        "identified_functional": "1/2 * (1/3 * E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)] + 1/3 * E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)] + 1/3 * E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)]) + 1/2 * (1/3 * E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)] + 1/3 * E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)] + 1/3 * E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)])",
+        "certificate_sha256": "a825a2b00d11c352325406678414d4f4917fe65812f1cc9abb46abe13b4c628a",
+        "estimation_request": null,
+        "warning": "Finite mixture of full-assignment population means; no PFN value is estimated"
+      },
+      "independent_replay": true,
+      "reviewed_input_sha256": "7c1a6453627f3016bab6be3a003201443a4f470c71830a67ad43dec444386da4",
+      "native_evidence": {
+        "query_type": "FINITE_POLICY_MIXTURE",
+        "status": "POINT",
+        "route": "R1B_FINITE_POLICY",
+        "reason_code": null,
+        "result": {
+          "components": [
+            {
+              "study": {
+                "network_id": "network_674deabf095efd3d740146983f6131619f2b92eb31af42c6df0ad33f902db3d4",
+                "node_order": [
+                  "农1",
+                  "农2",
+                  "农3",
+                  "农4",
+                  "农5",
+                  "农6",
+                  "农7",
+                  "农8"
+                ],
+                "undirected_edges": [
+                  [
+                    "农1",
+                    "农2"
+                  ],
+                  [
+                    "农1",
+                    "农3"
+                  ],
+                  [
+                    "农1",
+                    "农8"
+                  ],
+                  [
+                    "农2",
+                    "农3"
+                  ],
+                  [
+                    "农2",
+                    "农4"
+                  ],
+                  [
+                    "农5",
+                    "农6"
+                  ],
+                  [
+                    "农6",
+                    "农7"
+                  ]
+                ],
+                "treatment_variable": "按安排做示范记1，其余记0",
+                "outcome_variable": "下一期化肥强度相对上一期的变化，单位为塞迪每株",
+                "outcome_kind": "continuous",
+                "context_reference": "示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象",
+                "observation_regime": "experimental",
+                "assignment_design_json": "{\"kind\":\"heterogeneous_bernoulli_binary_v1\",\"propensities\":{\"农1\":\"1/2\",\"农2\":\"1/2\",\"农3\":\"1/2\",\"农4\":\"1/2\",\"农5\":\"1/2\",\"农6\":\"1/2\",\"农7\":\"1/2\",\"农8\":\"1/2\"}}",
+                "protocol_provenance": "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3,src_a89971471eefedb1f770ef69771daaba282480755530304cbcedae9debe680f1,src_04367b5fd230901556db7f07071ad41018c00396dd5d0f11e1aaa162163ae3e0,src_99071689c8c6a6964ca741b53c5d0106272f0de8ec2aa521ba7f76d60e068cf8,src_e29ecd20f938594f6c22614d23bb6ac13d24c9619fa39315c47f4e7ec7bb9986,src_ae17135f4b55d84a415fa7b9da311a2e420503db9ed6c0d858cafdf42c8bf1d0,src_3f700cac14a5ba380b0c8f5f11b17cd1958e1a95d46f22e1843ed2e15e658aeb,src_dee41ec3c8022ecd3f89deced38daaa4110e1b6df80b3b52739b2cca7bb5e2f9,src_3874785038cdb6edaa72e8f966df2abf542bd6b5a3d5d8ab8d171d7503031a41,src_a51cbd371a0941f340f1a40e7e17d0bc521e5532c16c069048d750cb387b2467,src_d4b941238204b3e9e7255658a93f7addc27509a1d14fe4208df1eef3dd8e7655,src_895d95d65555e83c7ce111e52527638e99ee8e8c7af42b9cc9639453b7e7ef46,src_b2b89f33deccafbdee254eb81cd79be0afa7de8558c971483304ac3b63ac21ba,src_bca03e482d408f949887b7ab295a7435da3d00e1c0c26826d8f36a834a1b543b,src_db158cbc9dadd18f7b7b0e2117343322094415dfb248bec46063588c5da047a5,src_87ecf07ad7f16c5e3d9f23b4ad9f9441e6498eed469bd30c280a25bc87ec3055,src_378fa815a35da4829444bf9d8ec8fb65a51264ae5dcd05408f8a99655d9ec758,src_b02cdbcfb7ed77bb0b36387ed9315df98b45a60f060347361857313ad430e18a,src_51421450c3968dd22012c3d8af8d05637a1553e66672d15d12736a4901702c15,src_0800b87d38dc129b3ea0ddf4c679a00666e5cff3472f4341337a6ceda74b0565,src_8475b7fcd32fe5c95d012ba3287c9348e76e9ae1c7a02cbbc146dddc2b56c33c,src_1d31ca6c25d2e5ad7f911efbc513ec3daaad2b562c2810afa8eb4aac2dc696db,src_06554ad8cbbfd68c3b47525683753bbaa08b2897a1fe42b0f4203455c0f2668f,src_275b6fb790909462cc9d50330c978f9610ad270b545deb2b29fd6e50b1bd33b2,src_e3cf6ebb1116b5fa439cafc51cd72a65e0e6208a3b699c1209bc193ce0b1a1e6,src_453f6fc80b4ba59314c1587c317ce62eb93327be8b99fd55aa511846cfccd97b,src_530e78606acf119a108eca192dc7d6bc81bf4ec75088093ac178b725b4641a21,src_24e732c88a597ea5f54ebcce90e61fd50e38186bb4bc47d2ea620a5cb65f7ed2,src_017dd3916a1c138a8a15522bcfea7d9f3340e63e51f65447a919de2b501384e9,src_e32c289fdcaaaf2a6be74a5939ee4931df55c29d18fff17eb2d935e3ab5adbe6,src_e11332df70797c7facf5a9e1c133dc494a40bb81c023d1c6fc5c26a2255d86c3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                "network_provenance": "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3,src_a89971471eefedb1f770ef69771daaba282480755530304cbcedae9debe680f1,src_04367b5fd230901556db7f07071ad41018c00396dd5d0f11e1aaa162163ae3e0,src_99071689c8c6a6964ca741b53c5d0106272f0de8ec2aa521ba7f76d60e068cf8,src_e29ecd20f938594f6c22614d23bb6ac13d24c9619fa39315c47f4e7ec7bb9986,src_ae17135f4b55d84a415fa7b9da311a2e420503db9ed6c0d858cafdf42c8bf1d0,src_3f700cac14a5ba380b0c8f5f11b17cd1958e1a95d46f22e1843ed2e15e658aeb,src_dee41ec3c8022ecd3f89deced38daaa4110e1b6df80b3b52739b2cca7bb5e2f9,src_3874785038cdb6edaa72e8f966df2abf542bd6b5a3d5d8ab8d171d7503031a41,src_a51cbd371a0941f340f1a40e7e17d0bc521e5532c16c069048d750cb387b2467,src_d4b941238204b3e9e7255658a93f7addc27509a1d14fe4208df1eef3dd8e7655,src_895d95d65555e83c7ce111e52527638e99ee8e8c7af42b9cc9639453b7e7ef46,src_b2b89f33deccafbdee254eb81cd79be0afa7de8558c971483304ac3b63ac21ba,src_bca03e482d408f949887b7ab295a7435da3d00e1c0c26826d8f36a834a1b543b,src_db158cbc9dadd18f7b7b0e2117343322094415dfb248bec46063588c5da047a5,src_87ecf07ad7f16c5e3d9f23b4ad9f9441e6498eed469bd30c280a25bc87ec3055,src_378fa815a35da4829444bf9d8ec8fb65a51264ae5dcd05408f8a99655d9ec758,src_b02cdbcfb7ed77bb0b36387ed9315df98b45a60f060347361857313ad430e18a,src_51421450c3968dd22012c3d8af8d05637a1553e66672d15d12736a4901702c15,src_0800b87d38dc129b3ea0ddf4c679a00666e5cff3472f4341337a6ceda74b0565,src_8475b7fcd32fe5c95d012ba3287c9348e76e9ae1c7a02cbbc146dddc2b56c33c,src_1d31ca6c25d2e5ad7f911efbc513ec3daaad2b562c2810afa8eb4aac2dc696db,src_06554ad8cbbfd68c3b47525683753bbaa08b2897a1fe42b0f4203455c0f2668f,src_275b6fb790909462cc9d50330c978f9610ad270b545deb2b29fd6e50b1bd33b2,src_e3cf6ebb1116b5fa439cafc51cd72a65e0e6208a3b699c1209bc193ce0b1a1e6,src_453f6fc80b4ba59314c1587c317ce62eb93327be8b99fd55aa511846cfccd97b,src_530e78606acf119a108eca192dc7d6bc81bf4ec75088093ac178b725b4641a21,src_24e732c88a597ea5f54ebcce90e61fd50e38186bb4bc47d2ea620a5cb65f7ed2,src_017dd3916a1c138a8a15522bcfea7d9f3340e63e51f65447a919de2b501384e9,src_e32c289fdcaaaf2a6be74a5939ee4931df55c29d18fff17eb2d935e3ab5adbe6,src_e11332df70797c7facf5a9e1c133dc494a40bb81c023d1c6fc5c26a2255d86c3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+              },
+              "target": {
+                "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+                "network_fingerprint": "83ffb52e4c07e3aaf285d9f109e872a8e8bc661b37c88d81398e929bfa8dc9bc",
+                "node_order": [
+                  "农1",
+                  "农2",
+                  "农3",
+                  "农4",
+                  "农5",
+                  "农6",
+                  "农7",
+                  "农8"
+                ],
+                "outcome": "下一期化肥强度相对上一期的变化，单位为塞迪每株",
+                "context": "示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象",
+                "averaging_scope": "population_conditional_mean_given_W",
+                "authority": "TRUSTED_FIXTURE",
+                "query_resolution": "RESOLVED",
+                "assignment_law_fingerprint": null,
+                "exposure_fingerprint": null,
+                "node_id": null,
+                "arm": null,
+                "policy_assignment": [
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0
+                ],
+                "unit_weights": [
+                  "0",
+                  "0",
+                  "0",
+                  "0",
+                  "1/3",
+                  "1/3",
+                  "1/3",
+                  "0"
+                ],
+                "target_digest": "6d058a60d38fecedac90847dd726a8e4211c7a7f0b592a31d116cb2aa2d037ed"
+              },
+              "sources": [
+                {
+                  "source_id": "source_104a494ca549a45d4889d2ea8426d6f01bf0062a77d42743f5354bb6af55d2d7",
+                  "operator": "NODE_FULL_LAW",
+                  "provenance": "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3,src_a89971471eefedb1f770ef69771daaba282480755530304cbcedae9debe680f1,src_04367b5fd230901556db7f07071ad41018c00396dd5d0f11e1aaa162163ae3e0,src_99071689c8c6a6964ca741b53c5d0106272f0de8ec2aa521ba7f76d60e068cf8,src_e29ecd20f938594f6c22614d23bb6ac13d24c9619fa39315c47f4e7ec7bb9986,src_ae17135f4b55d84a415fa7b9da311a2e420503db9ed6c0d858cafdf42c8bf1d0,src_3f700cac14a5ba380b0c8f5f11b17cd1958e1a95d46f22e1843ed2e15e658aeb,src_dee41ec3c8022ecd3f89deced38daaa4110e1b6df80b3b52739b2cca7bb5e2f9,src_3874785038cdb6edaa72e8f966df2abf542bd6b5a3d5d8ab8d171d7503031a41,src_a51cbd371a0941f340f1a40e7e17d0bc521e5532c16c069048d750cb387b2467,src_d4b941238204b3e9e7255658a93f7addc27509a1d14fe4208df1eef3dd8e7655,src_895d95d65555e83c7ce111e52527638e99ee8e8c7af42b9cc9639453b7e7ef46,src_b2b89f33deccafbdee254eb81cd79be0afa7de8558c971483304ac3b63ac21ba,src_bca03e482d408f949887b7ab295a7435da3d00e1c0c26826d8f36a834a1b543b,src_db158cbc9dadd18f7b7b0e2117343322094415dfb248bec46063588c5da047a5,src_87ecf07ad7f16c5e3d9f23b4ad9f9441e6498eed469bd30c280a25bc87ec3055,src_378fa815a35da4829444bf9d8ec8fb65a51264ae5dcd05408f8a99655d9ec758,src_b02cdbcfb7ed77bb0b36387ed9315df98b45a60f060347361857313ad430e18a,src_51421450c3968dd22012c3d8af8d05637a1553e66672d15d12736a4901702c15,src_0800b87d38dc129b3ea0ddf4c679a00666e5cff3472f4341337a6ceda74b0565,src_8475b7fcd32fe5c95d012ba3287c9348e76e9ae1c7a02cbbc146dddc2b56c33c,src_1d31ca6c25d2e5ad7f911efbc513ec3daaad2b562c2810afa8eb4aac2dc696db,src_06554ad8cbbfd68c3b47525683753bbaa08b2897a1fe42b0f4203455c0f2668f,src_275b6fb790909462cc9d50330c978f9610ad270b545deb2b29fd6e50b1bd33b2,src_e3cf6ebb1116b5fa439cafc51cd72a65e0e6208a3b699c1209bc193ce0b1a1e6,src_453f6fc80b4ba59314c1587c317ce62eb93327be8b99fd55aa511846cfccd97b,src_530e78606acf119a108eca192dc7d6bc81bf4ec75088093ac178b725b4641a21,src_24e732c88a597ea5f54ebcce90e61fd50e38186bb4bc47d2ea620a5cb65f7ed2,src_017dd3916a1c138a8a15522bcfea7d9f3340e63e51f65447a919de2b501384e9,src_e32c289fdcaaaf2a6be74a5939ee4931df55c29d18fff17eb2d935e3ab5adbe6,src_e11332df70797c7facf5a9e1c133dc494a40bb81c023d1c6fc5c26a2255d86c3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                  "admission": "ADMITTED",
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                  "regime": "experimental",
+                  "shared_scope_digest": "4e2380a78e11485e77efcf86fa3612704bc66b89251cceac37a2cf5d122d5bb4",
+                  "protocol_digest": "b136a833244a61fd12dc469c740ce61ac299ed871146caf9659ceb8cb86c1f31",
+                  "node_order": [
+                    "农1",
+                    "农2",
+                    "农3",
+                    "农4",
+                    "农5",
+                    "农6",
+                    "农7",
+                    "农8"
+                  ],
+                  "outcome": "下一期化肥强度相对上一期的变化，单位为塞迪每株",
+                  "context": "示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象",
+                  "outcome_nodes": [
+                    "农1",
+                    "农2",
+                    "农3",
+                    "农4",
+                    "农5",
+                    "农6",
+                    "农7",
+                    "农8"
+                  ],
+                  "assignment_cells": [],
+                  "exposure_fingerprint": null
+                }
+              ],
+              "assumptions": [
+                {
+                  "name": "known_assignment_law",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "full_vector_randomization",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "consistency",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "fixed_pretreatment_network",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "finite_conditional_first_moments",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                }
+              ],
+              "route_receipt": {
+                "version": "non-arm-network-inquiry-shadow-v1.7",
+                "study_digest": "3e42d7adace994df23800e82fb1dc0ddc2d8d17a49050e30ff235fb41e7e43b9",
+                "study_declaration_digest": "3a148649375685085f1ec4d041f5209af8ac7b15c1e663a05e21636027809863",
+                "assumption_evidence_digest": "f26095d8213c6ac8a1866e4778b17b8aecedacf05809789e7569e64feb3fdd6f",
+                "policy_assignment_probability": "1/256",
+                "target_digest": "6d058a60d38fecedac90847dd726a8e4211c7a7f0b592a31d116cb2aa2d037ed",
+                "target_authority": "TRUSTED_FIXTURE",
+                "target_resolution": "RESOLVED",
+                "family_id": "randomized_full_assignment_policy_mean_candidate_v0",
+                "route_status": "THEOREM_BACKEND_UNAVAILABLE",
+                "target_match": "MATCHED",
+                "information_status": "SATISFIED",
+                "assumption_status": "ADMITTED",
+                "validity_status": "POSITIVE_UNDER_DECLARED_Q",
+                "backend_capability": "CANDIDATE_NOT_REGISTERED",
+                "required_observable": {
+                  "operator": "NODE_ASSIGNMENT_MEANS_FOR_POLICY",
+                  "network_fingerprint": "83ffb52e4c07e3aaf285d9f109e872a8e8bc661b37c88d81398e929bfa8dc9bc",
+                  "node_order": [
+                    "农1",
+                    "农2",
+                    "农3",
+                    "农4",
+                    "农5",
+                    "农6",
+                    "农7",
+                    "农8"
+                  ],
+                  "outcome": "下一期化肥强度相对上一期的变化，单位为塞迪每株",
+                  "context": "示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象",
+                  "node_ids": [
+                    "农5",
+                    "农6",
+                    "农7"
+                  ],
+                  "arm_cell": null,
+                  "assignment_cell": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0
+                  ],
+                  "assignment_law_fingerprint": null,
+                  "exposure_fingerprint": null,
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR"
+                },
+                "source_results": [
+                  {
+                    "source_id": "source_104a494ca549a45d4889d2ea8426d6f01bf0062a77d42743f5354bb6af55d2d7",
+                    "source_digest": "5912220f3a9998f83027433964dbd532bca5fe168a98d998f5942ab050d54744",
+                    "information_status": "SATISFIED",
+                    "reason": null,
+                    "rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17"
+                  }
+                ],
+                "blockers": [
+                  "NO_REGISTERED_GENERAL_FIXED_POLICY_THEOREM_OR_VERIFIER"
+                ],
+                "warnings": [
+                  "A4_SATISFIED_DOES_NOT_AUTHORIZE_CAUSAL_IDENTIFICATION"
+                ],
+                "mathematical_identification_from_router": null,
+                "digest": "9bcf172915ba4610e38932c4e5c752f1e71485343617758281ce23f8f73656a2"
+              },
+              "selected_a4_source_id": "source_104a494ca549a45d4889d2ea8426d6f01bf0062a77d42743f5354bb6af55d2d7",
+              "selected_a4_source_digest": "5912220f3a9998f83027433964dbd532bca5fe168a98d998f5942ab050d54744",
+              "a4_rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17",
+              "assignment_probability": "1/256",
+              "weighted_nodes": [
+                "农5",
+                "农6",
+                "农7"
+              ],
+              "node_weights": [
+                "1/3",
+                "1/3",
+                "1/3"
+              ],
+              "required_observables": [
+                "E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)]",
+                "E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)]",
+                "E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)]"
+              ],
+              "identified_functional": "1/3 * E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)] + 1/3 * E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)] + 1/3 * E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)]",
+              "target_fingerprint": "18fee3999e6b008fcc02386399951abd19ff6d6e34abfd6a9e0ff16596b7f9e4",
+              "theorem_id": "R1B_RANDOMIZED_FULL_ASSIGNMENT_POLICY_POINT_V1",
+              "certificate_sha256": "74c8b616eedb4273a46e7d7ac28c0a7bc1a3ab08050e86b31811f967d61ab043",
+              "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+              "status": "POINT",
+              "verification_status": "VERIFIED",
+              "estimation_request": null
+            },
+            {
+              "study": {
+                "network_id": "network_674deabf095efd3d740146983f6131619f2b92eb31af42c6df0ad33f902db3d4",
+                "node_order": [
+                  "农1",
+                  "农2",
+                  "农3",
+                  "农4",
+                  "农5",
+                  "农6",
+                  "农7",
+                  "农8"
+                ],
+                "undirected_edges": [
+                  [
+                    "农1",
+                    "农2"
+                  ],
+                  [
+                    "农1",
+                    "农3"
+                  ],
+                  [
+                    "农1",
+                    "农8"
+                  ],
+                  [
+                    "农2",
+                    "农3"
+                  ],
+                  [
+                    "农2",
+                    "农4"
+                  ],
+                  [
+                    "农5",
+                    "农6"
+                  ],
+                  [
+                    "农6",
+                    "农7"
+                  ]
+                ],
+                "treatment_variable": "按安排做示范记1，其余记0",
+                "outcome_variable": "下一期化肥强度相对上一期的变化，单位为塞迪每株",
+                "outcome_kind": "continuous",
+                "context_reference": "示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象",
+                "observation_regime": "experimental",
+                "assignment_design_json": "{\"kind\":\"heterogeneous_bernoulli_binary_v1\",\"propensities\":{\"农1\":\"1/2\",\"农2\":\"1/2\",\"农3\":\"1/2\",\"农4\":\"1/2\",\"农5\":\"1/2\",\"农6\":\"1/2\",\"农7\":\"1/2\",\"农8\":\"1/2\"}}",
+                "protocol_provenance": "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3,src_a89971471eefedb1f770ef69771daaba282480755530304cbcedae9debe680f1,src_04367b5fd230901556db7f07071ad41018c00396dd5d0f11e1aaa162163ae3e0,src_99071689c8c6a6964ca741b53c5d0106272f0de8ec2aa521ba7f76d60e068cf8,src_e29ecd20f938594f6c22614d23bb6ac13d24c9619fa39315c47f4e7ec7bb9986,src_ae17135f4b55d84a415fa7b9da311a2e420503db9ed6c0d858cafdf42c8bf1d0,src_3f700cac14a5ba380b0c8f5f11b17cd1958e1a95d46f22e1843ed2e15e658aeb,src_dee41ec3c8022ecd3f89deced38daaa4110e1b6df80b3b52739b2cca7bb5e2f9,src_3874785038cdb6edaa72e8f966df2abf542bd6b5a3d5d8ab8d171d7503031a41,src_a51cbd371a0941f340f1a40e7e17d0bc521e5532c16c069048d750cb387b2467,src_d4b941238204b3e9e7255658a93f7addc27509a1d14fe4208df1eef3dd8e7655,src_895d95d65555e83c7ce111e52527638e99ee8e8c7af42b9cc9639453b7e7ef46,src_b2b89f33deccafbdee254eb81cd79be0afa7de8558c971483304ac3b63ac21ba,src_bca03e482d408f949887b7ab295a7435da3d00e1c0c26826d8f36a834a1b543b,src_db158cbc9dadd18f7b7b0e2117343322094415dfb248bec46063588c5da047a5,src_87ecf07ad7f16c5e3d9f23b4ad9f9441e6498eed469bd30c280a25bc87ec3055,src_378fa815a35da4829444bf9d8ec8fb65a51264ae5dcd05408f8a99655d9ec758,src_b02cdbcfb7ed77bb0b36387ed9315df98b45a60f060347361857313ad430e18a,src_51421450c3968dd22012c3d8af8d05637a1553e66672d15d12736a4901702c15,src_0800b87d38dc129b3ea0ddf4c679a00666e5cff3472f4341337a6ceda74b0565,src_8475b7fcd32fe5c95d012ba3287c9348e76e9ae1c7a02cbbc146dddc2b56c33c,src_1d31ca6c25d2e5ad7f911efbc513ec3daaad2b562c2810afa8eb4aac2dc696db,src_06554ad8cbbfd68c3b47525683753bbaa08b2897a1fe42b0f4203455c0f2668f,src_275b6fb790909462cc9d50330c978f9610ad270b545deb2b29fd6e50b1bd33b2,src_e3cf6ebb1116b5fa439cafc51cd72a65e0e6208a3b699c1209bc193ce0b1a1e6,src_453f6fc80b4ba59314c1587c317ce62eb93327be8b99fd55aa511846cfccd97b,src_530e78606acf119a108eca192dc7d6bc81bf4ec75088093ac178b725b4641a21,src_24e732c88a597ea5f54ebcce90e61fd50e38186bb4bc47d2ea620a5cb65f7ed2,src_017dd3916a1c138a8a15522bcfea7d9f3340e63e51f65447a919de2b501384e9,src_e32c289fdcaaaf2a6be74a5939ee4931df55c29d18fff17eb2d935e3ab5adbe6,src_e11332df70797c7facf5a9e1c133dc494a40bb81c023d1c6fc5c26a2255d86c3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                "network_provenance": "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3,src_a89971471eefedb1f770ef69771daaba282480755530304cbcedae9debe680f1,src_04367b5fd230901556db7f07071ad41018c00396dd5d0f11e1aaa162163ae3e0,src_99071689c8c6a6964ca741b53c5d0106272f0de8ec2aa521ba7f76d60e068cf8,src_e29ecd20f938594f6c22614d23bb6ac13d24c9619fa39315c47f4e7ec7bb9986,src_ae17135f4b55d84a415fa7b9da311a2e420503db9ed6c0d858cafdf42c8bf1d0,src_3f700cac14a5ba380b0c8f5f11b17cd1958e1a95d46f22e1843ed2e15e658aeb,src_dee41ec3c8022ecd3f89deced38daaa4110e1b6df80b3b52739b2cca7bb5e2f9,src_3874785038cdb6edaa72e8f966df2abf542bd6b5a3d5d8ab8d171d7503031a41,src_a51cbd371a0941f340f1a40e7e17d0bc521e5532c16c069048d750cb387b2467,src_d4b941238204b3e9e7255658a93f7addc27509a1d14fe4208df1eef3dd8e7655,src_895d95d65555e83c7ce111e52527638e99ee8e8c7af42b9cc9639453b7e7ef46,src_b2b89f33deccafbdee254eb81cd79be0afa7de8558c971483304ac3b63ac21ba,src_bca03e482d408f949887b7ab295a7435da3d00e1c0c26826d8f36a834a1b543b,src_db158cbc9dadd18f7b7b0e2117343322094415dfb248bec46063588c5da047a5,src_87ecf07ad7f16c5e3d9f23b4ad9f9441e6498eed469bd30c280a25bc87ec3055,src_378fa815a35da4829444bf9d8ec8fb65a51264ae5dcd05408f8a99655d9ec758,src_b02cdbcfb7ed77bb0b36387ed9315df98b45a60f060347361857313ad430e18a,src_51421450c3968dd22012c3d8af8d05637a1553e66672d15d12736a4901702c15,src_0800b87d38dc129b3ea0ddf4c679a00666e5cff3472f4341337a6ceda74b0565,src_8475b7fcd32fe5c95d012ba3287c9348e76e9ae1c7a02cbbc146dddc2b56c33c,src_1d31ca6c25d2e5ad7f911efbc513ec3daaad2b562c2810afa8eb4aac2dc696db,src_06554ad8cbbfd68c3b47525683753bbaa08b2897a1fe42b0f4203455c0f2668f,src_275b6fb790909462cc9d50330c978f9610ad270b545deb2b29fd6e50b1bd33b2,src_e3cf6ebb1116b5fa439cafc51cd72a65e0e6208a3b699c1209bc193ce0b1a1e6,src_453f6fc80b4ba59314c1587c317ce62eb93327be8b99fd55aa511846cfccd97b,src_530e78606acf119a108eca192dc7d6bc81bf4ec75088093ac178b725b4641a21,src_24e732c88a597ea5f54ebcce90e61fd50e38186bb4bc47d2ea620a5cb65f7ed2,src_017dd3916a1c138a8a15522bcfea7d9f3340e63e51f65447a919de2b501384e9,src_e32c289fdcaaaf2a6be74a5939ee4931df55c29d18fff17eb2d935e3ab5adbe6,src_e11332df70797c7facf5a9e1c133dc494a40bb81c023d1c6fc5c26a2255d86c3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+              },
+              "target": {
+                "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+                "network_fingerprint": "83ffb52e4c07e3aaf285d9f109e872a8e8bc661b37c88d81398e929bfa8dc9bc",
+                "node_order": [
+                  "农1",
+                  "农2",
+                  "农3",
+                  "农4",
+                  "农5",
+                  "农6",
+                  "农7",
+                  "农8"
+                ],
+                "outcome": "下一期化肥强度相对上一期的变化，单位为塞迪每株",
+                "context": "示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象",
+                "averaging_scope": "population_conditional_mean_given_W",
+                "authority": "TRUSTED_FIXTURE",
+                "query_resolution": "RESOLVED",
+                "assignment_law_fingerprint": null,
+                "exposure_fingerprint": null,
+                "node_id": null,
+                "arm": null,
+                "policy_assignment": [
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "unit_weights": [
+                  "0",
+                  "0",
+                  "0",
+                  "0",
+                  "1/3",
+                  "1/3",
+                  "1/3",
+                  "0"
+                ],
+                "target_digest": "c7b4d6a4859df35cfa08c787e4bd167c2ad9c3443efe57fc8c52d3e1df69d549"
+              },
+              "sources": [
+                {
+                  "source_id": "source_104a494ca549a45d4889d2ea8426d6f01bf0062a77d42743f5354bb6af55d2d7",
+                  "operator": "NODE_FULL_LAW",
+                  "provenance": "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3,src_a89971471eefedb1f770ef69771daaba282480755530304cbcedae9debe680f1,src_04367b5fd230901556db7f07071ad41018c00396dd5d0f11e1aaa162163ae3e0,src_99071689c8c6a6964ca741b53c5d0106272f0de8ec2aa521ba7f76d60e068cf8,src_e29ecd20f938594f6c22614d23bb6ac13d24c9619fa39315c47f4e7ec7bb9986,src_ae17135f4b55d84a415fa7b9da311a2e420503db9ed6c0d858cafdf42c8bf1d0,src_3f700cac14a5ba380b0c8f5f11b17cd1958e1a95d46f22e1843ed2e15e658aeb,src_dee41ec3c8022ecd3f89deced38daaa4110e1b6df80b3b52739b2cca7bb5e2f9,src_3874785038cdb6edaa72e8f966df2abf542bd6b5a3d5d8ab8d171d7503031a41,src_a51cbd371a0941f340f1a40e7e17d0bc521e5532c16c069048d750cb387b2467,src_d4b941238204b3e9e7255658a93f7addc27509a1d14fe4208df1eef3dd8e7655,src_895d95d65555e83c7ce111e52527638e99ee8e8c7af42b9cc9639453b7e7ef46,src_b2b89f33deccafbdee254eb81cd79be0afa7de8558c971483304ac3b63ac21ba,src_bca03e482d408f949887b7ab295a7435da3d00e1c0c26826d8f36a834a1b543b,src_db158cbc9dadd18f7b7b0e2117343322094415dfb248bec46063588c5da047a5,src_87ecf07ad7f16c5e3d9f23b4ad9f9441e6498eed469bd30c280a25bc87ec3055,src_378fa815a35da4829444bf9d8ec8fb65a51264ae5dcd05408f8a99655d9ec758,src_b02cdbcfb7ed77bb0b36387ed9315df98b45a60f060347361857313ad430e18a,src_51421450c3968dd22012c3d8af8d05637a1553e66672d15d12736a4901702c15,src_0800b87d38dc129b3ea0ddf4c679a00666e5cff3472f4341337a6ceda74b0565,src_8475b7fcd32fe5c95d012ba3287c9348e76e9ae1c7a02cbbc146dddc2b56c33c,src_1d31ca6c25d2e5ad7f911efbc513ec3daaad2b562c2810afa8eb4aac2dc696db,src_06554ad8cbbfd68c3b47525683753bbaa08b2897a1fe42b0f4203455c0f2668f,src_275b6fb790909462cc9d50330c978f9610ad270b545deb2b29fd6e50b1bd33b2,src_e3cf6ebb1116b5fa439cafc51cd72a65e0e6208a3b699c1209bc193ce0b1a1e6,src_453f6fc80b4ba59314c1587c317ce62eb93327be8b99fd55aa511846cfccd97b,src_530e78606acf119a108eca192dc7d6bc81bf4ec75088093ac178b725b4641a21,src_24e732c88a597ea5f54ebcce90e61fd50e38186bb4bc47d2ea620a5cb65f7ed2,src_017dd3916a1c138a8a15522bcfea7d9f3340e63e51f65447a919de2b501384e9,src_e32c289fdcaaaf2a6be74a5939ee4931df55c29d18fff17eb2d935e3ab5adbe6,src_e11332df70797c7facf5a9e1c133dc494a40bb81c023d1c6fc5c26a2255d86c3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                  "admission": "ADMITTED",
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                  "regime": "experimental",
+                  "shared_scope_digest": "4e2380a78e11485e77efcf86fa3612704bc66b89251cceac37a2cf5d122d5bb4",
+                  "protocol_digest": "b136a833244a61fd12dc469c740ce61ac299ed871146caf9659ceb8cb86c1f31",
+                  "node_order": [
+                    "农1",
+                    "农2",
+                    "农3",
+                    "农4",
+                    "农5",
+                    "农6",
+                    "农7",
+                    "农8"
+                  ],
+                  "outcome": "下一期化肥强度相对上一期的变化，单位为塞迪每株",
+                  "context": "示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象",
+                  "outcome_nodes": [
+                    "农1",
+                    "农2",
+                    "农3",
+                    "农4",
+                    "农5",
+                    "农6",
+                    "农7",
+                    "农8"
+                  ],
+                  "assignment_cells": [],
+                  "exposure_fingerprint": null
+                }
+              ],
+              "assumptions": [
+                {
+                  "name": "known_assignment_law",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "full_vector_randomization",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "consistency",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "fixed_pretreatment_network",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "finite_conditional_first_moments",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_e0c7f134728cf61dc27b34b078f1e5b40378d47c787f990af8022c1407fa19cc,src_0d7455e8702a54b201c1e1186a444c1bf4dd954c5330b6b717e7010cc4ac4286,src_92cec6cb5a14e451e7aad7b9817ab48a7c09732141788bff56b32d35b6fa8686,src_699c120a466f99811feedee468fa0381cda87093a9b9bb33b74e8407e8aad7bd,src_b26a7b6dbdd14a8180991b14a4781bde7a024cf1715d6227ad92f7b5ba5e8fa3; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=b92a39a9651ddc566317acf240a4a25a4f535d9c7239090f95d4c2be003ab3cf",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                }
+              ],
+              "route_receipt": {
+                "version": "non-arm-network-inquiry-shadow-v1.7",
+                "study_digest": "3e42d7adace994df23800e82fb1dc0ddc2d8d17a49050e30ff235fb41e7e43b9",
+                "study_declaration_digest": "3a148649375685085f1ec4d041f5209af8ac7b15c1e663a05e21636027809863",
+                "assumption_evidence_digest": "f26095d8213c6ac8a1866e4778b17b8aecedacf05809789e7569e64feb3fdd6f",
+                "policy_assignment_probability": "1/256",
+                "target_digest": "c7b4d6a4859df35cfa08c787e4bd167c2ad9c3443efe57fc8c52d3e1df69d549",
+                "target_authority": "TRUSTED_FIXTURE",
+                "target_resolution": "RESOLVED",
+                "family_id": "randomized_full_assignment_policy_mean_candidate_v0",
+                "route_status": "THEOREM_BACKEND_UNAVAILABLE",
+                "target_match": "MATCHED",
+                "information_status": "SATISFIED",
+                "assumption_status": "ADMITTED",
+                "validity_status": "POSITIVE_UNDER_DECLARED_Q",
+                "backend_capability": "CANDIDATE_NOT_REGISTERED",
+                "required_observable": {
+                  "operator": "NODE_ASSIGNMENT_MEANS_FOR_POLICY",
+                  "network_fingerprint": "83ffb52e4c07e3aaf285d9f109e872a8e8bc661b37c88d81398e929bfa8dc9bc",
+                  "node_order": [
+                    "农1",
+                    "农2",
+                    "农3",
+                    "农4",
+                    "农5",
+                    "农6",
+                    "农7",
+                    "农8"
+                  ],
+                  "outcome": "下一期化肥强度相对上一期的变化，单位为塞迪每株",
+                  "context": "示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象",
+                  "node_ids": [
+                    "农5",
+                    "农6",
+                    "农7"
+                  ],
+                  "arm_cell": null,
+                  "assignment_cell": [
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "assignment_law_fingerprint": null,
+                  "exposure_fingerprint": null,
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR"
+                },
+                "source_results": [
+                  {
+                    "source_id": "source_104a494ca549a45d4889d2ea8426d6f01bf0062a77d42743f5354bb6af55d2d7",
+                    "source_digest": "5912220f3a9998f83027433964dbd532bca5fe168a98d998f5942ab050d54744",
+                    "information_status": "SATISFIED",
+                    "reason": null,
+                    "rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17"
+                  }
+                ],
+                "blockers": [
+                  "NO_REGISTERED_GENERAL_FIXED_POLICY_THEOREM_OR_VERIFIER"
+                ],
+                "warnings": [
+                  "A4_SATISFIED_DOES_NOT_AUTHORIZE_CAUSAL_IDENTIFICATION"
+                ],
+                "mathematical_identification_from_router": null,
+                "digest": "0891c601f5b1467a46d285091c3f69ff52c9b7c9cd00cbffe2c4ba817e15229e"
+              },
+              "selected_a4_source_id": "source_104a494ca549a45d4889d2ea8426d6f01bf0062a77d42743f5354bb6af55d2d7",
+              "selected_a4_source_digest": "5912220f3a9998f83027433964dbd532bca5fe168a98d998f5942ab050d54744",
+              "a4_rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17",
+              "assignment_probability": "1/256",
+              "weighted_nodes": [
+                "农5",
+                "农6",
+                "农7"
+              ],
+              "node_weights": [
+                "1/3",
+                "1/3",
+                "1/3"
+              ],
+              "required_observables": [
+                "E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)]",
+                "E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)]",
+                "E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)]"
+              ],
+              "identified_functional": "1/3 * E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)] + 1/3 * E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)] + 1/3 * E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)]",
+              "target_fingerprint": "46321d6fd461992d1c726ac57efd19c718c76b5e5bd8173d9e31f5910b17465f",
+              "theorem_id": "R1B_RANDOMIZED_FULL_ASSIGNMENT_POLICY_POINT_V1",
+              "certificate_sha256": "0b3a3c59096b1f7c662e738df1381f99acdd982f694b37cf031687d9d13ec0f0",
+              "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+              "status": "POINT",
+              "verification_status": "VERIFIED",
+              "estimation_request": null
+            }
+          ],
+          "policy_probabilities": [
+            "1/2",
+            "1/2"
+          ],
+          "target_fingerprint": "762a2857693f381b4dca127dbf729e69053523f2f47a97c3142550008edc602a",
+          "identified_functional": "1/2 * (1/3 * E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)] + 1/3 * E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)] + 1/3 * E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(0,0,0,0,0,1,0,0)]) + 1/2 * (1/3 * E[Y_{农5}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)] + 1/3 * E[Y_{农6}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)] + 1/3 * E[Y_{农7}^obs | W=示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象, T_vector=(1,0,0,0,0,0,0,0)])",
+          "certificate_sha256": "a825a2b00d11c352325406678414d4f4917fe65812f1cc9abb46abe13b4c628a",
+          "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+          "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+          "status": "POINT",
+          "verification_status": "VERIFIED",
+          "estimation_request": null
+        },
+        "attempted_routes": []
+      }
+    }
+  ],
+  "clarification_questions": [],
+  "evidence_status": "CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE",
+  "production_admission": false,
+  "estimation_handoff_allowed": false,
+  "query_id": "q1",
+  "remaining_query_ids": [],
+  "result_scope": "SELECTED_QUERY_ONLY",
+  "fact_family": "NETWORK_FINITE_POLICY_FACTS",
+  "plan_sha256": "5837bd5b63427a9ac99ce20419e813fe98dd45fc969611d94320c4aae5830067",
+  "attempts": [
+    {
+      "stage": "POLICY_COMPONENT",
+      "state": "POINT",
+      "reason_code": null
+    },
+    {
+      "stage": "POLICY_COMPONENT",
+      "state": "POINT",
+      "reason_code": null
+    },
+    {
+      "method": "R1B_FINITE_POLICY",
+      "state": "POINT",
+      "reason_code": null
+    }
+  ],
+  "primary_method": "R1B_FINITE_POLICY",
+  "partial_fallback_performed": false
+}

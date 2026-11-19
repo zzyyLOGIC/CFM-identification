@@ -1,0 +1,958 @@
+{
+  "state": "POINT",
+  "reason_code": null,
+  "backend_called": true,
+  "independent_replay": true,
+  "mathematical_claim": {
+    "kind": "POINT",
+    "representation": "NATIVE_NETWORK_OBSERVED_FUNCTIONAL",
+    "target": {
+      "node_order": [
+        "学1",
+        "学2",
+        "学3",
+        "学4",
+        "学5",
+        "学6",
+        "学7",
+        "学8",
+        "学9"
+      ],
+      "population": [
+        "学1",
+        "学2",
+        "学3",
+        "学4",
+        "学5",
+        "学6",
+        "学7",
+        "学8",
+        "学9"
+      ],
+      "unit_weights": [
+        "1/9",
+        "1/9",
+        "1/9",
+        "1/9",
+        "1/9",
+        "1/9",
+        "1/9",
+        "1/9",
+        "1/9"
+      ],
+      "treatment": "发药记1，不发药记0",
+      "outcome": "学校该学年的出勤率，取值为0到1的比例",
+      "context": "下一学年；九所学校分属三个片区，片区内彼此相邻",
+      "kind": "FINITE_POLICY_MEAN",
+      "policies": [
+        {
+          "assignment": [
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          "weight": "1/2"
+        },
+        {
+          "assignment": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "weight": "1/2"
+        }
+      ]
+    },
+    "target_fingerprint": "bda5dec6b683b2d6d8c94c744e4292b5168852ff3fbc954901f6f7761f758416",
+    "expression": "1/2 * (1/9 * E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]) + 1/2 * (1/9 * E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)])",
+    "numeric_value": null
+  },
+  "certificate": {
+    "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+    "status": "POINT",
+    "verification_status": "VERIFIED",
+    "target_fingerprint": "bda5dec6b683b2d6d8c94c744e4292b5168852ff3fbc954901f6f7761f758416",
+    "policy_support": [
+      {
+        "assignment": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          1,
+          0
+        ],
+        "policy_probability": "1/2",
+        "experimental_assignment_probability": "1/512",
+        "fixed_policy_certificate": "bca09d7e24003aa55ec128ae1afd59e617a2ecaa82a206770618dedf06a829b3"
+      },
+      {
+        "assignment": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "policy_probability": "1/2",
+        "experimental_assignment_probability": "1/512",
+        "fixed_policy_certificate": "e194aee36260ef45a605c33e4cde6e65ad4f14691a6dbb1fca6536315c9933dc"
+      }
+    ],
+    "identified_functional": "1/2 * (1/9 * E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]) + 1/2 * (1/9 * E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)])",
+    "certificate_sha256": "de39a6505da97fbbdce61fb6111b83c8dca637bd247dd3c79d447ae3c9d660b1",
+    "estimation_request": null,
+    "warning": "Finite mixture of full-assignment population means; no PFN value is estimated"
+  },
+  "answers": [
+    {
+      "method": "R1B_FINITE_POLICY",
+      "mathematical_claim": {
+        "kind": "POINT",
+        "representation": "NATIVE_NETWORK_OBSERVED_FUNCTIONAL",
+        "target": {
+          "node_order": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6",
+            "学7",
+            "学8",
+            "学9"
+          ],
+          "population": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6",
+            "学7",
+            "学8",
+            "学9"
+          ],
+          "unit_weights": [
+            "1/9",
+            "1/9",
+            "1/9",
+            "1/9",
+            "1/9",
+            "1/9",
+            "1/9",
+            "1/9",
+            "1/9"
+          ],
+          "treatment": "发药记1，不发药记0",
+          "outcome": "学校该学年的出勤率，取值为0到1的比例",
+          "context": "下一学年；九所学校分属三个片区，片区内彼此相邻",
+          "kind": "FINITE_POLICY_MEAN",
+          "policies": [
+            {
+              "assignment": [
+                1,
+                1,
+                0,
+                1,
+                1,
+                0,
+                1,
+                1,
+                0
+              ],
+              "weight": "1/2"
+            },
+            {
+              "assignment": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              "weight": "1/2"
+            }
+          ]
+        },
+        "target_fingerprint": "bda5dec6b683b2d6d8c94c744e4292b5168852ff3fbc954901f6f7761f758416",
+        "expression": "1/2 * (1/9 * E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]) + 1/2 * (1/9 * E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)])",
+        "numeric_value": null
+      },
+      "certificate": {
+        "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+        "status": "POINT",
+        "verification_status": "VERIFIED",
+        "target_fingerprint": "bda5dec6b683b2d6d8c94c744e4292b5168852ff3fbc954901f6f7761f758416",
+        "policy_support": [
+          {
+            "assignment": [
+              1,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              1,
+              0
+            ],
+            "policy_probability": "1/2",
+            "experimental_assignment_probability": "1/512",
+            "fixed_policy_certificate": "bca09d7e24003aa55ec128ae1afd59e617a2ecaa82a206770618dedf06a829b3"
+          },
+          {
+            "assignment": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "policy_probability": "1/2",
+            "experimental_assignment_probability": "1/512",
+            "fixed_policy_certificate": "e194aee36260ef45a605c33e4cde6e65ad4f14691a6dbb1fca6536315c9933dc"
+          }
+        ],
+        "identified_functional": "1/2 * (1/9 * E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]) + 1/2 * (1/9 * E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)])",
+        "certificate_sha256": "de39a6505da97fbbdce61fb6111b83c8dca637bd247dd3c79d447ae3c9d660b1",
+        "estimation_request": null,
+        "warning": "Finite mixture of full-assignment population means; no PFN value is estimated"
+      },
+      "independent_replay": true,
+      "reviewed_input_sha256": "b5ba7335db9f0c776a4fed33149025318ae69207ec2b5cc235f0b010def95e08",
+      "native_evidence": {
+        "query_type": "FINITE_POLICY_MIXTURE",
+        "status": "POINT",
+        "route": "R1B_FINITE_POLICY",
+        "reason_code": null,
+        "result": {
+          "components": [
+            {
+              "study": {
+                "network_id": "network_69b0a34f48ba003430f3d82b835b6aa0d1ae4a2ab7a9bd1602bddfc87581bca9",
+                "node_order": [
+                  "学1",
+                  "学2",
+                  "学3",
+                  "学4",
+                  "学5",
+                  "学6",
+                  "学7",
+                  "学8",
+                  "学9"
+                ],
+                "undirected_edges": [
+                  [
+                    "学1",
+                    "学2"
+                  ],
+                  [
+                    "学1",
+                    "学3"
+                  ],
+                  [
+                    "学2",
+                    "学3"
+                  ],
+                  [
+                    "学4",
+                    "学5"
+                  ],
+                  [
+                    "学4",
+                    "学6"
+                  ],
+                  [
+                    "学5",
+                    "学6"
+                  ],
+                  [
+                    "学7",
+                    "学8"
+                  ],
+                  [
+                    "学7",
+                    "学9"
+                  ],
+                  [
+                    "学8",
+                    "学9"
+                  ]
+                ],
+                "treatment_variable": "发药记1，不发药记0",
+                "outcome_variable": "学校该学年的出勤率，取值为0到1的比例",
+                "outcome_kind": "continuous",
+                "context_reference": "下一学年；九所学校分属三个片区，片区内彼此相邻",
+                "observation_regime": "experimental",
+                "assignment_design_json": "{\"kind\":\"heterogeneous_bernoulli_binary_v1\",\"propensities\":{\"学1\":\"1/2\",\"学2\":\"1/2\",\"学3\":\"1/2\",\"学4\":\"1/2\",\"学5\":\"1/2\",\"学6\":\"1/2\",\"学7\":\"1/2\",\"学8\":\"1/2\",\"学9\":\"1/2\"}}",
+                "protocol_provenance": "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a,src_dd4e5d6887cc8a38f8f5327ae71c0843bed29892d35242e39cee2b70cc0e05ac,src_78eef50a28c25909aa25dd908900c8027f5f8e0d6b425c835b54754ef61f4d6a,src_c662ad650493d805249d3b1697e0b8f3285b1a5a4bf3d2d1008723c2bdeddc14,src_35c84cdeeb1f14e3a59748064cd6711f4578e91ab84f6a6bd60f8505d5adbe20,src_739f427f5b258175ac4aa1546fc5c76a1d641f883ecdc677dfe96186fc74b699; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                "network_provenance": "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a,src_dd4e5d6887cc8a38f8f5327ae71c0843bed29892d35242e39cee2b70cc0e05ac,src_78eef50a28c25909aa25dd908900c8027f5f8e0d6b425c835b54754ef61f4d6a,src_c662ad650493d805249d3b1697e0b8f3285b1a5a4bf3d2d1008723c2bdeddc14,src_35c84cdeeb1f14e3a59748064cd6711f4578e91ab84f6a6bd60f8505d5adbe20,src_739f427f5b258175ac4aa1546fc5c76a1d641f883ecdc677dfe96186fc74b699; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+              },
+              "target": {
+                "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+                "network_fingerprint": "b8a0c42b1099d68825cc86d1855c19991c40f8a3aa9e8d1dc99aaa318b29bdd1",
+                "node_order": [
+                  "学1",
+                  "学2",
+                  "学3",
+                  "学4",
+                  "学5",
+                  "学6",
+                  "学7",
+                  "学8",
+                  "学9"
+                ],
+                "outcome": "学校该学年的出勤率，取值为0到1的比例",
+                "context": "下一学年；九所学校分属三个片区，片区内彼此相邻",
+                "averaging_scope": "population_conditional_mean_given_W",
+                "authority": "TRUSTED_FIXTURE",
+                "query_resolution": "RESOLVED",
+                "assignment_law_fingerprint": null,
+                "exposure_fingerprint": null,
+                "node_id": null,
+                "arm": null,
+                "policy_assignment": [
+                  1,
+                  1,
+                  0,
+                  1,
+                  1,
+                  0,
+                  1,
+                  1,
+                  0
+                ],
+                "unit_weights": [
+                  "1/9",
+                  "1/9",
+                  "1/9",
+                  "1/9",
+                  "1/9",
+                  "1/9",
+                  "1/9",
+                  "1/9",
+                  "1/9"
+                ],
+                "target_digest": "77bad7ed9a5f41c908d54d149359ab6837a9722235a691ff71bb60538ebcd5b7"
+              },
+              "sources": [
+                {
+                  "source_id": "source_22c8163f956b85985c62ea41b88b1495eae37891f0de51fc9609ed33c57b49da",
+                  "operator": "NODE_FULL_LAW",
+                  "provenance": "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a,src_dd4e5d6887cc8a38f8f5327ae71c0843bed29892d35242e39cee2b70cc0e05ac,src_78eef50a28c25909aa25dd908900c8027f5f8e0d6b425c835b54754ef61f4d6a,src_c662ad650493d805249d3b1697e0b8f3285b1a5a4bf3d2d1008723c2bdeddc14,src_35c84cdeeb1f14e3a59748064cd6711f4578e91ab84f6a6bd60f8505d5adbe20,src_739f427f5b258175ac4aa1546fc5c76a1d641f883ecdc677dfe96186fc74b699; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                  "admission": "ADMITTED",
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                  "regime": "experimental",
+                  "shared_scope_digest": "749c56556d4cf89752e3b9c8ac4e9332a8a7ff3d51da6732f08312ab24d785cf",
+                  "protocol_digest": "074b2fe5db2d8d439be9a9775d957f700616d54b789a49ba76247e1deb35c5d5",
+                  "node_order": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6",
+                    "学7",
+                    "学8",
+                    "学9"
+                  ],
+                  "outcome": "学校该学年的出勤率，取值为0到1的比例",
+                  "context": "下一学年；九所学校分属三个片区，片区内彼此相邻",
+                  "outcome_nodes": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6",
+                    "学7",
+                    "学8",
+                    "学9"
+                  ],
+                  "assignment_cells": [],
+                  "exposure_fingerprint": null
+                }
+              ],
+              "assumptions": [
+                {
+                  "name": "known_assignment_law",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "full_vector_randomization",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "consistency",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "fixed_pretreatment_network",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "finite_conditional_first_moments",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                }
+              ],
+              "route_receipt": {
+                "version": "non-arm-network-inquiry-shadow-v1.7",
+                "study_digest": "813368343208df41fe6fb5f911db1b1a2e46c688aa0747b7c1af49fcfbedac40",
+                "study_declaration_digest": "46986ee26a7752f2b8765e86a8ec8874345bc70cb78cba660fb449f3754afe9c",
+                "assumption_evidence_digest": "d8be3fd4b52a88b75871c403011703e96c2b115b4eb5797728a28a772e113965",
+                "policy_assignment_probability": "1/512",
+                "target_digest": "77bad7ed9a5f41c908d54d149359ab6837a9722235a691ff71bb60538ebcd5b7",
+                "target_authority": "TRUSTED_FIXTURE",
+                "target_resolution": "RESOLVED",
+                "family_id": "randomized_full_assignment_policy_mean_candidate_v0",
+                "route_status": "THEOREM_BACKEND_UNAVAILABLE",
+                "target_match": "MATCHED",
+                "information_status": "SATISFIED",
+                "assumption_status": "ADMITTED",
+                "validity_status": "POSITIVE_UNDER_DECLARED_Q",
+                "backend_capability": "CANDIDATE_NOT_REGISTERED",
+                "required_observable": {
+                  "operator": "NODE_ASSIGNMENT_MEANS_FOR_POLICY",
+                  "network_fingerprint": "b8a0c42b1099d68825cc86d1855c19991c40f8a3aa9e8d1dc99aaa318b29bdd1",
+                  "node_order": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6",
+                    "学7",
+                    "学8",
+                    "学9"
+                  ],
+                  "outcome": "学校该学年的出勤率，取值为0到1的比例",
+                  "context": "下一学年；九所学校分属三个片区，片区内彼此相邻",
+                  "node_ids": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6",
+                    "学7",
+                    "学8",
+                    "学9"
+                  ],
+                  "arm_cell": null,
+                  "assignment_cell": [
+                    1,
+                    1,
+                    0,
+                    1,
+                    1,
+                    0,
+                    1,
+                    1,
+                    0
+                  ],
+                  "assignment_law_fingerprint": null,
+                  "exposure_fingerprint": null,
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR"
+                },
+                "source_results": [
+                  {
+                    "source_id": "source_22c8163f956b85985c62ea41b88b1495eae37891f0de51fc9609ed33c57b49da",
+                    "source_digest": "033aa414633031316efb42882ba6463f20f5ff60d89e0d73be793942cd424e63",
+                    "information_status": "SATISFIED",
+                    "reason": null,
+                    "rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17"
+                  }
+                ],
+                "blockers": [
+                  "NO_REGISTERED_GENERAL_FIXED_POLICY_THEOREM_OR_VERIFIER"
+                ],
+                "warnings": [
+                  "A4_SATISFIED_DOES_NOT_AUTHORIZE_CAUSAL_IDENTIFICATION"
+                ],
+                "mathematical_identification_from_router": null,
+                "digest": "b4a91d1f58f793aa32f565f0152828adc8b3d79219ab96d4862fcc4e67b7e457"
+              },
+              "selected_a4_source_id": "source_22c8163f956b85985c62ea41b88b1495eae37891f0de51fc9609ed33c57b49da",
+              "selected_a4_source_digest": "033aa414633031316efb42882ba6463f20f5ff60d89e0d73be793942cd424e63",
+              "a4_rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17",
+              "assignment_probability": "1/512",
+              "weighted_nodes": [
+                "学1",
+                "学2",
+                "学3",
+                "学4",
+                "学5",
+                "学6",
+                "学7",
+                "学8",
+                "学9"
+              ],
+              "node_weights": [
+                "1/9",
+                "1/9",
+                "1/9",
+                "1/9",
+                "1/9",
+                "1/9",
+                "1/9",
+                "1/9",
+                "1/9"
+              ],
+              "required_observables": [
+                "E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]",
+                "E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]",
+                "E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]",
+                "E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]",
+                "E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]",
+                "E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]",
+                "E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]",
+                "E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]",
+                "E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]"
+              ],
+              "identified_functional": "1/9 * E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]",
+              "target_fingerprint": "0dfd895e18d638fec8f7d23a697890c8d46cbe9d94f640b4f879018db89533a9",
+              "theorem_id": "R1B_RANDOMIZED_FULL_ASSIGNMENT_POLICY_POINT_V1",
+              "certificate_sha256": "bca09d7e24003aa55ec128ae1afd59e617a2ecaa82a206770618dedf06a829b3",
+              "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+              "status": "POINT",
+              "verification_status": "VERIFIED",
+              "estimation_request": null
+            },
+            {
+              "study": {
+                "network_id": "network_69b0a34f48ba003430f3d82b835b6aa0d1ae4a2ab7a9bd1602bddfc87581bca9",
+                "node_order": [
+                  "学1",
+                  "学2",
+                  "学3",
+                  "学4",
+                  "学5",
+                  "学6",
+                  "学7",
+                  "学8",
+                  "学9"
+                ],
+                "undirected_edges": [
+                  [
+                    "学1",
+                    "学2"
+                  ],
+                  [
+                    "学1",
+                    "学3"
+                  ],
+                  [
+                    "学2",
+                    "学3"
+                  ],
+                  [
+                    "学4",
+                    "学5"
+                  ],
+                  [
+                    "学4",
+                    "学6"
+                  ],
+                  [
+                    "学5",
+                    "学6"
+                  ],
+                  [
+                    "学7",
+                    "学8"
+                  ],
+                  [
+                    "学7",
+                    "学9"
+                  ],
+                  [
+                    "学8",
+                    "学9"
+                  ]
+                ],
+                "treatment_variable": "发药记1，不发药记0",
+                "outcome_variable": "学校该学年的出勤率，取值为0到1的比例",
+                "outcome_kind": "continuous",
+                "context_reference": "下一学年；九所学校分属三个片区，片区内彼此相邻",
+                "observation_regime": "experimental",
+                "assignment_design_json": "{\"kind\":\"heterogeneous_bernoulli_binary_v1\",\"propensities\":{\"学1\":\"1/2\",\"学2\":\"1/2\",\"学3\":\"1/2\",\"学4\":\"1/2\",\"学5\":\"1/2\",\"学6\":\"1/2\",\"学7\":\"1/2\",\"学8\":\"1/2\",\"学9\":\"1/2\"}}",
+                "protocol_provenance": "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a,src_dd4e5d6887cc8a38f8f5327ae71c0843bed29892d35242e39cee2b70cc0e05ac,src_78eef50a28c25909aa25dd908900c8027f5f8e0d6b425c835b54754ef61f4d6a,src_c662ad650493d805249d3b1697e0b8f3285b1a5a4bf3d2d1008723c2bdeddc14,src_35c84cdeeb1f14e3a59748064cd6711f4578e91ab84f6a6bd60f8505d5adbe20,src_739f427f5b258175ac4aa1546fc5c76a1d641f883ecdc677dfe96186fc74b699; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                "network_provenance": "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a,src_dd4e5d6887cc8a38f8f5327ae71c0843bed29892d35242e39cee2b70cc0e05ac,src_78eef50a28c25909aa25dd908900c8027f5f8e0d6b425c835b54754ef61f4d6a,src_c662ad650493d805249d3b1697e0b8f3285b1a5a4bf3d2d1008723c2bdeddc14,src_35c84cdeeb1f14e3a59748064cd6711f4578e91ab84f6a6bd60f8505d5adbe20,src_739f427f5b258175ac4aa1546fc5c76a1d641f883ecdc677dfe96186fc74b699; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+              },
+              "target": {
+                "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+                "network_fingerprint": "b8a0c42b1099d68825cc86d1855c19991c40f8a3aa9e8d1dc99aaa318b29bdd1",
+                "node_order": [
+                  "学1",
+                  "学2",
+                  "学3",
+                  "学4",
+                  "学5",
+                  "学6",
+                  "学7",
+                  "学8",
+                  "学9"
+                ],
+                "outcome": "学校该学年的出勤率，取值为0到1的比例",
+                "context": "下一学年；九所学校分属三个片区，片区内彼此相邻",
+                "averaging_scope": "population_conditional_mean_given_W",
+                "authority": "TRUSTED_FIXTURE",
+                "query_resolution": "RESOLVED",
+                "assignment_law_fingerprint": null,
+                "exposure_fingerprint": null,
+                "node_id": null,
+                "arm": null,
+                "policy_assignment": [
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1,
+                  1
+                ],
+                "unit_weights": [
+                  "1/9",
+                  "1/9",
+                  "1/9",
+                  "1/9",
+                  "1/9",
+                  "1/9",
+                  "1/9",
+                  "1/9",
+                  "1/9"
+                ],
+                "target_digest": "5ff2be6f0e03e57b18351d3cc7433b1abd33230ae8742d39f27e88d08b83e91a"
+              },
+              "sources": [
+                {
+                  "source_id": "source_22c8163f956b85985c62ea41b88b1495eae37891f0de51fc9609ed33c57b49da",
+                  "operator": "NODE_FULL_LAW",
+                  "provenance": "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a,src_dd4e5d6887cc8a38f8f5327ae71c0843bed29892d35242e39cee2b70cc0e05ac,src_78eef50a28c25909aa25dd908900c8027f5f8e0d6b425c835b54754ef61f4d6a,src_c662ad650493d805249d3b1697e0b8f3285b1a5a4bf3d2d1008723c2bdeddc14,src_35c84cdeeb1f14e3a59748064cd6711f4578e91ab84f6a6bd60f8505d5adbe20,src_739f427f5b258175ac4aa1546fc5c76a1d641f883ecdc677dfe96186fc74b699; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                  "admission": "ADMITTED",
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                  "regime": "experimental",
+                  "shared_scope_digest": "749c56556d4cf89752e3b9c8ac4e9332a8a7ff3d51da6732f08312ab24d785cf",
+                  "protocol_digest": "074b2fe5db2d8d439be9a9775d957f700616d54b789a49ba76247e1deb35c5d5",
+                  "node_order": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6",
+                    "学7",
+                    "学8",
+                    "学9"
+                  ],
+                  "outcome": "学校该学年的出勤率，取值为0到1的比例",
+                  "context": "下一学年；九所学校分属三个片区，片区内彼此相邻",
+                  "outcome_nodes": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6",
+                    "学7",
+                    "学8",
+                    "学9"
+                  ],
+                  "assignment_cells": [],
+                  "exposure_fingerprint": null
+                }
+              ],
+              "assumptions": [
+                {
+                  "name": "known_assignment_law",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "full_vector_randomization",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "consistency",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "fixed_pretreatment_network",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "finite_conditional_first_moments",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_ff5e6dfbc70050331b16e2529bd2ce3043b5417c721fa46a134fa9269b0dae97,src_b6e6b6b661090f17fb2694befe87e5ec54f4b98c689e17bb62ce46fdba332981,src_62caf0a4ba7bba48586411f04e9b0dd64c89b93fcf28ee0d0f427ec6161ecafc,src_3b59a818b87d721de44d08d2566f1dbfd8a1b2537ece664e600fe82caf8a70e1,src_639ae5c8d22a029ca171238244aa4512972f8c49a1cf4b68bf5b790cacdbcb1a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=1f8a358cd5fd58f9081b46af4aeb49dc3976521a2a82143304efbacdf6a52878",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                }
+              ],
+              "route_receipt": {
+                "version": "non-arm-network-inquiry-shadow-v1.7",
+                "study_digest": "813368343208df41fe6fb5f911db1b1a2e46c688aa0747b7c1af49fcfbedac40",
+                "study_declaration_digest": "46986ee26a7752f2b8765e86a8ec8874345bc70cb78cba660fb449f3754afe9c",
+                "assumption_evidence_digest": "d8be3fd4b52a88b75871c403011703e96c2b115b4eb5797728a28a772e113965",
+                "policy_assignment_probability": "1/512",
+                "target_digest": "5ff2be6f0e03e57b18351d3cc7433b1abd33230ae8742d39f27e88d08b83e91a",
+                "target_authority": "TRUSTED_FIXTURE",
+                "target_resolution": "RESOLVED",
+                "family_id": "randomized_full_assignment_policy_mean_candidate_v0",
+                "route_status": "THEOREM_BACKEND_UNAVAILABLE",
+                "target_match": "MATCHED",
+                "information_status": "SATISFIED",
+                "assumption_status": "ADMITTED",
+                "validity_status": "POSITIVE_UNDER_DECLARED_Q",
+                "backend_capability": "CANDIDATE_NOT_REGISTERED",
+                "required_observable": {
+                  "operator": "NODE_ASSIGNMENT_MEANS_FOR_POLICY",
+                  "network_fingerprint": "b8a0c42b1099d68825cc86d1855c19991c40f8a3aa9e8d1dc99aaa318b29bdd1",
+                  "node_order": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6",
+                    "学7",
+                    "学8",
+                    "学9"
+                  ],
+                  "outcome": "学校该学年的出勤率，取值为0到1的比例",
+                  "context": "下一学年；九所学校分属三个片区，片区内彼此相邻",
+                  "node_ids": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6",
+                    "学7",
+                    "学8",
+                    "学9"
+                  ],
+                  "arm_cell": null,
+                  "assignment_cell": [
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1
+                  ],
+                  "assignment_law_fingerprint": null,
+                  "exposure_fingerprint": null,
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR"
+                },
+                "source_results": [
+                  {
+                    "source_id": "source_22c8163f956b85985c62ea41b88b1495eae37891f0de51fc9609ed33c57b49da",
+                    "source_digest": "033aa414633031316efb42882ba6463f20f5ff60d89e0d73be793942cd424e63",
+                    "information_status": "SATISFIED",
+                    "reason": null,
+                    "rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17"
+                  }
+                ],
+                "blockers": [
+                  "NO_REGISTERED_GENERAL_FIXED_POLICY_THEOREM_OR_VERIFIER"
+                ],
+                "warnings": [
+                  "A4_SATISFIED_DOES_NOT_AUTHORIZE_CAUSAL_IDENTIFICATION"
+                ],
+                "mathematical_identification_from_router": null,
+                "digest": "49b8e92cd89dd24d60214d285738f45197b8cef9ac2494be79504408e4b325a9"
+              },
+              "selected_a4_source_id": "source_22c8163f956b85985c62ea41b88b1495eae37891f0de51fc9609ed33c57b49da",
+              "selected_a4_source_digest": "033aa414633031316efb42882ba6463f20f5ff60d89e0d73be793942cd424e63",
+              "a4_rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17",
+              "assignment_probability": "1/512",
+              "weighted_nodes": [
+                "学1",
+                "学2",
+                "学3",
+                "学4",
+                "学5",
+                "学6",
+                "学7",
+                "学8",
+                "学9"
+              ],
+              "node_weights": [
+                "1/9",
+                "1/9",
+                "1/9",
+                "1/9",
+                "1/9",
+                "1/9",
+                "1/9",
+                "1/9",
+                "1/9"
+              ],
+              "required_observables": [
+                "E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)]",
+                "E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)]",
+                "E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)]",
+                "E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)]",
+                "E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)]",
+                "E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)]",
+                "E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)]",
+                "E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)]",
+                "E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)]"
+              ],
+              "identified_functional": "1/9 * E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)]",
+              "target_fingerprint": "0f032d277da26ceb2cb463eb1e9741723938cfa74d50c5451d8167e36c4887f7",
+              "theorem_id": "R1B_RANDOMIZED_FULL_ASSIGNMENT_POLICY_POINT_V1",
+              "certificate_sha256": "e194aee36260ef45a605c33e4cde6e65ad4f14691a6dbb1fca6536315c9933dc",
+              "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+              "status": "POINT",
+              "verification_status": "VERIFIED",
+              "estimation_request": null
+            }
+          ],
+          "policy_probabilities": [
+            "1/2",
+            "1/2"
+          ],
+          "target_fingerprint": "bda5dec6b683b2d6d8c94c744e4292b5168852ff3fbc954901f6f7761f758416",
+          "identified_functional": "1/2 * (1/9 * E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)] + 1/9 * E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,0,1,1,0,1,1,0)]) + 1/2 * (1/9 * E[Y_{学1}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学2}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学3}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学4}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学5}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学6}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学7}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学8}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)] + 1/9 * E[Y_{学9}^obs | W=下一学年；九所学校分属三个片区，片区内彼此相邻, T_vector=(1,1,1,1,1,1,1,1,1)])",
+          "certificate_sha256": "de39a6505da97fbbdce61fb6111b83c8dca637bd247dd3c79d447ae3c9d660b1",
+          "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+          "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+          "status": "POINT",
+          "verification_status": "VERIFIED",
+          "estimation_request": null
+        },
+        "attempted_routes": []
+      }
+    }
+  ],
+  "clarification_questions": [],
+  "evidence_status": "CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE",
+  "production_admission": false,
+  "estimation_handoff_allowed": false,
+  "query_id": "q1",
+  "remaining_query_ids": [],
+  "result_scope": "SELECTED_QUERY_ONLY",
+  "fact_family": "NETWORK_FINITE_POLICY_FACTS",
+  "plan_sha256": "c1523edf6a9dc4ea066ed476119e91a8bc4493adfd74730ebe2024b60b262443",
+  "attempts": [
+    {
+      "stage": "POLICY_COMPONENT",
+      "state": "POINT",
+      "reason_code": null
+    },
+    {
+      "stage": "POLICY_COMPONENT",
+      "state": "POINT",
+      "reason_code": null
+    },
+    {
+      "method": "R1B_FINITE_POLICY",
+      "state": "POINT",
+      "reason_code": null
+    }
+  ],
+  "primary_method": "R1B_FINITE_POLICY",
+  "partial_fallback_performed": false
+}

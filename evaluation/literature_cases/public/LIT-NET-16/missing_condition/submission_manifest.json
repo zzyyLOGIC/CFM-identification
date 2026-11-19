@@ -1,0 +1,38 @@
+{
+  "case_id": "LIT-NET-16",
+  "variant": "missing_condition",
+  "paper_id": "imbens_manski2004_confidence_intervals",
+  "title": "六团队练习计划推广：平均完成率能确定到什么范围？",
+  "synthetic": true,
+  "gold_oracle_location": "OUTSIDE_PUBLIC_CASE_DIRECTORY",
+  "llm_access_scope": "PUBLIC_CASE_FILES_ONLY",
+  "business_question_file": "business_question.md",
+  "supporting_files": [
+    "study_protocol.md",
+    "information.md",
+    "bounds.md",
+    "model.md",
+    "data_dictionary.md",
+    "units.csv",
+    "network_edges.csv",
+    "design.csv",
+    "information_cells.json"
+  ],
+  "heldout": false,
+  "adapted": true,
+  "adaptation_note": "场景改编自 Imbens 与 Manski (2004) 部分识别置信区间框架下的项目推广评估；六个团队、试点与全面推广两套安排、完成率均值与区间均为项目自建",
+  "notes": "Econometrica 改编：合成业务材料，改编自 Imbens 与 Manski (2004) 的部分识别置信区间框架；项目自建有限均值模型，不是论文的数值答案。公式背景取自其第 3 节（p. 1847）。",
+  "network_upload": {
+    "nodes_file": "units.csv",
+    "edges_file": "network_edges.csv",
+    "declaration": {
+      "kind": "UNDIRECTED",
+      "completeness": "COMPLETE",
+      "description": "协作网络为固定的处理前简单无向网络，完整边为团队1—团队2、团队2—团队3、团队3—团队4、团队4—团队5、团队5—团队6，没有其他边。"
+    },
+    "declaration_source": {
+      "file": "study_protocol.md",
+      "quote": "协作网络为固定的处理前简单无向网络，完整边为团队1—团队2、团队2—团队3、团队3—团队4、团队4—团队5、团队5—团队6，没有其他边。"
+    }
+  }
+}

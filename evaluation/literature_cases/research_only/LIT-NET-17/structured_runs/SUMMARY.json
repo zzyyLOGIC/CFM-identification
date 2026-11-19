@@ -1,0 +1,47 @@
+{
+  "evidence_kind": "HAND_AUTHORED_REFERENCE_FIXTURE",
+  "automatic_business_reading": false,
+  "api_calls": 0,
+  "synthetic_reviews": true,
+  "rows": [
+    {
+      "variant": "original",
+      "plan_state": "REVIEW_REQUIRED",
+      "final_state": "PARTIAL",
+      "reason": null,
+      "independent_replay": true,
+      "interval": [
+        "7/12",
+        "3/4"
+      ],
+      "sharp": true,
+      "width": "1/6",
+      "target_sha256": "19be839169f2b619943685c10cbc7545af0321d48ba1d9198208dccd5f67007b"
+    },
+    {
+      "variant": "missing_condition",
+      "plan_state": "NEEDS_INPUT",
+      "final_state": "NEEDS_INPUT",
+      "reason": "BOUNDED_MODEL_DECLARATIONS_INCOMPLETE",
+      "independent_replay": false,
+      "interval": null,
+      "sharp": null,
+      "width": null,
+      "target_sha256": null
+    },
+    {
+      "variant": "changed_target",
+      "plan_state": "REVIEW_REQUIRED",
+      "final_state": "PARTIAL",
+      "reason": null,
+      "independent_replay": true,
+      "interval": [
+        "1/2",
+        "3/4"
+      ],
+      "sharp": true,
+      "width": "1/4",
+      "target_sha256": "0fc3bcaab609b156b0b6be80d6cb81b903bfd50823e3d7f0cf720824793f62f6"
+    }
+  ]
+}

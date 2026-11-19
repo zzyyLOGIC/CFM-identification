@@ -26,11 +26,11 @@ def load_registry():
 
 
 class LiteratureCaseLibraryTest(unittest.TestCase):
-    def test_registry_has_twelve_unique_cases(self):
+    def test_registry_has_unique_cases(self):
         registry = load_registry()
         ids = [c["case_id"] for c in registry["cases"]]
-        self.assertEqual(len(ids), 12)
-        self.assertEqual(len(set(ids)), 12)
+        self.assertEqual(len(ids), 21)
+        self.assertEqual(len(set(ids)), 21)
 
     def test_public_has_no_reference_like_files(self):
         for case in load_registry()["cases"]:
@@ -53,19 +53,21 @@ class LiteratureCaseLibraryTest(unittest.TestCase):
                 for name in value.get("supporting_files", []):
                     self.assertTrue((folder / name).is_file(), folder / name)
 
-    def test_four_holdouts(self):
+    def test_holdouts_stay_four_and_cover_all_families(self):
+        # 案例库从 12 个扩到 21 个：09-17 是补充情境，都做了完整结构化运行并已入库，
+        # 不宜倒签成 holdout；holdout 仍是原来的 4 个，覆盖三个能力族（网络两题）。
         cases = load_registry()["cases"]
         held = [c for c in cases if c.get("heldout")]
         self.assertEqual(len(held), 4)
-        self.assertGreaterEqual(len(held) * 3, len(cases))
+        self.assertEqual({c["family"] for c in held}, {"NETWORK", "IV", "DAG"})
 
-    def test_benchmark_has_36_public_rows_and_no_expected_status(self):
+    def test_benchmark_has_63_public_rows_and_no_expected_status(self):
         rows = [
             json.loads(line)
             for line in (CASES / "benchmark" / "cases.jsonl").read_text(encoding="utf8").splitlines()
             if line.strip()
         ]
-        self.assertEqual(len(rows), 36)
+        self.assertEqual(len(rows), 63)
         self.assertTrue(all("expected_status" not in row for row in rows))
         self.assertTrue(all("reference_file" not in row for row in rows))
 
@@ -75,7 +77,7 @@ class LiteratureCaseLibraryTest(unittest.TestCase):
             for line in (CASES / "research_only" / "benchmark" / "references.jsonl").read_text(encoding="utf8").splitlines()
             if line.strip()
         ]
-        self.assertEqual(len(rows), 36)
+        self.assertEqual(len(rows), 63)
         held = {(r["case_id"], r["variant"]) for r in rows if r["holdout"]}
         self.assertEqual(len(held), 12)  # 4 held-out cases x 3 variants
 
@@ -90,7 +92,7 @@ class LiteratureCaseLibraryTest(unittest.TestCase):
             for line in (CASES / "research_only" / "benchmark" / "references.jsonl").read_text(encoding="utf8").splitlines()
             if line.strip()
         ]
-        self.assertEqual(len(refs), 36)
+        self.assertEqual(len(refs), 63)
         for row in refs:
             key = (row["case_id"], row["variant"])
             self.assertEqual((row["expected_status"], bool(row["holdout"])), expected[key], key)

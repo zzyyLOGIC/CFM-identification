@@ -426,6 +426,120 @@
       "reference_scope": "Hand-authored historical fixture or historical capability check; not live LLM evidence"
     },
     {
+      "case_id": "LIT-NET-09",
+      "paper_id": "alatas_etal2016_targeting",
+      "family": "NETWORK",
+      "title": "抽查核实怎么安排，八户家底能被摸清多少？",
+      "public_directory": "evaluation/literature_cases/public/LIT-NET-09",
+      "research_directory": "evaluation/literature_cases/research_only/LIT-NET-09",
+      "variants": [
+        {
+          "name": "original",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/original (2026-11-16, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        },
+        {
+          "name": "missing_condition",
+          "expected_status": "NEEDS_INPUT",
+          "actual_status": "NEEDS_INPUT",
+          "actual_source": "structured_runs/missing_condition (2026-11-16, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "NEEDS_INPUT"
+        },
+        {
+          "name": "changed_target",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/changed_target (2026-11-16, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        }
+      ],
+      "heldout": false,
+      "review_status": "PENDING_TEACHER",
+      "status": "PILOT_RUN_COMPLETE",
+      "reference_scope": "Hand-authored structured fixture (2026-11-16, no LLM). A 2026-11-18 real-LLM reading run (deepseek-chat, three variants, one request each, see actual_outputs.json): original POINT, missing_condition NEEDS_INPUT, changed_target POINT. Not a first-answer accuracy study; the earlier round and the three pre-revision records stay outside the repository."
+    },
+    {
+      "case_id": "LIT-NET-10",
+      "paper_id": "miguel_kremer2004_deworming",
+      "family": "NETWORK",
+      "title": "两种覆盖方案各一半机会时，九校平均出勤率是多少？",
+      "public_directory": "evaluation/literature_cases/public/LIT-NET-10",
+      "research_directory": "evaluation/literature_cases/research_only/LIT-NET-10",
+      "variants": [
+        {
+          "name": "original",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/original (2026-11-15, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        },
+        {
+          "name": "missing_condition",
+          "expected_status": "NEEDS_INPUT",
+          "actual_status": "NEEDS_INPUT",
+          "actual_source": "structured_runs/missing_condition (2026-11-15, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "NEEDS_INPUT"
+        },
+        {
+          "name": "changed_target",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/changed_target (2026-11-15, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        }
+      ],
+      "heldout": false,
+      "review_status": "PENDING_TEACHER",
+      "status": "PILOT_RUN_COMPLETE",
+      "reference_scope": "Hand-authored structured fixture (2026-11-16, no LLM). A 2026-11-18 real-LLM reading run (deepseek-chat, three variants, one request each, see actual_outputs.json): original POINT, missing_condition NEEDS_INPUT; changed_target stopped at READING_NOT_CONFIRMED, evaluation list read as all nine schools (see review_teacher.md). Not a first-answer accuracy study; the earlier round and the three pre-revision records stay outside the repository."
+    },
+    {
+      "case_id": "LIT-NET-11",
+      "paper_id": "cai_szeidl2018_meetings",
+      "family": "NETWORK",
+      "title": "两种投放方案各一半机会时，四十家企业平均申请概率是多少？",
+      "public_directory": "evaluation/literature_cases/public/LIT-NET-11",
+      "research_directory": "evaluation/literature_cases/research_only/LIT-NET-11",
+      "variants": [
+        {
+          "name": "original",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/original (2026-11-16, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        },
+        {
+          "name": "missing_condition",
+          "expected_status": "NEEDS_INPUT",
+          "actual_status": "NEEDS_INPUT",
+          "actual_source": "structured_runs/missing_condition (2026-11-16, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "NEEDS_INPUT"
+        },
+        {
+          "name": "changed_target",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/changed_target (2026-11-16, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        }
+      ],
+      "heldout": false,
+      "review_status": "PENDING_TEACHER",
+      "status": "PILOT_RUN_COMPLETE",
+      "reference_scope": "Hand-authored structured fixture (2026-11-16, no LLM). A 2026-11-18 real-LLM reading run (deepseek-chat, three variants, one request each, see actual_outputs.json): original POINT, missing_condition NEEDS_INPUT, changed_target POINT. Not a first-answer accuracy study; the earlier round and the three pre-revision records stay outside the repository."
+    },
+    {
       "case_id": "LIT-IV-02",
       "paper_id": "balke_pearl1997_bounds",
       "family": "IV",
@@ -464,6 +578,234 @@
       "holdout_scope": "DEVELOPMENT_HOLDOUT_NOT_BLIND_TO_REPO_HISTORY",
       "reference_scope": "Hand-authored historical fixture or historical capability check; not live LLM evidence",
       "current_scope_note": "A limited binary-IV research backend now exists. These public cases are not connected to the current automatic web route; sample counts are not an exact population law. UNSUPPORTED is entry coverage, not an IV impossibility proof."
+    },
+    {
+      "case_id": "LIT-NET-12",
+      "paper_id": "carrell2013_sorting",
+      "family": "NETWORK",
+      "title": "两套带学人安排各一半机会时，八名同学平均 GPA 变化是多少？",
+      "public_directory": "evaluation/literature_cases/public/LIT-NET-12",
+      "research_directory": "evaluation/literature_cases/research_only/LIT-NET-12",
+      "variants": [
+        {
+          "name": "original",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/original (2026-11-16, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        },
+        {
+          "name": "missing_condition",
+          "expected_status": "NEEDS_INPUT",
+          "actual_status": "NEEDS_INPUT",
+          "actual_source": "structured_runs/missing_condition (2026-11-16, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "NEEDS_INPUT"
+        },
+        {
+          "name": "changed_target",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/changed_target (2026-11-16, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        }
+      ],
+      "heldout": false,
+      "review_status": "PENDING_TEACHER",
+      "status": "PILOT_RUN_COMPLETE",
+      "reference_scope": "Hand-authored structured fixture (2026-11-16, no LLM). A 2026-11-18 real-LLM reading run (deepseek-chat, three variants, one request each, see actual_outputs.json): original POINT, changed_target POINT; missing_condition stopped at READING_NOT_CONFIRMED, known_assignment_law read as false (see review_teacher.md). Not a first-answer accuracy study; the earlier round and the three pre-revision records stay outside the repository."
+    },
+    {
+      "case_id": "LIT-NET-13",
+      "paper_id": "dahl2014_paternity_leave",
+      "family": "NETWORK",
+      "title": "两套生效安排各一半机会时，八名父亲休假概率的平均提高是多少？",
+      "public_directory": "evaluation/literature_cases/public/LIT-NET-13",
+      "research_directory": "evaluation/literature_cases/research_only/LIT-NET-13",
+      "variants": [
+        {
+          "name": "original",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/original (2026-11-16, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        },
+        {
+          "name": "missing_condition",
+          "expected_status": "NEEDS_INPUT",
+          "actual_status": "NEEDS_INPUT",
+          "actual_source": "structured_runs/missing_condition (2026-11-16, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "NEEDS_INPUT"
+        },
+        {
+          "name": "changed_target",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/changed_target (2026-11-16, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        }
+      ],
+      "heldout": false,
+      "review_status": "PENDING_TEACHER",
+      "status": "PILOT_RUN_COMPLETE",
+      "reference_scope": "Hand-authored structured fixture (2026-11-16, no LLM). A 2026-11-18 real-LLM reading run (deepseek-chat, three variants, one request each, see actual_outputs.json): changed_target POINT; original and missing_condition stopped at READING_NOT_CONFIRMED on the coverage rule (see review_teacher.md). Not a first-answer accuracy study; the earlier round and the three pre-revision records stay outside the repository."
+    },
+    {
+      "case_id": "LIT-NET-14",
+      "paper_id": "conley_udry2010_pineapple",
+      "family": "NETWORK",
+      "title": "两套示范安排各一半机会时，八名农户化肥强度的平均变化是多少？",
+      "public_directory": "evaluation/literature_cases/public/LIT-NET-14",
+      "research_directory": "evaluation/literature_cases/research_only/LIT-NET-14",
+      "variants": [
+        {
+          "name": "original",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/original (2026-11-17, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        },
+        {
+          "name": "missing_condition",
+          "expected_status": "NEEDS_INPUT",
+          "actual_status": "NEEDS_INPUT",
+          "actual_source": "structured_runs/missing_condition (2026-11-17, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "NEEDS_INPUT"
+        },
+        {
+          "name": "changed_target",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/changed_target (2026-11-17, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        }
+      ],
+      "heldout": false,
+      "review_status": "PENDING_TEACHER",
+      "status": "PILOT_RUN_COMPLETE",
+      "reference_scope": "Hand-authored structured fixture (2026-11-16, no LLM). The 2026-11-18 21:17 real-LLM reading run on the revised wording (deepseek-chat, see actual_outputs.json): original POINT, changed_target POINT, missing_condition stopped at READING_REJECTED (schema check, extra field) after one re-read. The 21:15 wording states that treatment is a 1/0 demonstration indicator and fertiliser intensity is the outcome; two earlier runs on the old wording stay outside the repository. Not a first-answer accuracy study."
+    },
+    {
+      "case_id": "LIT-NET-15",
+      "paper_id": "manski1993_reflection",
+      "family": "NETWORK",
+      "title": "两套辅导安排各一半机会时，六名学生成绩的平均提高是多少？",
+      "public_directory": "evaluation/literature_cases/public/LIT-NET-15",
+      "research_directory": "evaluation/literature_cases/research_only/LIT-NET-15",
+      "variants": [
+        {
+          "name": "original",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/original (2026-11-17, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        },
+        {
+          "name": "missing_condition",
+          "expected_status": "NEEDS_INPUT",
+          "actual_status": "NEEDS_INPUT",
+          "actual_source": "structured_runs/missing_condition (2026-11-17, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "NEEDS_INPUT"
+        },
+        {
+          "name": "changed_target",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/changed_target (2026-11-17, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        }
+      ],
+      "heldout": false,
+      "review_status": "PENDING_TEACHER",
+      "status": "PILOT_RUN_COMPLETE",
+      "reference_scope": "Hand-authored structured fixture (2026-11-16, no LLM). A 2026-11-18 real-LLM reading run (deepseek-chat, three variants, one request each, see actual_outputs.json): original POINT, missing_condition NEEDS_INPUT, changed_target POINT. Not a first-answer accuracy study; the earlier round and the three pre-revision records stay outside the repository."
+    },
+    {
+      "case_id": "LIT-NET-16",
+      "paper_id": "imbens_manski2004_confidence_intervals",
+      "family": "NETWORK",
+      "title": "六个团队试点全推广时，平均完成率能确定到什么范围？",
+      "public_directory": "evaluation/literature_cases/public/LIT-NET-16",
+      "research_directory": "evaluation/literature_cases/research_only/LIT-NET-16",
+      "variants": [
+        {
+          "name": "original",
+          "expected_status": "PARTIAL",
+          "actual_status": "PARTIAL",
+          "actual_source": "structured_runs/original (2026-11-17, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "PARTIAL"
+        },
+        {
+          "name": "missing_condition",
+          "expected_status": "NEEDS_INPUT",
+          "actual_status": "NEEDS_INPUT",
+          "actual_source": "structured_runs/missing_condition (2026-11-17, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "NEEDS_INPUT"
+        },
+        {
+          "name": "changed_target",
+          "expected_status": "POINT",
+          "actual_status": "POINT",
+          "actual_source": "structured_runs/changed_target (2026-11-17, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "POINT"
+        }
+      ],
+      "heldout": false,
+      "review_status": "PENDING_TEACHER",
+      "status": "PILOT_RUN_COMPLETE",
+      "reference_scope": "Hand-authored structured fixture (2026-11-16, no LLM). A 2026-11-18 real-LLM reading run (deepseek-chat, three variants, one request each, see actual_outputs.json): original PARTIAL [1/6, 5/6], missing_condition NEEDS_INPUT, changed_target POINT [1/2, 1/2]. Not a first-answer accuracy study; the earlier round and the three pre-revision records stay outside the repository."
+    },
+    {
+      "case_id": "LIT-NET-17",
+      "paper_id": "chernozhukov2007_parameter_sets",
+      "family": "NETWORK",
+      "title": "六家门店共享库存全接入：平均达标率能确定到什么范围？",
+      "public_directory": "evaluation/literature_cases/public/LIT-NET-17",
+      "research_directory": "evaluation/literature_cases/research_only/LIT-NET-17",
+      "variants": [
+        {
+          "name": "original",
+          "expected_status": "PARTIAL",
+          "actual_status": "PARTIAL",
+          "actual_source": "structured_runs/original (2026-11-17, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "PARTIAL"
+        },
+        {
+          "name": "missing_condition",
+          "expected_status": "NEEDS_INPUT",
+          "actual_status": "NEEDS_INPUT",
+          "actual_source": "structured_runs/missing_condition (2026-11-17, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "NEEDS_INPUT"
+        },
+        {
+          "name": "changed_target",
+          "expected_status": "PARTIAL",
+          "actual_status": "PARTIAL",
+          "actual_source": "structured_runs/changed_target (2026-11-17, no LLM)",
+          "expected_query_count": 1,
+          "expected_runtime_state": "PARTIAL"
+        }
+      ],
+      "heldout": false,
+      "review_status": "PENDING_TEACHER",
+      "status": "PILOT_RUN_COMPLETE",
+      "reference_scope": "Hand-authored structured fixture (2026-11-16, no LLM). A 2026-11-18 real-LLM reading run (deepseek-chat, three variants, one request each, see actual_outputs.json): original PARTIAL [7/12, 3/4], missing_condition NEEDS_INPUT, changed_target PARTIAL [1/2, 3/4]. Not a first-answer accuracy study; the earlier round and the three pre-revision records stay outside the repository."
     }
   ],
   "holdout_policy": "Development holdout only: references frozen and not used for tuning. Some source materials already appear in demo history; not blind against repository history."

@@ -1,0 +1,815 @@
+{
+  "case_id": "LIT-NET-17",
+  "paper_id": "chernozhukov2007_parameter_sets",
+  "paper": {
+    "author": "Victor Chernozhukov, Han Hong and Elie Tamer",
+    "year": 2007,
+    "title": "Estimation and Confidence Regions for Parameter Sets in Econometric Models",
+    "venue": "Econometrica",
+    "volume": "75",
+    "pages": "1243-1284",
+    "doi": null,
+    "version_checked": "User-provided published PDF, pp. 1243-1284, full text extracted; 17 verbatim quotes checked back to pages (PDF page + 1242), matching after whitespace removal and line-break hyphen restoration."
+  },
+  "paper_reference": {
+    "paper_question": "参数只能定到一个集合时，识别集合如何写成准则函数的零集，估计量与置信区域如何由样本准则函数的等值集构造？",
+    "target": "项目自建有限模型中的六门店链式全政策均值：六家门店全部接入共享库存时，等权平均达标率的识别集合。",
+    "source_location": "Section 2 (pp. 1246-1247) for Theta_I = {theta in Theta : Q(theta) = 0}, the moment-inequality set {theta : E_P[m_i(theta)] <= 0} in (2.1), and the statement that with linear moment functions Theta_I is an intersection of linear half-spaces; p. 1248 Example 1 for interval data with Theta_I = {theta : E[Y1] <= theta <= E[Y2]}; p. 1250 and p. 1253 for the contour set C_n(c). The numeric [7/12, 3/4] is NOT from this paper.",
+    "formula": "参照组：链式相邻网络 门店1—门店2—门店3—门店4—门店5—门店6，同伴暴露=严格过半邻居接入，平票为0。原试点每轮均匀固定抽 2 个名额；目标政策为全接入（每家自身处理=1），此时每家门店的暴露都是1，目标格子统一为（自身=1、暴露=1）。两类约束：门店1、门店6 的该格子是等式约束（试点揭示 3/4）；门店2-5 的该格子是双边夹逼约束（档案 [1/2, 3/4]，且该格子需要 3 个名额、试点只有 2 个，在分配律下概率为零，故只能落在界限里）。目标 theta = 六个格子均值的等权平均，识别集合下界 4*(1/2)/6 + 2*(3/4)/6 = 1/3 + 1/4 = 7/12；上界 4*(3/4)/6 + 2*(3/4)/6 = 1/2 + 1/4 = 3/4；宽度 1/6。与论文写法对应：六个格子给出六条约束，Theta_I 是这些约束在半空间交里截出的线段，下界绑在四条档案下界加两条等式、上界绑在四条档案上界加两条等式。变化版只评门店2-5（纯夹逼、没有等式）：识别集合退化为档案区间本身 [1/2, 3/4]，宽度 1/4，正是论文例 1 的 [E Y1, E Y2] 在本题的逐字形态。",
+    "conditions": [
+      "Complete finite mean model: only the listed exact population signature means and the archive bounds are known.",
+      "No full joint distribution and no extra aggregate means are provided.",
+      "Each store's mean lies in [1/2, 3/4] under every complete binary assignment (archive record).",
+      "Mean sufficiency: each store's potential-outcome mean depends only on own treatment and strict-majority peer exposure, for all binary assignments.",
+      "Known assignment law: uniform fixed quota of 2 out of 6.",
+      "Consistency, randomization independence, fixed pre-treatment network, finite first moments.",
+      "No additional cross-unit or cross-context coupling constraints."
+    ],
+    "sharpness_argument": "The two endpoint cells are equalities at 3/4, contributing 2*(3/4)/6 = 1/4. Each of the four interior cells is independently free within [1/2, 3/4], contributing [4*(1/2)/6, 4*(3/4)/6] = [1/3, 1/2]. Lower endpoint 1/3 + 1/4 = 7/12 and upper endpoint 1/2 + 1/4 = 3/4 are both attainable, so the interval is sharp relative to the declared finite mean model; the engine certificate reports sharp=true.",
+    "what_paper_supports": [
+      "The identified set as the zero set of a nonnegative population criterion, Theta_I = {theta : Q(theta) = 0}, generally multivalued (p. 1246).",
+      "Moment-inequality characterization (2.1) and the statement that with linear moment functions Theta_I is an intersection of linear half-spaces (p. 1246).",
+      "Moment-equality characterization (2.4)-(2.6) with the GMM criterion (p. 1247).",
+      "Example 1: interval data with Theta_I = {theta : E[Y1] <= theta <= E[Y2]} and a two-kink criterion (p. 1248).",
+      "Contour sets of the sample criterion as the general form of estimates and regions (p. 1250; equation (3.2) on p. 1253)."
+    ],
+    "what_paper_does_not_support": [
+      "It does not supply the numeric [7/12, 3/4] or [1/2, 3/4].",
+      "It does not supply the six-store chain network, the quota design, the archive bounds, or the known/bracketed split.",
+      "Its estimation and inference machinery (the choice of c-hat, subsampling on p. 1257, asymptotics of C_n on p. 1259, Hausdorff rates and the degeneracy property on pp. 1251 and 1254) has no counterpart in this deterministic finite model.",
+      "It does not claim that Theta_I as defined is sharp; sharpness here is a property of the declared finite model, checked by replaying the certificate, not a citation."
+    ]
+  },
+  "available_information_a4": {
+    "population": "Six stores: 门店1-门店6, equal weight 1/6.",
+    "network": "Fixed chain: 门店1—门店2—门店3—门店4—门店5—门店6; no other edges.",
+    "assignment": "Original pilot: uniform fixed quota of exactly 2 treated stores.",
+    "information": "Two exact population signature means: 门店1 and 门店6 each at (own=1, exposure=1) equal 3/4. Interior stores' (own=1, exposure=1) cells never occur under the quota-2 pilot (they would need three treated stores), so their means are only known to lie in the archive interval [1/2, 3/4].",
+    "complete_model": "Only the listed means and archive bounds are known; no full joint law or extra aggregate means."
+  },
+  "scientific_assumptions_a5": {
+    "status": "PROPOSED_AND_REQUIRES_INDEPENDENT_REVIEW",
+    "items": [
+      "Mean sufficiency: potential-outcome mean depends only on own treatment and strict-majority peer exposure, for all binary assignments.",
+      "Known uniform fixed-quota assignment law.",
+      "Consistency.",
+      "Randomization independence.",
+      "Fixed pre-treatment network.",
+      "Finite first moments.",
+      "No additional coupling restrictions."
+    ],
+    "not_adopted": [
+      "No extra monotonicity or other shape restrictions in the original case.",
+      "No full joint distribution.",
+      "No additional aggregate means or coupling constraints.",
+      "No distribution-free [0,1] bounds are used for the interior stores; their declared bounds are the narrower archive interval."
+    ]
+  },
+  "software_expected": {
+    "original": {
+      "status": "PARTIAL",
+      "interval": [
+        "7/12",
+        "3/4"
+      ],
+      "sharp": true,
+      "reason": "The bounded-policy adapter supports the complete finite mean model with per-node archive bounds and certifies the sharp interval."
+    },
+    "missing_condition": {
+      "status": "NEEDS_INPUT",
+      "reason": "The complete-model declarations are removed; the system cannot certify sharpness."
+    },
+    "changed_target": {
+      "status": "PARTIAL",
+      "interval": [
+        "1/2",
+        "3/4"
+      ],
+      "sharp": true,
+      "reason": "Restricting the target population to the four archive-covered stores removes every equality constraint, so the identified set equals the archive interval itself and no contraction occurs."
+    }
+  },
+  "actual_run": {
+    "method": "LOCAL_STRUCTURED_BOUNDED_POLICY_RUN_NO_LLM",
+    "provenance": "2026-11-17 local structured run through the existing bounded-policy business entry with explicit synthetic reviews; api_calls=0.",
+    "original": {
+      "state": "PARTIAL",
+      "independent_replay": true,
+      "interval": [
+        "7/12",
+        "3/4"
+      ],
+      "width": "1/6",
+      "sharp": true,
+      "target_sha256": "19be839169f2b619943685c10cbc7545af0321d48ba1d9198208dccd5f67007b",
+      "certificate": {
+        "version": "bounded-policy-mean-1",
+        "theorem": "FINITE_SIGNATURE_MEAN_BOX",
+        "input_sha256": "fe1138236723a5f0a69ff87ed573c619344c6916ab5cd3fb0fbe32baac136996",
+        "target_sha256": "19be839169f2b619943685c10cbc7545af0321d48ba1d9198208dccd5f67007b",
+        "status": "PARTIAL",
+        "lower": "7/12",
+        "upper": "3/4",
+        "width": "1/6",
+        "logical_range": [
+          "1/2",
+          "3/4"
+        ],
+        "informative": true,
+        "sharp": true,
+        "model_scope": "SIGNATURE_MEANS_AND_NODE_BOUNDS_ONLY",
+        "cells": [
+          {
+            "cell": [
+              "门店1",
+              0,
+              0
+            ],
+            "support": "2/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店1",
+              0,
+              1
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店1",
+              1,
+              0
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店1",
+              1,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": "3/4",
+            "lower_world": "3/4",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店2",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店2",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店2",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店2",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店3",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店3",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店3",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店3",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店4",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店4",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店4",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店4",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店5",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店5",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店5",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店5",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店6",
+              0,
+              0
+            ],
+            "support": "2/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店6",
+              0,
+              1
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店6",
+              1,
+              0
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店6",
+              1,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": "3/4",
+            "lower_world": "3/4",
+            "upper_world": "3/4"
+          }
+        ],
+        "bound_terms": [
+          {
+            "cell": [
+              "门店1",
+              1,
+              1
+            ],
+            "coefficient": "1/6",
+            "basis": "A4_EQUALITY",
+            "lower": "3/4",
+            "upper": "3/4"
+          },
+          {
+            "cell": [
+              "门店2",
+              1,
+              1
+            ],
+            "coefficient": "1/6",
+            "basis": "MEAN_BOUNDS",
+            "lower": "1/2",
+            "upper": "3/4"
+          },
+          {
+            "cell": [
+              "门店3",
+              1,
+              1
+            ],
+            "coefficient": "1/6",
+            "basis": "MEAN_BOUNDS",
+            "lower": "1/2",
+            "upper": "3/4"
+          },
+          {
+            "cell": [
+              "门店4",
+              1,
+              1
+            ],
+            "coefficient": "1/6",
+            "basis": "MEAN_BOUNDS",
+            "lower": "1/2",
+            "upper": "3/4"
+          },
+          {
+            "cell": [
+              "门店5",
+              1,
+              1
+            ],
+            "coefficient": "1/6",
+            "basis": "MEAN_BOUNDS",
+            "lower": "1/2",
+            "upper": "3/4"
+          },
+          {
+            "cell": [
+              "门店6",
+              1,
+              1
+            ],
+            "coefficient": "1/6",
+            "basis": "A4_EQUALITY",
+            "lower": "3/4",
+            "upper": "3/4"
+          }
+        ],
+        "realization": "BERNOULLI_PER_NODE_SIGNATURE",
+        "production_admission": false,
+        "estimation_handoff_allowed": false,
+        "certificate_sha256": "4cc42a2c2c55e359d83fa213b63ab5996396e3e06b4dc90a1cf011a74f1ce85b"
+      }
+    },
+    "missing_condition": {
+      "state": "NEEDS_INPUT",
+      "reason_code": "BOUNDED_MODEL_DECLARATIONS_INCOMPLETE",
+      "certificate_emitted": false
+    },
+    "changed_target": {
+      "state": "PARTIAL",
+      "independent_replay": true,
+      "interval": [
+        "1/2",
+        "3/4"
+      ],
+      "width": "1/4",
+      "sharp": true,
+      "target_sha256": "0fc3bcaab609b156b0b6be80d6cb81b903bfd50823e3d7f0cf720824793f62f6",
+      "certificate": {
+        "version": "bounded-policy-mean-1",
+        "theorem": "FINITE_SIGNATURE_MEAN_BOX",
+        "input_sha256": "2db76a45cc3ae064c67cfd44e8cb08ea865910f3a3ba370a5f3bf34e642dc40a",
+        "target_sha256": "0fc3bcaab609b156b0b6be80d6cb81b903bfd50823e3d7f0cf720824793f62f6",
+        "status": "PARTIAL",
+        "lower": "1/2",
+        "upper": "3/4",
+        "width": "1/4",
+        "logical_range": [
+          "1/2",
+          "3/4"
+        ],
+        "informative": false,
+        "sharp": true,
+        "model_scope": "SIGNATURE_MEANS_AND_NODE_BOUNDS_ONLY",
+        "cells": [
+          {
+            "cell": [
+              "门店1",
+              0,
+              0
+            ],
+            "support": "2/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店1",
+              0,
+              1
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店1",
+              1,
+              0
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店1",
+              1,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": "3/4",
+            "lower_world": "3/4",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店2",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店2",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店2",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店2",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店3",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店3",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店3",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店3",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店4",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店4",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店4",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店4",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店5",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店5",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店5",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店5",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店6",
+              0,
+              0
+            ],
+            "support": "2/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店6",
+              0,
+              1
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店6",
+              1,
+              0
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店6",
+              1,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": "3/4",
+            "lower_world": "3/4",
+            "upper_world": "3/4"
+          }
+        ],
+        "bound_terms": [
+          {
+            "cell": [
+              "门店2",
+              1,
+              1
+            ],
+            "coefficient": "1/4",
+            "basis": "MEAN_BOUNDS",
+            "lower": "1/2",
+            "upper": "3/4"
+          },
+          {
+            "cell": [
+              "门店3",
+              1,
+              1
+            ],
+            "coefficient": "1/4",
+            "basis": "MEAN_BOUNDS",
+            "lower": "1/2",
+            "upper": "3/4"
+          },
+          {
+            "cell": [
+              "门店4",
+              1,
+              1
+            ],
+            "coefficient": "1/4",
+            "basis": "MEAN_BOUNDS",
+            "lower": "1/2",
+            "upper": "3/4"
+          },
+          {
+            "cell": [
+              "门店5",
+              1,
+              1
+            ],
+            "coefficient": "1/4",
+            "basis": "MEAN_BOUNDS",
+            "lower": "1/2",
+            "upper": "3/4"
+          }
+        ],
+        "realization": "BERNOULLI_PER_NODE_SIGNATURE",
+        "production_admission": false,
+        "estimation_handoff_allowed": false,
+        "certificate_sha256": "a7e9ee9a8b7cdeba0a252aeb8055b320035aa1f3ba7d54e663e862f4d584d835"
+      }
+    }
+  },
+  "review_status": "PENDING_TEACHER",
+  "reviewer": null,
+  "holdout": false,
+  "notes": "Second bounded PARTIAL case in the LIT-NET series and the first one whose width comes from a non-trivial per-node mean bracket instead of the [0,1] extremes. The [7/12, 3/4] interval is a project finite-model result instantiating the moment-constraint/criterion-set form of Chernozhukov, Hong & Tamer (2007); it is not a numeric answer from the paper. Missing complete-model scope is NEEDS_INPUT; the population-restricted changed target is a pure interval-data case whose identified set equals the archive interval [1/2, 3/4] with informative=false. Missingness is structural (the quota-2 pilot never reveals interior stores' full-exposure cells) plus an archive bracket, not stochastic survey nonresponse."
+}

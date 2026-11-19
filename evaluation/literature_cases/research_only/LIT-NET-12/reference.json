@@ -1,0 +1,82 @@
+{
+  "case_id": "LIT-NET-12",
+  "paper_id": "carrell2013_sorting",
+  "paper": {
+    "authors": [
+      "Scott E. Carrell",
+      "Bruce I. Sacerdote",
+      "James E. West"
+    ],
+    "year": 2013,
+    "title": "From Natural Variation to Optimal Policy? The Importance of Endogenous Peer Group Formation",
+    "venue": "Econometrica",
+    "doi": "10.3982/ECTA10168"
+  },
+  "paper_reference": {
+    "paper_question": "能否用历史数据估计出的非线性同伴效应把新生排进同伴组以提高最低三分之一学生的成绩，以及为什么这样排出来的组实测失败？",
+    "target": "八名同学在两种带学人安排各 1/2 的随机政策下的平均 GPA 变化；每人等权。",
+    "source_location": "Carrell, Sacerdote and West (2013) Econometrica 81(3):855-882, DOI 10.3982/ECTA10168. Abstract (p. 855) and Introduction (pp. 855-857) for the paper question and the predicted-versus-observed contrast; Section 2 (pp. 862-870) for the two squadron types, equation (3) and Table IV; Section 3 and Table VI (p. 871) for the observed effects; Section 4 and Table VIII (p. 878) for the partner-choice evidence; Section 5 (pp. 880-881) for the limits of the explanation. Project-built scenario; the paper does not pose this question.",
+    "formula": "相邻关系：甲组六条边（四人两两相连），乙组三条边（学7-学5、学5-学6、学6-学8）。方案A（每组一名）：学3、学4 相邻的带学人只有学1，各 +0.053；学7 相邻学5，+0.082；学8 相邻学6，学6 不带学，为 0；合计 0.188，平均 0.0235。方案B（每组两名）：学3、学4 相邻学1与学2，各 −0.061；学7、学8 各 +0.082；合计 0.042，平均 0.00525。Target = 1/2×0.0235 + 1/2×0.00525 = 23/1600 = 0.014375。目标变化版取学3与学4：Target = 1/2×0.053 + 1/2×(−0.061) = −1/250 = −0.004。",
+    "conditions": [
+      "Two complete leader lists with known probabilities 1/2 each.",
+      "Leader assignment independent of the eight students' potential GPA changes.",
+      "Observed GPA changes correspond to the executed list.",
+      "Adjacency fixed before the lists are executed; the two groups are not neighbours of each other.",
+      "The ability-tier rule applies uniformly to every student, and a two-leader neighbourhood is the threshold."
+    ],
+    "what_paper_supports": [
+      "A history-based resorting predicted a 0.053 grade-point gain for bottom-third students, while the experiment produced −0.061 for the same group (Table IV p. 868; Table VI p. 871).",
+      "Treated low-ability students formed more homogeneous subgroups and picked high SAT Verbal study partners less often (−3.9 percentage points), so being placed with a peer is not the same as interacting with that peer (Table VIII p. 878).",
+      "Middle-ability treated students gained 0.082, which the paper attributes to no longer interacting with low-ability students in homogeneous squadrons (Table VI p. 871; p. 881)."
+    ],
+    "what_paper_does_not_support": [
+      "No claim that this reproduces the paper's policy: the paper reassigns students into squadrons through the integer program in equation (3); the case takes both groups as given and only decides how many peer leaders to send.",
+      "No claim that the case keeps the paper's random-assignment contrast: both lists act on already formed groups, so the comparison is mild versus concentrated leader assignment, not natural variation versus optimal policy.",
+      "No claim that 0.053, −0.061 and 0.082 are individual treatment effects: 0.053 is a predicted group-level gain and the other two are coefficients on a treatment dummy in a group-level regression.",
+      "No claim that the paper supplies the tier rule: using a predicted value at one adjacent leader and an observed value at two is a project-built threshold, and the paper never puts these numbers in one formula.",
+      "No claim that the adjacency structure is estimated: the paper reports partner-choice shares, not a person-level adjacency list, so the six and three edges are a project-built illustration.",
+      "No claim that eight students stand for the paper's sample: the balance check covers 2,653 students and Table VI rests on 4,834 student-semester observations; no extrapolation to 20 squadrons or USAFA.",
+      "No claim that GPA changes measure welfare: course failure, attrition and major switching are outside the case.",
+      "No claim of reproducing the sorting algorithm or the structural estimates behind it."
+    ]
+  },
+  "software_expected": {
+    "original": {
+      "status": "POINT"
+    },
+    "missing_condition": {
+      "status": "NEEDS_INPUT",
+      "reason": "The probabilities of the two leader lists are omitted; the fact layer stops with EXTENDED_NETWORK_FACTS_INCOMPLETE."
+    },
+    "changed_target": {
+      "status": "POINT",
+      "reason": "Evaluation population moves to the two low-ability students of group A; target and weights must be rebound."
+    }
+  },
+  "actual_run": {
+    "method": "LOCAL_STRUCTURED_FINITE_POLICY_RUN_NO_LLM",
+    "provenance": "2026-11-16 local structured run through the extended network finite-policy entry with explicit synthetic reviews; api_calls=0.",
+    "original": {
+      "state": "POINT",
+      "independent_replay": true,
+      "target_fingerprint": "a4ba9af9f4359117cce6e039a378f3b888e1d02480b618c1b9ee077c7ac03afd",
+      "output_file": "structured_runs/original/result.json"
+    },
+    "missing_condition": {
+      "state": "NEEDS_INPUT",
+      "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+      "output_file": "structured_runs/missing_condition/result.json"
+    },
+    "changed_target": {
+      "state": "POINT",
+      "independent_replay": true,
+      "target_fingerprint": "5c1abd7c489cb407b8ebaf730b52f215c9ec0a8bfdd6868fb9894405b03a8202",
+      "output_file": "structured_runs/changed_target/result.json"
+    },
+    "note": "三个变体均在本地结构化运行；不调用 LLM；不读取公开材料以外的参考内容。"
+  },
+  "review_status": "PENDING_TEACHER",
+  "reviewer": "teacher",
+  "holdout": false,
+  "notes": "Scenario adaptation; the paper does not pose this question. Network enters the target: a student's GPA change depends on the number of adjacent leaders, and dropping the edge set leaves adjacency undefined. The policy form departs furthest from the paper: the paper resorts students into groups, while the case keeps groups fixed and assigns leaders, because the mixture schema carries one adjacency for all policies. The paper's random-assignment arm is absent, so the case compares mild versus concentrated assignment."
+}

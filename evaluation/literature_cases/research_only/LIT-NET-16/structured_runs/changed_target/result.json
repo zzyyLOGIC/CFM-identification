@@ -1,0 +1,1107 @@
+{
+  "state": "POINT",
+  "reason_code": null,
+  "backend_called": true,
+  "independent_replay": true,
+  "mathematical_claim": {
+    "kind": "POINT",
+    "target": {
+      "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+      "node_order": [
+        "团队1",
+        "团队2",
+        "团队3",
+        "团队4",
+        "团队5",
+        "团队6"
+      ],
+      "assignment": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "unit_weights": [
+        "1/2",
+        "0",
+        "0",
+        "0",
+        "0",
+        "1/2"
+      ],
+      "treatment": "启用练习计划",
+      "outcome": "考核周内是否完成全部练习",
+      "context": "考核周练习计划推广"
+    },
+    "target_sha256": "e110bb6a66266b8183014de2f90d246b8796c30b35f40b39ae3cc44d6bf168c2",
+    "width": "0",
+    "sharp": true,
+    "representation": "EXACT_IDENTIFIED_INTERVAL",
+    "interval": [
+      "1/2",
+      "1/2"
+    ],
+    "informative": true,
+    "logical_range": [
+      "0",
+      "1"
+    ],
+    "numeric_value": "1/2",
+    "bound_formula": {
+      "lower": {
+        "constant": "0",
+        "terms": {
+          "b1": "1/2",
+          "b2": "1/2"
+        }
+      },
+      "upper": {
+        "constant": "0",
+        "terms": {
+          "b1": "1/2",
+          "b2": "1/2"
+        }
+      },
+      "parameters": [
+        {
+          "symbol": "b1",
+          "cell": [
+            "团队1",
+            1,
+            1
+          ],
+          "value": "1/2"
+        },
+        {
+          "symbol": "b2",
+          "cell": [
+            "团队6",
+            1,
+            1
+          ],
+          "value": "1/2"
+        }
+      ],
+      "validity": "REPLAYED_NUMERIC_CERTIFICATE_RECIPE"
+    }
+  },
+  "certificate": {
+    "version": "bounded-policy-mean-1",
+    "theorem": "FINITE_SIGNATURE_MEAN_BOX",
+    "input_sha256": "2141b1c53f4e8b781ccf776b698d6cb0cf2332f314121d812792fa6e48b2b9ac",
+    "target_sha256": "e110bb6a66266b8183014de2f90d246b8796c30b35f40b39ae3cc44d6bf168c2",
+    "status": "POINT",
+    "lower": "1/2",
+    "upper": "1/2",
+    "width": "0",
+    "logical_range": [
+      "0",
+      "1"
+    ],
+    "informative": true,
+    "sharp": true,
+    "model_scope": "SIGNATURE_MEANS_AND_NODE_BOUNDS_ONLY",
+    "cells": [
+      {
+        "cell": [
+          "团队1",
+          0,
+          0
+        ],
+        "support": "2/5",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队1",
+          0,
+          1
+        ],
+        "support": "4/15",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队1",
+          1,
+          0
+        ],
+        "support": "4/15",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队1",
+          1,
+          1
+        ],
+        "support": "1/15",
+        "a4_value": "1/2",
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队2",
+          0,
+          0
+        ],
+        "support": "3/5",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队2",
+          0,
+          1
+        ],
+        "support": "1/15",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队2",
+          1,
+          0
+        ],
+        "support": "1/3",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队2",
+          1,
+          1
+        ],
+        "support": "0",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队3",
+          0,
+          0
+        ],
+        "support": "3/5",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队3",
+          0,
+          1
+        ],
+        "support": "1/15",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队3",
+          1,
+          0
+        ],
+        "support": "1/3",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队3",
+          1,
+          1
+        ],
+        "support": "0",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队4",
+          0,
+          0
+        ],
+        "support": "3/5",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队4",
+          0,
+          1
+        ],
+        "support": "1/15",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队4",
+          1,
+          0
+        ],
+        "support": "1/3",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队4",
+          1,
+          1
+        ],
+        "support": "0",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队5",
+          0,
+          0
+        ],
+        "support": "3/5",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队5",
+          0,
+          1
+        ],
+        "support": "1/15",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队5",
+          1,
+          0
+        ],
+        "support": "1/3",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队5",
+          1,
+          1
+        ],
+        "support": "0",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队6",
+          0,
+          0
+        ],
+        "support": "2/5",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队6",
+          0,
+          1
+        ],
+        "support": "4/15",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队6",
+          1,
+          0
+        ],
+        "support": "4/15",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      },
+      {
+        "cell": [
+          "团队6",
+          1,
+          1
+        ],
+        "support": "1/15",
+        "a4_value": "1/2",
+        "lower_world": "1/2",
+        "upper_world": "1/2"
+      }
+    ],
+    "bound_terms": [
+      {
+        "cell": [
+          "团队1",
+          1,
+          1
+        ],
+        "coefficient": "1/2",
+        "basis": "A4_EQUALITY",
+        "lower": "1/2",
+        "upper": "1/2"
+      },
+      {
+        "cell": [
+          "团队6",
+          1,
+          1
+        ],
+        "coefficient": "1/2",
+        "basis": "A4_EQUALITY",
+        "lower": "1/2",
+        "upper": "1/2"
+      }
+    ],
+    "realization": "BERNOULLI_PER_NODE_SIGNATURE",
+    "production_admission": false,
+    "estimation_handoff_allowed": false,
+    "certificate_sha256": "9c4baad58f9db8d70f8d2857185928ec3639dd5225ad2d894d20b10ffe2b3e2e"
+  },
+  "answers": [
+    {
+      "method": "BOUNDED_POLICY_MEAN_D2_E1",
+      "mathematical_claim": {
+        "kind": "POINT",
+        "target": {
+          "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+          "node_order": [
+            "团队1",
+            "团队2",
+            "团队3",
+            "团队4",
+            "团队5",
+            "团队6"
+          ],
+          "assignment": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "unit_weights": [
+            "1/2",
+            "0",
+            "0",
+            "0",
+            "0",
+            "1/2"
+          ],
+          "treatment": "启用练习计划",
+          "outcome": "考核周内是否完成全部练习",
+          "context": "考核周练习计划推广"
+        },
+        "target_sha256": "e110bb6a66266b8183014de2f90d246b8796c30b35f40b39ae3cc44d6bf168c2",
+        "width": "0",
+        "sharp": true,
+        "representation": "EXACT_IDENTIFIED_INTERVAL",
+        "interval": [
+          "1/2",
+          "1/2"
+        ],
+        "informative": true,
+        "logical_range": [
+          "0",
+          "1"
+        ],
+        "numeric_value": "1/2",
+        "bound_formula": {
+          "lower": {
+            "constant": "0",
+            "terms": {
+              "b1": "1/2",
+              "b2": "1/2"
+            }
+          },
+          "upper": {
+            "constant": "0",
+            "terms": {
+              "b1": "1/2",
+              "b2": "1/2"
+            }
+          },
+          "parameters": [
+            {
+              "symbol": "b1",
+              "cell": [
+                "团队1",
+                1,
+                1
+              ],
+              "value": "1/2"
+            },
+            {
+              "symbol": "b2",
+              "cell": [
+                "团队6",
+                1,
+                1
+              ],
+              "value": "1/2"
+            }
+          ],
+          "validity": "REPLAYED_NUMERIC_CERTIFICATE_RECIPE"
+        }
+      },
+      "certificate": {
+        "version": "bounded-policy-mean-1",
+        "theorem": "FINITE_SIGNATURE_MEAN_BOX",
+        "input_sha256": "2141b1c53f4e8b781ccf776b698d6cb0cf2332f314121d812792fa6e48b2b9ac",
+        "target_sha256": "e110bb6a66266b8183014de2f90d246b8796c30b35f40b39ae3cc44d6bf168c2",
+        "status": "POINT",
+        "lower": "1/2",
+        "upper": "1/2",
+        "width": "0",
+        "logical_range": [
+          "0",
+          "1"
+        ],
+        "informative": true,
+        "sharp": true,
+        "model_scope": "SIGNATURE_MEANS_AND_NODE_BOUNDS_ONLY",
+        "cells": [
+          {
+            "cell": [
+              "团队1",
+              0,
+              0
+            ],
+            "support": "2/5",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队1",
+              0,
+              1
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队1",
+              1,
+              0
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队1",
+              1,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": "1/2",
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队2",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队2",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队2",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队2",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队3",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队3",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队3",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队3",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队4",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队4",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队4",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队4",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队5",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队5",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队5",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队5",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队6",
+              0,
+              0
+            ],
+            "support": "2/5",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队6",
+              0,
+              1
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队6",
+              1,
+              0
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队6",
+              1,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": "1/2",
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          }
+        ],
+        "bound_terms": [
+          {
+            "cell": [
+              "团队1",
+              1,
+              1
+            ],
+            "coefficient": "1/2",
+            "basis": "A4_EQUALITY",
+            "lower": "1/2",
+            "upper": "1/2"
+          },
+          {
+            "cell": [
+              "团队6",
+              1,
+              1
+            ],
+            "coefficient": "1/2",
+            "basis": "A4_EQUALITY",
+            "lower": "1/2",
+            "upper": "1/2"
+          }
+        ],
+        "realization": "BERNOULLI_PER_NODE_SIGNATURE",
+        "production_admission": false,
+        "estimation_handoff_allowed": false,
+        "certificate_sha256": "9c4baad58f9db8d70f8d2857185928ec3639dd5225ad2d894d20b10ffe2b3e2e"
+      },
+      "native_evidence": {
+        "inquiry": {
+          "study": {
+            "network_id": "network_e14a42c5ebf80604c4ef43fedf89030627d28d3fe5d81c1bc8501daf67d42278",
+            "node_order": [
+              "团队1",
+              "团队2",
+              "团队3",
+              "团队4",
+              "团队5",
+              "团队6"
+            ],
+            "undirected_edges": [
+              [
+                "团队1",
+                "团队2"
+              ],
+              [
+                "团队2",
+                "团队3"
+              ],
+              [
+                "团队3",
+                "团队4"
+              ],
+              [
+                "团队4",
+                "团队5"
+              ],
+              [
+                "团队5",
+                "团队6"
+              ]
+            ],
+            "treatment_variable": "启用练习计划",
+            "outcome_variable": "考核周内是否完成全部练习",
+            "outcome_kind": "binary",
+            "context_reference": "考核周练习计划推广",
+            "observation_regime": "experimental",
+            "assignment_design_json": "{\"kind\":\"complete_randomization_binary_v1\",\"m\":2}",
+            "protocol_provenance": "Reviewed original source locators: src_c45b64a378eaaba8f937a65d92c6b75d08bdf36a1f2cef7b85926f4864edc7e0",
+            "network_provenance": "Reviewed original source locators: src_ca89778afe1b49eb73d27cb197ab51ed292dd73c52375d1682637384a474c30a,src_5e4e69fd8d643763f2f71065b1fbba8f4136997a8f077929d18ffcb140599181",
+            "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+          },
+          "target": {
+            "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+            "network_fingerprint": "7b6cec611dded862f39bcb7a3ea1707f25204fa5ca3775576a73896580dfbba6",
+            "node_order": [
+              "团队1",
+              "团队2",
+              "团队3",
+              "团队4",
+              "团队5",
+              "团队6"
+            ],
+            "outcome": "考核周内是否完成全部练习",
+            "context": "考核周练习计划推广",
+            "averaging_scope": "population_conditional_mean_given_W",
+            "authority": "TRUSTED_FIXTURE",
+            "query_resolution": "RESOLVED",
+            "assignment_law_fingerprint": null,
+            "exposure_fingerprint": null,
+            "node_id": null,
+            "arm": null,
+            "policy_assignment": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "unit_weights": [
+              "1/2",
+              "0",
+              "0",
+              "0",
+              "0",
+              "1/2"
+            ],
+            "target_digest": "cd7bd6c42c95961423e8f72c405907b20087697bf95bf9116fe3ad037b68b314"
+          },
+          "assumptions": [
+            {
+              "name": "known_assignment_law",
+              "source": "demo_specification",
+              "confirmed": true,
+              "status": "ADMITTED",
+              "evidence": [
+                "Reviewed original source locators: src_e845b2650a0683d654ac2fe5c0776f4c89c0ad2f7394198b3167ef5dbde29be3",
+                "Independent synthetic protocol reviewer",
+                "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+                "review_binding:158d3cafb40e690c45c05901359d05a4bdebe16887f289dfa70dec594c7d15d2"
+              ],
+              "details": ""
+            },
+            {
+              "name": "full_vector_randomization",
+              "source": "demo_specification",
+              "confirmed": true,
+              "status": "ADMITTED",
+              "evidence": [
+                "Reviewed original source locators: src_e845b2650a0683d654ac2fe5c0776f4c89c0ad2f7394198b3167ef5dbde29be3",
+                "Independent synthetic protocol reviewer",
+                "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+                "review_binding:158d3cafb40e690c45c05901359d05a4bdebe16887f289dfa70dec594c7d15d2"
+              ],
+              "details": ""
+            },
+            {
+              "name": "consistency",
+              "source": "demo_specification",
+              "confirmed": true,
+              "status": "ADMITTED",
+              "evidence": [
+                "Reviewed original source locators: src_e845b2650a0683d654ac2fe5c0776f4c89c0ad2f7394198b3167ef5dbde29be3",
+                "Independent synthetic protocol reviewer",
+                "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+                "review_binding:158d3cafb40e690c45c05901359d05a4bdebe16887f289dfa70dec594c7d15d2"
+              ],
+              "details": ""
+            },
+            {
+              "name": "fixed_pretreatment_network",
+              "source": "demo_specification",
+              "confirmed": true,
+              "status": "ADMITTED",
+              "evidence": [
+                "Reviewed original source locators: src_e845b2650a0683d654ac2fe5c0776f4c89c0ad2f7394198b3167ef5dbde29be3",
+                "Independent synthetic protocol reviewer",
+                "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+                "review_binding:158d3cafb40e690c45c05901359d05a4bdebe16887f289dfa70dec594c7d15d2"
+              ],
+              "details": ""
+            },
+            {
+              "name": "finite_conditional_first_moments",
+              "source": "demo_specification",
+              "confirmed": true,
+              "status": "ADMITTED",
+              "evidence": [
+                "Reviewed original source locators: src_e845b2650a0683d654ac2fe5c0776f4c89c0ad2f7394198b3167ef5dbde29be3",
+                "Independent synthetic protocol reviewer",
+                "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+                "review_binding:158d3cafb40e690c45c05901359d05a4bdebe16887f289dfa70dec594c7d15d2"
+              ],
+              "details": ""
+            }
+          ],
+          "r1b_sources": [],
+          "r2_signature": {
+            "study_scope_digest": "bb70c3404918a095e155d9188934f412c81f81faf424f89b714924125397eb27",
+            "network_fingerprint": "7b6cec611dded862f39bcb7a3ea1707f25204fa5ca3775576a73896580dfbba6",
+            "treatment_variable": "启用练习计划",
+            "grouping": "strict_majority_ties_low",
+            "core_collaborators": [],
+            "signature_fingerprint": "d15e3da4bfdba51a9dfd9b5f77562097e9ef5d4082eebbe9ac16b00e14d7dae1"
+          },
+          "r2_sufficiency": {
+            "study_scope_digest": "bb70c3404918a095e155d9188934f412c81f81faf424f89b714924125397eb27",
+            "signature_fingerprint": "d15e3da4bfdba51a9dfd9b5f77562097e9ef5d4082eebbe9ac16b00e14d7dae1",
+            "covered_nodes": [
+              "团队1",
+              "团队2",
+              "团队3",
+              "团队4",
+              "团队5",
+              "团队6"
+            ],
+            "assumption": {
+              "name": "mean_signature_sufficiency",
+              "source": "demo_specification",
+              "confirmed": true,
+              "status": "ADMITTED",
+              "evidence": [
+                "Reviewed original source locators: src_106e5dc542ba9a6e2ce5e1dba35deaeaf2aadd02d1692c3aacda4ab359f329aa",
+                "Independent synthetic protocol reviewer",
+                "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+                "review_binding:158d3cafb40e690c45c05901359d05a4bdebe16887f289dfa70dec594c7d15d2"
+              ],
+              "details": ""
+            }
+          },
+          "r2_sources": [
+            {
+              "source_id": "source_7b56d95a7c8f86533c001e5e794a567a0ed7f0941ac5dd8919f723ba346d7a72",
+              "operator": "NODE_SIGNATURE_MEANS",
+              "provenance": "Reviewed original source locators: src_61330d8dcc5132bb3f3c763d4c07d9ed05f9149cbcea11a32cd5fdf416e93bb7,src_9bb8716d2cc1a4daab7595d20ec86ba7b88913cfa68d18894e6d8caa29e73001,src_102ea65546aeda76524fd07b5f35955168343aa3e379e3983b3759f6ad21e88d; independent review: Independent synthetic protocol reviewer; Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+              "admission": "ADMITTED",
+              "availability": "EXACT_POPULATION_VALUE",
+              "study_scope_digest": "bb70c3404918a095e155d9188934f412c81f81faf424f89b714924125397eb27",
+              "protocol_digest": "0fefada6545910dcf74016741d7b95a67e576c52617dd353edc320dd0ec0f85c",
+              "node_order": [
+                "团队1",
+                "团队2",
+                "团队3",
+                "团队4",
+                "团队5",
+                "团队6"
+              ],
+              "outcome": "考核周内是否完成全部练习",
+              "context": "考核周练习计划推广",
+              "outcome_nodes": [
+                "团队1",
+                "团队6"
+              ],
+              "signature_fingerprint": "d15e3da4bfdba51a9dfd9b5f77562097e9ef5d4082eebbe9ac16b00e14d7dae1",
+              "signature_cells": [
+                [
+                  "团队1",
+                  1,
+                  1
+                ],
+                [
+                  "团队6",
+                  1,
+                  1
+                ]
+              ]
+            }
+          ]
+        },
+        "information": {
+          "version": "bounded-policy-mean-1",
+          "inquiry_sha256": "09fd480d336543fae72b3d78c5504050d5a3f809337d45cfe7ac490a739bedd7",
+          "source_id": "source_7b56d95a7c8f86533c001e5e794a567a0ed7f0941ac5dd8919f723ba346d7a72",
+          "source_sha256": "76bb3145200ae38f85f3439ae7117d57ccc3fdf405386569af90de342d889ffb",
+          "information_scope": "EXACT_LISTED_SIGNATURE_MEANS_ONLY",
+          "model_scope": "SIGNATURE_MEANS_AND_NODE_BOUNDS_ONLY",
+          "availability": "EXACT_POPULATION_VALUE",
+          "values": [
+            {
+              "node": "团队1",
+              "own": 1,
+              "exposure": 1,
+              "value": "1/2"
+            },
+            {
+              "node": "团队6",
+              "own": 1,
+              "exposure": 1,
+              "value": "1/2"
+            }
+          ],
+          "bounds": [
+            {
+              "node": "团队1",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "node": "团队2",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "node": "团队3",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "node": "团队4",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "node": "团队5",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "node": "团队6",
+              "lower": "0",
+              "upper": "1"
+            }
+          ],
+          "bounds_kind": "CONDITIONAL_MEAN",
+          "bounds_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+          "outcome_definition": "考核周内完成全部练习记1、未完成记0",
+          "outcome_unit": "0/1指标",
+          "outcome_period": "考核周",
+          "a4_provenance": "Reviewed exact source locators: a4ba47265a2b75bb453d69ff76ebfa6b3c0571cc872c2fa9e38509e78acfaa98; plan:cfa17897146fc737513f61b20e55c611464916b65aeeeb90e25db0479d9d07b2",
+          "bounds_provenance": "Reviewed bound/model source locators: 2a6759c195ae8f8ab4ea3754791ae246d864a1003ce9e32e85d799ebe59d0d9a; plan:cfa17897146fc737513f61b20e55c611464916b65aeeeb90e25db0479d9d07b2"
+        }
+      },
+      "independent_replay": true,
+      "reviewed_input_sha256": "2141b1c53f4e8b781ccf776b698d6cb0cf2332f314121d812792fa6e48b2b9ac"
+    }
+  ],
+  "clarification_questions": [],
+  "evidence_status": "CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE",
+  "production_admission": false,
+  "estimation_handoff_allowed": false,
+  "query_id": "q1",
+  "result_scope": "SELECTED_QUERY_ONLY",
+  "remaining_query_ids": [],
+  "plan_sha256": "cfa17897146fc737513f61b20e55c611464916b65aeeeb90e25db0479d9d07b2",
+  "fact_family": "NETWORK_FIXED_POLICY_FACTS",
+  "attempts": [
+    {
+      "method": "BOUNDED_POLICY_MEAN_D2_E1",
+      "state": "POINT",
+      "independent_replay": true
+    }
+  ],
+  "exclusions": [],
+  "primary_method": "BOUNDED_POLICY_MEAN_D2_E1",
+  "partial_fallback_performed": false
+}

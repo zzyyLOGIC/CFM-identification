@@ -1,0 +1,1094 @@
+{
+  "source": "real LLM run (reading stage only), deepseek-chat, 2026-11-18 20:15 +0800",
+  "provenance": "Fresh LLM call recorded in this case package: three variants, one request each (plus one re-read where the structural check failed). The model only reads the question; it does not pick theorems, approve assumptions or produce identification results.",
+  "case_id": "LIT-NET-15",
+  "results": [
+    {
+      "case_id": "LIT-NET-15",
+      "variant": "original",
+      "run_at": "2026-11-18 20:16:49 +0800",
+      "provider": {
+        "name": "openai-chat-compatible:deepseek-chat",
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat"
+      },
+      "reading_source": "real_llm",
+      "reviews": {
+        "authority": "FROZEN_REFERENCE_APPROVALS",
+        "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+      },
+      "api_calls": 2,
+      "question": "某校要在一个年级推行课外辅导计划，成绩会怎么变，老师和家长都没有把握。年级里只有甲乙两个班。甲班四名学生，编号学1 至学4，班内互为参照组；乙班两名学生，编号学5、学6，班内互为参照组。学生只把本班同学当参照组，班间没有参照关系。\n\n教务处要在两套辅导安排里抽签：\n\n- 方案 A：辅导学1、学2、学5 这三名学生；\n- 方案 B：辅导学3、学6 这两名学生。\n\n成绩规则如下：\n\n- 受辅导的学生成绩直接提高 4 分；\n- 班平均成绩每提高 1 分，班里每名学生再提高 0.5 分；\n- 没有其他影响成绩的途径。\n\n班平均按最终口径理解：受辅导学生的提高会拉高班平均，班平均的提高又回给班内每名学生，相互传导直到稳定；规则里的班平均，指传导全部兑现之后的最终班平均。\n\n两种安排各以一半概率被采用，这就是全部候选方案。我们想知道，六名学生成绩相对不推行计划时的平均提高在两种安排各一半机会时是多少。每人等权。",
+      "prompt": {
+        "contract": "network-extended-reading",
+        "system_sha256": "b85c894b47fe99abb57717eceb0af0620d62d17a048a89e38bdcee1f02fa3d8a",
+        "system_characters": 2556,
+        "user_characters": 17927
+      },
+      "reread": {
+        "performed": true,
+        "trigger": "1 validation error for MixtureReading\nfirst_stage_exclusion\n  Value error, FIRST_STAGE_EXCLUSION_SOURCE_STATE_REQUIRED [type=value_error, input_value={'source_ids': ['s0004'], 'status': 'NOT_STATED'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/value_error",
+        "feedback": "你上一次的回答没有通过结构检查：1 validation error for MixtureReading\nfirst_stage_exclusion\n  Value error, FIRST_STAGE_EXCLUSION_SOURCE_STATE_REQUIRED [type=value_error, input_value={'source_ids': ['s0004'], 'status': 'NOT_STATED'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/value_error。请重新阅读材料原文，修正该问题后给出完整回答；只有材料本身确实没有依据时才维持原判。"
+      },
+      "answer_seconds": 3.157,
+      "first_answer": {
+        "reference_context": "cd5e54e83b57d",
+        "study": {
+          "source_ids": [
+            "s0002",
+            "s0010",
+            "s0012",
+            "s0013",
+            "s0015",
+            "s0016",
+            "s0018"
+          ],
+          "nodes": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6"
+          ],
+          "edges": [
+            [
+              "学1",
+              "学2"
+            ],
+            [
+              "学1",
+              "学3"
+            ],
+            [
+              "学1",
+              "学4"
+            ],
+            [
+              "学2",
+              "学3"
+            ],
+            [
+              "学2",
+              "学4"
+            ],
+            [
+              "学3",
+              "学4"
+            ],
+            [
+              "学5",
+              "学6"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "是否受辅导：按所选辅导安排直接接受辅导",
+          "outcome": "成绩相对不推行计划时的提高（分）",
+          "outcome_kind": "CONTINUOUS",
+          "context": "甲乙两个班，班内互为参照组，班间无参照关系；结果评价时点为辅导执行后的期末"
+        },
+        "additional_restrictions": [
+          {
+            "source_ids": [
+              "s0015",
+              "s0016",
+              "s0017",
+              "s0018"
+            ],
+            "text": "成绩形成机制：受辅导学生直接提高4分；班平均最终提高每1分使班内每名学生再提高0.5分；传导至最终班平均稳定；无其他影响途径。"
+          },
+          {
+            "source_ids": [
+              "s0019"
+            ],
+            "text": "目标为六名学生每人等权的平均处理结果，不扣除或比较某个固定对照方案。"
+          }
+        ],
+        "unresolved": [],
+        "version": "network-finite-policy-reading-1",
+        "assignment": {
+          "source_ids": [
+            "s0004"
+          ],
+          "kind": "UNKNOWN",
+          "probabilities": null,
+          "fixed_count": null
+        },
+        "first_stage_exclusion": {
+          "source_ids": [
+            "s0004"
+          ],
+          "status": "NOT_STATED"
+        },
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0009"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0002",
+              "s0006"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [],
+            "value": null
+          }
+        },
+        "target": {
+          "source_ids": [
+            "s0009",
+            "s0019"
+          ],
+          "population": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6"
+          ],
+          "aggregation": "EQUAL_MEAN",
+          "components": [
+            {
+              "source_ids": [
+                "s0009",
+                "s0012"
+              ],
+              "assignment": {
+                "学1": 1,
+                "学2": 1,
+                "学3": 0,
+                "学4": 0,
+                "学5": 1,
+                "学6": 0
+              },
+              "weight": "1/2"
+            },
+            {
+              "source_ids": [
+                "s0009",
+                "s0013"
+              ],
+              "assignment": {
+                "学1": 0,
+                "学2": 0,
+                "学3": 1,
+                "学4": 0,
+                "学5": 0,
+                "学6": 1
+              },
+              "weight": "1/2"
+            }
+          ],
+          "policy_distribution_complete": {
+            "source_ids": [
+              "s0009"
+            ],
+            "value": true
+          }
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0008"
+            ],
+            "operator": "UNKNOWN",
+            "availability": "UNKNOWN",
+            "outcome_nodes": [],
+            "assignment_cells": []
+          }
+        ]
+      },
+      "transport": {
+        "stream": false,
+        "json_mode_sent": true,
+        "output_token_parameter": null,
+        "output_token_limit": null,
+        "require_finish_reason": false,
+        "max_stream_wire_bytes": 2000000,
+        "transport_calls": 1,
+        "response_bytes": 2857,
+        "content_characters": 1738,
+        "content_bytes": 2108,
+        "stream_events": 0,
+        "stage": "complete",
+        "status": "json_object_received",
+        "http_status": 200,
+        "headers_seconds": 0.188,
+        "returned_model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 7845,
+          "completion_tokens": 697,
+          "total_tokens": 8542,
+          "prompt_cache_hit_tokens": 7680,
+          "prompt_cache_miss_tokens": 165
+        },
+        "finish_reason": "stop",
+        "json_envelope_received": "bare",
+        "elapsed_seconds": 3.157
+      },
+      "reading_rejected": "1 validation error for MixtureReading\nfirst_stage_exclusion\n  Value error, FIRST_STAGE_EXCLUSION_SOURCE_STATE_REQUIRED [type=value_error, input_value={'source_ids': ['s0004'], 'status': 'NOT_STATED'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/value_error",
+      "reread_answer": {
+        "reference_context": "cd5e54e83b57d",
+        "study": {
+          "source_ids": [
+            "s0002",
+            "s0010",
+            "s0019"
+          ],
+          "nodes": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6"
+          ],
+          "edges": [
+            [
+              "学1",
+              "学2"
+            ],
+            [
+              "学1",
+              "学3"
+            ],
+            [
+              "学1",
+              "学4"
+            ],
+            [
+              "学2",
+              "学3"
+            ],
+            [
+              "学2",
+              "学4"
+            ],
+            [
+              "学3",
+              "学4"
+            ],
+            [
+              "学5",
+              "学6"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "是否受辅导（按所执行的方案A或方案B确定）",
+          "outcome": "成绩相对不推行计划时的提高（分）",
+          "outcome_kind": "CONTINUOUS",
+          "context": "甲乙两个班，班内互为参照组，班间无参照关系；两套辅导安排各以1/2概率被采用；评价时点为辅导执行后的期末"
+        },
+        "additional_restrictions": [
+          {
+            "source_ids": [
+              "s0015",
+              "s0016",
+              "s0017",
+              "s0018"
+            ],
+            "text": "受辅导学生成绩直接提高4分；班平均每提高1分，班内每名学生再提高0.5分；无其他影响途径；班平均按传导全部兑现后的最终口径。"
+          }
+        ],
+        "unresolved": [],
+        "version": "network-finite-policy-reading-1",
+        "assignment": {
+          "source_ids": [
+            "s0004",
+            "s0011",
+            "s0019"
+          ],
+          "kind": "UNKNOWN",
+          "probabilities": null,
+          "fixed_count": null
+        },
+        "first_stage_exclusion": null,
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0009"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0006",
+              "s0009"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0006",
+              "s0010"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          }
+        },
+        "target": {
+          "source_ids": [
+            "s0009",
+            "s0019"
+          ],
+          "population": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6"
+          ],
+          "aggregation": "EQUAL_MEAN",
+          "components": [
+            {
+              "source_ids": [
+                "s0012",
+                "s0019"
+              ],
+              "assignment": {
+                "学1": 1,
+                "学2": 1,
+                "学3": 0,
+                "学4": 0,
+                "学5": 1,
+                "学6": 0
+              },
+              "weight": "1/2"
+            },
+            {
+              "source_ids": [
+                "s0013",
+                "s0019"
+              ],
+              "assignment": {
+                "学1": 0,
+                "学2": 0,
+                "学3": 1,
+                "学4": 0,
+                "学5": 0,
+                "学6": 1
+              },
+              "weight": "1/2"
+            }
+          ],
+          "policy_distribution_complete": {
+            "source_ids": [
+              "s0009",
+              "s0019"
+            ],
+            "value": true
+          }
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0008"
+            ],
+            "operator": "FULL_JOINT_LAW",
+            "availability": "SYMBOLIC_POPULATION_OPERATOR",
+            "outcome_nodes": [
+              "学1",
+              "学2",
+              "学3",
+              "学4",
+              "学5",
+              "学6"
+            ],
+            "assignment_cells": []
+          }
+        ]
+      },
+      "parsed_reference_context_sha256": "d5e54e83b57dc319316d0187a99638498a4b3ef5dabdca07db190a64003c6fa6",
+      "confirmation": {
+        "confirmed": true,
+        "compared": [
+          "study.nodes",
+          "study.edges",
+          "study.graph_kind",
+          "study.edge_list_complete",
+          "study.outcome_kind",
+          "exposure.kind",
+          "target.population",
+          "target.kind",
+          "target.operation",
+          "target.aggregation",
+          "target.averaging",
+          "regime.kind",
+          "conditioning.kind",
+          "target.components",
+          "assumptions.*"
+        ],
+        "not_compared": [
+          "study.treatment",
+          "study.outcome",
+          "study.context",
+          "free-text notes"
+        ],
+        "contradictions": [],
+        "not_declared": [],
+        "extra": []
+      },
+      "declared_notes": {
+        "additional_restrictions": [
+          "受辅导学生成绩直接提高4分；班平均每提高1分，班内每名学生再提高0.5分；无其他影响途径；班平均按传导全部兑现后的最终口径。"
+        ],
+        "unresolved": [],
+        "adopted": false,
+        "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+      },
+      "plan_state": "REVIEW_REQUIRED",
+      "plan_reason": null,
+      "observed": "POINT",
+      "reason_code": null,
+      "independent_replay": true,
+      "mathematical_claim": {
+        "target_fingerprint": "0c8fb6b4633a4e862a803276b610b50d235576e09acd95b098134e6c5de0e789"
+      },
+      "outcome": {
+        "state": "POINT",
+        "reason_code": null,
+        "independent_replay": true
+      }
+    },
+    {
+      "case_id": "LIT-NET-15",
+      "variant": "missing_condition",
+      "run_at": "2026-11-18 20:16:55 +0800",
+      "provider": {
+        "name": "openai-chat-compatible:deepseek-chat",
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat"
+      },
+      "reading_source": "real_llm",
+      "reviews": {
+        "authority": "FROZEN_REFERENCE_APPROVALS",
+        "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+      },
+      "api_calls": 1,
+      "question": "某校要在一个年级推行课外辅导计划，成绩会怎么变，老师和家长都没有把握。年级里只有甲乙两个班。甲班四名学生，编号学1 至学4，班内互为参照组；乙班两名学生，编号学5、学6，班内互为参照组。学生只把本班同学当参照组，班间没有参照关系。\n\n教务处要在两套辅导安排里抽签：\n\n- 方案 A：辅导学1、学2、学5 这三名学生；\n- 方案 B：辅导学3、学6 这两名学生。\n\n成绩规则如下：\n\n- 受辅导的学生成绩直接提高 4 分；\n- 班平均成绩每提高 1 分，班里每名学生再提高 0.5 分；\n- 没有其他影响成绩的途径。\n\n班平均按最终口径理解：受辅导学生的提高会拉高班平均，班平均的提高又回给班内每名学生，相互传导直到稳定；规则里的班平均，指传导全部兑现之后的最终班平均。\n\n教务处明年会从这两套安排里选一套执行。我们想知道，六名学生成绩相对不推行计划时的平均提高在明年采用其中一套安排时是多少。每人等权。",
+      "prompt": {
+        "contract": "network-extended-reading",
+        "system_sha256": "b85c894b47fe99abb57717eceb0af0620d62d17a048a89e38bdcee1f02fa3d8a",
+        "system_characters": 2556,
+        "user_characters": 17931
+      },
+      "reread": {
+        "performed": false,
+        "reason": "first answer used as-is; a re-read is a separate call"
+      },
+      "answer_seconds": 3.828,
+      "first_answer": {
+        "reference_context": "c1f0fba932ea0",
+        "study": {
+          "source_ids": [
+            "s0002",
+            "s0006",
+            "s0010",
+            "s0012",
+            "s0013"
+          ],
+          "nodes": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6"
+          ],
+          "edges": [
+            [
+              "学1",
+              "学2"
+            ],
+            [
+              "学1",
+              "学3"
+            ],
+            [
+              "学1",
+              "学4"
+            ],
+            [
+              "学2",
+              "学3"
+            ],
+            [
+              "学2",
+              "学4"
+            ],
+            [
+              "学3",
+              "学4"
+            ],
+            [
+              "学5",
+              "学6"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "是否接受课外辅导（方案A为学1、学2、学5；方案B为学3、学6）",
+          "outcome": "成绩相对不推行计划时的提高",
+          "outcome_kind": "CONTINUOUS",
+          "context": "甲乙两班六名学生，班内互为参照组，班间无参照关系；结果为辅导执行后期末相对不推行计划时的成绩提高"
+        },
+        "additional_restrictions": [
+          {
+            "source_ids": [
+              "s0006"
+            ],
+            "text": "六名学生在两套安排下的潜在成绩提高与安排选择独立；观察到的成绩提高对应实际执行的那套安排；班级划分在安排执行前固定；受辅导者直接提高4分、班平均每提高1分班里每名学生再提高0.5分的规则对每名学生一致适用；所需比例存在。"
+          },
+          {
+            "source_ids": [
+              "s0014",
+              "s0015",
+              "s0016",
+              "s0017",
+              "s0018"
+            ],
+            "text": "成绩规则：受辅导学生直接提高4分；班平均每提高1分，班里每名学生再提高0.5分；没有其他影响成绩的途径；班平均按传导全部兑现后的最终口径理解。"
+          }
+        ],
+        "unresolved": [
+          {
+            "source_ids": [
+              "s0009"
+            ],
+            "text": "未来两套辅导安排各自被采用的机会没有说明，因此随机政策下各方案的选择概率缺失。"
+          }
+        ],
+        "version": "network-finite-policy-reading-1",
+        "assignment": {
+          "source_ids": [
+            "s0004"
+          ],
+          "kind": "UNKNOWN",
+          "probabilities": null,
+          "fixed_count": null
+        },
+        "first_stage_exclusion": null,
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          }
+        },
+        "target": {
+          "source_ids": [
+            "s0019",
+            "s0022",
+            "s0023",
+            "s0009"
+          ],
+          "population": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6"
+          ],
+          "aggregation": "EQUAL_MEAN",
+          "components": [
+            {
+              "source_ids": [
+                "s0012"
+              ],
+              "assignment": {
+                "学1": 1,
+                "学2": 1,
+                "学5": 1,
+                "学3": 0,
+                "学4": 0,
+                "学6": 0
+              },
+              "weight": null
+            },
+            {
+              "source_ids": [
+                "s0013"
+              ],
+              "assignment": {
+                "学1": 0,
+                "学2": 0,
+                "学5": 0,
+                "学3": 1,
+                "学4": 0,
+                "学6": 1
+              },
+              "weight": null
+            }
+          ],
+          "policy_distribution_complete": {
+            "source_ids": [
+              "s0009"
+            ],
+            "value": false
+          }
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0008"
+            ],
+            "operator": "OTHER",
+            "availability": "SYMBOLIC_POPULATION_OPERATOR",
+            "outcome_nodes": [
+              "学1",
+              "学2",
+              "学3",
+              "学4",
+              "学5",
+              "学6"
+            ],
+            "assignment_cells": []
+          }
+        ]
+      },
+      "transport": {
+        "stream": false,
+        "json_mode_sent": true,
+        "output_token_parameter": null,
+        "output_token_limit": null,
+        "require_finish_reason": false,
+        "max_stream_wire_bytes": 2000000,
+        "transport_calls": 1,
+        "response_bytes": 3381,
+        "content_characters": 1943,
+        "content_bytes": 2623,
+        "stream_events": 0,
+        "stage": "complete",
+        "status": "json_object_received",
+        "http_status": 200,
+        "headers_seconds": 0.171,
+        "returned_model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 7725,
+          "completion_tokens": 798,
+          "total_tokens": 8523,
+          "prompt_cache_hit_tokens": 1408,
+          "prompt_cache_miss_tokens": 6317
+        },
+        "finish_reason": "stop",
+        "json_envelope_received": "bare",
+        "elapsed_seconds": 3.828
+      },
+      "parsed_reference_context_sha256": "1f0fba932ea02f5477185790042161e536a859956754e88c25fbbe76d5ddbab6",
+      "confirmation": {
+        "confirmed": true,
+        "compared": [
+          "study.nodes",
+          "study.edges",
+          "study.graph_kind",
+          "study.edge_list_complete",
+          "study.outcome_kind",
+          "exposure.kind",
+          "target.population",
+          "target.kind",
+          "target.operation",
+          "target.aggregation",
+          "target.averaging",
+          "regime.kind",
+          "conditioning.kind",
+          "target.components",
+          "assumptions.*"
+        ],
+        "not_compared": [
+          "study.treatment",
+          "study.outcome",
+          "study.context",
+          "free-text notes"
+        ],
+        "contradictions": [],
+        "not_declared": [],
+        "extra": [
+          {
+            "field": "target.components",
+            "reading": [
+              {
+                "source_ids": [
+                  "src_b284dad302a547ac7da1536ed8887aee3c36cefd6dee1c2a9d0eb3f1682e8fbc"
+                ],
+                "assignment": {
+                  "学1": 1,
+                  "学2": 1,
+                  "学5": 1,
+                  "学3": 0,
+                  "学4": 0,
+                  "学6": 0
+                },
+                "weight": null
+              },
+              {
+                "source_ids": [
+                  "src_505a626399407f5358bc2ffc043e57a9790888a78ed578d327588d41c69cd317"
+                ],
+                "assignment": {
+                  "学1": 0,
+                  "学2": 0,
+                  "学5": 0,
+                  "学3": 1,
+                  "学4": 0,
+                  "学6": 1
+                },
+                "weight": null
+              }
+            ]
+          }
+        ]
+      },
+      "declared_notes": {
+        "additional_restrictions": [
+          "六名学生在两套安排下的潜在成绩提高与安排选择独立；观察到的成绩提高对应实际执行的那套安排；班级划分在安排执行前固定；受辅导者直接提高4分、班平均每提高1分班里每名学生再提高0.5分的规则对每名学生一致适用；所需比例存在。",
+          "成绩规则：受辅导学生直接提高4分；班平均每提高1分，班里每名学生再提高0.5分；没有其他影响成绩的途径；班平均按传导全部兑现后的最终口径理解。"
+        ],
+        "unresolved": [
+          "未来两套辅导安排各自被采用的机会没有说明，因此随机政策下各方案的选择概率缺失。"
+        ],
+        "adopted": false,
+        "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+      },
+      "plan_state": "NEEDS_INPUT",
+      "plan_reason": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+      "observed": "NEEDS_INPUT",
+      "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+      "independent_replay": false,
+      "mathematical_claim": {},
+      "outcome": {
+        "state": "NEEDS_INPUT",
+        "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+        "independent_replay": false
+      }
+    },
+    {
+      "case_id": "LIT-NET-15",
+      "variant": "changed_target",
+      "run_at": "2026-11-18 20:16:59 +0800",
+      "provider": {
+        "name": "openai-chat-compatible:deepseek-chat",
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat"
+      },
+      "reading_source": "real_llm",
+      "reviews": {
+        "authority": "FROZEN_REFERENCE_APPROVALS",
+        "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+      },
+      "api_calls": 1,
+      "question": "某校要在一个年级推行课外辅导计划，成绩会怎么变，老师和家长都没有把握。年级里只有甲乙两个班。甲班四名学生，编号学1 至学4，班内互为参照组；乙班两名学生，编号学5、学6，班内互为参照组。学生只把本班同学当参照组，班间没有参照关系。\n\n教务处要在两套辅导安排里抽签：\n\n- 方案 A：辅导学1、学2、学5 这三名学生；\n- 方案 B：辅导学3、学6 这两名学生。\n\n成绩规则如下：\n\n- 受辅导的学生成绩直接提高 4 分；\n- 班平均成绩每提高 1 分，班里每名学生再提高 0.5 分；\n- 没有其他影响成绩的途径。\n\n班平均按最终口径理解：受辅导学生的提高会拉高班平均，班平均的提高又回给班内每名学生，相互传导直到稳定；规则里的班平均，指传导全部兑现之后的最终班平均。\n\n我们要单独看甲班学3 这一名学生。两种安排各以一半概率被采用，这就是全部候选方案。我们想知道，学3 成绩相对不推行计划时的平均提高在两种安排各一半机会时是多少。只有他一名学生，权重为 1。",
+      "prompt": {
+        "contract": "network-extended-reading",
+        "system_sha256": "b85c894b47fe99abb57717eceb0af0620d62d17a048a89e38bdcee1f02fa3d8a",
+        "system_characters": 2556,
+        "user_characters": 18008
+      },
+      "reread": {
+        "performed": false,
+        "reason": "first answer used as-is; a re-read is a separate call"
+      },
+      "answer_seconds": 2.984,
+      "first_answer": {
+        "reference_context": "c0ebe7e584f6d",
+        "study": {
+          "source_ids": [
+            "s0002",
+            "s0006",
+            "s0010",
+            "s0019"
+          ],
+          "nodes": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6"
+          ],
+          "edges": [
+            [
+              "学1",
+              "学2"
+            ],
+            [
+              "学1",
+              "学3"
+            ],
+            [
+              "学1",
+              "学4"
+            ],
+            [
+              "学2",
+              "学3"
+            ],
+            [
+              "学2",
+              "学4"
+            ],
+            [
+              "学3",
+              "学4"
+            ],
+            [
+              "学5",
+              "学6"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "接受辅导计划",
+          "outcome": "成绩相对不推行计划时的提高",
+          "outcome_kind": "CONTINUOUS",
+          "context": "甲乙两个班共六名学生，班内互为参照组，班间无参照关系；受辅导者直接提高4分，班平均最终提高每1分则班内每人再提高0.5分。"
+        },
+        "additional_restrictions": [],
+        "unresolved": [],
+        "version": "network-finite-policy-reading-1",
+        "assignment": {
+          "source_ids": [
+            "s0004"
+          ],
+          "kind": "UNKNOWN",
+          "probabilities": null,
+          "fixed_count": null
+        },
+        "first_stage_exclusion": null,
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0006",
+              "s0009"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          }
+        },
+        "target": {
+          "source_ids": [
+            "s0009",
+            "s0019"
+          ],
+          "population": [
+            "学3"
+          ],
+          "aggregation": "EQUAL_MEAN",
+          "components": [
+            {
+              "source_ids": [
+                "s0012",
+                "s0019"
+              ],
+              "assignment": {
+                "学1": 1,
+                "学2": 1,
+                "学3": 0,
+                "学4": 0,
+                "学5": 1,
+                "学6": 0
+              },
+              "weight": "1/2"
+            },
+            {
+              "source_ids": [
+                "s0013",
+                "s0019"
+              ],
+              "assignment": {
+                "学1": 0,
+                "学2": 0,
+                "学3": 1,
+                "学4": 0,
+                "学5": 0,
+                "学6": 1
+              },
+              "weight": "1/2"
+            }
+          ],
+          "policy_distribution_complete": {
+            "source_ids": [
+              "s0009"
+            ],
+            "value": true
+          }
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0008"
+            ],
+            "operator": "FULL_JOINT_LAW",
+            "availability": "SYMBOLIC_POPULATION_OPERATOR",
+            "outcome_nodes": [
+              "学1",
+              "学2",
+              "学3",
+              "学4",
+              "学5",
+              "学6"
+            ],
+            "assignment_cells": []
+          }
+        ]
+      },
+      "transport": {
+        "stream": false,
+        "json_mode_sent": true,
+        "output_token_parameter": null,
+        "output_token_limit": null,
+        "require_finish_reason": false,
+        "max_stream_wire_bytes": 2000000,
+        "transport_calls": 1,
+        "response_bytes": 2972,
+        "content_characters": 1967,
+        "content_bytes": 2195,
+        "stream_events": 0,
+        "stage": "complete",
+        "status": "json_object_received",
+        "http_status": 200,
+        "headers_seconds": 0.25,
+        "returned_model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 7785,
+          "completion_tokens": 759,
+          "total_tokens": 8544,
+          "prompt_cache_hit_tokens": 1408,
+          "prompt_cache_miss_tokens": 6377
+        },
+        "finish_reason": "stop",
+        "json_envelope_received": "bare",
+        "elapsed_seconds": 2.984
+      },
+      "parsed_reference_context_sha256": "0ebe7e584f6d7914d057fc9d78eed9231cca03c5b74cdeb6519c329ad3cdd88a",
+      "confirmation": {
+        "confirmed": true,
+        "compared": [
+          "study.nodes",
+          "study.edges",
+          "study.graph_kind",
+          "study.edge_list_complete",
+          "study.outcome_kind",
+          "exposure.kind",
+          "target.population",
+          "target.kind",
+          "target.operation",
+          "target.aggregation",
+          "target.averaging",
+          "regime.kind",
+          "conditioning.kind",
+          "target.components",
+          "assumptions.*"
+        ],
+        "not_compared": [
+          "study.treatment",
+          "study.outcome",
+          "study.context",
+          "free-text notes"
+        ],
+        "contradictions": [],
+        "not_declared": [],
+        "extra": []
+      },
+      "declared_notes": {
+        "additional_restrictions": [],
+        "unresolved": [],
+        "adopted": false,
+        "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+      },
+      "plan_state": "REVIEW_REQUIRED",
+      "plan_reason": null,
+      "observed": "POINT",
+      "reason_code": null,
+      "independent_replay": true,
+      "mathematical_claim": {
+        "target_fingerprint": "e23ed914d969f75c1f85a04bfe1aad92553b78df95c6b42b51702adb3b744d1c"
+      },
+      "outcome": {
+        "state": "POINT",
+        "reason_code": null,
+        "independent_replay": true
+      }
+    }
+  ]
+}

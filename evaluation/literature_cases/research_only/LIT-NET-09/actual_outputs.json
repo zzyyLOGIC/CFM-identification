@@ -1,0 +1,1011 @@
+{
+ "source": "real LLM run (reading stage only), deepseek-chat, 2026-11-19 13:17 +0800, on the trial-section revision",
+ "provenance": "Fresh LLM call recorded in this case package on 2026-11-19, after the trial section was rewritten to state the lottery directly: three variants, one request each (plus one re-read where the structural check failed). The model only reads the question; it does not pick theorems, approve assumptions or produce identification results.",
+ "case_id": "LIT-NET-09",
+ "results": [
+  {
+   "case_id": "LIT-NET-09",
+   "variant": "original",
+   "run_at": "2026-11-19 13:17:40 +0800",
+   "provider": {
+    "name": "openai-chat-compatible:deepseek-chat",
+    "base_url": "https://api.deepseek.com/v1",
+    "model": "deepseek-chat"
+   },
+   "reading_source": "real_llm",
+   "reviews": {
+    "authority": "FROZEN_REFERENCE_APPROVALS",
+    "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+   },
+   "api_calls": 1,
+   "question": "两个村的扶贫办要做贫困户认定。村甲四户，编号 1 到 4，四户两两之间都有日常往来。村乙四户，编号 5 到 8，往来只有 5 与 6、6 与 7、7 与 8 这三对。入户调查已经逐户核准了各家底细，但村里多数人对别家的真实情况仍然只是凭印象。\n\n下一轮要派调查员抽查核实若干户，核实到的情况会在村里公开。两种安排各以一半概率被采用，这就是全部候选安排：安排 A 在村甲核实 1 号、在村乙核实 5 号；安排 B 在村甲核实 1 号和 3 号、在村乙核实 5 号和 6 号。\n\n一户的家底算被摸清，需要满足两条之一：这户自己被核实；或者这户的邻居里至少有一户被核实，住得近的人清楚彼此底细，调查员从邻居那里也能问出实情。两条都不满足的户，村里只是凭印象，不能算摸清。\n\n我们想知道，按这个抽签办法，八户当中家底被摸清的比例平均是多少。每户同等权重，试点安排和资料范围见附件。",
+   "prompt": {
+    "contract": "network-extended-reading",
+    "system_sha256": "b85c894b47fe99abb57717eceb0af0620d62d17a048a89e38bdcee1f02fa3d8a",
+    "system_characters": 2556,
+    "user_characters": 17254
+   },
+   "reread": {
+    "performed": false,
+    "reason": "first answer used as-is; a re-read is a separate call"
+   },
+   "answer_seconds": 3.093,
+   "first_answer": {
+    "reference_context": "c89b359f545a8",
+    "study": {
+     "source_ids": [
+      "s0002",
+      "s0009",
+      "s0011"
+     ],
+     "nodes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+     ],
+     "edges": [
+      [
+       "1",
+       "2"
+      ],
+      [
+       "1",
+       "3"
+      ],
+      [
+       "1",
+       "4"
+      ],
+      [
+       "2",
+       "3"
+      ],
+      [
+       "2",
+       "4"
+      ],
+      [
+       "3",
+       "4"
+      ],
+      [
+       "5",
+       "6"
+      ],
+      [
+       "6",
+       "7"
+      ],
+      [
+       "7",
+       "8"
+      ]
+     ],
+     "graph_kind": "SIMPLE_UNDIRECTED",
+     "edge_list_complete": true,
+     "treatment": "被核实记1，未核实记0",
+     "outcome": "该户家底被摸清记1，没摸清记0",
+     "outcome_kind": "BINARY",
+     "context": "两村扶贫办抽查核实若干户，核实结果在村内公开；评价时点为公开之后；两套核实安排作用于同一批八户，结果定义不变。"
+    },
+    "additional_restrictions": [
+     {
+      "source_ids": [
+       "s0006"
+      ],
+      "text": "同伴暴露进入本案例目标：一户的家底是否被摸清，取决于本户是否被核实，以及本户的邻居中是否至少有一户被核实。核实一户会使该户本身及其全部邻居的家底变成被摸清；该规则是题目的判定规则，不是对信息传播过程的估计。"
+     }
+    ],
+    "unresolved": [],
+    "version": "network-finite-policy-reading-1",
+    "assignment": {
+     "source_ids": [
+      "s0004",
+      "s0010",
+      "s0014"
+     ],
+     "kind": "OTHER",
+     "probabilities": null,
+     "fixed_count": null
+    },
+    "first_stage_exclusion": null,
+    "assumptions": {
+     "known_assignment_law": {
+      "source_ids": [
+       "s0004",
+       "s0006"
+      ],
+      "value": true
+     },
+     "full_vector_randomization": {
+      "source_ids": [
+       "s0004",
+       "s0006"
+      ],
+      "value": true
+     },
+     "consistency": {
+      "source_ids": [
+       "s0006"
+      ],
+      "value": true
+     },
+     "fixed_pretreatment_network": {
+      "source_ids": [
+       "s0002"
+      ],
+      "value": true
+     },
+     "finite_conditional_first_moments": {
+      "source_ids": [
+       "s0006"
+      ],
+      "value": true
+     }
+    },
+    "target": {
+     "source_ids": [
+      "s0008",
+      "s0010",
+      "s0012",
+      "s0014",
+      "s0016"
+     ],
+     "population": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+     ],
+     "aggregation": "EQUAL_MEAN",
+     "components": [
+      {
+       "source_ids": [
+        "s0010",
+        "s0014"
+       ],
+       "assignment": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1,
+        "6": 0,
+        "7": 0,
+        "8": 0
+       },
+       "weight": "1/2"
+      },
+      {
+       "source_ids": [
+        "s0010",
+        "s0014"
+       ],
+       "assignment": {
+        "1": 1,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 1,
+        "6": 1,
+        "7": 0,
+        "8": 0
+       },
+       "weight": "1/2"
+      }
+     ],
+     "policy_distribution_complete": {
+      "source_ids": [
+       "s0008",
+       "s0010",
+       "s0014"
+      ],
+      "value": true
+     }
+    },
+    "information": [
+     {
+      "source_ids": [
+       "s0002",
+       "s0008"
+      ],
+      "operator": "UNKNOWN",
+      "availability": "UNKNOWN",
+      "outcome_nodes": [],
+      "assignment_cells": []
+     }
+    ]
+   },
+   "transport": {
+    "stream": false,
+    "json_mode_sent": true,
+    "output_token_parameter": null,
+    "output_token_limit": null,
+    "require_finish_reason": false,
+    "max_stream_wire_bytes": 2000000,
+    "transport_calls": 1,
+    "response_bytes": 2872,
+    "content_characters": 1746,
+    "content_bytes": 2106,
+    "stream_events": 0,
+    "stage": "complete",
+    "status": "json_object_received",
+    "http_status": 200,
+    "headers_seconds": 0.125,
+    "returned_model": "deepseek-flash",
+    "usage": {
+     "prompt_tokens": 7584,
+     "completion_tokens": 689,
+     "total_tokens": 8273,
+     "prompt_cache_hit_tokens": 1408,
+     "prompt_cache_miss_tokens": 6176
+    },
+    "finish_reason": "stop",
+    "json_envelope_received": "bare",
+    "elapsed_seconds": 3.093
+   },
+   "parsed_reference_context_sha256": "89b359f545a834a1f7b92658d9bb54eca934bc8fdc61c1b23d35fb8ca980d225",
+   "confirmation": {
+    "confirmed": true,
+    "compared": [
+     "study.nodes",
+     "study.edges",
+     "study.graph_kind",
+     "study.edge_list_complete",
+     "study.outcome_kind",
+     "exposure.kind",
+     "target.population",
+     "target.kind",
+     "target.operation",
+     "target.aggregation",
+     "target.averaging",
+     "regime.kind",
+     "conditioning.kind",
+     "target.components",
+     "assumptions.*"
+    ],
+    "not_compared": [
+     "study.treatment",
+     "study.outcome",
+     "study.context",
+     "free-text notes"
+    ],
+    "contradictions": [],
+    "not_declared": [],
+    "extra": []
+   },
+   "declared_notes": {
+    "additional_restrictions": [
+     "同伴暴露进入本案例目标：一户的家底是否被摸清，取决于本户是否被核实，以及本户的邻居中是否至少有一户被核实。核实一户会使该户本身及其全部邻居的家底变成被摸清；该规则是题目的判定规则，不是对信息传播过程的估计。"
+    ],
+    "unresolved": [],
+    "adopted": false,
+    "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+   },
+   "plan_state": "REVIEW_REQUIRED",
+   "plan_reason": null,
+   "observed": "POINT",
+   "reason_code": null,
+   "independent_replay": true,
+   "mathematical_claim": {
+    "target_fingerprint": "2abdafd27f18b5bc77113a8d7dbef99c27c60ef9f7e05d241c79d417a15a82fb"
+   },
+   "outcome": {
+    "state": "POINT",
+    "reason_code": null,
+    "independent_replay": true
+   }
+  },
+  {
+   "case_id": "LIT-NET-09",
+   "variant": "missing_condition",
+   "run_at": "2026-11-19 13:17:43 +0800",
+   "provider": {
+    "name": "openai-chat-compatible:deepseek-chat",
+    "base_url": "https://api.deepseek.com/v1",
+    "model": "deepseek-chat"
+   },
+   "reading_source": "real_llm",
+   "reviews": {
+    "authority": "FROZEN_REFERENCE_APPROVALS",
+    "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+   },
+   "api_calls": 1,
+   "question": "两个村的扶贫办要做贫困户认定。村甲四户，编号 1 到 4，四户两两之间都有日常往来。村乙四户，编号 5 到 8，往来只有 5 与 6、6 与 7、7 与 8 这三对。入户调查已经逐户核准了各家底细，但村里多数人对别家的真实情况仍然只是凭印象。\n\n下一轮要派调查员抽查核实若干户，核实到的情况会在村里公开。下一轮会从这两种安排里选一种执行：安排 A 在村甲核实 1 号、在村乙核实 5 号；安排 B 在村甲核实 1 号和 3 号、在村乙核实 5 号和 6 号。\n\n一户的家底算被摸清，需要满足两条之一：这户自己被核实；或者这户的邻居里至少有一户被核实，住得近的人清楚彼此底细，调查员从邻居那里也能问出实情。两条都不满足的户，村里只是凭印象，不能算摸清。\n\n我们想知道，八户当中家底被摸清的比例平均是多少。每户同等权重，试点安排和资料范围见附件。",
+   "prompt": {
+    "contract": "network-extended-reading",
+    "system_sha256": "b85c894b47fe99abb57717eceb0af0620d62d17a048a89e38bdcee1f02fa3d8a",
+    "system_characters": 2556,
+    "user_characters": 17201
+   },
+   "reread": {
+    "performed": false,
+    "reason": "first answer used as-is; a re-read is a separate call"
+   },
+   "transport_retries": [
+    {
+     "code": "TRANSPORT_ERROR",
+     "diagnostics": {
+      "stream": false,
+      "json_mode_sent": true,
+      "output_token_parameter": null,
+      "output_token_limit": null,
+      "require_finish_reason": false,
+      "max_stream_wire_bytes": 2000000,
+      "transport_calls": 1,
+      "response_bytes": 0,
+      "content_characters": 0,
+      "content_bytes": 0,
+      "stream_events": 0,
+      "stage": "transport",
+      "status": "failed",
+      "elapsed_seconds": 17.281,
+      "error_code": "TRANSPORT_ERROR"
+     }
+    }
+   ],
+   "answer_seconds": 21.797,
+   "first_answer": {
+    "reference_context": "c948604b8f602",
+    "study": {
+     "source_ids": [
+      "s0002"
+     ],
+     "nodes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+     ],
+     "edges": [
+      [
+       "1",
+       "2"
+      ],
+      [
+       "1",
+       "3"
+      ],
+      [
+       "1",
+       "4"
+      ],
+      [
+       "2",
+       "3"
+      ],
+      [
+       "2",
+       "4"
+      ],
+      [
+       "3",
+       "4"
+      ],
+      [
+       "5",
+       "6"
+      ],
+      [
+       "6",
+       "7"
+      ],
+      [
+       "7",
+       "8"
+      ]
+     ],
+     "graph_kind": "SIMPLE_UNDIRECTED",
+     "edge_list_complete": true,
+     "treatment": "核实（被核实记1，未核实记0）",
+     "outcome": "该户家底被摸清记1，没摸清记0",
+     "outcome_kind": "BINARY",
+     "context": "村甲1至4号两两相连；村乙5至8号为5—6、6—7、7—8路径。关系在核实安排确定前固定且为无向。评价时点为核实结果在村内公开之后，两套安排作用于同一批八户，结果定义不变。"
+    },
+    "additional_restrictions": [
+     {
+      "source_ids": [
+       "s0002"
+      ],
+      "text": "入户调查已逐户核准各家底细，该结论只用于说明摸清指什么，不进入结果计算。"
+     }
+    ],
+    "unresolved": [
+     {
+      "source_ids": [
+       "s0008"
+      ],
+      "text": "问题没有说明两套安排各自被采用的机会，政策分布的权重未给出。"
+     }
+    ],
+    "version": "network-finite-policy-reading-1",
+    "assignment": {
+     "source_ids": [
+      "s0004"
+     ],
+     "kind": "UNKNOWN",
+     "probabilities": null,
+     "fixed_count": null
+    },
+    "first_stage_exclusion": null,
+    "assumptions": {
+     "known_assignment_law": {
+      "source_ids": [
+       "s0006"
+      ],
+      "value": true
+     },
+     "full_vector_randomization": {
+      "source_ids": [
+       "s0006"
+      ],
+      "value": true
+     },
+     "consistency": {
+      "source_ids": [
+       "s0006"
+      ],
+      "value": true
+     },
+     "fixed_pretreatment_network": {
+      "source_ids": [
+       "s0002"
+      ],
+      "value": true
+     },
+     "finite_conditional_first_moments": {
+      "source_ids": [
+       "s0006"
+      ],
+      "value": true
+     }
+    },
+    "target": {
+     "source_ids": [
+      "s0010",
+      "s0012",
+      "s0008"
+     ],
+     "population": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+     ],
+     "aggregation": "EQUAL_MEAN",
+     "components": [
+      {
+       "source_ids": [
+        "s0010"
+       ],
+       "assignment": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1,
+        "6": 0,
+        "7": 0,
+        "8": 0
+       },
+       "weight": null
+      },
+      {
+       "source_ids": [
+        "s0010"
+       ],
+       "assignment": {
+        "1": 1,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 1,
+        "6": 1,
+        "7": 0,
+        "8": 0
+       },
+       "weight": null
+      }
+     ],
+     "policy_distribution_complete": {
+      "source_ids": [
+       "s0008"
+      ],
+      "value": false
+     }
+    },
+    "information": [
+     {
+      "source_ids": [
+       "s0008"
+      ],
+      "operator": "NODE_FULL_LAW",
+      "availability": "SYMBOLIC_POPULATION_OPERATOR",
+      "outcome_nodes": [
+       "1",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8"
+      ],
+      "assignment_cells": []
+     }
+    ]
+   },
+   "transport": {
+    "stream": false,
+    "json_mode_sent": true,
+    "output_token_parameter": null,
+    "output_token_limit": null,
+    "require_finish_reason": false,
+    "max_stream_wire_bytes": 2000000,
+    "transport_calls": 1,
+    "response_bytes": 2829,
+    "content_characters": 1733,
+    "content_bytes": 2069,
+    "stream_events": 0,
+    "stage": "complete",
+    "status": "json_object_received",
+    "http_status": 200,
+    "headers_seconds": 0.656,
+    "returned_model": "deepseek-flash",
+    "usage": {
+     "prompt_tokens": 7535,
+     "completion_tokens": 681,
+     "total_tokens": 8216,
+     "prompt_cache_hit_tokens": 1408,
+     "prompt_cache_miss_tokens": 6127
+    },
+    "finish_reason": "stop",
+    "json_envelope_received": "bare",
+    "elapsed_seconds": 3.516
+   },
+   "parsed_reference_context_sha256": "948604b8f602697af625b8a242b56d281cd275020a1e50438bbbaf9c33683fa7",
+   "confirmation": {
+    "confirmed": true,
+    "compared": [
+     "study.nodes",
+     "study.edges",
+     "study.graph_kind",
+     "study.edge_list_complete",
+     "study.outcome_kind",
+     "exposure.kind",
+     "target.population",
+     "target.kind",
+     "target.operation",
+     "target.aggregation",
+     "target.averaging",
+     "regime.kind",
+     "conditioning.kind",
+     "target.components",
+     "assumptions.*"
+    ],
+    "not_compared": [
+     "study.treatment",
+     "study.outcome",
+     "study.context",
+     "free-text notes"
+    ],
+    "contradictions": [],
+    "not_declared": [],
+    "extra": [
+     {
+      "field": "target.components",
+      "reading": [
+       {
+        "source_ids": [
+         "src_a9bf5d721abe7aa7005ce3877d99f1c33016ee932909522533ac34c43be917ae"
+        ],
+        "assignment": {
+         "1": 1,
+         "2": 0,
+         "3": 0,
+         "4": 0,
+         "5": 1,
+         "6": 0,
+         "7": 0,
+         "8": 0
+        },
+        "weight": null
+       },
+       {
+        "source_ids": [
+         "src_a9bf5d721abe7aa7005ce3877d99f1c33016ee932909522533ac34c43be917ae"
+        ],
+        "assignment": {
+         "1": 1,
+         "2": 0,
+         "3": 1,
+         "4": 0,
+         "5": 1,
+         "6": 1,
+         "7": 0,
+         "8": 0
+        },
+        "weight": null
+       }
+      ]
+     }
+    ]
+   },
+   "declared_notes": {
+    "additional_restrictions": [
+     "入户调查已逐户核准各家底细，该结论只用于说明摸清指什么，不进入结果计算。"
+    ],
+    "unresolved": [
+     "问题没有说明两套安排各自被采用的机会，政策分布的权重未给出。"
+    ],
+    "adopted": false,
+    "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+   },
+   "plan_state": "NEEDS_INPUT",
+   "plan_reason": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+   "observed": "NEEDS_INPUT",
+   "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+   "independent_replay": false,
+   "mathematical_claim": {},
+   "outcome": {
+    "state": "NEEDS_INPUT",
+    "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+    "independent_replay": false
+   }
+  },
+  {
+   "case_id": "LIT-NET-09",
+   "variant": "changed_target",
+   "run_at": "2026-11-19 13:18:05 +0800",
+   "provider": {
+    "name": "openai-chat-compatible:deepseek-chat",
+    "base_url": "https://api.deepseek.com/v1",
+    "model": "deepseek-chat"
+   },
+   "reading_source": "real_llm",
+   "reviews": {
+    "authority": "FROZEN_REFERENCE_APPROVALS",
+    "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+   },
+   "api_calls": 1,
+   "question": "两个村的扶贫办要做贫困户认定。村甲四户，编号 1 到 4，四户两两之间都有日常往来。村乙四户，编号 5 到 8，往来只有 5 与 6、6 与 7、7 与 8 这三对。入户调查已经逐户核准了各家底细，但村里多数人对别家的真实情况仍然只是凭印象。\n\n下一轮要派调查员抽查核实若干户，核实到的情况会在村里公开。两种安排各以一半概率被采用，这就是全部候选安排：安排 A 在村甲核实 1 号、在村乙核实 5 号；安排 B 在村甲核实 1 号和 3 号、在村乙核实 5 号和 6 号。\n\n一户的家底算被摸清，需要满足两条之一：这户自己被核实；或者这户的邻居里至少有一户被核实，住得近的人清楚彼此底细，调查员从邻居那里也能问出实情。两条都不满足的户，村里只是凭印象，不能算摸清。\n\n我们想知道，村乙 5 到 8 这四户当中，家底被摸清的比例平均是多少。每户同等权重，试点安排和资料范围见附件。",
+   "prompt": {
+    "contract": "network-extended-reading",
+    "system_sha256": "b85c894b47fe99abb57717eceb0af0620d62d17a048a89e38bdcee1f02fa3d8a",
+    "system_characters": 2556,
+    "user_characters": 17269
+   },
+   "reread": {
+    "performed": false,
+    "reason": "first answer used as-is; a re-read is a separate call"
+   },
+   "answer_seconds": 5.438,
+   "first_answer": {
+    "reference_context": "cd2e50d175d4c",
+    "study": {
+     "source_ids": [
+      "s0002",
+      "s0009",
+      "s0010",
+      "s0011",
+      "s0013",
+      "s0014",
+      "s0015"
+     ],
+     "nodes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+     ],
+     "edges": [
+      [
+       "1",
+       "2"
+      ],
+      [
+       "1",
+       "3"
+      ],
+      [
+       "1",
+       "4"
+      ],
+      [
+       "2",
+       "3"
+      ],
+      [
+       "2",
+       "4"
+      ],
+      [
+       "3",
+       "4"
+      ],
+      [
+       "5",
+       "6"
+      ],
+      [
+       "6",
+       "7"
+      ],
+      [
+       "7",
+       "8"
+      ]
+     ],
+     "graph_kind": "SIMPLE_UNDIRECTED",
+     "edge_list_complete": true,
+     "treatment": "被核实记1，未核实记0",
+     "outcome": "该户家底被摸清记1，没摸清记0；自己被核实或至少一名邻居被核实为1，否则为0",
+     "outcome_kind": "BINARY",
+     "context": "村甲1至4号两两相连；村乙5至8号仅5—6、6—7、7—8相连。评价时点为核实结果村内公开后；入户调查信息不进入结果计算。"
+    },
+    "additional_restrictions": [
+     {
+      "source_ids": [
+       "s0002",
+       "s0006",
+       "s0008",
+       "s0012"
+      ],
+      "text": "目标总体为村乙5至8号四户，每户等权；只报告随机政策下的平均水平，不与对照方案相减。"
+     },
+     {
+      "source_ids": [
+       "s0002",
+       "s0006"
+      ],
+      "text": "户间往来关系在评价期间固定；结果定义不随两套核实安排改变。"
+     },
+     {
+      "source_ids": [
+       "s0006"
+      ],
+      "text": "核实结果公开后，家底是否被摸清按本户是否被核实及邻居中是否至少一户被核实判定，属题目给定规则。"
+     }
+    ],
+    "unresolved": [],
+    "version": "network-finite-policy-reading-1",
+    "assignment": {
+     "source_ids": [
+      "s0004",
+      "s0010",
+      "s0014"
+     ],
+     "kind": "OTHER",
+     "probabilities": null,
+     "fixed_count": null
+    },
+    "first_stage_exclusion": null,
+    "assumptions": {
+     "known_assignment_law": {
+      "source_ids": [
+       "s0004",
+       "s0006",
+       "s0010",
+       "s0014"
+      ],
+      "value": true
+     },
+     "full_vector_randomization": {
+      "source_ids": [
+       "s0004",
+       "s0006"
+      ],
+      "value": true
+     },
+     "consistency": {
+      "source_ids": [
+       "s0006"
+      ],
+      "value": true
+     },
+     "fixed_pretreatment_network": {
+      "source_ids": [
+       "s0002",
+       "s0006"
+      ],
+      "value": true
+     },
+     "finite_conditional_first_moments": {
+      "source_ids": [
+       "s0006",
+       "s0008"
+      ],
+      "value": null
+     }
+    },
+    "target": {
+     "source_ids": [
+      "s0008",
+      "s0010",
+      "s0012",
+      "s0014",
+      "s0016"
+     ],
+     "population": [
+      "5",
+      "6",
+      "7",
+      "8"
+     ],
+     "aggregation": "EQUAL_MEAN",
+     "components": [
+      {
+       "source_ids": [
+        "s0010",
+        "s0014"
+       ],
+       "assignment": {
+        "1": 1,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 1,
+        "6": 0,
+        "7": 0,
+        "8": 0
+       },
+       "weight": "1/2"
+      },
+      {
+       "source_ids": [
+        "s0010",
+        "s0014"
+       ],
+       "assignment": {
+        "1": 1,
+        "2": 0,
+        "3": 1,
+        "4": 0,
+        "5": 1,
+        "6": 1,
+        "7": 0,
+        "8": 0
+       },
+       "weight": "1/2"
+      }
+     ],
+     "policy_distribution_complete": {
+      "source_ids": [
+       "s0008",
+       "s0010",
+       "s0014"
+      ],
+      "value": true
+     }
+    },
+    "information": [
+     {
+      "source_ids": [
+       "s0008"
+      ],
+      "operator": "NODE_FULL_LAW",
+      "availability": "SYMBOLIC_POPULATION_OPERATOR",
+      "outcome_nodes": [
+       "1",
+       "2",
+       "3",
+       "4",
+       "5",
+       "6",
+       "7",
+       "8"
+      ],
+      "assignment_cells": []
+     }
+    ]
+   },
+   "transport": {
+    "stream": false,
+    "json_mode_sent": true,
+    "output_token_parameter": null,
+    "output_token_limit": null,
+    "require_finish_reason": false,
+    "max_stream_wire_bytes": 2000000,
+    "transport_calls": 1,
+    "response_bytes": 3222,
+    "content_characters": 1990,
+    "content_bytes": 2410,
+    "stream_events": 0,
+    "stage": "complete",
+    "status": "json_object_received",
+    "http_status": 200,
+    "headers_seconds": 0.156,
+    "returned_model": "deepseek-flash",
+    "usage": {
+     "prompt_tokens": 7602,
+     "completion_tokens": 821,
+     "total_tokens": 8423,
+     "prompt_cache_hit_tokens": 1408,
+     "prompt_cache_miss_tokens": 6194
+    },
+    "finish_reason": "stop",
+    "json_envelope_received": "bare",
+    "elapsed_seconds": 5.438
+   },
+   "parsed_reference_context_sha256": "d2e50d175d4c9460940156ac8b763e7168b59ac28b30281b96de24c4588ae639",
+   "confirmation": {
+    "confirmed": true,
+    "compared": [
+     "study.nodes",
+     "study.edges",
+     "study.graph_kind",
+     "study.edge_list_complete",
+     "study.outcome_kind",
+     "exposure.kind",
+     "target.population",
+     "target.kind",
+     "target.operation",
+     "target.aggregation",
+     "target.averaging",
+     "regime.kind",
+     "conditioning.kind",
+     "target.components",
+     "assumptions.*"
+    ],
+    "not_compared": [
+     "study.treatment",
+     "study.outcome",
+     "study.context",
+     "free-text notes"
+    ],
+    "contradictions": [],
+    "not_declared": [
+     {
+      "field": "assumptions.finite_conditional_first_moments",
+      "approved": true
+     }
+    ],
+    "extra": []
+   },
+   "declared_notes": {
+    "additional_restrictions": [
+     "目标总体为村乙5至8号四户，每户等权；只报告随机政策下的平均水平，不与对照方案相减。",
+     "户间往来关系在评价期间固定；结果定义不随两套核实安排改变。",
+     "核实结果公开后，家底是否被摸清按本户是否被核实及邻居中是否至少一户被核实判定，属题目给定规则。"
+    ],
+    "unresolved": [],
+    "adopted": false,
+    "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+   },
+   "plan_state": "REVIEW_REQUIRED",
+   "plan_reason": null,
+   "observed": "POINT",
+   "reason_code": null,
+   "independent_replay": true,
+   "mathematical_claim": {
+    "target_fingerprint": "44ea2fc636d4e31345721f7ca0a6325aac92a937d6a44b490ff7d51b63af11a7"
+   },
+   "outcome": {
+    "state": "POINT",
+    "reason_code": null,
+    "independent_replay": true
+   }
+  }
+ ]
+}

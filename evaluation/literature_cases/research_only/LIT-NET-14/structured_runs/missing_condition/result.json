@@ -1,0 +1,775 @@
+{
+  "state": "NEEDS_INPUT",
+  "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+  "backend_called": false,
+  "independent_replay": false,
+  "mathematical_claim": null,
+  "certificate": null,
+  "answers": [],
+  "clarification_questions": [
+    "请明确本次分析是否采用这一条件：未来政策的有限概率分布完整。",
+    "请列出未来政策的全部完整方案与选择概率。"
+  ],
+  "evidence_status": "CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE",
+  "production_admission": false,
+  "estimation_handoff_allowed": false,
+  "query_id": "q1",
+  "remaining_query_ids": [],
+  "result_scope": "SELECTED_QUERY_ONLY",
+  "fact_family": "NETWORK_FINITE_POLICY_FACTS",
+  "query_review": {
+    "version": "business-dispatch-review-1",
+    "binding_sha256": "fe5476b40ca7b0fea79f06d06930144b9591efc4ad75e084664e53d9034f48de",
+    "reviewer": "Independent synthetic protocol reviewer",
+    "evidence": "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+    "authority": "SYNTHETIC_TEST",
+    "decisions": {
+      "business_target_and_population": "ACCEPTED",
+      "research_structure": "ACCEPTED",
+      "source_entailment": "ACCEPTED"
+    }
+  },
+  "request_sha256": "7f3fe4865f24aebac8e3a9378efa34d2dcf5e2e00d5a56cd32c68001ca268705",
+  "methods": [],
+  "exclusions": [],
+  "facts": {
+    "reference_context": "c94afc8deebbc",
+    "study": {
+      "source_ids": [
+        "src_45fd8822d8dfa8fc6fe4e8e10b40a8238be1b8475cbe90ddba8a176e36bf02e0",
+        "src_4da766c24d9c85f47b7bc063ec5fdc726431684f66f7c5dbecf5c1d19247205d",
+        "src_ac5218d907fa35f3d08f4ec237c442ae203465582c47ab0c096b6b2720a81f24",
+        "src_cb6bd717f0dcaabf2afc43aacb381c559700ddfbe8443b60a679adaaa2518193",
+        "src_423957ffde06f85e740c054f31b7706b942730fe8a7b9cfaac39d035f408fc86",
+        "src_4da6ac2a8ff115075f884ec03aa9c994ca08dbc4181679db64ee5765014310a0",
+        "src_df3014b393f7a9aa1ae3dcdfe3b8cf5b3ca775e11cd015c6bcd7d7a3ae82e942",
+        "src_ba7e48cf114d85dbebd8a52a21de0d2e551d770516c5c2be89d5d22b9fd36087",
+        "src_e2294b7bbf35078d695e6ca91d04807d3127e610bc7fd43e923d0ffeec0a6b30",
+        "src_16b48fc7df3a130f0138ad7ac4125373de3f67ab623239830bbb302727f576ac",
+        "src_db57ab15a755d76ca3da6458b54cfe29119eb87492f7d538fdc885384fcc746d",
+        "src_78415adea57af8e51c3bd99528b733e1e10f5afca528d1c13e7317f86a3fb9e3",
+        "src_fa1ff33d7bf252beb4b898826a4089f68fcfd92f9d7e8a1b4557ab5117e834b4",
+        "src_8c3a6b02d2bc8b5dc0dd620b6f8c62eb26f38d1d7e13686d7ccc1e2985d22b8d",
+        "src_ea76a25a391fc268ee3b45e7f44109b1f44f3d38461c580143ffb82371bbcaa4",
+        "src_cdf4d438ce30205ea8c019cd1bcfd61383c2aa6824acc5e4a40486374b647594",
+        "src_d4c9f93ffb31669b5e10706b67c9bd3b3ef30f9e55841c42436d20c3d0b8dd72",
+        "src_cb0577dbbaf2a17b34369406e862eacc7c5e74687fba5f5c615e331da246df34",
+        "src_7b9b2a14f16f80c05464bb192031b3a98b9805df60507c5d2308d5ece75903e6",
+        "src_d86ca4efd9f8421f5cc412b44c26bbd4af6cd22796909c3b2dc708ae3c9c97d9",
+        "src_2f25549c13df6483cec398d35de871c2d3a39e3ff282ba6abc5a3033d22ca3fc",
+        "src_d8346cecde136db59b7b7df0142e8dac3477e99c068ac789b926005fd80a93cf",
+        "src_0a55bd673efda55ff823d6501aebe52cc736da2480e94104a0373f672c0e3f2d",
+        "src_12956631b1a5002519af979eb34589630fb98d334d2b02f641dfc4198386aec3",
+        "src_2c9df5e2032add15fb0b158eb526ae8af0fa31b12aea9650d9eb613f700bbd5a",
+        "src_d50b38eb22375aeb0791a0da76027575704d1b65b41d2fff8ecde80db001296d",
+        "src_48be4aaa4a2abcd46bc36fcafa0821d6c3bc0b761600144b80e4560139eff73d",
+        "src_162ccdfb90633b10c0ca1abc0fdfddae66003276241fabdbd070dd7cf9c150c0",
+        "src_78006be0e09ee2dcb07c5ab9d6235fb4ddf192f222c80f1b725f6a43fd8489d4",
+        "src_2b41e5d3186563ea90141ad45a3403ca69e9af702cf98ae43bbc8c028fa2a4d3",
+        "src_00268c9cd6b8021bd71dd4e8eee65e17160efb4b85b1f7e6f635c20d8a8dba5b",
+        "src_c716003113c53ec9659bca001a34e540b2d3a5d8c67bf92ed240d76d67318b4d",
+        "src_c2ec1699956cf65dd08e8d91f82e5ef46244ccdb52ee94af629602bdf7ebe114",
+        "src_28315750b2e89bbad7cc1060f8c46588a171b888f5d4f0dc257967046d548843",
+        "src_11d4a5db41020957d1e23c6e02ac747cbd9e853eb76514d9f83176e4e92f6ac0"
+      ],
+      "nodes": [
+        "农1",
+        "农2",
+        "农3",
+        "农4",
+        "农5",
+        "农6",
+        "农7",
+        "农8"
+      ],
+      "edges": [
+        [
+          "农1",
+          "农2"
+        ],
+        [
+          "农1",
+          "农3"
+        ],
+        [
+          "农2",
+          "农3"
+        ],
+        [
+          "农2",
+          "农4"
+        ],
+        [
+          "农5",
+          "农6"
+        ],
+        [
+          "农6",
+          "农7"
+        ],
+        [
+          "农1",
+          "农8"
+        ]
+      ],
+      "graph_kind": "SIMPLE_UNDIRECTED",
+      "edge_list_complete": true,
+      "treatment": "按安排做示范记1，其余记0",
+      "outcome": "下一期化肥强度相对上一期的变化，单位为塞迪每株",
+      "outcome_kind": "CONTINUOUS",
+      "context": "示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象"
+    },
+    "additional_restrictions": [],
+    "unresolved": [],
+    "version": "network-finite-policy-reading-1",
+    "assignment": {
+      "source_ids": [
+        "src_45fd8822d8dfa8fc6fe4e8e10b40a8238be1b8475cbe90ddba8a176e36bf02e0",
+        "src_4da766c24d9c85f47b7bc063ec5fdc726431684f66f7c5dbecf5c1d19247205d",
+        "src_ac5218d907fa35f3d08f4ec237c442ae203465582c47ab0c096b6b2720a81f24",
+        "src_cb6bd717f0dcaabf2afc43aacb381c559700ddfbe8443b60a679adaaa2518193",
+        "src_423957ffde06f85e740c054f31b7706b942730fe8a7b9cfaac39d035f408fc86",
+        "src_4da6ac2a8ff115075f884ec03aa9c994ca08dbc4181679db64ee5765014310a0",
+        "src_df3014b393f7a9aa1ae3dcdfe3b8cf5b3ca775e11cd015c6bcd7d7a3ae82e942",
+        "src_ba7e48cf114d85dbebd8a52a21de0d2e551d770516c5c2be89d5d22b9fd36087",
+        "src_e2294b7bbf35078d695e6ca91d04807d3127e610bc7fd43e923d0ffeec0a6b30",
+        "src_16b48fc7df3a130f0138ad7ac4125373de3f67ab623239830bbb302727f576ac",
+        "src_db57ab15a755d76ca3da6458b54cfe29119eb87492f7d538fdc885384fcc746d",
+        "src_78415adea57af8e51c3bd99528b733e1e10f5afca528d1c13e7317f86a3fb9e3",
+        "src_fa1ff33d7bf252beb4b898826a4089f68fcfd92f9d7e8a1b4557ab5117e834b4",
+        "src_8c3a6b02d2bc8b5dc0dd620b6f8c62eb26f38d1d7e13686d7ccc1e2985d22b8d",
+        "src_ea76a25a391fc268ee3b45e7f44109b1f44f3d38461c580143ffb82371bbcaa4",
+        "src_cdf4d438ce30205ea8c019cd1bcfd61383c2aa6824acc5e4a40486374b647594",
+        "src_d4c9f93ffb31669b5e10706b67c9bd3b3ef30f9e55841c42436d20c3d0b8dd72",
+        "src_cb0577dbbaf2a17b34369406e862eacc7c5e74687fba5f5c615e331da246df34",
+        "src_7b9b2a14f16f80c05464bb192031b3a98b9805df60507c5d2308d5ece75903e6",
+        "src_d86ca4efd9f8421f5cc412b44c26bbd4af6cd22796909c3b2dc708ae3c9c97d9",
+        "src_2f25549c13df6483cec398d35de871c2d3a39e3ff282ba6abc5a3033d22ca3fc",
+        "src_d8346cecde136db59b7b7df0142e8dac3477e99c068ac789b926005fd80a93cf",
+        "src_0a55bd673efda55ff823d6501aebe52cc736da2480e94104a0373f672c0e3f2d",
+        "src_12956631b1a5002519af979eb34589630fb98d334d2b02f641dfc4198386aec3",
+        "src_2c9df5e2032add15fb0b158eb526ae8af0fa31b12aea9650d9eb613f700bbd5a",
+        "src_d50b38eb22375aeb0791a0da76027575704d1b65b41d2fff8ecde80db001296d",
+        "src_48be4aaa4a2abcd46bc36fcafa0821d6c3bc0b761600144b80e4560139eff73d",
+        "src_162ccdfb90633b10c0ca1abc0fdfddae66003276241fabdbd070dd7cf9c150c0",
+        "src_78006be0e09ee2dcb07c5ab9d6235fb4ddf192f222c80f1b725f6a43fd8489d4",
+        "src_2b41e5d3186563ea90141ad45a3403ca69e9af702cf98ae43bbc8c028fa2a4d3",
+        "src_00268c9cd6b8021bd71dd4e8eee65e17160efb4b85b1f7e6f635c20d8a8dba5b",
+        "src_c716003113c53ec9659bca001a34e540b2d3a5d8c67bf92ed240d76d67318b4d",
+        "src_c2ec1699956cf65dd08e8d91f82e5ef46244ccdb52ee94af629602bdf7ebe114",
+        "src_28315750b2e89bbad7cc1060f8c46588a171b888f5d4f0dc257967046d548843",
+        "src_11d4a5db41020957d1e23c6e02ac747cbd9e853eb76514d9f83176e4e92f6ac0"
+      ],
+      "kind": "INDEPENDENT_BERNOULLI",
+      "probabilities": {
+        "农1": "1/2",
+        "农2": "1/2",
+        "农3": "1/2",
+        "农4": "1/2",
+        "农5": "1/2",
+        "农6": "1/2",
+        "农7": "1/2",
+        "农8": "1/2"
+      },
+      "fixed_count": null,
+      "groups": null,
+      "treated_quotas": null,
+      "clusters": null,
+      "cluster_probabilities": null,
+      "quota_profiles": null,
+      "profile_probabilities": null,
+      "treated_sets": null,
+      "set_probabilities": null,
+      "unit_weights": null,
+      "balance_covariates": null,
+      "balance_tolerance": null
+    },
+    "first_stage_exclusion": null,
+    "assumptions": {
+      "known_assignment_law": {
+        "source_ids": [
+          "src_45fd8822d8dfa8fc6fe4e8e10b40a8238be1b8475cbe90ddba8a176e36bf02e0",
+          "src_4da766c24d9c85f47b7bc063ec5fdc726431684f66f7c5dbecf5c1d19247205d",
+          "src_ac5218d907fa35f3d08f4ec237c442ae203465582c47ab0c096b6b2720a81f24",
+          "src_cb6bd717f0dcaabf2afc43aacb381c559700ddfbe8443b60a679adaaa2518193",
+          "src_423957ffde06f85e740c054f31b7706b942730fe8a7b9cfaac39d035f408fc86"
+        ],
+        "value": true
+      },
+      "full_vector_randomization": {
+        "source_ids": [
+          "src_45fd8822d8dfa8fc6fe4e8e10b40a8238be1b8475cbe90ddba8a176e36bf02e0",
+          "src_4da766c24d9c85f47b7bc063ec5fdc726431684f66f7c5dbecf5c1d19247205d",
+          "src_ac5218d907fa35f3d08f4ec237c442ae203465582c47ab0c096b6b2720a81f24",
+          "src_cb6bd717f0dcaabf2afc43aacb381c559700ddfbe8443b60a679adaaa2518193",
+          "src_423957ffde06f85e740c054f31b7706b942730fe8a7b9cfaac39d035f408fc86"
+        ],
+        "value": true
+      },
+      "consistency": {
+        "source_ids": [
+          "src_45fd8822d8dfa8fc6fe4e8e10b40a8238be1b8475cbe90ddba8a176e36bf02e0",
+          "src_4da766c24d9c85f47b7bc063ec5fdc726431684f66f7c5dbecf5c1d19247205d",
+          "src_ac5218d907fa35f3d08f4ec237c442ae203465582c47ab0c096b6b2720a81f24",
+          "src_cb6bd717f0dcaabf2afc43aacb381c559700ddfbe8443b60a679adaaa2518193",
+          "src_423957ffde06f85e740c054f31b7706b942730fe8a7b9cfaac39d035f408fc86"
+        ],
+        "value": true
+      },
+      "fixed_pretreatment_network": {
+        "source_ids": [
+          "src_45fd8822d8dfa8fc6fe4e8e10b40a8238be1b8475cbe90ddba8a176e36bf02e0",
+          "src_4da766c24d9c85f47b7bc063ec5fdc726431684f66f7c5dbecf5c1d19247205d",
+          "src_ac5218d907fa35f3d08f4ec237c442ae203465582c47ab0c096b6b2720a81f24",
+          "src_cb6bd717f0dcaabf2afc43aacb381c559700ddfbe8443b60a679adaaa2518193",
+          "src_423957ffde06f85e740c054f31b7706b942730fe8a7b9cfaac39d035f408fc86"
+        ],
+        "value": true
+      },
+      "finite_conditional_first_moments": {
+        "source_ids": [
+          "src_45fd8822d8dfa8fc6fe4e8e10b40a8238be1b8475cbe90ddba8a176e36bf02e0",
+          "src_4da766c24d9c85f47b7bc063ec5fdc726431684f66f7c5dbecf5c1d19247205d",
+          "src_ac5218d907fa35f3d08f4ec237c442ae203465582c47ab0c096b6b2720a81f24",
+          "src_cb6bd717f0dcaabf2afc43aacb381c559700ddfbe8443b60a679adaaa2518193",
+          "src_423957ffde06f85e740c054f31b7706b942730fe8a7b9cfaac39d035f408fc86"
+        ],
+        "value": true
+      }
+    },
+    "target": {
+      "source_ids": [
+        "src_45fd8822d8dfa8fc6fe4e8e10b40a8238be1b8475cbe90ddba8a176e36bf02e0",
+        "src_4da766c24d9c85f47b7bc063ec5fdc726431684f66f7c5dbecf5c1d19247205d",
+        "src_ac5218d907fa35f3d08f4ec237c442ae203465582c47ab0c096b6b2720a81f24",
+        "src_cb6bd717f0dcaabf2afc43aacb381c559700ddfbe8443b60a679adaaa2518193",
+        "src_423957ffde06f85e740c054f31b7706b942730fe8a7b9cfaac39d035f408fc86",
+        "src_4da6ac2a8ff115075f884ec03aa9c994ca08dbc4181679db64ee5765014310a0",
+        "src_df3014b393f7a9aa1ae3dcdfe3b8cf5b3ca775e11cd015c6bcd7d7a3ae82e942",
+        "src_ba7e48cf114d85dbebd8a52a21de0d2e551d770516c5c2be89d5d22b9fd36087",
+        "src_e2294b7bbf35078d695e6ca91d04807d3127e610bc7fd43e923d0ffeec0a6b30",
+        "src_16b48fc7df3a130f0138ad7ac4125373de3f67ab623239830bbb302727f576ac",
+        "src_db57ab15a755d76ca3da6458b54cfe29119eb87492f7d538fdc885384fcc746d",
+        "src_78415adea57af8e51c3bd99528b733e1e10f5afca528d1c13e7317f86a3fb9e3",
+        "src_fa1ff33d7bf252beb4b898826a4089f68fcfd92f9d7e8a1b4557ab5117e834b4",
+        "src_8c3a6b02d2bc8b5dc0dd620b6f8c62eb26f38d1d7e13686d7ccc1e2985d22b8d",
+        "src_ea76a25a391fc268ee3b45e7f44109b1f44f3d38461c580143ffb82371bbcaa4",
+        "src_cdf4d438ce30205ea8c019cd1bcfd61383c2aa6824acc5e4a40486374b647594",
+        "src_d4c9f93ffb31669b5e10706b67c9bd3b3ef30f9e55841c42436d20c3d0b8dd72",
+        "src_cb0577dbbaf2a17b34369406e862eacc7c5e74687fba5f5c615e331da246df34",
+        "src_7b9b2a14f16f80c05464bb192031b3a98b9805df60507c5d2308d5ece75903e6",
+        "src_d86ca4efd9f8421f5cc412b44c26bbd4af6cd22796909c3b2dc708ae3c9c97d9",
+        "src_2f25549c13df6483cec398d35de871c2d3a39e3ff282ba6abc5a3033d22ca3fc",
+        "src_d8346cecde136db59b7b7df0142e8dac3477e99c068ac789b926005fd80a93cf",
+        "src_0a55bd673efda55ff823d6501aebe52cc736da2480e94104a0373f672c0e3f2d",
+        "src_12956631b1a5002519af979eb34589630fb98d334d2b02f641dfc4198386aec3",
+        "src_2c9df5e2032add15fb0b158eb526ae8af0fa31b12aea9650d9eb613f700bbd5a",
+        "src_d50b38eb22375aeb0791a0da76027575704d1b65b41d2fff8ecde80db001296d",
+        "src_48be4aaa4a2abcd46bc36fcafa0821d6c3bc0b761600144b80e4560139eff73d",
+        "src_162ccdfb90633b10c0ca1abc0fdfddae66003276241fabdbd070dd7cf9c150c0",
+        "src_78006be0e09ee2dcb07c5ab9d6235fb4ddf192f222c80f1b725f6a43fd8489d4",
+        "src_2b41e5d3186563ea90141ad45a3403ca69e9af702cf98ae43bbc8c028fa2a4d3",
+        "src_00268c9cd6b8021bd71dd4e8eee65e17160efb4b85b1f7e6f635c20d8a8dba5b",
+        "src_c716003113c53ec9659bca001a34e540b2d3a5d8c67bf92ed240d76d67318b4d",
+        "src_c2ec1699956cf65dd08e8d91f82e5ef46244ccdb52ee94af629602bdf7ebe114",
+        "src_28315750b2e89bbad7cc1060f8c46588a171b888f5d4f0dc257967046d548843",
+        "src_11d4a5db41020957d1e23c6e02ac747cbd9e853eb76514d9f83176e4e92f6ac0"
+      ],
+      "population": [
+        "农1",
+        "农2",
+        "农3",
+        "农4",
+        "农5",
+        "农6",
+        "农7",
+        "农8"
+      ],
+      "aggregation": "EQUAL_MEAN",
+      "components": [],
+      "policy_distribution_complete": {
+        "source_ids": [
+          "src_45fd8822d8dfa8fc6fe4e8e10b40a8238be1b8475cbe90ddba8a176e36bf02e0",
+          "src_4da766c24d9c85f47b7bc063ec5fdc726431684f66f7c5dbecf5c1d19247205d",
+          "src_ac5218d907fa35f3d08f4ec237c442ae203465582c47ab0c096b6b2720a81f24",
+          "src_cb6bd717f0dcaabf2afc43aacb381c559700ddfbe8443b60a679adaaa2518193",
+          "src_423957ffde06f85e740c054f31b7706b942730fe8a7b9cfaac39d035f408fc86",
+          "src_4da6ac2a8ff115075f884ec03aa9c994ca08dbc4181679db64ee5765014310a0",
+          "src_df3014b393f7a9aa1ae3dcdfe3b8cf5b3ca775e11cd015c6bcd7d7a3ae82e942",
+          "src_ba7e48cf114d85dbebd8a52a21de0d2e551d770516c5c2be89d5d22b9fd36087",
+          "src_e2294b7bbf35078d695e6ca91d04807d3127e610bc7fd43e923d0ffeec0a6b30",
+          "src_16b48fc7df3a130f0138ad7ac4125373de3f67ab623239830bbb302727f576ac",
+          "src_db57ab15a755d76ca3da6458b54cfe29119eb87492f7d538fdc885384fcc746d",
+          "src_78415adea57af8e51c3bd99528b733e1e10f5afca528d1c13e7317f86a3fb9e3",
+          "src_fa1ff33d7bf252beb4b898826a4089f68fcfd92f9d7e8a1b4557ab5117e834b4",
+          "src_8c3a6b02d2bc8b5dc0dd620b6f8c62eb26f38d1d7e13686d7ccc1e2985d22b8d",
+          "src_ea76a25a391fc268ee3b45e7f44109b1f44f3d38461c580143ffb82371bbcaa4",
+          "src_cdf4d438ce30205ea8c019cd1bcfd61383c2aa6824acc5e4a40486374b647594",
+          "src_d4c9f93ffb31669b5e10706b67c9bd3b3ef30f9e55841c42436d20c3d0b8dd72",
+          "src_cb0577dbbaf2a17b34369406e862eacc7c5e74687fba5f5c615e331da246df34",
+          "src_7b9b2a14f16f80c05464bb192031b3a98b9805df60507c5d2308d5ece75903e6",
+          "src_d86ca4efd9f8421f5cc412b44c26bbd4af6cd22796909c3b2dc708ae3c9c97d9",
+          "src_2f25549c13df6483cec398d35de871c2d3a39e3ff282ba6abc5a3033d22ca3fc",
+          "src_d8346cecde136db59b7b7df0142e8dac3477e99c068ac789b926005fd80a93cf",
+          "src_0a55bd673efda55ff823d6501aebe52cc736da2480e94104a0373f672c0e3f2d",
+          "src_12956631b1a5002519af979eb34589630fb98d334d2b02f641dfc4198386aec3",
+          "src_2c9df5e2032add15fb0b158eb526ae8af0fa31b12aea9650d9eb613f700bbd5a",
+          "src_d50b38eb22375aeb0791a0da76027575704d1b65b41d2fff8ecde80db001296d",
+          "src_48be4aaa4a2abcd46bc36fcafa0821d6c3bc0b761600144b80e4560139eff73d",
+          "src_162ccdfb90633b10c0ca1abc0fdfddae66003276241fabdbd070dd7cf9c150c0",
+          "src_78006be0e09ee2dcb07c5ab9d6235fb4ddf192f222c80f1b725f6a43fd8489d4",
+          "src_2b41e5d3186563ea90141ad45a3403ca69e9af702cf98ae43bbc8c028fa2a4d3",
+          "src_00268c9cd6b8021bd71dd4e8eee65e17160efb4b85b1f7e6f635c20d8a8dba5b",
+          "src_c716003113c53ec9659bca001a34e540b2d3a5d8c67bf92ed240d76d67318b4d",
+          "src_c2ec1699956cf65dd08e8d91f82e5ef46244ccdb52ee94af629602bdf7ebe114",
+          "src_28315750b2e89bbad7cc1060f8c46588a171b888f5d4f0dc257967046d548843",
+          "src_11d4a5db41020957d1e23c6e02ac747cbd9e853eb76514d9f83176e4e92f6ac0"
+        ],
+        "value": null
+      }
+    },
+    "information": [
+      {
+        "source_ids": [
+          "src_45fd8822d8dfa8fc6fe4e8e10b40a8238be1b8475cbe90ddba8a176e36bf02e0",
+          "src_4da766c24d9c85f47b7bc063ec5fdc726431684f66f7c5dbecf5c1d19247205d",
+          "src_ac5218d907fa35f3d08f4ec237c442ae203465582c47ab0c096b6b2720a81f24",
+          "src_cb6bd717f0dcaabf2afc43aacb381c559700ddfbe8443b60a679adaaa2518193",
+          "src_423957ffde06f85e740c054f31b7706b942730fe8a7b9cfaac39d035f408fc86",
+          "src_4da6ac2a8ff115075f884ec03aa9c994ca08dbc4181679db64ee5765014310a0",
+          "src_df3014b393f7a9aa1ae3dcdfe3b8cf5b3ca775e11cd015c6bcd7d7a3ae82e942",
+          "src_ba7e48cf114d85dbebd8a52a21de0d2e551d770516c5c2be89d5d22b9fd36087",
+          "src_e2294b7bbf35078d695e6ca91d04807d3127e610bc7fd43e923d0ffeec0a6b30",
+          "src_16b48fc7df3a130f0138ad7ac4125373de3f67ab623239830bbb302727f576ac",
+          "src_db57ab15a755d76ca3da6458b54cfe29119eb87492f7d538fdc885384fcc746d",
+          "src_78415adea57af8e51c3bd99528b733e1e10f5afca528d1c13e7317f86a3fb9e3",
+          "src_fa1ff33d7bf252beb4b898826a4089f68fcfd92f9d7e8a1b4557ab5117e834b4",
+          "src_8c3a6b02d2bc8b5dc0dd620b6f8c62eb26f38d1d7e13686d7ccc1e2985d22b8d",
+          "src_ea76a25a391fc268ee3b45e7f44109b1f44f3d38461c580143ffb82371bbcaa4",
+          "src_cdf4d438ce30205ea8c019cd1bcfd61383c2aa6824acc5e4a40486374b647594",
+          "src_d4c9f93ffb31669b5e10706b67c9bd3b3ef30f9e55841c42436d20c3d0b8dd72",
+          "src_cb0577dbbaf2a17b34369406e862eacc7c5e74687fba5f5c615e331da246df34",
+          "src_7b9b2a14f16f80c05464bb192031b3a98b9805df60507c5d2308d5ece75903e6",
+          "src_d86ca4efd9f8421f5cc412b44c26bbd4af6cd22796909c3b2dc708ae3c9c97d9",
+          "src_2f25549c13df6483cec398d35de871c2d3a39e3ff282ba6abc5a3033d22ca3fc",
+          "src_d8346cecde136db59b7b7df0142e8dac3477e99c068ac789b926005fd80a93cf",
+          "src_0a55bd673efda55ff823d6501aebe52cc736da2480e94104a0373f672c0e3f2d",
+          "src_12956631b1a5002519af979eb34589630fb98d334d2b02f641dfc4198386aec3",
+          "src_2c9df5e2032add15fb0b158eb526ae8af0fa31b12aea9650d9eb613f700bbd5a",
+          "src_d50b38eb22375aeb0791a0da76027575704d1b65b41d2fff8ecde80db001296d",
+          "src_48be4aaa4a2abcd46bc36fcafa0821d6c3bc0b761600144b80e4560139eff73d",
+          "src_162ccdfb90633b10c0ca1abc0fdfddae66003276241fabdbd070dd7cf9c150c0",
+          "src_78006be0e09ee2dcb07c5ab9d6235fb4ddf192f222c80f1b725f6a43fd8489d4",
+          "src_2b41e5d3186563ea90141ad45a3403ca69e9af702cf98ae43bbc8c028fa2a4d3",
+          "src_00268c9cd6b8021bd71dd4e8eee65e17160efb4b85b1f7e6f635c20d8a8dba5b",
+          "src_c716003113c53ec9659bca001a34e540b2d3a5d8c67bf92ed240d76d67318b4d",
+          "src_c2ec1699956cf65dd08e8d91f82e5ef46244ccdb52ee94af629602bdf7ebe114",
+          "src_28315750b2e89bbad7cc1060f8c46588a171b888f5d4f0dc257967046d548843",
+          "src_11d4a5db41020957d1e23c6e02ac747cbd9e853eb76514d9f83176e4e92f6ac0"
+        ],
+        "operator": "NODE_FULL_LAW",
+        "availability": "SYMBOLIC_POPULATION_OPERATOR",
+        "outcome_nodes": [
+          "农1",
+          "农2",
+          "农3",
+          "农4",
+          "农5",
+          "农6",
+          "农7",
+          "农8"
+        ],
+        "assignment_cells": []
+      }
+    ]
+  },
+  "reference_binding": {
+    "context": "c94afc8deebbc",
+    "context_sha256": "94afc8deebbc9c25f9a2e0526171a7b60c3112e6ba539bbff1c646b2cf350845",
+    "aliases": {
+      "s0001": "src_45fd8822d8dfa8fc6fe4e8e10b40a8238be1b8475cbe90ddba8a176e36bf02e0",
+      "s0002": "src_4da766c24d9c85f47b7bc063ec5fdc726431684f66f7c5dbecf5c1d19247205d",
+      "s0003": "src_ac5218d907fa35f3d08f4ec237c442ae203465582c47ab0c096b6b2720a81f24",
+      "s0004": "src_cb6bd717f0dcaabf2afc43aacb381c559700ddfbe8443b60a679adaaa2518193",
+      "s0005": "src_423957ffde06f85e740c054f31b7706b942730fe8a7b9cfaac39d035f408fc86",
+      "s0006": "src_4da6ac2a8ff115075f884ec03aa9c994ca08dbc4181679db64ee5765014310a0",
+      "s0007": "src_df3014b393f7a9aa1ae3dcdfe3b8cf5b3ca775e11cd015c6bcd7d7a3ae82e942",
+      "s0008": "src_ba7e48cf114d85dbebd8a52a21de0d2e551d770516c5c2be89d5d22b9fd36087",
+      "s0009": "src_e2294b7bbf35078d695e6ca91d04807d3127e610bc7fd43e923d0ffeec0a6b30",
+      "s0010": "src_16b48fc7df3a130f0138ad7ac4125373de3f67ab623239830bbb302727f576ac",
+      "s0011": "src_db57ab15a755d76ca3da6458b54cfe29119eb87492f7d538fdc885384fcc746d",
+      "s0012": "src_78415adea57af8e51c3bd99528b733e1e10f5afca528d1c13e7317f86a3fb9e3",
+      "s0013": "src_fa1ff33d7bf252beb4b898826a4089f68fcfd92f9d7e8a1b4557ab5117e834b4",
+      "s0014": "src_8c3a6b02d2bc8b5dc0dd620b6f8c62eb26f38d1d7e13686d7ccc1e2985d22b8d",
+      "s0015": "src_ea76a25a391fc268ee3b45e7f44109b1f44f3d38461c580143ffb82371bbcaa4",
+      "s0016": "src_cdf4d438ce30205ea8c019cd1bcfd61383c2aa6824acc5e4a40486374b647594",
+      "s0017": "src_d4c9f93ffb31669b5e10706b67c9bd3b3ef30f9e55841c42436d20c3d0b8dd72",
+      "s0018": "src_cb0577dbbaf2a17b34369406e862eacc7c5e74687fba5f5c615e331da246df34",
+      "s0019": "src_7b9b2a14f16f80c05464bb192031b3a98b9805df60507c5d2308d5ece75903e6",
+      "s0020": "src_d86ca4efd9f8421f5cc412b44c26bbd4af6cd22796909c3b2dc708ae3c9c97d9",
+      "s0021": "src_2f25549c13df6483cec398d35de871c2d3a39e3ff282ba6abc5a3033d22ca3fc",
+      "s0022": "src_d8346cecde136db59b7b7df0142e8dac3477e99c068ac789b926005fd80a93cf",
+      "s0023": "src_0a55bd673efda55ff823d6501aebe52cc736da2480e94104a0373f672c0e3f2d",
+      "s0024": "src_12956631b1a5002519af979eb34589630fb98d334d2b02f641dfc4198386aec3",
+      "s0025": "src_2c9df5e2032add15fb0b158eb526ae8af0fa31b12aea9650d9eb613f700bbd5a",
+      "s0026": "src_d50b38eb22375aeb0791a0da76027575704d1b65b41d2fff8ecde80db001296d",
+      "s0027": "src_48be4aaa4a2abcd46bc36fcafa0821d6c3bc0b761600144b80e4560139eff73d",
+      "s0028": "src_162ccdfb90633b10c0ca1abc0fdfddae66003276241fabdbd070dd7cf9c150c0",
+      "s0029": "src_78006be0e09ee2dcb07c5ab9d6235fb4ddf192f222c80f1b725f6a43fd8489d4",
+      "s0030": "src_2b41e5d3186563ea90141ad45a3403ca69e9af702cf98ae43bbc8c028fa2a4d3",
+      "s0031": "src_00268c9cd6b8021bd71dd4e8eee65e17160efb4b85b1f7e6f635c20d8a8dba5b",
+      "s0032": "src_c716003113c53ec9659bca001a34e540b2d3a5d8c67bf92ed240d76d67318b4d",
+      "s0033": "src_c2ec1699956cf65dd08e8d91f82e5ef46244ccdb52ee94af629602bdf7ebe114",
+      "s0034": "src_28315750b2e89bbad7cc1060f8c46588a171b888f5d4f0dc257967046d548843",
+      "s0035": "src_11d4a5db41020957d1e23c6e02ac747cbd9e853eb76514d9f83176e4e92f6ac0"
+    }
+  },
+  "reading_candidate": {
+    "version": "network-finite-policy-reading-1",
+    "reference_context": "c94afc8deebbc",
+    "study": {
+      "source_ids": [
+        "s0001",
+        "s0002",
+        "s0003",
+        "s0004",
+        "s0005",
+        "s0006",
+        "s0007",
+        "s0008",
+        "s0009",
+        "s0010",
+        "s0011",
+        "s0012",
+        "s0013",
+        "s0014",
+        "s0015",
+        "s0016",
+        "s0017",
+        "s0018",
+        "s0019",
+        "s0020",
+        "s0021",
+        "s0022",
+        "s0023",
+        "s0024",
+        "s0025",
+        "s0026",
+        "s0027",
+        "s0028",
+        "s0029",
+        "s0030",
+        "s0031",
+        "s0032",
+        "s0033",
+        "s0034",
+        "s0035"
+      ],
+      "nodes": [
+        "农1",
+        "农2",
+        "农3",
+        "农4",
+        "农5",
+        "农6",
+        "农7",
+        "农8"
+      ],
+      "edges": [
+        [
+          "农1",
+          "农2"
+        ],
+        [
+          "农1",
+          "农3"
+        ],
+        [
+          "农2",
+          "农3"
+        ],
+        [
+          "农2",
+          "农4"
+        ],
+        [
+          "农5",
+          "农6"
+        ],
+        [
+          "农6",
+          "农7"
+        ],
+        [
+          "农1",
+          "农8"
+        ]
+      ],
+      "graph_kind": "SIMPLE_UNDIRECTED",
+      "edge_list_complete": true,
+      "treatment": "按安排做示范记1，其余记0",
+      "outcome": "下一期化肥强度相对上一期的变化，单位为塞迪每株",
+      "outcome_kind": "CONTINUOUS",
+      "context": "示范执行后的下一期；八名农户分属三个村，甲村与乙村为信息邻里，1 号与 8 号为表亲，丙村没有其他研究对象"
+    },
+    "additional_restrictions": [],
+    "unresolved": [],
+    "assignment": {
+      "source_ids": [
+        "s0001",
+        "s0002",
+        "s0003",
+        "s0004",
+        "s0005",
+        "s0006",
+        "s0007",
+        "s0008",
+        "s0009",
+        "s0010",
+        "s0011",
+        "s0012",
+        "s0013",
+        "s0014",
+        "s0015",
+        "s0016",
+        "s0017",
+        "s0018",
+        "s0019",
+        "s0020",
+        "s0021",
+        "s0022",
+        "s0023",
+        "s0024",
+        "s0025",
+        "s0026",
+        "s0027",
+        "s0028",
+        "s0029",
+        "s0030",
+        "s0031",
+        "s0032",
+        "s0033",
+        "s0034",
+        "s0035"
+      ],
+      "kind": "INDEPENDENT_BERNOULLI",
+      "probabilities": {
+        "农1": "1/2",
+        "农2": "1/2",
+        "农3": "1/2",
+        "农4": "1/2",
+        "农5": "1/2",
+        "农6": "1/2",
+        "农7": "1/2",
+        "农8": "1/2"
+      },
+      "fixed_count": null
+    },
+    "first_stage_exclusion": null,
+    "assumptions": {
+      "known_assignment_law": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "full_vector_randomization": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "consistency": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "fixed_pretreatment_network": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "finite_conditional_first_moments": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      }
+    },
+    "target": {
+      "source_ids": [
+        "s0001",
+        "s0002",
+        "s0003",
+        "s0004",
+        "s0005",
+        "s0006",
+        "s0007",
+        "s0008",
+        "s0009",
+        "s0010",
+        "s0011",
+        "s0012",
+        "s0013",
+        "s0014",
+        "s0015",
+        "s0016",
+        "s0017",
+        "s0018",
+        "s0019",
+        "s0020",
+        "s0021",
+        "s0022",
+        "s0023",
+        "s0024",
+        "s0025",
+        "s0026",
+        "s0027",
+        "s0028",
+        "s0029",
+        "s0030",
+        "s0031",
+        "s0032",
+        "s0033",
+        "s0034",
+        "s0035"
+      ],
+      "population": [
+        "农1",
+        "农2",
+        "农3",
+        "农4",
+        "农5",
+        "农6",
+        "农7",
+        "农8"
+      ],
+      "aggregation": "EQUAL_MEAN",
+      "policy_distribution_complete": {
+        "value": null,
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006",
+          "s0007",
+          "s0008",
+          "s0009",
+          "s0010",
+          "s0011",
+          "s0012",
+          "s0013",
+          "s0014",
+          "s0015",
+          "s0016",
+          "s0017",
+          "s0018",
+          "s0019",
+          "s0020",
+          "s0021",
+          "s0022",
+          "s0023",
+          "s0024",
+          "s0025",
+          "s0026",
+          "s0027",
+          "s0028",
+          "s0029",
+          "s0030",
+          "s0031",
+          "s0032",
+          "s0033",
+          "s0034",
+          "s0035"
+        ]
+      },
+      "components": []
+    },
+    "information": [
+      {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006",
+          "s0007",
+          "s0008",
+          "s0009",
+          "s0010",
+          "s0011",
+          "s0012",
+          "s0013",
+          "s0014",
+          "s0015",
+          "s0016",
+          "s0017",
+          "s0018",
+          "s0019",
+          "s0020",
+          "s0021",
+          "s0022",
+          "s0023",
+          "s0024",
+          "s0025",
+          "s0026",
+          "s0027",
+          "s0028",
+          "s0029",
+          "s0030",
+          "s0031",
+          "s0032",
+          "s0033",
+          "s0034",
+          "s0035"
+        ],
+        "operator": "NODE_FULL_LAW",
+        "availability": "SYMBOLIC_POPULATION_OPERATOR",
+        "outcome_nodes": [
+          "农1",
+          "农2",
+          "农3",
+          "农4",
+          "农5",
+          "农6",
+          "农7",
+          "农8"
+        ],
+        "assignment_cells": []
+      }
+    ]
+  },
+  "bundle": {
+    "case_id": "LIT-NET-14-missing_condition",
+    "documents": {
+      "proposal": "## study\n\n文献启发的合成演示，不是原论文数据。研究对象是甲乙丙三个村的八名农户，农户是研究单位。示范户按安排把化肥强度调到示范水平。结果为下一期化肥强度相对上一期的变化，单位为塞迪每株，可正可负。同一村内的信息邻里关系见题面列出的四对与两对，另有 1 号与 8 号的表亲一对；只有互相问过农艺建议的农户才构成信息邻里。评价时点为示范执行后的下一期，两套示范安排评价同一批八名农户、同一结果定义。\n\n## trial\n\n过去没有随机试点，化肥强度由各家自行摸索，上一季强度是历史做法。\n\n## science\n\n本演示拟采用：上述两套示范安排与信息邻里关系已知；八名农户在两套安排下的潜在强度变化与安排选择独立；观察到的强度变化对应实际执行的那套安排；信息邻里关系在安排执行前固定；新手看到示范后调到示范水平、老兵不动、示范户按安排调整的规则对每名农户一致适用；所需比例存在。\n\n## information\n\n本演示的理论输入是覆盖八名农户的完整示范安排与各农户强度变化的符号总体分布，来自同一次基线调查；这里没有给定任何强度变化的总体数值，不是八条样本记录。\n未来只执行一套示范安排，问题没有说明两套安排各自被采用的机会。本案例只问随机政策下的平均水平，不与某个对照方案相减。",
+      "business_question": "某地开始推广菠萝种植，化肥该用多少，各家没有把握。当地种植协会掌握每户上一季的化肥强度（单位：塞迪每株），农技登记册记着谁向谁问过农艺建议——只有互相问过建议的农户，才看得到对方的实验结果。\n\n甲村四户，编号 1 至 4，信息边 1—2、1—3、2—3、2—4。乙村三户，编号 5 至 7，信息边 5—6、6—7。8 号在丙村，与 1 号是表亲，信息边 1—8，丙村只有他一名研究对象。\n\n上一季化肥强度（塞迪每株）：1 号 2、2 号 4、3 号 6、4 号 2、5 号 3、6 号 5、7 号 3、8 号 5。3 号早年种过菠萝，是老兵；其余七户是新手。\n\n协会要在两套示范安排里抽签：\n\n- 方案 A：1 号把自家化肥强度调到 4 塞迪每株做示范，收成高于预期，这条好消息向全体信息邻里公开；\n- 方案 B：6 号把自家化肥强度调到 2 塞迪每株做示范，同样高于预期，公开方式相同。\n\n示范安排按户记 1 与 0：被安排做示范的户记 1，其余户记 0。化肥强度是结果变量，不是处理取值。\n\n调整规则如下：\n\n- 新手看到信息邻里里的示范后，把下一期化肥强度调到示范水平：示范比自己上一季高就上调，低就下调，恰好相等就不动；\n- 老兵看到示范不调整；\n- 示范户本人按安排调整自己的强度，计入全体；\n- 只有示范地块出现好消息，其他农户的调整本身不构成新的示范。\n\n协会明年会从这两套安排里选一套执行。我们想知道，八名农户下一期化肥强度相对各自上一期的平均变化在明年采用其中一套安排时是多少。每人等权。"
+    },
+    "question": "某地开始推广菠萝种植，化肥该用多少，各家没有把握。当地种植协会掌握每户上一季的化肥强度（单位：塞迪每株），农技登记册记着谁向谁问过农艺建议——只有互相问过建议的农户，才看得到对方的实验结果。\n\n甲村四户，编号 1 至 4，信息边 1—2、1—3、2—3、2—4。乙村三户，编号 5 至 7，信息边 5—6、6—7。8 号在丙村，与 1 号是表亲，信息边 1—8，丙村只有他一名研究对象。\n\n上一季化肥强度（塞迪每株）：1 号 2、2 号 4、3 号 6、4 号 2、5 号 3、6 号 5、7 号 3、8 号 5。3 号早年种过菠萝，是老兵；其余七户是新手。\n\n协会要在两套示范安排里抽签：\n\n- 方案 A：1 号把自家化肥强度调到 4 塞迪每株做示范，收成高于预期，这条好消息向全体信息邻里公开；\n- 方案 B：6 号把自家化肥强度调到 2 塞迪每株做示范，同样高于预期，公开方式相同。\n\n示范安排按户记 1 与 0：被安排做示范的户记 1，其余户记 0。化肥强度是结果变量，不是处理取值。\n\n调整规则如下：\n\n- 新手看到信息邻里里的示范后，把下一期化肥强度调到示范水平：示范比自己上一季高就上调，低就下调，恰好相等就不动；\n- 老兵看到示范不调整；\n- 示范户本人按安排调整自己的强度，计入全体；\n- 只有示范地块出现好消息，其他农户的调整本身不构成新的示范。\n\n协会明年会从这两套安排里选一套执行。我们想知道，八名农户下一期化肥强度相对各自上一期的平均变化在明年采用其中一套安排时是多少。每人等权。"
+  }
+}

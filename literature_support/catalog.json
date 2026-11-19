@@ -1,6 +1,6 @@
 {
   "schema_version": "literature-support-catalog-1",
-  "updated_on": "2026-11-13",
+  "updated_on": "2026-11-17",
   "scope": "Selected source cards, classification provenance and project-to-literature mappings. Includes new planning sources for IV and ID, which do not declare executable capabilities. Full literature review and theorem audits remain incomplete.",
   "project_wide_literature_review_complete": false,
   "contains_downloaded_articles": false,
@@ -950,6 +950,432 @@
         "No automatic approval of a business balance rule."
       ],
       "project_use": "Background for the product-weight fixed-quota family; general balance conditioning is derived in the project and motivated by Morgan-Rubin (2012)."
+    },
+    {
+      "id": "alatas_etal2016_targeting",
+      "title": "Network Structure and the Aggregation of Information: Theory and Evidence from Indonesia",
+      "authors": [
+        "Vivi Alatas",
+        "Abhijit Banerjee",
+        "Arun G. Chandrasekhar",
+        "Rema Hanna",
+        "Benjamin A. Olken"
+      ],
+      "year": 2016,
+      "venue": "American Economic Review",
+      "volume": "106",
+      "issue": "7",
+      "pages": "1663–1704",
+      "article_type": "Journal research article",
+      "doi": "10.1257/aer.20140705",
+      "urls": {
+        "doi": "https://doi.org/10.1257/aer.20140705"
+      },
+      "read_scope": {
+        "level": "selected_full_text_sections",
+        "read_on": "2026-11-16",
+        "inspected": [
+          "Abstract: information aggregation and the targeting application",
+          "Section IIA and Table 4: rank error rate at network distance 1 versus 3, described by the paper as descriptive regressions",
+          "Section IIB: network notation and the giant-component share of 0.51",
+          "Section IIIC and Proposition 1: aggregation rule",
+          "Section V and Tables 10 and 11: interaction of community targeting with network diffusiveness"
+        ],
+        "not_inspected": [
+          "Structural appendix and every auxiliary table behind the 600-community estimates; no full-text verification claimed."
+        ],
+        "full_text_verified": false
+      },
+      "supports": [
+        "Information about household poverty is dispersed and travels through village networks, so who knows whom changes what a community nomination list contains.",
+        "Information accuracy declines with network distance; the paper reports 2.5 to 3.8 percentage points lower rank error at distance 1 than at distance 3, explicitly as descriptive regressions.",
+        "The advantage of community targeting over a proxy-means test varies with network diffusiveness, positive and significant under the self-assessment measure and not under the consumption measure."
+      ],
+      "does_not_support": [
+        "A deterministic rule in which one verified household makes every neighbor correct; the paper's distance effect is probabilistic and its error rates remain between 0.46 and 0.52 with 0.19 don't-know.",
+        "The half-Bayesian learning model, its signal-precision parameters, or the structural estimates.",
+        "Any extrapolation from eight synthetic households to the paper's 600 communities."
+      ],
+      "project_use": "Scenario adaptation for LIT-NET-09: verification coverage as the policy, whether a household's circumstances become known as the outcome, with network distance collapsed into whether at least one neighbor was verified."
+    },
+    {
+      "id": "miguel_kremer2004_deworming",
+      "title": "Worms: Identifying Impacts on Education and Health in the Presence of Treatment Externalities",
+      "authors": [
+        "Edward Miguel",
+        "Michael Kremer"
+      ],
+      "year": 2004,
+      "venue": "Econometrica",
+      "volume": "72",
+      "issue": "1",
+      "pages": "159–217",
+      "article_type": "Journal research article",
+      "doi": "10.1111/j.1468-0262.2004.00481.x",
+      "urls": {
+        "doi": "https://doi.org/10.1111/j.1468-0262.2004.00481.x"
+      },
+      "read_scope": {
+        "level": "selected_full_text_sections",
+        "read_on": "2026-11-16",
+        "inspected": [
+          "Abstract and Introduction: treatment externalities as the motivation",
+          "Section 3: three-group cluster randomization and each group's treatment year",
+          "Section 4.1 and equation (1): cluster randomization identifying the overall effect in the presence of within-school spillovers"
+        ],
+        "not_inspected": [
+          "Empirical tables, robustness checks after Section 5, and the cost-effectiveness calculations; no full-text verification claimed."
+        ],
+        "full_text_verified": false
+      },
+      "supports": [
+        "School-level cluster randomization identifies an overall program effect when within-school spillovers exist.",
+        "Spillovers across schools are identified from the local density of treated schools.",
+        "Evaluating an expansion of coverage must include the extra benefit that already-covered schools receive when neighboring coverage grows."
+      ],
+      "does_not_support": [
+        "Using 0.80, 0.06 and 0.03 as paper estimates; they are synthetic parameters.",
+        "Decomposing the treated-school effect into a direct effect and a within-school spillover.",
+        "Reading the 0.04 difference between the two phases as the paper's identified policy effect; the randomization was done once, so the phase difference mixes in year effects."
+      ],
+      "project_use": "Scenario adaptation for LIT-NET-10: nine schools in three zones, two coverage phases expressed as a mixture of complete coverage lists."
+    },
+    {
+      "id": "cai_szeidl2018_meetings",
+      "title": "Interfirm Relationships and Business Performance",
+      "authors": [
+        "Jing Cai",
+        "Adam Szeidl"
+      ],
+      "year": 2018,
+      "venue": "The Quarterly Journal of Economics",
+      "volume": "133",
+      "issue": "3",
+      "pages": "1229–1282",
+      "article_type": "Journal research article",
+      "doi": "10.1093/qje/qjx049",
+      "urls": {
+        "doi": "https://doi.org/10.1093/qje/qjx049"
+      },
+      "read_scope": {
+        "level": "selected_full_text_sections",
+        "read_on": "2026-11-16",
+        "inspected": [
+          "Abstract: meetings raise revenue by 8.1% and managers shared information especially when not competitors",
+          "Section II.B: sample construction, four group types over 26 subregions, and the 0%, 50%, 80% within-group information intensities",
+          "Section II.D: self-selection limits the estimand to firms interested in business associations",
+          "Section III.B: peer effects on sales",
+          "Section IV.A, Table IX and note 28: the Info, informed-group-member and competition-interaction coefficients, and the median-competitor definition of competition",
+          "Note 30: diffusion was similarly high at 50% and 80% coverage"
+        ],
+        "not_inspected": [
+          "Section IV.B partner matching, Section V cost-benefit, and the online appendix tables; no full-text verification claimed."
+        ],
+        "full_text_verified": false
+      },
+      "supports": [
+        "Within-group information coverage was randomized across meeting groups at 0%, 50% and 80%, and conditional on strata and subregion peers were random.",
+        "Being informed raised the application probability by 30 percentage points, having at least one informed group member by 29.1 points, and competition weakened diffusion by 21.2 points.",
+        "Diffusion was similar at 50% and 80% coverage, so adding informed members beyond the first did not raise the uninformed application probability much."
+      ],
+      "does_not_support": [
+        "Treating this case as an adaptation of the paper's main question; the main intervention is a year of monthly meetings and the main outcome is revenue and profit.",
+        "Fitting an individual prediction equation from the three coefficients; the paper reports three separate regressions and does not combine them.",
+        "Adding the full-sample Info coefficient to the informed-group-member coefficient as if they came from the same population; that sum is an additivity assumption made by the project.",
+        "A zero baseline as the paper's control condition; 40% of control managers were also informed."
+      ],
+      "project_use": "Scenario adaptation for LIT-NET-11: a within-group information-coverage policy with competition moderating diffusion, expressed as a mixture of two complete information lists."
+    },
+    {
+      "id": "carrell2013_sorting",
+      "title": "From Natural Variation to Optimal Policy? The Importance of Endogenous Peer Group Formation",
+      "authors": [
+        "Scott E. Carrell",
+        "Bruce I. Sacerdote",
+        "James E. West"
+      ],
+      "year": 2013,
+      "venue": "Econometrica",
+      "volume": "81",
+      "issue": "3",
+      "pages": "855–882",
+      "article_type": "Journal research article",
+      "doi": "10.3982/ECTA10168",
+      "urls": {
+        "doi": "https://doi.org/10.3982/ECTA10168"
+      },
+      "read_scope": {
+        "level": "selected_full_text_sections",
+        "read_on": "2026-11-16",
+        "inspected": [
+          "Abstract and Introduction (pp. 855-857): the predicted 0.053 gain for the bottom third and the negative observed effect, with students avoiding the intended peers",
+          "Section 2 (pp. 862-870): 20 control and 20 treatment squadrons, the integer program in equation (3), and the bimodal versus homogeneous squadron definitions on p. 865",
+          "Table IV (p. 868): predicted treatment effect of 0.053 for low predicted GPA students",
+          "Section 3 and Table VI (p. 871): -0.061 for low, 0.082 for middle, -0.012 for high ability, on 4,834 student-semester observations",
+          "Section 4 and Table VIII (p. 878): homophily in study partner and friend choice, 0.171 versus 0.125, and high SAT Verbal partners 3.9 percentage points lower",
+          "Section 5 (pp. 880-881): the paper states the exact cause cannot be known with certainty"
+        ],
+        "not_inspected": [
+          "The derivations of equations (1) and (2) in Section 1.2, the Supplemental Material tables, and full readings of Figures 1 to 5; no full-text verification claimed."
+        ],
+        "full_text_verified": false
+      },
+      "supports": [
+        "A history-based resorting predicted a 0.053 grade-point gain for bottom-third students, while the experiment produced -0.061 for the same group.",
+        "Treated low-ability students formed more homogeneous subgroups and selected high SAT Verbal study partners less often, so being placed with a peer differs from interacting with that peer.",
+        "Middle-ability treated students gained 0.082, which the paper attributes to no longer interacting with low-ability students in homogeneous squadrons."
+      ],
+      "does_not_support": [
+        "Treating this case as a reproduction of the paper's sorting policy; the paper reassigns students through an integer program, while the case keeps both groups fixed and assigns peer leaders.",
+        "Keeping the paper's random-assignment contrast; both lists act on already formed groups, so the case compares mild versus concentrated assignment.",
+        "Reading 0.053, -0.061 and 0.082 as individual treatment effects; 0.053 is a predicted group-level gain and the other two are coefficients on a treatment dummy.",
+        "Using one adjacency for every policy; the paper's network forms endogenously, and the case fixes adjacency so the mixture schema can express the policy."
+      ],
+      "project_use": "Scenario adaptation for LIT-NET-12: a fixed-adjacency leader-assignment policy whose outcome depends on the number of adjacent leaders, expressed as a mixture of two complete leader lists."
+    },
+    {
+      "id": "dahl2014_paternity_leave",
+      "title": "Peer Effects in Program Participation",
+      "authors": [
+        "Gordon B. Dahl",
+        "Katrine V. Løken",
+        "Magne Mogstad"
+      ],
+      "year": 2014,
+      "venue": "American Economic Review",
+      "volume": "104",
+      "issue": "7",
+      "pages": "2049–2074",
+      "article_type": "Journal research article",
+      "doi": "10.1257/aer.104.7.2049",
+      "urls": {
+        "doi": "https://doi.org/10.1257/aer.104.7.2049"
+      },
+      "read_scope": {
+        "level": "selected_full_text_sections",
+        "read_on": "2026-11-16",
+        "inspected": [
+          "Abstract and Introduction (pp. 2049-2051): 11 and 15 percentage point peer effects for coworkers and brothers, take-up rising from 3 to 35 percent, a 32 percentage point first stage",
+          "Section I (pp. 2052-2053): the April 1, 1993 cutoff and the identification design",
+          "Section II (pp. 2054-2056): the Norwegian registry setting at a summary level only",
+          "Section IV and Table 1 (p. 2060): first stage 0.317 and 0.304, reduced forms 0.035 and 0.047, second stage 0.110 and 0.153, 26,851 coworker and 12,495 brother observations",
+          "Section V and Table 3 (pp. 2063-2066): mechanism evidence for managers, low unionization, private firms and short tenure",
+          "Section VI, equations (6)-(9) and Table 4 Panel B (pp. 2066-2070): sequential ordering on p. 2067, decay-adjusted effects 0.026, 0.037, 0.060, snowball shares 0, 30, 57 percent, and the note that fifth and later coworkers lack observations",
+          "Section VII (pp. 2071-2072): conclusions for policy design"
+        ],
+        "not_inspected": [
+          "The online Appendix construction of decay parameters, Figure A5, and the sample-restriction details of Section II; no full-text verification claimed."
+        ],
+        "full_text_verified": false
+      },
+      "supports": [
+        "Fathers of children born after April 1, 1993 became eligible for paid leave, and take-up rose from 3 to 35 percent, a first stage of 32 percentage points.",
+        "Coworker effects rise with birth order inside a firm, from 0.026 to 0.037 to 0.060, with snowball shares of 0, 30 and 57 percent.",
+        "Brothers respond more strongly than coworkers, and earlier fathers influence later ones but not the reverse."
+      ],
+      "does_not_support": [
+        "Treating 0.32 as a leave take-up level; the 35 percent figure is a post-reform participation rate, while the case uses only a change.",
+        "Adding 0.026, 0.037 and 0.060 across upstream fathers; they are reduced-form totals relative to the first covered coworker.",
+        "Treating the cutoff date as a schedulable policy instrument; the paper's date is set by the reform and supports an identification design, not a policy design.",
+        "Reading the eight fathers as the paper's sample or the case as a reproduction of equations (6)-(9); the structural betas are not reported."
+      ],
+      "project_use": "Scenario adaptation for LIT-NET-13: two complete start-date schedules drawn with equal probability, where a father's leave-probability change depends on his birth-order distance from the covered coworker in the same plant, expressed as a mixture of two schedules over one fixed adjacency."
+    },
+    {
+      "id": "conley_udry2010_pineapple",
+      "title": "Learning about a New Technology: Pineapple in Ghana",
+      "authors": [
+        "Timothy G. Conley",
+        "Christopher R. Udry"
+      ],
+      "year": 2010,
+      "venue": "American Economic Review",
+      "volume": "100",
+      "issue": "1",
+      "pages": "35–69",
+      "article_type": "Journal research article",
+      "doi": "10.1257/aer.100.1.35",
+      "urls": {
+        "doi": "https://doi.org/10.1257/aer.100.1.35"
+      },
+      "read_scope": {
+        "level": "selected_full_text_sections",
+        "read_on": "2026-11-17",
+        "inspected": [
+          "Abstract (p. 35): farmers adjust inputs to align with surprisingly successful information neighbors",
+          "Introduction (pp. 35-38): the signed direction rule and the novice/veteran difference in the summary of findings",
+          "Section II (pp. 40-43): construction of M, its near-zero case, and the experience normalization",
+          "p. 51: the full signed definition of M",
+          "Table 4 note (p. 55): advice-question definition of information neighborhoods, sample of 107",
+          "Section IV text (pp. 56-58): one standard deviation of M (about four) for roughly four cedis per plant, no veteran response, insignificant financial neighbors, downward moves as real as upward ones, no own-plot versus neighbor-plot difference",
+          "Table 5 (p. 57): M 1.05 (0.20), M x novice 1.07 (0.22), M x veteran -0.46 (0.34)",
+          "Table 6 A (p. 59): M from own plots 1.46 (0.56) versus information neighbors 1.22 (0.31)",
+          "p. 60: no learning on the established maize-cassava mix"
+        ],
+        "not_inspected": [
+          "Appendix A, Table A1, and the construction details of the growing-conditions control; no full-text verification claimed."
+        ],
+        "full_text_verified": false
+      },
+      "supports": [
+        "M is large and positive when a good-news experiment is much higher than the farmer's previous use, large and negative when much lower, and near zero when close (p. 51; p. 43).",
+        "Novices respond and veterans do not: 1.07 (0.22) versus -0.46 (0.34), different at the 3 percent level, with no evidence of veteran response in the text.",
+        "Strong partial correlations are driven as much by downward as by upward movement, and own-plot good news is not significantly different from neighbor-plot good news."
+      ],
+      "does_not_support": [
+        "Reading the 1.05 coefficient as an exact multiplier; the text states about four for about four cedis, and the case rounds to 1.",
+        "Carrying the experience normalization of M into the case; only the sign implication is kept and the novice/veteran difference becomes two separate rules.",
+        "Treating demonstrations as the paper's experiments; experiments there are farmer-chosen and judged against growing conditions, while the case makes the demonstration level a lottery-set policy parameter.",
+        "Substituting geographic or financial neighbors for information neighbors; financial-neighbor coefficients are insignificant and geographic neighbors enter as a control.",
+        "Reading the eight farmers as the paper's sample: 107 cultivators, and the previous-use figures are project-built.",
+        "Extrapolating to established crops: the maize-cassava mix shows no learning."
+      ],
+      "project_use": "Scenario adaptation for LIT-NET-14: two complete demonstration arrangements drawn with equal probability over one fixed information network, where a novice's intensity change equals the demonstrated level minus previous use (zero when equal), veterans never move, and the demonstrator's own change counts; the target is the average signed change and can be negative."
+    },
+    {
+      "id": "manski1993_reflection",
+      "title": "Identification of Endogenous Social Effects: The Reflection Problem",
+      "authors": [
+        "Charles F. Manski"
+      ],
+      "year": 1993,
+      "venue": "Review of Economic Studies",
+      "volume": "60",
+      "issue": "3",
+      "pages": "531–542",
+      "doi": "10.2307/2298123",
+      "urls": {
+        "doi": "https://doi.org/10.2307/2298123"
+      },
+      "article_type": "Journal research article (identification theory)",
+      "read_scope": {
+        "level": "selected_full_text_sections",
+        "read_on": "2026-11-17",
+        "inspected": [
+          "Abstract (p. 531): the reflection problem and the need for prior information on reference-group composition",
+          "Section 1 (pp. 531-532): the mirror metaphor and the theme of the paper",
+          "Section 2 opening (pp. 532-533): the linear model and the definitions of endogenous, exogenous and correlated effects; the high-school achievement example",
+          "p. 533: the tutoring example, the social multiplier with feedback, and exogenous/correlated effects not generating the multiplier",
+          "p. 534: the social equilibrium equation (3), its unique solution (4) provided beta differs from 1, and Proposition 1",
+          "p. 535: corollary to Proposition 1 and the nonlinear-model identification condition",
+          "p. 536: informed specification of reference groups as a necessary prelude",
+          "p. 537: the spatial autoregressive weighted-average form",
+          "p. 541: conclusions on tighter theory, richer data and experimental evidence"
+        ],
+        "not_inspected": [
+          "Sections 4-5 (dynamic models and consumer demand) and the proofs of the propositions; no full-text verification claimed."
+        ],
+        "full_text_verified": false
+      },
+      "supports": [
+        "Individual outcomes vary with the reference-group average, and the group mean solves the social equilibrium equation (3) with unique solution (4) provided beta is not 1 (p. 533; p. 534).",
+        "An effective tutoring programme directly helps the tutored, indirectly helps all students as their achievement rises, with feedback to the tutored; exogenous and correlated effects do not generate this multiplier (p. 533).",
+        "Prior information specifying the composition of reference groups is a necessary prelude to analysis of social effects (Abstract p. 531; p. 536).",
+        "Endogenous effects cannot be distinguished from exogenous or correlated effects in observational data (Proposition 1, p. 534); the decomposition requires known rules or richer data (p. 541)."
+      ],
+      "does_not_support": [
+        "Reading beta=0.5 or the 4-point direct effect as the paper's numbers: the paper reports no numbers, the parameters are project-built and constrained only by beta not equal to 1 (p. 534).",
+        "Treating the case as a demonstration of the paper's identification result: the case is a policy computation with fully known rules, not inference from data.",
+        "Treating the lottery as the paper's design: tutoring there is a hypothetical example without quotas or randomization (p. 533).",
+        "Adding contextual or correlated effects: the case keeps only the endogenous effect as in the paper's restricted model (p. 535).",
+        "Reading the six students as any sample: the paper has no data and the roster is project-built."
+      ],
+      "project_use": "Scenario adaptation for LIT-NET-15: two complete tutoring arrangements drawn with equal probability over two classes with within-class reference groups; a tutored student gains 4 points directly and every student gains 0.5 points per point of the final class-mean gain, so the answer solves the social-equilibrium equation on each class; the target is the average gain over the six students and the changed-target variant evaluates one student only."
+    },
+    {
+      "id": "imbens_manski2004_confidence_intervals",
+      "title": "Confidence Intervals for Partially Identified Parameters",
+      "authors": [
+        "Guido W. Imbens",
+        "Charles F. Manski"
+      ],
+      "year": 2004,
+      "venue": "Econometrica",
+      "volume": "72",
+      "issue": "6",
+      "pages": "1845–1857",
+      "doi": "10.1111/j.1468-0262.2004.00555.x",
+      "urls": {
+        "doi": "https://doi.org/10.1111/j.1468-0262.2004.00555.x"
+      },
+      "article_type": "Journal research article (Notes and Comments; identification and inference theory)",
+      "read_scope": {
+        "level": "full_text_verified",
+        "read_on": "2026-11-17",
+        "inspected": [
+          "Abstract and Section 1 (p. 1845): partially identified parameters and the confidence-interval question",
+          "Section 2 (p. 1846): the abstract structure, Lemma 1, and the substantive choice between covering the true value and covering the region",
+          "Section 3 (pp. 1847-1849): the missing-data example with known p, the identification region [mu*p, mu*p+(1-p)], the point-identified case p=1, and the three intervals",
+          "Section 4 (pp. 1849-1850): the general case, Assumption 1, equations (6)-(7), Lemma 4",
+          "Appendix (pp. 1851-1857): proofs located; Lemmas 5-10 not re-derived"
+        ],
+        "not_inspected": [
+          "Step-by-step re-derivation of the proofs of Lemmas 5-10; formula-level subscripts in the extracted text are damaged and formulas are cited by equation number."
+        ],
+        "full_text_verified": true
+      },
+      "supports": [
+        "The abstract structure of partially identified parameters and the substantive choice between intervals covering the true value and intervals covering the region (Section 2, p. 1846).",
+        "With a bounded outcome, some data missing and known p, the population mean is theta = mu*p + lambda*(1-p) with lambda in [0,1], and the identification region is [mu*p, mu*p + (1-p)] of width 1-p (Section 3, p. 1847).",
+        "In the point-identified case p = 1 the region collapses to the point mu (p. 1847).",
+        "The mean of the observed subpopulation, mu, is point identified while the population mean theta is only set-identified; the contrast drives the three-interval comparison (pp. 1847-1849)."
+      ],
+      "does_not_support": [
+        "Reading [1/6, 5/6] or [1/2, 1/2] as the paper's numbers: the paper reports no empirical values; all case numbers are project-built.",
+        "Reading the chain network, the quota-2 pilot or the known/missing split as the paper's design: the paper has no network and no quota; missingness there is stochastic with a known propensity score, while the case's missingness is structural (zero-probability cells under the pilot law).",
+        "Borrowing the confidence-interval machinery (three intervals, the C_N equation, Lemmas 1-10) into the deterministic finite model: the case uses only the Section 3 identification-region structure and the point-identification limit.",
+        "Treating the two known endpoints as any sample: the roster, the means and the bounds are project-built declarations."
+      ],
+      "project_use": "Scenario adaptation for LIT-NET-16: six teams on a chain, a quota-2 pilot that reveals the full-exposure cell only for the two endpoints (mu=1/2, mass p=1/3), interior teams' full-exposure means only bounded in [0,1]; the original target reproduces [mu*p, mu*p+(1-p)] = [1/6, 5/6] as a PARTIAL interval, the changed-target variant evaluates the two revealed endpoints and collapses to the point 1/2, and the missing-condition variant drops the complete-model declaration."
+    },
+    {
+      "id": "chernozhukov2007_parameter_sets",
+      "title": "Estimation and Confidence Regions for Parameter Sets in Econometric Models",
+      "authors": [
+        "Victor Chernozhukov",
+        "Han Hong",
+        "Elie Tamer"
+      ],
+      "year": 2007,
+      "venue": "Econometrica",
+      "volume": "75",
+      "issue": "5",
+      "pages": "1243–1284",
+      "doi": "10.1111/j.1468-0262.2007.00794.x",
+      "urls": {
+        "doi": "https://doi.org/10.1111/j.1468-0262.2007.00794.x"
+      },
+      "article_type": "Journal research article (identification and inference theory)",
+      "read_scope": {
+        "level": "full_text_verified",
+        "read_on": "2026-11-17",
+        "inspected": [
+          "Abstract and Section 1 (pp. 1243-1246): criterion-function framework, identified set as the set of minimizers, moment inequalities and equalities",
+          "Section 2.1 (pp. 1246-1247): Theta_I = {theta : Q(theta) = 0}, moment inequalities (2.1), the half-space/polyhedron statement, moment equalities (2.4)-(2.6)",
+          "Section 2.2 (p. 1248): Example 1 interval data, its moment function and Theta_I = {theta : E[Y1] <= theta <= E[Y2]}; Examples 2-4 located",
+          "Section 2.3 (pp. 1250-1252): contour sets, the inferential statistic C_n in (2.9), rates and the degeneracy property",
+          "Sections 3.3-3.5 (pp. 1256-1259) and the conclusion (p. 1270): confidence regions, subsampling, asymptotics located but not used"
+        ],
+        "not_inspected": [
+          "Step-by-step re-derivation of Section 4 (conditions verified for moment-condition models) and Section 5 (regions for a point in Theta_I); formula-level subscripts in the extracted text are damaged and formulas are cited by equation number."
+        ],
+        "full_text_verified": true
+      },
+      "supports": [
+        "The identified set as the zero set of a nonnegative population criterion, Theta_I = {theta in Theta : Q(theta) = 0}, generally multivalued (Section 2, p. 1246).",
+        "Moment-inequality restrictions E_P[m_i(theta)] <= 0 and, with linear moment functions, Theta_I as an intersection of linear half-spaces that may be a triangle, a trapezoid or a polyhedron (p. 1246).",
+        "Moment-equality restrictions and the GMM form of the criterion (p. 1247, equations (2.4)-(2.6)).",
+        "Example 1: interval data with Theta_I = {theta : E[Y1] <= theta <= E[Y2]} and a two-kink criterion (p. 1248).",
+        "Contour sets C_n(c) of the sample criterion as the general form of estimators and regions (p. 1250; equation (3.2) on p. 1253)."
+      ],
+      "does_not_support": [
+        "Reading [7/12, 3/4] or [1/2, 3/4] as the paper's numbers: the paper reports no empirical values; all case numbers are project-built.",
+        "Reading the chain network, the quota-2 pilot, the archive bounds or the equality/bracket split as the paper's design: the paper has no network and no quota.",
+        "Borrowing the estimation and inference machinery (the choice of c-hat, subsampling on p. 1257, asymptotics of C_n on p. 1259, Hausdorff rates and the degeneracy property on pp. 1251 and 1254) into the deterministic finite model.",
+        "Treating Theta_I as sharp by definition: the paper defines Theta_I by the model's restrictions and does not assert sharpness; sharpness here is checked by replaying the project certificate.",
+        "Reading Example 1's Y1, Y2 as the case's [1/2, 3/4]: the paper brackets realizations, the case declares per-node mean brackets."
+      ],
+      "project_use": "Scenario adaptation for LIT-NET-17: six stores on a chain, a quota-2 pilot that reveals the full-exposure cell only for the two endpoints (3/4, equality constraints), interior stores' full-exposure means only known to lie in the archive interval [1/2, 3/4] (two inequality constraints each); the original target gives the PARTIAL interval [7/12, 3/4] of width 1/6, the changed target evaluates only the four archive-covered stores and collapses to the archive interval itself [1/2, 3/4] with informative=false, and the missing-condition variant drops the complete-model declaration and returns NEEDS_INPUT."
     }
   ],
   "route_maps": [

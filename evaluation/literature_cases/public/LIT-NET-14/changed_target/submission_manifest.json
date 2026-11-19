@@ -1,0 +1,18 @@
+{
+  "case_id": "LIT-NET-14",
+  "variant": "changed_target",
+  "paper_id": "conley_udry2010_pineapple",
+  "title": "两套示范安排各一半机会时，乙村三户化肥强度的平均变化是多少？",
+  "synthetic": true,
+  "gold_oracle_location": "OUTSIDE_PUBLIC_CASE_DIRECTORY",
+  "llm_access_scope": "PUBLIC_CASE_FILES_ONLY",
+  "business_question_file": "business_question.md",
+  "supporting_files": [
+    "study_protocol.md",
+    "data_dictionary.md"
+  ],
+  "heldout": false,
+  "adapted": true,
+  "adaptation_note": "场景改编自加纳菠萝农户把化肥用量调向信息邻里里意外成功实验水平的公开描述；八名农户、三个村的划分与上一季强度表为项目自建",
+  "notes": "评价名单改为 B 村第 5、6、7 名农户；目标与权重相应缩小，其余设定与原始版本相同。"
+}

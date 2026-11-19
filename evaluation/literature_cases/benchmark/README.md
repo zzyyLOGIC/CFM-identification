@@ -7,9 +7,9 @@
 ## 文件
 
 ```text
-cases.jsonl                          36 条公开输入（模型可见，不含答案）
+cases.jsonl                          63 条公开输入（模型可见，不含答案）
 schema.json                          单次尝试的 JSONL 字段
-../research_only/benchmark/references.jsonl   36 条参考答案索引（禁止给模型）
+../research_only/benchmark/references.jsonl   63 条参考答案索引（禁止给模型）
 ../tools/export_benchmark.py         重新导出 cases/references
 ../tools/score_benchmark.py          对记录的 attempts 评分
 ```

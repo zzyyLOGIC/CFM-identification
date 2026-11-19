@@ -1,0 +1,18 @@
+{
+  "case_id": "LIT-NET-15",
+  "variant": "changed_target",
+  "paper_id": "manski1993_reflection",
+  "title": "两套辅导安排各一半机会时，学3 一人的成绩平均提高是多少？",
+  "synthetic": true,
+  "gold_oracle_location": "OUTSIDE_PUBLIC_CASE_DIRECTORY",
+  "llm_access_scope": "PUBLIC_CASE_FILES_ONLY",
+  "business_question_file": "business_question.md",
+  "supporting_files": [
+    "study_protocol.md",
+    "data_dictionary.md"
+  ],
+  "heldout": false,
+  "adapted": true,
+  "adaptation_note": "场景改编自 Manski (1993) 反射问题与辅导计划社会乘数的理论框架；六名学生、甲乙两班的划分、两套抽签安排与成绩规则参数为项目自建",
+  "notes": "评价名单改为仅 A 班第 3 名学生；目标与权重相应缩小，其余设定与原始版本相同。"
+}

@@ -1,0 +1,18 @@
+{
+  "case_id": "LIT-NET-13",
+  "variant": "original",
+  "paper_id": "dahl2014_paternity_leave",
+  "title": "两套生效安排各一半机会时，八名父亲休假概率的平均提高是多少？",
+  "synthetic": true,
+  "gold_oracle_location": "OUTSIDE_PUBLIC_CASE_DIRECTORY",
+  "llm_access_scope": "PUBLIC_CASE_FILES_ONLY",
+  "business_question_file": "business_question.md",
+  "supporting_files": [
+    "study_protocol.md",
+    "data_dictionary.md"
+  ],
+  "heldout": false,
+  "adapted": true,
+  "adaptation_note": "场景改编自以某个日期为界、界后生孩子的父亲才享有带薪育儿假的公开描述；八名父亲、两个厂的划分与按出生先后分档的规则为项目自建",
+  "notes": "合成业务材料，改编自 Dahl、Løken 与 Mogstad (2014, American Economic Review 改编) 的育儿假资格外生变化在同事与兄弟间的同伴扩散设计；不是论文数据复现。"
+}

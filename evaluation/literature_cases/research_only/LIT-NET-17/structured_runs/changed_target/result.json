@@ -1,0 +1,1139 @@
+{
+  "state": "PARTIAL",
+  "reason_code": null,
+  "backend_called": true,
+  "independent_replay": true,
+  "mathematical_claim": {
+    "kind": "PARTIAL",
+    "target": {
+      "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+      "node_order": [
+        "门店1",
+        "门店2",
+        "门店3",
+        "门店4",
+        "门店5",
+        "门店6"
+      ],
+      "assignment": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "unit_weights": [
+        "0",
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4",
+        "0"
+      ],
+      "treatment": "接入共享库存",
+      "outcome": "考核月内是否达标",
+      "context": "考核月共享库存试点推广"
+    },
+    "target_sha256": "0fc3bcaab609b156b0b6be80d6cb81b903bfd50823e3d7f0cf720824793f62f6",
+    "width": "1/4",
+    "sharp": true,
+    "representation": "EXACT_IDENTIFIED_INTERVAL",
+    "interval": [
+      "1/2",
+      "3/4"
+    ],
+    "informative": false,
+    "logical_range": [
+      "1/2",
+      "3/4"
+    ],
+    "numeric_value": null,
+    "bound_formula": {
+      "lower": {
+        "constant": "1/2",
+        "terms": {}
+      },
+      "upper": {
+        "constant": "3/4",
+        "terms": {}
+      },
+      "parameters": [
+        {
+          "symbol": "b1",
+          "cell": [
+            "门店1",
+            1,
+            1
+          ],
+          "value": "3/4"
+        },
+        {
+          "symbol": "b2",
+          "cell": [
+            "门店6",
+            1,
+            1
+          ],
+          "value": "3/4"
+        }
+      ],
+      "validity": "REPLAYED_NUMERIC_CERTIFICATE_RECIPE"
+    }
+  },
+  "certificate": {
+    "version": "bounded-policy-mean-1",
+    "theorem": "FINITE_SIGNATURE_MEAN_BOX",
+    "input_sha256": "2db76a45cc3ae064c67cfd44e8cb08ea865910f3a3ba370a5f3bf34e642dc40a",
+    "target_sha256": "0fc3bcaab609b156b0b6be80d6cb81b903bfd50823e3d7f0cf720824793f62f6",
+    "status": "PARTIAL",
+    "lower": "1/2",
+    "upper": "3/4",
+    "width": "1/4",
+    "logical_range": [
+      "1/2",
+      "3/4"
+    ],
+    "informative": false,
+    "sharp": true,
+    "model_scope": "SIGNATURE_MEANS_AND_NODE_BOUNDS_ONLY",
+    "cells": [
+      {
+        "cell": [
+          "门店1",
+          0,
+          0
+        ],
+        "support": "2/5",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店1",
+          0,
+          1
+        ],
+        "support": "4/15",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店1",
+          1,
+          0
+        ],
+        "support": "4/15",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店1",
+          1,
+          1
+        ],
+        "support": "1/15",
+        "a4_value": "3/4",
+        "lower_world": "3/4",
+        "upper_world": "3/4"
+      },
+      {
+        "cell": [
+          "门店2",
+          0,
+          0
+        ],
+        "support": "3/5",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店2",
+          0,
+          1
+        ],
+        "support": "1/15",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店2",
+          1,
+          0
+        ],
+        "support": "1/3",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店2",
+          1,
+          1
+        ],
+        "support": "0",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "3/4"
+      },
+      {
+        "cell": [
+          "门店3",
+          0,
+          0
+        ],
+        "support": "3/5",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店3",
+          0,
+          1
+        ],
+        "support": "1/15",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店3",
+          1,
+          0
+        ],
+        "support": "1/3",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店3",
+          1,
+          1
+        ],
+        "support": "0",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "3/4"
+      },
+      {
+        "cell": [
+          "门店4",
+          0,
+          0
+        ],
+        "support": "3/5",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店4",
+          0,
+          1
+        ],
+        "support": "1/15",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店4",
+          1,
+          0
+        ],
+        "support": "1/3",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店4",
+          1,
+          1
+        ],
+        "support": "0",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "3/4"
+      },
+      {
+        "cell": [
+          "门店5",
+          0,
+          0
+        ],
+        "support": "3/5",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店5",
+          0,
+          1
+        ],
+        "support": "1/15",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店5",
+          1,
+          0
+        ],
+        "support": "1/3",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店5",
+          1,
+          1
+        ],
+        "support": "0",
+        "a4_value": null,
+        "lower_world": "1/2",
+        "upper_world": "3/4"
+      },
+      {
+        "cell": [
+          "门店6",
+          0,
+          0
+        ],
+        "support": "2/5",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店6",
+          0,
+          1
+        ],
+        "support": "4/15",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店6",
+          1,
+          0
+        ],
+        "support": "4/15",
+        "a4_value": null,
+        "lower_world": "5/8",
+        "upper_world": "5/8"
+      },
+      {
+        "cell": [
+          "门店6",
+          1,
+          1
+        ],
+        "support": "1/15",
+        "a4_value": "3/4",
+        "lower_world": "3/4",
+        "upper_world": "3/4"
+      }
+    ],
+    "bound_terms": [
+      {
+        "cell": [
+          "门店2",
+          1,
+          1
+        ],
+        "coefficient": "1/4",
+        "basis": "MEAN_BOUNDS",
+        "lower": "1/2",
+        "upper": "3/4"
+      },
+      {
+        "cell": [
+          "门店3",
+          1,
+          1
+        ],
+        "coefficient": "1/4",
+        "basis": "MEAN_BOUNDS",
+        "lower": "1/2",
+        "upper": "3/4"
+      },
+      {
+        "cell": [
+          "门店4",
+          1,
+          1
+        ],
+        "coefficient": "1/4",
+        "basis": "MEAN_BOUNDS",
+        "lower": "1/2",
+        "upper": "3/4"
+      },
+      {
+        "cell": [
+          "门店5",
+          1,
+          1
+        ],
+        "coefficient": "1/4",
+        "basis": "MEAN_BOUNDS",
+        "lower": "1/2",
+        "upper": "3/4"
+      }
+    ],
+    "realization": "BERNOULLI_PER_NODE_SIGNATURE",
+    "production_admission": false,
+    "estimation_handoff_allowed": false,
+    "certificate_sha256": "a7e9ee9a8b7cdeba0a252aeb8055b320035aa1f3ba7d54e663e862f4d584d835"
+  },
+  "answers": [
+    {
+      "method": "BOUNDED_POLICY_MEAN_D2_E1",
+      "mathematical_claim": {
+        "kind": "PARTIAL",
+        "target": {
+          "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+          "node_order": [
+            "门店1",
+            "门店2",
+            "门店3",
+            "门店4",
+            "门店5",
+            "门店6"
+          ],
+          "assignment": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "unit_weights": [
+            "0",
+            "1/4",
+            "1/4",
+            "1/4",
+            "1/4",
+            "0"
+          ],
+          "treatment": "接入共享库存",
+          "outcome": "考核月内是否达标",
+          "context": "考核月共享库存试点推广"
+        },
+        "target_sha256": "0fc3bcaab609b156b0b6be80d6cb81b903bfd50823e3d7f0cf720824793f62f6",
+        "width": "1/4",
+        "sharp": true,
+        "representation": "EXACT_IDENTIFIED_INTERVAL",
+        "interval": [
+          "1/2",
+          "3/4"
+        ],
+        "informative": false,
+        "logical_range": [
+          "1/2",
+          "3/4"
+        ],
+        "numeric_value": null,
+        "bound_formula": {
+          "lower": {
+            "constant": "1/2",
+            "terms": {}
+          },
+          "upper": {
+            "constant": "3/4",
+            "terms": {}
+          },
+          "parameters": [
+            {
+              "symbol": "b1",
+              "cell": [
+                "门店1",
+                1,
+                1
+              ],
+              "value": "3/4"
+            },
+            {
+              "symbol": "b2",
+              "cell": [
+                "门店6",
+                1,
+                1
+              ],
+              "value": "3/4"
+            }
+          ],
+          "validity": "REPLAYED_NUMERIC_CERTIFICATE_RECIPE"
+        }
+      },
+      "certificate": {
+        "version": "bounded-policy-mean-1",
+        "theorem": "FINITE_SIGNATURE_MEAN_BOX",
+        "input_sha256": "2db76a45cc3ae064c67cfd44e8cb08ea865910f3a3ba370a5f3bf34e642dc40a",
+        "target_sha256": "0fc3bcaab609b156b0b6be80d6cb81b903bfd50823e3d7f0cf720824793f62f6",
+        "status": "PARTIAL",
+        "lower": "1/2",
+        "upper": "3/4",
+        "width": "1/4",
+        "logical_range": [
+          "1/2",
+          "3/4"
+        ],
+        "informative": false,
+        "sharp": true,
+        "model_scope": "SIGNATURE_MEANS_AND_NODE_BOUNDS_ONLY",
+        "cells": [
+          {
+            "cell": [
+              "门店1",
+              0,
+              0
+            ],
+            "support": "2/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店1",
+              0,
+              1
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店1",
+              1,
+              0
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店1",
+              1,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": "3/4",
+            "lower_world": "3/4",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店2",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店2",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店2",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店2",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店3",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店3",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店3",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店3",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店4",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店4",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店4",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店4",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店5",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店5",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店5",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店5",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "3/4"
+          },
+          {
+            "cell": [
+              "门店6",
+              0,
+              0
+            ],
+            "support": "2/5",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店6",
+              0,
+              1
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店6",
+              1,
+              0
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "5/8",
+            "upper_world": "5/8"
+          },
+          {
+            "cell": [
+              "门店6",
+              1,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": "3/4",
+            "lower_world": "3/4",
+            "upper_world": "3/4"
+          }
+        ],
+        "bound_terms": [
+          {
+            "cell": [
+              "门店2",
+              1,
+              1
+            ],
+            "coefficient": "1/4",
+            "basis": "MEAN_BOUNDS",
+            "lower": "1/2",
+            "upper": "3/4"
+          },
+          {
+            "cell": [
+              "门店3",
+              1,
+              1
+            ],
+            "coefficient": "1/4",
+            "basis": "MEAN_BOUNDS",
+            "lower": "1/2",
+            "upper": "3/4"
+          },
+          {
+            "cell": [
+              "门店4",
+              1,
+              1
+            ],
+            "coefficient": "1/4",
+            "basis": "MEAN_BOUNDS",
+            "lower": "1/2",
+            "upper": "3/4"
+          },
+          {
+            "cell": [
+              "门店5",
+              1,
+              1
+            ],
+            "coefficient": "1/4",
+            "basis": "MEAN_BOUNDS",
+            "lower": "1/2",
+            "upper": "3/4"
+          }
+        ],
+        "realization": "BERNOULLI_PER_NODE_SIGNATURE",
+        "production_admission": false,
+        "estimation_handoff_allowed": false,
+        "certificate_sha256": "a7e9ee9a8b7cdeba0a252aeb8055b320035aa1f3ba7d54e663e862f4d584d835"
+      },
+      "native_evidence": {
+        "inquiry": {
+          "study": {
+            "network_id": "network_bd5b74b0aed160e769ce5bea16b6a8b3555af2fd7d79c27a6fb7427703297591",
+            "node_order": [
+              "门店1",
+              "门店2",
+              "门店3",
+              "门店4",
+              "门店5",
+              "门店6"
+            ],
+            "undirected_edges": [
+              [
+                "门店1",
+                "门店2"
+              ],
+              [
+                "门店2",
+                "门店3"
+              ],
+              [
+                "门店3",
+                "门店4"
+              ],
+              [
+                "门店4",
+                "门店5"
+              ],
+              [
+                "门店5",
+                "门店6"
+              ]
+            ],
+            "treatment_variable": "接入共享库存",
+            "outcome_variable": "考核月内是否达标",
+            "outcome_kind": "binary",
+            "context_reference": "考核月共享库存试点推广",
+            "observation_regime": "experimental",
+            "assignment_design_json": "{\"kind\":\"complete_randomization_binary_v1\",\"m\":2}",
+            "protocol_provenance": "Reviewed original source locators: src_14f1de7114ea9b826718657f51a9bfe22385eb0a1d085a2c034b71157d64794f",
+            "network_provenance": "Reviewed original source locators: src_c2f137d7ae3f9cbd9a53ad6bd9f842413a68ee7b46ddb834bdeb646888e883be,src_6882c7b1ad214a1350219b2cd2b0ca51575f61a82af0e9352e9005bf3b91953d",
+            "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+          },
+          "target": {
+            "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+            "network_fingerprint": "4e1a302784cdfb21f74ad16dbd0113dc21a107fb00baf94e56c1a2e5c58dff6f",
+            "node_order": [
+              "门店1",
+              "门店2",
+              "门店3",
+              "门店4",
+              "门店5",
+              "门店6"
+            ],
+            "outcome": "考核月内是否达标",
+            "context": "考核月共享库存试点推广",
+            "averaging_scope": "population_conditional_mean_given_W",
+            "authority": "TRUSTED_FIXTURE",
+            "query_resolution": "RESOLVED",
+            "assignment_law_fingerprint": null,
+            "exposure_fingerprint": null,
+            "node_id": null,
+            "arm": null,
+            "policy_assignment": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "unit_weights": [
+              "0",
+              "1/4",
+              "1/4",
+              "1/4",
+              "1/4",
+              "0"
+            ],
+            "target_digest": "e490b538b09188f17ba504a3bcd6cf7f37ea8c200df3d38bf87f855297b0a4b8"
+          },
+          "assumptions": [
+            {
+              "name": "known_assignment_law",
+              "source": "demo_specification",
+              "confirmed": true,
+              "status": "ADMITTED",
+              "evidence": [
+                "Reviewed original source locators: src_a3fd04464054d1313411f6acbe2c6e0d96bd0c0671db27893f12889346f1e728",
+                "Independent synthetic protocol reviewer",
+                "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+                "review_binding:7efd6ce138ccc6dc0ad8ee826adfe35cd0ad095c541a76f584d30f02e3b7f856"
+              ],
+              "details": ""
+            },
+            {
+              "name": "full_vector_randomization",
+              "source": "demo_specification",
+              "confirmed": true,
+              "status": "ADMITTED",
+              "evidence": [
+                "Reviewed original source locators: src_a3fd04464054d1313411f6acbe2c6e0d96bd0c0671db27893f12889346f1e728",
+                "Independent synthetic protocol reviewer",
+                "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+                "review_binding:7efd6ce138ccc6dc0ad8ee826adfe35cd0ad095c541a76f584d30f02e3b7f856"
+              ],
+              "details": ""
+            },
+            {
+              "name": "consistency",
+              "source": "demo_specification",
+              "confirmed": true,
+              "status": "ADMITTED",
+              "evidence": [
+                "Reviewed original source locators: src_a3fd04464054d1313411f6acbe2c6e0d96bd0c0671db27893f12889346f1e728",
+                "Independent synthetic protocol reviewer",
+                "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+                "review_binding:7efd6ce138ccc6dc0ad8ee826adfe35cd0ad095c541a76f584d30f02e3b7f856"
+              ],
+              "details": ""
+            },
+            {
+              "name": "fixed_pretreatment_network",
+              "source": "demo_specification",
+              "confirmed": true,
+              "status": "ADMITTED",
+              "evidence": [
+                "Reviewed original source locators: src_a3fd04464054d1313411f6acbe2c6e0d96bd0c0671db27893f12889346f1e728",
+                "Independent synthetic protocol reviewer",
+                "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+                "review_binding:7efd6ce138ccc6dc0ad8ee826adfe35cd0ad095c541a76f584d30f02e3b7f856"
+              ],
+              "details": ""
+            },
+            {
+              "name": "finite_conditional_first_moments",
+              "source": "demo_specification",
+              "confirmed": true,
+              "status": "ADMITTED",
+              "evidence": [
+                "Reviewed original source locators: src_a3fd04464054d1313411f6acbe2c6e0d96bd0c0671db27893f12889346f1e728",
+                "Independent synthetic protocol reviewer",
+                "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+                "review_binding:7efd6ce138ccc6dc0ad8ee826adfe35cd0ad095c541a76f584d30f02e3b7f856"
+              ],
+              "details": ""
+            }
+          ],
+          "r1b_sources": [],
+          "r2_signature": {
+            "study_scope_digest": "9e212ff983cd4b8c84074625dda4e21e0556f9cb9dd00a97931a1ca2fdaf9cd7",
+            "network_fingerprint": "4e1a302784cdfb21f74ad16dbd0113dc21a107fb00baf94e56c1a2e5c58dff6f",
+            "treatment_variable": "接入共享库存",
+            "grouping": "strict_majority_ties_low",
+            "core_collaborators": [],
+            "signature_fingerprint": "b444df33bd8a97fa250c3cd368e41869c725083f76f8374ab5917a08d17a9242"
+          },
+          "r2_sufficiency": {
+            "study_scope_digest": "9e212ff983cd4b8c84074625dda4e21e0556f9cb9dd00a97931a1ca2fdaf9cd7",
+            "signature_fingerprint": "b444df33bd8a97fa250c3cd368e41869c725083f76f8374ab5917a08d17a9242",
+            "covered_nodes": [
+              "门店1",
+              "门店2",
+              "门店3",
+              "门店4",
+              "门店5",
+              "门店6"
+            ],
+            "assumption": {
+              "name": "mean_signature_sufficiency",
+              "source": "demo_specification",
+              "confirmed": true,
+              "status": "ADMITTED",
+              "evidence": [
+                "Reviewed original source locators: src_f272eb54b8dd44d9b1439014e373456b058599825e57c6937fff46c95008c856",
+                "Independent synthetic protocol reviewer",
+                "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+                "review_binding:7efd6ce138ccc6dc0ad8ee826adfe35cd0ad095c541a76f584d30f02e3b7f856"
+              ],
+              "details": ""
+            }
+          },
+          "r2_sources": [
+            {
+              "source_id": "source_ed71631daf6fd00a9cfbcc5091223fbea451becc142b2c3f978a8f77902ce1bd",
+              "operator": "NODE_SIGNATURE_MEANS",
+              "provenance": "Reviewed original source locators: src_2ca8b86a7af98e2ce83198cc43f11dbb2a21dd711e7a10ea25b6db9b52f3a277,src_677e1d4c25971dbb99c5a6e326bca52c0968944e01dacf8ad4e47c437d60b0b8,src_691622713c4feb42ef8130a5c1f62e05df231e74d9691eb1e590f68f3c1278cb; independent review: Independent synthetic protocol reviewer; Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+              "admission": "ADMITTED",
+              "availability": "EXACT_POPULATION_VALUE",
+              "study_scope_digest": "9e212ff983cd4b8c84074625dda4e21e0556f9cb9dd00a97931a1ca2fdaf9cd7",
+              "protocol_digest": "0fefada6545910dcf74016741d7b95a67e576c52617dd353edc320dd0ec0f85c",
+              "node_order": [
+                "门店1",
+                "门店2",
+                "门店3",
+                "门店4",
+                "门店5",
+                "门店6"
+              ],
+              "outcome": "考核月内是否达标",
+              "context": "考核月共享库存试点推广",
+              "outcome_nodes": [
+                "门店1",
+                "门店6"
+              ],
+              "signature_fingerprint": "b444df33bd8a97fa250c3cd368e41869c725083f76f8374ab5917a08d17a9242",
+              "signature_cells": [
+                [
+                  "门店1",
+                  1,
+                  1
+                ],
+                [
+                  "门店6",
+                  1,
+                  1
+                ]
+              ]
+            }
+          ]
+        },
+        "information": {
+          "version": "bounded-policy-mean-1",
+          "inquiry_sha256": "000815eddc5937fea45cb8989030a492d73f770724ec6a90213063878b2bc246",
+          "source_id": "source_ed71631daf6fd00a9cfbcc5091223fbea451becc142b2c3f978a8f77902ce1bd",
+          "source_sha256": "5aeedb5d797033683a5853a018a30971bf4a2604c560c30834809072d05a7620",
+          "information_scope": "EXACT_LISTED_SIGNATURE_MEANS_ONLY",
+          "model_scope": "SIGNATURE_MEANS_AND_NODE_BOUNDS_ONLY",
+          "availability": "EXACT_POPULATION_VALUE",
+          "values": [
+            {
+              "node": "门店1",
+              "own": 1,
+              "exposure": 1,
+              "value": "3/4"
+            },
+            {
+              "node": "门店6",
+              "own": 1,
+              "exposure": 1,
+              "value": "3/4"
+            }
+          ],
+          "bounds": [
+            {
+              "node": "门店1",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "node": "门店2",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "node": "门店3",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "node": "门店4",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "node": "门店5",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "node": "门店6",
+              "lower": "1/2",
+              "upper": "3/4"
+            }
+          ],
+          "bounds_kind": "CONDITIONAL_MEAN",
+          "bounds_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+          "outcome_definition": "考核月内达标记1、未达标记0",
+          "outcome_unit": "0/1指标",
+          "outcome_period": "考核月",
+          "a4_provenance": "Reviewed exact source locators: 5244eae2d07183645fff77ba5a1d788c54b26de4aef0b1b77a4890942a285d8a; plan:7bd701ec0ad1b5e0794ca9e894049eb4fba822db31dc7cf1448fae8e95aa0a85",
+          "bounds_provenance": "Reviewed bound/model source locators: 49ba862233203f221c7b81cd3db080d61b6e4107641b1be69717cdd3c967f148; plan:7bd701ec0ad1b5e0794ca9e894049eb4fba822db31dc7cf1448fae8e95aa0a85"
+        }
+      },
+      "independent_replay": true,
+      "reviewed_input_sha256": "2db76a45cc3ae064c67cfd44e8cb08ea865910f3a3ba370a5f3bf34e642dc40a"
+    }
+  ],
+  "clarification_questions": [],
+  "evidence_status": "CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE",
+  "production_admission": false,
+  "estimation_handoff_allowed": false,
+  "query_id": "q1",
+  "result_scope": "SELECTED_QUERY_ONLY",
+  "remaining_query_ids": [],
+  "plan_sha256": "7bd701ec0ad1b5e0794ca9e894049eb4fba822db31dc7cf1448fae8e95aa0a85",
+  "fact_family": "NETWORK_FIXED_POLICY_FACTS",
+  "attempts": [
+    {
+      "method": "BOUNDED_POLICY_MEAN_D2_E1",
+      "state": "PARTIAL",
+      "independent_replay": true
+    }
+  ],
+  "exclusions": [],
+  "primary_method": "BOUNDED_POLICY_MEAN_D2_E1",
+  "partial_fallback_performed": false
+}

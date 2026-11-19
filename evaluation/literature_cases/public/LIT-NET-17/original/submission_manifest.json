@@ -1,0 +1,38 @@
+{
+  "case_id": "LIT-NET-17",
+  "variant": "original",
+  "paper_id": "chernozhukov2007_parameter_sets",
+  "title": "六家门店共享库存全接入：平均达标率能确定到什么范围？",
+  "synthetic": true,
+  "gold_oracle_location": "OUTSIDE_PUBLIC_CASE_DIRECTORY",
+  "llm_access_scope": "PUBLIC_CASE_FILES_ONLY",
+  "business_question_file": "business_question.md",
+  "supporting_files": [
+    "study_protocol.md",
+    "information.md",
+    "bounds.md",
+    "model.md",
+    "data_dictionary.md",
+    "units.csv",
+    "network_edges.csv",
+    "design.csv",
+    "information_cells.json"
+  ],
+  "heldout": false,
+  "adapted": true,
+  "adaptation_note": "场景改编自 Chernozhukov、Hong 与 Tamer (2007) 参数集估计框架下的门店库存接入评估；六家门店、两套接入安排、达标率区间均为项目自建",
+  "notes": "Econometrica 改编：合成业务材料，改编自 Chernozhukov、Hong 与 Tamer (2007) 的参数集估计框架；项目自建有限均值模型，不是论文的数值答案。公式背景取自其第 2 节（pp. 1246–1247）。",
+  "network_upload": {
+    "nodes_file": "units.csv",
+    "edges_file": "network_edges.csv",
+    "declaration": {
+      "kind": "UNDIRECTED",
+      "completeness": "COMPLETE",
+      "description": "相邻关系为固定的处理前简单无向网络，完整边为门店1—门店2、门店2—门店3、门店3—门店4、门店4—门店5、门店5—门店6，没有其他边。"
+    },
+    "declaration_source": {
+      "file": "study_protocol.md",
+      "quote": "相邻关系为固定的处理前简单无向网络，完整边为门店1—门店2、门店2—门店3、门店3—门店4、门店4—门店5、门店5—门店6，没有其他边。"
+    }
+  }
+}

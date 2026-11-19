@@ -1,0 +1,1164 @@
+{
+  "source": "real LLM run (reading stage only), deepseek-chat, 2026-11-18 20:15 +0800",
+  "provenance": "Fresh LLM call recorded in this case package: three variants, one request each (plus one re-read where the structural check failed). The model only reads the question; it does not pick theorems, approve assumptions or produce identification results.",
+  "case_id": "LIT-NET-16",
+  "results": [
+    {
+      "case_id": "LIT-NET-16",
+      "variant": "original",
+      "run_at": "2026-11-18 20:17:03 +0800",
+      "provider": {
+        "name": "openai-chat-compatible:deepseek-chat",
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat"
+      },
+      "reading_source": "real_llm",
+      "reviews": {
+        "authority": "FROZEN_REFERENCE_APPROVALS",
+        "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+      },
+      "api_calls": 1,
+      "question": "如果这6个团队都启用练习计划，评价全部这些团队、每个团队权重相同，平均完成率能否由现有总体信息唯一确定？",
+      "prompt": {
+        "contract": "network-policy-reading-bounded",
+        "system_sha256": "a9067da06a8562e6ded9204ee483b9fdaf713cb9574913db4c810939e3211bc9",
+        "system_characters": 4055,
+        "user_characters": 20976
+      },
+      "reread": {
+        "performed": false,
+        "reason": "first answer used as-is; a re-read is a separate call"
+      },
+      "answer_seconds": 4.843,
+      "first_answer": {
+        "version": "network-policy-reading-1",
+        "reference_context": "c85f55e67f12c",
+        "study": {
+          "source_ids": [
+            "s0001",
+            "s0002"
+          ],
+          "nodes": [
+            "团队1",
+            "团队2",
+            "团队3",
+            "团队4",
+            "团队5",
+            "团队6"
+          ],
+          "edges": [
+            [
+              "团队1",
+              "团队2"
+            ],
+            [
+              "团队2",
+              "团队3"
+            ],
+            [
+              "团队3",
+              "团队4"
+            ],
+            [
+              "团队4",
+              "团队5"
+            ],
+            [
+              "团队5",
+              "团队6"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "每个团队启用练习计划记1、不启用记0",
+          "outcome": "该团队在考核周内是否完成全部练习，完成记1、未完成记0",
+          "outcome_kind": "BINARY",
+          "context": "考核周共有6个团队参与练习计划推广；结果为考核周内完成全部练习的0/1指标"
+        },
+        "assignment": {
+          "source_ids": [
+            "s0003"
+          ],
+          "kind": "UNIFORM_FIXED_QUOTA",
+          "probabilities": null,
+          "fixed_count": 2,
+          "groups": null,
+          "treated_quotas": null,
+          "clusters": null,
+          "cluster_probabilities": null,
+          "quota_profiles": null,
+          "profile_probabilities": null,
+          "treated_sets": null,
+          "set_probabilities": null,
+          "unit_weights": null,
+          "balance_covariates": null,
+          "balance_tolerance": null
+        },
+        "first_stage_exclusion": null,
+        "target": {
+          "source_ids": [
+            "s0018",
+            "s0019"
+          ],
+          "kind": "FIXED_POLICY_MEAN",
+          "assignment": {
+            "团队1": 1,
+            "团队2": 1,
+            "团队3": 1,
+            "团队4": 1,
+            "团队5": 1,
+            "团队6": 1
+          },
+          "population": [
+            "团队1",
+            "团队2",
+            "团队3",
+            "团队4",
+            "团队5",
+            "团队6"
+          ],
+          "aggregation": "EQUAL_MEAN"
+        },
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0002",
+              "s0004"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          }
+        },
+        "exposure": {
+          "source_ids": [
+            "s0008"
+          ],
+          "kind": "STRICT_MAJORITY_TIES_LOW",
+          "core_collaborators": null,
+          "weights": null,
+          "mode": null,
+          "groups": null
+        },
+        "mean_sufficiency": {
+          "source_ids": [
+            "s0009"
+          ],
+          "value": true,
+          "scope": "ALL_BINARY_ASSIGNMENTS",
+          "covered_nodes": [
+            "团队1",
+            "团队2",
+            "团队3",
+            "团队4",
+            "团队5",
+            "团队6"
+          ]
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0005",
+              "s0006",
+              "s0007"
+            ],
+            "operator": "NODE_SIGNATURE_MEANS",
+            "availability": "EXACT_POPULATION_VALUE",
+            "outcome_nodes": [
+              "团队1",
+              "团队6"
+            ],
+            "assignment_cells": [],
+            "signature_cells": [
+              {
+                "node": "团队1",
+                "own": 1,
+                "exposure": 1,
+                "value": "1/2"
+              },
+              {
+                "node": "团队6",
+                "own": 1,
+                "exposure": 1,
+                "value": "1/2"
+              }
+            ],
+            "data_description": [
+              {
+                "source_ids": [
+                  "s0005"
+                ],
+                "text": "季度末按试点整理出的精确总体条件均值，不是有限样本估计。"
+              }
+            ]
+          }
+        ],
+        "additional_restrictions": [
+          {
+            "source_ids": [
+              "s0017"
+            ],
+            "text": "总体信息只有以上逐项列出的精确总体均值，不包含完整联合分布、其他总体信息或额外聚合均值；除随机化、一致性、固定网络、有限矩、全安排均值暴露充分性以及上述界限外，没有跨团队、跨情境的额外耦合限制。"
+          }
+        ],
+        "unresolved": [
+          {
+            "source_ids": [
+              "s0006",
+              "s0007"
+            ],
+            "text": "已给出的精确总体签名均值仅覆盖团队1和团队6在自身处理=1、同伴暴露=1的格子；其余团队及目标全启用安排下的签名格子均值未列出。"
+          },
+          {
+            "source_ids": [
+              "s0018",
+              "s0019"
+            ],
+            "text": "目标为6个团队全启用时的等权平均完成率；该完整安排下各对象与同伴暴露的均值信息未完整给出，能否唯一确定留待后续检查。"
+          }
+        ],
+        "bounded_model": {
+          "source_ids": [
+            "s0010",
+            "s0011",
+            "s0012",
+            "s0013",
+            "s0014",
+            "s0015",
+            "s0016",
+            "s0017"
+          ],
+          "bounds_kind": "CONDITIONAL_MEAN",
+          "bounds_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+          "bounds": [
+            {
+              "source_ids": [
+                "s0011"
+              ],
+              "node": "团队1",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0012"
+              ],
+              "node": "团队2",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0013"
+              ],
+              "node": "团队3",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0014"
+              ],
+              "node": "团队4",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0015"
+              ],
+              "node": "团队5",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0016"
+              ],
+              "node": "团队6",
+              "lower": "0",
+              "upper": "1"
+            }
+          ],
+          "outcome_definition": "考核周内完成全部练习记1、未完成记0",
+          "outcome_unit": "0/1指标",
+          "outcome_period": "考核周",
+          "listed_means_are_complete_information": {
+            "source_ids": [
+              "s0017"
+            ],
+            "value": true
+          },
+          "no_additional_coupling_constraints": {
+            "source_ids": [
+              "s0017"
+            ],
+            "value": true
+          }
+        }
+      },
+      "transport": {
+        "stream": false,
+        "json_mode_sent": true,
+        "output_token_parameter": null,
+        "output_token_limit": null,
+        "require_finish_reason": false,
+        "max_stream_wire_bytes": 2000000,
+        "transport_calls": 1,
+        "response_bytes": 5061,
+        "content_characters": 3255,
+        "content_bytes": 4101,
+        "stream_events": 0,
+        "stage": "complete",
+        "status": "json_object_received",
+        "http_status": 200,
+        "headers_seconds": 0.25,
+        "returned_model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 9279,
+          "completion_tokens": 1228,
+          "total_tokens": 10507,
+          "prompt_cache_hit_tokens": 1792,
+          "prompt_cache_miss_tokens": 7487
+        },
+        "finish_reason": "stop",
+        "json_envelope_received": "bare",
+        "elapsed_seconds": 4.843
+      },
+      "parsed_reference_context_sha256": "85f55e67f12c9abfdbc85667bac64ed456d7c3e1f22ff30d1e3a2ac153b4d2aa",
+      "confirmation": {
+        "confirmed": true,
+        "compared": [
+          "study.nodes",
+          "study.edges",
+          "study.graph_kind",
+          "study.edge_list_complete",
+          "study.outcome_kind",
+          "exposure.kind",
+          "target.population",
+          "target.kind",
+          "target.operation",
+          "target.aggregation",
+          "target.averaging",
+          "regime.kind",
+          "conditioning.kind",
+          "assignment.kind",
+          "assignment.probabilities",
+          "assignment.fixed_count",
+          "assumptions.*"
+        ],
+        "not_compared": [
+          "study.treatment",
+          "study.outcome",
+          "study.context",
+          "free-text notes"
+        ],
+        "contradictions": [],
+        "not_declared": [],
+        "extra": []
+      },
+      "declared_notes": {
+        "additional_restrictions": [
+          "总体信息只有以上逐项列出的精确总体均值，不包含完整联合分布、其他总体信息或额外聚合均值；除随机化、一致性、固定网络、有限矩、全安排均值暴露充分性以及上述界限外，没有跨团队、跨情境的额外耦合限制。"
+        ],
+        "unresolved": [
+          "已给出的精确总体签名均值仅覆盖团队1和团队6在自身处理=1、同伴暴露=1的格子；其余团队及目标全启用安排下的签名格子均值未列出。",
+          "目标为6个团队全启用时的等权平均完成率；该完整安排下各对象与同伴暴露的均值信息未完整给出，能否唯一确定留待后续检查。"
+        ],
+        "adopted": false,
+        "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+      },
+      "plan_state": "REVIEW_REQUIRED",
+      "plan_reason": null,
+      "observed": "PARTIAL",
+      "reason_code": null,
+      "independent_replay": true,
+      "mathematical_claim": {
+        "interval": [
+          "1/6",
+          "5/6"
+        ],
+        "sharp": true,
+        "width": "2/3"
+      },
+      "outcome": {
+        "state": "PARTIAL",
+        "reason_code": null,
+        "independent_replay": true
+      }
+    },
+    {
+      "case_id": "LIT-NET-16",
+      "variant": "missing_condition",
+      "run_at": "2026-11-18 20:17:08 +0800",
+      "provider": {
+        "name": "openai-chat-compatible:deepseek-chat",
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat"
+      },
+      "reading_source": "real_llm",
+      "reviews": {
+        "authority": "FROZEN_REFERENCE_APPROVALS",
+        "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+      },
+      "api_calls": 1,
+      "question": "如果这6个团队都启用练习计划，评价全部这些团队、每个团队权重相同，平均完成率能否由现有总体信息唯一确定？",
+      "prompt": {
+        "contract": "network-policy-reading-bounded",
+        "system_sha256": "a9067da06a8562e6ded9204ee483b9fdaf713cb9574913db4c810939e3211bc9",
+        "system_characters": 4055,
+        "user_characters": 20891
+      },
+      "reread": {
+        "performed": false,
+        "reason": "first answer used as-is; a re-read is a separate call"
+      },
+      "answer_seconds": 4.266,
+      "first_answer": {
+        "version": "network-policy-reading-1",
+        "reference_context": "cfb54a597f253",
+        "study": {
+          "source_ids": [
+            "s0001",
+            "s0002"
+          ],
+          "nodes": [
+            "团队1",
+            "团队2",
+            "团队3",
+            "团队4",
+            "团队5",
+            "团队6"
+          ],
+          "edges": [
+            [
+              "团队1",
+              "团队2"
+            ],
+            [
+              "团队2",
+              "团队3"
+            ],
+            [
+              "团队3",
+              "团队4"
+            ],
+            [
+              "团队4",
+              "团队5"
+            ],
+            [
+              "团队5",
+              "团队6"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "每个团队启用练习计划记1、不启用记0",
+          "outcome": "该团队在考核周内是否完成全部练习，完成记1、未完成记0",
+          "outcome_kind": "BINARY",
+          "context": "考核周共有6个团队参与练习计划推广"
+        },
+        "assignment": {
+          "source_ids": [
+            "s0003"
+          ],
+          "kind": "UNIFORM_FIXED_QUOTA",
+          "probabilities": null,
+          "fixed_count": 2,
+          "groups": null,
+          "treated_quotas": null,
+          "clusters": null,
+          "cluster_probabilities": null,
+          "quota_profiles": null,
+          "profile_probabilities": null,
+          "treated_sets": null,
+          "set_probabilities": null,
+          "unit_weights": null,
+          "balance_covariates": null,
+          "balance_tolerance": null
+        },
+        "first_stage_exclusion": null,
+        "target": {
+          "source_ids": [
+            "s0018"
+          ],
+          "kind": "FIXED_POLICY_MEAN",
+          "assignment": {
+            "团队1": 1,
+            "团队2": 1,
+            "团队3": 1,
+            "团队4": 1,
+            "团队5": 1,
+            "团队6": 1
+          },
+          "population": [
+            "团队1",
+            "团队2",
+            "团队3",
+            "团队4",
+            "团队5",
+            "团队6"
+          ],
+          "aggregation": "EQUAL_MEAN"
+        },
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          }
+        },
+        "exposure": {
+          "source_ids": [
+            "s0008"
+          ],
+          "kind": "STRICT_MAJORITY_TIES_LOW",
+          "core_collaborators": null,
+          "weights": null,
+          "mode": null,
+          "groups": null
+        },
+        "mean_sufficiency": {
+          "source_ids": [
+            "s0009"
+          ],
+          "value": true,
+          "scope": "ALL_BINARY_ASSIGNMENTS",
+          "covered_nodes": [
+            "团队1",
+            "团队2",
+            "团队3",
+            "团队4",
+            "团队5",
+            "团队6"
+          ]
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0005",
+              "s0006",
+              "s0007"
+            ],
+            "operator": "NODE_SIGNATURE_MEANS",
+            "availability": "EXACT_POPULATION_VALUE",
+            "outcome_nodes": [
+              "团队1",
+              "团队6"
+            ],
+            "assignment_cells": [],
+            "signature_cells": [
+              {
+                "node": "团队1",
+                "own": 1,
+                "exposure": 1,
+                "value": "1/2"
+              },
+              {
+                "node": "团队6",
+                "own": 1,
+                "exposure": 1,
+                "value": "1/2"
+              }
+            ],
+            "data_description": []
+          }
+        ],
+        "additional_restrictions": [
+          {
+            "source_ids": [
+              "s0010"
+            ],
+            "text": "界限与上文研究背景相同，对每个团队、每一种完整二元安排均成立，限制潜在结果均值。结果定义为考核周内完成全部练习记1、未完成记0；单位为0/1指标，期间为考核周。"
+          }
+        ],
+        "unresolved": [
+          {
+            "source_ids": [
+              "s0005",
+              "s0006",
+              "s0007"
+            ],
+            "text": "精确总体条件均值仅列出团队1和团队6在自身处理=1、同伴暴露=1时的值；其余对象及签名格子的总体均值未提供。"
+          },
+          {
+            "source_ids": [
+              "s0017"
+            ],
+            "text": "研究暂未确认是否还有其他总体信息或耦合条件。"
+          }
+        ],
+        "bounded_model": {
+          "source_ids": [
+            "s0010",
+            "s0011",
+            "s0012",
+            "s0013",
+            "s0014",
+            "s0015",
+            "s0016"
+          ],
+          "bounds_kind": "CONDITIONAL_MEAN",
+          "bounds_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+          "bounds": [
+            {
+              "source_ids": [
+                "s0011"
+              ],
+              "node": "团队1",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0012"
+              ],
+              "node": "团队2",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0013"
+              ],
+              "node": "团队3",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0014"
+              ],
+              "node": "团队4",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0015"
+              ],
+              "node": "团队5",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0016"
+              ],
+              "node": "团队6",
+              "lower": "0",
+              "upper": "1"
+            }
+          ],
+          "outcome_definition": "考核周内完成全部练习记1、未完成记0",
+          "outcome_unit": "0/1指标",
+          "outcome_period": "考核周",
+          "listed_means_are_complete_information": {
+            "source_ids": [
+              "s0017"
+            ],
+            "value": null
+          },
+          "no_additional_coupling_constraints": {
+            "source_ids": [
+              "s0017"
+            ],
+            "value": null
+          }
+        }
+      },
+      "transport": {
+        "stream": false,
+        "json_mode_sent": true,
+        "output_token_parameter": null,
+        "output_token_limit": null,
+        "require_finish_reason": false,
+        "max_stream_wire_bytes": 2000000,
+        "transport_calls": 1,
+        "response_bytes": 4654,
+        "content_characters": 3086,
+        "content_bytes": 3708,
+        "stream_events": 0,
+        "stage": "complete",
+        "status": "json_object_received",
+        "http_status": 200,
+        "headers_seconds": 0.25,
+        "returned_model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 9222,
+          "completion_tokens": 1132,
+          "total_tokens": 10354,
+          "prompt_cache_hit_tokens": 1792,
+          "prompt_cache_miss_tokens": 7430
+        },
+        "finish_reason": "stop",
+        "json_envelope_received": "bare",
+        "elapsed_seconds": 4.266
+      },
+      "parsed_reference_context_sha256": "fb54a597f25395083810cd4b5103e174d798cd49fb8d29e11248a487082dcb5d",
+      "confirmation": {
+        "confirmed": true,
+        "compared": [
+          "study.nodes",
+          "study.edges",
+          "study.graph_kind",
+          "study.edge_list_complete",
+          "study.outcome_kind",
+          "exposure.kind",
+          "target.population",
+          "target.kind",
+          "target.operation",
+          "target.aggregation",
+          "target.averaging",
+          "regime.kind",
+          "conditioning.kind",
+          "assignment.kind",
+          "assignment.probabilities",
+          "assignment.fixed_count",
+          "assumptions.*"
+        ],
+        "not_compared": [
+          "study.treatment",
+          "study.outcome",
+          "study.context",
+          "free-text notes"
+        ],
+        "contradictions": [],
+        "not_declared": [],
+        "extra": []
+      },
+      "declared_notes": {
+        "additional_restrictions": [
+          "界限与上文研究背景相同，对每个团队、每一种完整二元安排均成立，限制潜在结果均值。结果定义为考核周内完成全部练习记1、未完成记0；单位为0/1指标，期间为考核周。"
+        ],
+        "unresolved": [
+          "精确总体条件均值仅列出团队1和团队6在自身处理=1、同伴暴露=1时的值；其余对象及签名格子的总体均值未提供。",
+          "研究暂未确认是否还有其他总体信息或耦合条件。"
+        ],
+        "adopted": false,
+        "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+      },
+      "plan_state": "NEEDS_INPUT",
+      "plan_reason": "BOUNDED_MODEL_DECLARATIONS_INCOMPLETE",
+      "observed": "NEEDS_INPUT",
+      "reason_code": "BOUNDED_MODEL_DECLARATIONS_INCOMPLETE",
+      "independent_replay": false,
+      "mathematical_claim": {},
+      "outcome": {
+        "state": "NEEDS_INPUT",
+        "reason_code": "BOUNDED_MODEL_DECLARATIONS_INCOMPLETE",
+        "independent_replay": false
+      }
+    },
+    {
+      "case_id": "LIT-NET-16",
+      "variant": "changed_target",
+      "run_at": "2026-11-18 20:17:12 +0800",
+      "provider": {
+        "name": "openai-chat-compatible:deepseek-chat",
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat"
+      },
+      "reading_source": "real_llm",
+      "reviews": {
+        "authority": "FROZEN_REFERENCE_APPROVALS",
+        "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+      },
+      "api_calls": 1,
+      "question": "如果这6个团队都启用练习计划，只评价试点数据里已知完成均值的团队1和团队6、每个团队权重相同，平均完成率能否由现有总体信息唯一确定？",
+      "prompt": {
+        "contract": "network-policy-reading-bounded",
+        "system_sha256": "a9067da06a8562e6ded9204ee483b9fdaf713cb9574913db4c810939e3211bc9",
+        "system_characters": 4055,
+        "user_characters": 21018
+      },
+      "reread": {
+        "performed": false,
+        "reason": "first answer used as-is; a re-read is a separate call"
+      },
+      "answer_seconds": 3.672,
+      "first_answer": {
+        "version": "network-policy-reading-1",
+        "reference_context": "ca09215871444",
+        "study": {
+          "source_ids": [
+            "s0001",
+            "s0002"
+          ],
+          "nodes": [
+            "团队1",
+            "团队2",
+            "团队3",
+            "团队4",
+            "团队5",
+            "团队6"
+          ],
+          "edges": [
+            [
+              "团队1",
+              "团队2"
+            ],
+            [
+              "团队2",
+              "团队3"
+            ],
+            [
+              "团队3",
+              "团队4"
+            ],
+            [
+              "团队4",
+              "团队5"
+            ],
+            [
+              "团队5",
+              "团队6"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "每个团队启用练习计划记1、不启用记0",
+          "outcome": "该团队在考核周内是否完成全部练习，完成记1、未完成记0",
+          "outcome_kind": "BINARY",
+          "context": "考核周共有6个团队参与练习计划推广"
+        },
+        "assignment": {
+          "source_ids": [
+            "s0003"
+          ],
+          "kind": "UNIFORM_FIXED_QUOTA",
+          "probabilities": null,
+          "fixed_count": 2,
+          "groups": null,
+          "treated_quotas": null,
+          "clusters": null,
+          "cluster_probabilities": null,
+          "quota_profiles": null,
+          "profile_probabilities": null,
+          "treated_sets": null,
+          "set_probabilities": null,
+          "unit_weights": null,
+          "balance_covariates": null,
+          "balance_tolerance": null
+        },
+        "target": {
+          "source_ids": [
+            "s0018",
+            "s0019"
+          ],
+          "kind": "FIXED_POLICY_MEAN",
+          "assignment": {
+            "团队1": 1,
+            "团队2": 1,
+            "团队3": 1,
+            "团队4": 1,
+            "团队5": 1,
+            "团队6": 1
+          },
+          "population": [
+            "团队1",
+            "团队6"
+          ],
+          "aggregation": "EQUAL_MEAN"
+        },
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          }
+        },
+        "exposure": {
+          "source_ids": [
+            "s0008"
+          ],
+          "kind": "STRICT_MAJORITY_TIES_LOW",
+          "core_collaborators": null
+        },
+        "mean_sufficiency": {
+          "source_ids": [
+            "s0009"
+          ],
+          "value": true,
+          "scope": "ALL_BINARY_ASSIGNMENTS",
+          "covered_nodes": [
+            "团队1",
+            "团队2",
+            "团队3",
+            "团队4",
+            "团队5",
+            "团队6"
+          ]
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0005",
+              "s0006",
+              "s0007"
+            ],
+            "operator": "NODE_SIGNATURE_MEANS",
+            "availability": "EXACT_POPULATION_VALUE",
+            "outcome_nodes": [
+              "团队1",
+              "团队6"
+            ],
+            "assignment_cells": [],
+            "signature_cells": [
+              {
+                "node": "团队1",
+                "own": 1,
+                "exposure": 1,
+                "value": "1/2"
+              },
+              {
+                "node": "团队6",
+                "own": 1,
+                "exposure": 1,
+                "value": "1/2"
+              }
+            ]
+          }
+        ],
+        "bounded_model": {
+          "source_ids": [
+            "s0010",
+            "s0011",
+            "s0012",
+            "s0013",
+            "s0014",
+            "s0015",
+            "s0016",
+            "s0017"
+          ],
+          "bounds_kind": "CONDITIONAL_MEAN",
+          "bounds_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+          "bounds": [
+            {
+              "source_ids": [
+                "s0011"
+              ],
+              "node": "团队1",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0012"
+              ],
+              "node": "团队2",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0013"
+              ],
+              "node": "团队3",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0014"
+              ],
+              "node": "团队4",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0015"
+              ],
+              "node": "团队5",
+              "lower": "0",
+              "upper": "1"
+            },
+            {
+              "source_ids": [
+                "s0016"
+              ],
+              "node": "团队6",
+              "lower": "0",
+              "upper": "1"
+            }
+          ],
+          "outcome_definition": "考核周内完成全部练习记1、未完成记0",
+          "outcome_unit": "0/1指标",
+          "outcome_period": "考核周",
+          "listed_means_are_complete_information": {
+            "source_ids": [
+              "s0017"
+            ],
+            "value": true
+          },
+          "no_additional_coupling_constraints": {
+            "source_ids": [
+              "s0017"
+            ],
+            "value": true
+          }
+        },
+        "additional_restrictions": [],
+        "unresolved": []
+      },
+      "transport": {
+        "stream": false,
+        "json_mode_sent": true,
+        "output_token_parameter": null,
+        "output_token_limit": null,
+        "require_finish_reason": false,
+        "max_stream_wire_bytes": 2000000,
+        "transport_calls": 1,
+        "response_bytes": 3930,
+        "content_characters": 2711,
+        "content_bytes": 3027,
+        "stream_events": 0,
+        "stage": "complete",
+        "status": "json_object_received",
+        "http_status": 200,
+        "headers_seconds": 0.219,
+        "returned_model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 9301,
+          "completion_tokens": 962,
+          "total_tokens": 10263,
+          "prompt_cache_hit_tokens": 1920,
+          "prompt_cache_miss_tokens": 7381
+        },
+        "finish_reason": "stop",
+        "json_envelope_received": "bare",
+        "elapsed_seconds": 3.672
+      },
+      "parsed_reference_context_sha256": "a0921587144414db61e9f6d97fb62b6f4028b6ac859d5c611dfa04e0e04b461d",
+      "confirmation": {
+        "confirmed": true,
+        "compared": [
+          "study.nodes",
+          "study.edges",
+          "study.graph_kind",
+          "study.edge_list_complete",
+          "study.outcome_kind",
+          "exposure.kind",
+          "target.population",
+          "target.kind",
+          "target.operation",
+          "target.aggregation",
+          "target.averaging",
+          "regime.kind",
+          "conditioning.kind",
+          "assignment.kind",
+          "assignment.probabilities",
+          "assignment.fixed_count",
+          "assumptions.*"
+        ],
+        "not_compared": [
+          "study.treatment",
+          "study.outcome",
+          "study.context",
+          "free-text notes"
+        ],
+        "contradictions": [],
+        "not_declared": [],
+        "extra": []
+      },
+      "declared_notes": {
+        "additional_restrictions": [],
+        "unresolved": [],
+        "adopted": false,
+        "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+      },
+      "plan_state": "REVIEW_REQUIRED",
+      "plan_reason": null,
+      "observed": "POINT",
+      "reason_code": null,
+      "independent_replay": true,
+      "mathematical_claim": {
+        "interval": [
+          "1/2",
+          "1/2"
+        ],
+        "sharp": true,
+        "width": "0"
+      },
+      "outcome": {
+        "state": "POINT",
+        "reason_code": null,
+        "independent_replay": true
+      }
+    }
+  ]
+}

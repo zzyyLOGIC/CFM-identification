@@ -1,0 +1,18 @@
+{
+  "case_id": "LIT-NET-12",
+  "variant": "original",
+  "paper_id": "carrell2013_sorting",
+  "title": "两套带学人安排各一半机会时，八名同学平均 GPA 变化是多少？",
+  "synthetic": true,
+  "gold_oracle_location": "OUTSIDE_PUBLIC_CASE_DIRECTORY",
+  "llm_access_scope": "PUBLIC_CASE_FILES_ONLY",
+  "business_question_file": "business_question.md",
+  "supporting_files": [
+    "study_protocol.md",
+    "data_dictionary.md"
+  ],
+  "heldout": false,
+  "adapted": true,
+  "adaptation_note": "场景改编自按历史估计重排同伴组、实测效应却反转的公开描述，题目设定为项目自建",
+  "notes": "合成业务材料，改编自 Carrell、Sacerdote 与 West (2013, Econometrica 改编) 的按估计同伴效应安排学人分组的设计；不是论文数据复现。"
+}

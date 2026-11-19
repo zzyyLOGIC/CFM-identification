@@ -1,0 +1,83 @@
+{
+  "case_id": "LIT-NET-09",
+  "paper_id": "alatas_etal2016_targeting",
+  "paper": {
+    "authors": [
+      "Vivi Alatas",
+      "Abhijit Banerjee",
+      "Arun G. Chandrasekhar",
+      "Rema Hanna",
+      "Benjamin A. Olken"
+    ],
+    "year": 2016,
+    "title": "Network Structure and the Aggregation of Information: Theory and Evidence from Indonesia",
+    "venue": "American Economic Review",
+    "doi": "10.1257/aer.20140705"
+  },
+  "paper_reference": {
+    "paper_question": "社区掌握分散的贫困信息，网络结构如何影响信息聚合与定向瞄准效果？",
+    "target": "八户在“每村核实一户”与“村甲核实两户、村乙核实两户”各 1/2 的随机政策下，家底被摸清的平均比例；八户等权。",
+    "source_location": "Alatas et al. (2016) AER 106(7):1663-1704, DOI 10.1257/aer.20140705. Section IIA, Table 4 (pp. 1676-1679) for accuracy decaying with network distance; Section V, Table 10 (pp. 1697-1700) for diffusiveness and targeting; Table 1 (p. 1673) for connectivity; Section IIIA (pp. 1680-1682) for the model. Project-built scenario; the paper does not pose this question.",
+    "formula": "Target = (1/8) sum_i [ (1/2) K_i(a) + (1/2) K_i(b) ]，a={1,5}，b={1,3,5,6}，K_i(s)=1{ 户 i 在 s 中被核实，或 i 的邻域与 s 相交 }，K_i 为“家底被摸清”的指示函数。代入得方案 a 为 6/8、方案 b 为 7/8，Target = (1/2)(6/8) + (1/2)(7/8) = 13/16 = 0.8125，端点差 1/8；目标变化版只评村乙四户，方案 a 为 2/4、方案 b 为 3/4，Target = (1/2)(2/4) + (1/2)(3/4) = 5/8 = 0.625。",
+    "conditions": [
+      "Two complete verification lists with known probabilities 1/2 each.",
+      "Assignment independent of true poverty status and of the pre-treatment network.",
+      "Observed outcome corresponds to the executed list.",
+      "Network among the eight households fixed before verification.",
+      "Rule: verified own household, or at least one verified neighbour, counts as informed; otherwise not informed.",
+      "Required proportions exist."
+    ],
+    "what_paper_supports": [
+      "Dispersed community information on neighbours' poverty as business context.",
+      "Accuracy of that information decays with network distance (Section IIA, Table 4; descriptive, not causal).",
+      "Network diffusiveness changes the relative performance of community targeting versus PMT (Section V, Table 10)."
+    ],
+    "what_paper_does_not_support": [
+      "No claim that distance 1 implies full knowledge: the paper reports probability differences, the case collapses them to 0/1.",
+      "No modelling of noise: paper error rates are 0.46-0.52 with 0.19 don't know.",
+      "No replication of the semi-Bayesian learning model or the structural estimation.",
+      "No replication of the Table 10 interaction regression; beta_C is not the answer.",
+      "No claim that eight households in two villages represent 631 communities.",
+      "No extrapolation to optimal verification lists in real villages."
+    ]
+  },
+  "software_expected": {
+    "original": {
+      "status": "POINT"
+    },
+    "missing_condition": {
+      "status": "NEEDS_INPUT",
+      "reason": "The probabilities of the two verification lists are omitted; the fact layer stops with EXTENDED_NETWORK_FACTS_INCOMPLETE."
+    },
+    "changed_target": {
+      "status": "POINT",
+      "reason": "Evaluation population moves to the four households of village B; target and weights must be rebound."
+    }
+  },
+  "actual_run": {
+    "method": "LOCAL_STRUCTURED_FINITE_POLICY_RUN_NO_LLM",
+    "provenance": "2026-11-16 local structured run through the extended network finite-policy entry with explicit synthetic reviews; api_calls=0.",
+    "original": {
+      "state": "POINT",
+      "independent_replay": true,
+      "target_fingerprint": "2abdafd27f18b5bc77113a8d7dbef99c27c60ef9f7e05d241c79d417a15a82fb",
+      "output_file": "structured_runs/original/result.json"
+    },
+    "missing_condition": {
+      "state": "NEEDS_INPUT",
+      "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+      "output_file": "structured_runs/missing_condition/result.json"
+    },
+    "changed_target": {
+      "state": "POINT",
+      "independent_replay": true,
+      "target_fingerprint": "44ea2fc636d4e31345721f7ca0a6325aac92a937d6a44b490ff7d51b63af11a7",
+      "output_file": "structured_runs/changed_target/result.json"
+    },
+    "note": "三个变体均在本地结构化运行；不调用 LLM；不读取公开材料以外的参考内容。"
+  },
+  "review_status": "PENDING_TEACHER",
+  "reviewer": "teacher",
+  "holdout": false,
+  "notes": "Scenario adaptation; the paper does not pose this question. The outcome records whether a household's circumstances become known, not whether the judgement is correct, so it applies uniformly to poor and non-poor households. Peer exposure enters the target: a household is informed if it is verified or has at least one verified neighbour, and dropping the edge set leaves the target undefined. The changed_target evaluates the four households of village B at weight 1/4 each."
+}

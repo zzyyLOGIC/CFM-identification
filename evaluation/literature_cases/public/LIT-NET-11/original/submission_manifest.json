@@ -1,0 +1,18 @@
+{
+  "case_id": "LIT-NET-11",
+  "variant": "original",
+  "paper_id": "cai_szeidl2018_meetings",
+  "title": "两种投放方案各一半机会时，四十家企业平均申请概率是多少？",
+  "synthetic": true,
+  "gold_oracle_location": "OUTSIDE_PUBLIC_CASE_DIRECTORY",
+  "llm_access_scope": "PUBLIC_CASE_FILES_ONLY",
+  "business_question_file": "business_question.md",
+  "supporting_files": [
+    "study_protocol.md",
+    "data_dictionary.md"
+  ],
+  "heldout": false,
+  "adapted": true,
+  "adaptation_note": "场景改编自企业家会议组内信息投放的公开描述，题目设定为项目自建",
+  "notes": "合成业务材料，改编自 Cai 与 Szeidl (2018, Quarterly Journal of Economics 改编) 的企业家同伴会议与组内信息扩散设计；不是论文数据复现。"
+}

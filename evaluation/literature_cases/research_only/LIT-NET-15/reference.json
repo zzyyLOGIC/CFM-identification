@@ -1,0 +1,77 @@
+{
+  "case_id": "LIT-NET-15",
+  "paper_id": "manski1993_reflection",
+  "paper": {
+    "authors": [
+      "Charles F. Manski"
+    ],
+    "year": 1993,
+    "title": "Identification of Endogenous Social Effects: The Reflection Problem",
+    "venue": "Review of Economic Studies"
+  },
+  "paper_reference": {
+    "paper_question": "观测一个总体中的行为分布，研究者能否推断「组平均行为影响个体行为」（内生效应）是真的，而不是情境效应或相关效应的假象？这就是反射问题；论文的回答是：没有参照组构成的先验信息就不能推断，线性模型下三类效应相互之间分不开。",
+    "target": "六名学生在两套辅导安排各 1/2 的随机政策下，成绩相对不推行计划时的平均提高；每人等权。答案是论文式 (3) 社会均衡方程在两个班上的解。",
+    "source_location": "Manski (1993) Review of Economic Studies 60(3):531-542, ISSN 0034-6527. Abstract (p. 531) for the reflection problem and the need for prior information on reference-group composition; p. 532 for the mirror metaphor; p. 533 for the endogenous-effect definition through the average achievement of the youth's school, for the tutoring example, for the social multiplier with feedback, and for exogenous and correlated effects not generating this multiplier; p. 534 for the social equilibrium equation (3), its unique solution (4) provided beta differs from 1, and Proposition 1 that endogenous effects cannot be distinguished from exogenous or correlated effects; p. 535 for the nonlinear-model identification condition; p. 536 for informed specification of reference groups as a necessary prelude to analysis of social effects; p. 537 for the spatial autoregressive weighted-average form; p. 541 for the conclusions on tighter theory, richer data, and experimental evidence. The paper is pure identification theory, reports no numbers, and poses no question; the scenario and all parameter values are project-built.",
+    "formula": "参照组：甲班学1—学4 完全图（六对），乙班学5—学6 一对，班间无参照。规则：受辅导者直接提高 4 分；班平均每提高 1 分、班里每人再提高 0.5 分；无其他途径；班平均按传导兑现后的最终口径。均衡（论文式 (4) 结构，beta=0.5）：班平均提高 m = 4S/(n(1-0.5)) = 8S/n，S 为班内受辅导人数、n 为班人数；每人提高 = 4·d(i) + 0.5·m(班)。方案 A（学1、学2、学5 受辅导）：甲班 m=8×2/4=4，学1、学2 各 6，学3、学4 各 2，合计 16；乙班 m=8×1/2=4，学5 得 6、学6 得 2，合计 8；全体 24，平均 4。方案 B（学3、学6 受辅导）：甲班 m=8×1/4=2，学3 得 5（4+1），其余各 1，合计 8；乙班 m=4，学6 得 6、学5 得 2，合计 8；全体 16，平均 8/3。Target = 1/2×4 + 1/2×(8/3) = 10/3 = 3.333...。目标变化版只评学3，权重 1：方案 A 得 2（纯溢出），方案 B 得 5（4 直接 + 1 溢出）；Target = 1/2×(2+5) = 7/2 = 3.5。每班合计恒为该班直接效应合计的 1/(1-0.5)=2 倍，与班人数无关。",
+    "conditions": [
+      "Two complete tutoring arrangements with known probabilities of 1/2 each.",
+      "Arrangement choice independent of the six students' potential score gains.",
+      "Observed score gains correspond to the executed arrangement.",
+      "Class partition (reference groups) is fixed and known before the arrangement is executed, and there is no cross-class reference.",
+      "The rule set applies uniformly: tutored students gain 4 points directly, every student gains 0.5 points per point of the final class-mean gain, and there is no other channel; the class mean is the post-feedback equilibrium value."
+    ],
+    "what_paper_supports": [
+      "Individual outcomes vary with the reference-group average outcome, and the group mean solves the social equilibrium equation (3) with the unique solution (4) provided beta is not 1 (p. 533; p. 534). The case answer is a direct two-class substitution into this structure.",
+      "An effective tutoring programme directly helps the tutored, indirectly helps all students as their achievement rises, with feedback to the tutored themselves; exogenous and correlated effects do not generate this social multiplier (p. 533). The multiplier 1/(1-0.5)=2 in the case embodies this.",
+      "Prior information specifying the composition of reference groups is required for inference (Abstract p. 531; p. 536). The case fixes the class partition as given prior information, satisfying exactly this prerequisite.",
+      "The composite parameters are identified but the decomposition is not: endogenous effects cannot be distinguished from exogenous or correlated effects (Proposition 1, p. 534). The changed-target variant requires decomposing a student's gain into direct and spillover parts, which the case can do with known rules and observational data cannot."
+    ],
+    "what_paper_does_not_support": [
+      "No claim that beta=0.5 or the 4-point direct effect come from the paper: the paper reports no numbers, the parameters are project-built and constrained only by the equilibrium-uniqueness condition beta different from 1 (p. 534).",
+      "No claim that the case demonstrates the paper's identification result: the paper shows the decomposition is impossible from observational data (p. 534), while the case is a policy computation with fully known rules and involves no estimation.",
+      "No claim that the lottery reproduces the paper's design: tutoring there is a hypothetical policy example (p. 533) without quotas or randomization; the two arrangements and their probabilities are project-built.",
+      "No claim that contextual or correlated effects are present: the case keeps only the endogenous effect as in the paper's restricted model (p. 535); adding a contextual effect would change the case's meaning.",
+      "No claim that the six students stand for any sample: the paper has no data, and the roster, classes and parameter values are all project-built."
+    ]
+  },
+  "software_expected": {
+    "original": {
+      "status": "POINT"
+    },
+    "missing_condition": {
+      "status": "NEEDS_INPUT",
+      "reason": "The probabilities of the two tutoring arrangements are omitted; the fact layer stops with EXTENDED_NETWORK_FACTS_INCOMPLETE."
+    },
+    "changed_target": {
+      "status": "POINT",
+      "reason": "Evaluation population moves to student 3 of class A alone; target and weights must be rebound."
+    }
+  },
+  "actual_run": {
+    "method": "LOCAL_STRUCTURED_FINITE_POLICY_RUN_NO_LLM",
+    "provenance": "2026-11-17 local structured run through the extended network finite-policy entry with explicit synthetic reviews; api_calls=0.",
+    "original": {
+      "state": "POINT",
+      "independent_replay": true,
+      "target_fingerprint": "0c8fb6b4633a4e862a803276b610b50d235576e09acd95b098134e6c5de0e789",
+      "output_file": "structured_runs/original/result.json"
+    },
+    "missing_condition": {
+      "state": "NEEDS_INPUT",
+      "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+      "output_file": "structured_runs/missing_condition/result.json"
+    },
+    "changed_target": {
+      "state": "POINT",
+      "independent_replay": true,
+      "target_fingerprint": "e23ed914d969f75c1f85a04bfe1aad92553b78df95c6b42b51702adb3b744d1c",
+      "output_file": "structured_runs/changed_target/result.json"
+    },
+    "note": "三个变体均在本地结构化运行；不调用 LLM；不读取公开材料以外的参考内容。"
+  },
+  "review_status": "PENDING_TEACHER",
+  "reviewer": "teacher",
+  "holdout": false,
+  "notes": "Scenario adaptation; the paper is pure identification theory, poses no question and reports no numbers. The reference-group partition enters the target through the class-mean equilibrium, and the case is the first in the suite that requires solving an equilibrium and the first that borrows functional form instead of numbers. The largest departure is therefore the parameter values themselves: beta=0.5 and the 4-point direct effect are project-built, constrained only by beta not equal to 1. The equilibrium rule (direct gain, spillover coefficient, final class-mean) lives in the question text and cannot enter the fact layer: the mixture schema carries one fixed adjacency and two complete assignment vectors, and the identifier only checks the target shape and the two policy vectors [1,1,0,0,1,0] / [0,0,1,0,0,1]. Deleting the class partition kills computability at the business level only; at the framework level the finite-policy mean still identifies without the graph."
+}

@@ -1,0 +1,637 @@
+{
+  "state": "NEEDS_INPUT",
+  "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+  "backend_called": false,
+  "independent_replay": false,
+  "mathematical_claim": null,
+  "certificate": null,
+  "answers": [],
+  "clarification_questions": [
+    "请明确本次分析是否采用这一条件：未来政策的有限概率分布完整。",
+    "请列出未来政策的全部完整方案与选择概率。"
+  ],
+  "evidence_status": "CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE",
+  "production_admission": false,
+  "estimation_handoff_allowed": false,
+  "query_id": "q1",
+  "remaining_query_ids": [],
+  "result_scope": "SELECTED_QUERY_ONLY",
+  "fact_family": "NETWORK_FINITE_POLICY_FACTS",
+  "query_review": {
+    "version": "business-dispatch-review-1",
+    "binding_sha256": "3616e6ba693d559933c7070f8763e2eb15e5e95b57a7dd20a6afb584ec976a03",
+    "reviewer": "Independent synthetic protocol reviewer",
+    "evidence": "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+    "authority": "SYNTHETIC_TEST",
+    "decisions": {
+      "business_target_and_population": "ACCEPTED",
+      "research_structure": "ACCEPTED",
+      "source_entailment": "ACCEPTED"
+    }
+  },
+  "request_sha256": "fb96194af8cc046e61806024a8ec6669d11018fe211259320beaf7eefbb5df0b",
+  "methods": [],
+  "exclusions": [],
+  "facts": {
+    "reference_context": "c85c1bed195f9",
+    "study": {
+      "source_ids": [
+        "src_84a31eb0f7e2d5f047cb87c1c4d2ea67ee3803881127c4f9ca030b2339a12dc3",
+        "src_b27d96fe78546017016673ecbcc762775e5ff66a213ccb10836828e3872c2573",
+        "src_b4cba91c28bbf8477a753a23f58f173200690c0547d74beae41f991d3e4f95d7",
+        "src_c5341eaff2e0d0d82c0adab662bf168dc7b971312e334704233f3db0af7540cc",
+        "src_bccd0412b95dec2350a195c73f67200792785a8a4a0a9b990fca5a687cec3ab9",
+        "src_8f5bf021519718c4b239258ad4e24d992f352667deb963cd9506b5e32286f161",
+        "src_4000708a2f8cf23d62d7b4682fd77033b14ac4c1cb225c8586122c72d3f76301",
+        "src_541702314fbb458bd2f2c5ca29a5ae959528087e80389a6095f437c1756978e5",
+        "src_15d2854627a90846711e942083603c7aafc8d703395a0b58e8ac0486ac448781",
+        "src_e0cf445d6f8a7909af253a809558037f152b4900a9cdebc6c2aea775dc178f63",
+        "src_42112c6b0e34e8210a8d2690ce3c2079aa2d134c15ef324b6474f29edf761ae3",
+        "src_64a8c40bc58a04e33da6f19cb700c44f7ee16c7e9ba6ee136fcc3c617a3271d9",
+        "src_4cbcb35f3cdafa8ca9bd58adc0cab2623649b75219a396c8ef8b550797d6a16e",
+        "src_ee202067f8dc49a2377c144bd826f690e4026080631c1fb08f0058d881791496",
+        "src_dbb87988ddaad960c1c371556393748ac723f393c2329f0aee3bacdc4f25b556",
+        "src_ef93b392c09a097e2d22471269a22f2fcf613ea65643ce03393f0a6a114c1913",
+        "src_f52fd8fcb454892dab5d2a5a2a65654efa1b4ec07bfc9e1eabfd0596a51aff24",
+        "src_739067d91099cb5464a79198dcb0aa45d695c165d3e03de93e7f38958cff812a",
+        "src_c76e2e64263dc15f34da4f95c0cfa17d98cd48ea50efcbb0bf951d9578a14cde",
+        "src_d82850693279291b9858623b317cba126cf4c632bc5765a9543008d48cd3c9db",
+        "src_59023e41e0bdb88584c8d962ec42349a105bdbe6542760d1d4bff20aec035de1"
+      ],
+      "nodes": [
+        "学1",
+        "学2",
+        "学3",
+        "学4",
+        "学5",
+        "学6",
+        "学7",
+        "学8"
+      ],
+      "edges": [
+        [
+          "学1",
+          "学2"
+        ],
+        [
+          "学1",
+          "学3"
+        ],
+        [
+          "学1",
+          "学4"
+        ],
+        [
+          "学2",
+          "学3"
+        ],
+        [
+          "学2",
+          "学4"
+        ],
+        [
+          "学3",
+          "学4"
+        ],
+        [
+          "学7",
+          "学5"
+        ],
+        [
+          "学5",
+          "学6"
+        ],
+        [
+          "学6",
+          "学8"
+        ]
+      ],
+      "graph_kind": "SIMPLE_UNDIRECTED",
+      "edge_list_complete": true,
+      "treatment": "担任带学人记1，不担任记0",
+      "outcome": "学年末 GPA 相对学年起点的变化，单位为绩点分",
+      "outcome_kind": "CONTINUOUS",
+      "context": "学年末；八名同学分属两个学习组，组内相邻关系见题面，组间不构成邻居"
+    },
+    "additional_restrictions": [],
+    "unresolved": [],
+    "version": "network-finite-policy-reading-1",
+    "assignment": {
+      "source_ids": [
+        "src_84a31eb0f7e2d5f047cb87c1c4d2ea67ee3803881127c4f9ca030b2339a12dc3",
+        "src_b27d96fe78546017016673ecbcc762775e5ff66a213ccb10836828e3872c2573",
+        "src_b4cba91c28bbf8477a753a23f58f173200690c0547d74beae41f991d3e4f95d7",
+        "src_c5341eaff2e0d0d82c0adab662bf168dc7b971312e334704233f3db0af7540cc",
+        "src_bccd0412b95dec2350a195c73f67200792785a8a4a0a9b990fca5a687cec3ab9",
+        "src_8f5bf021519718c4b239258ad4e24d992f352667deb963cd9506b5e32286f161",
+        "src_4000708a2f8cf23d62d7b4682fd77033b14ac4c1cb225c8586122c72d3f76301",
+        "src_541702314fbb458bd2f2c5ca29a5ae959528087e80389a6095f437c1756978e5",
+        "src_15d2854627a90846711e942083603c7aafc8d703395a0b58e8ac0486ac448781",
+        "src_e0cf445d6f8a7909af253a809558037f152b4900a9cdebc6c2aea775dc178f63",
+        "src_42112c6b0e34e8210a8d2690ce3c2079aa2d134c15ef324b6474f29edf761ae3",
+        "src_64a8c40bc58a04e33da6f19cb700c44f7ee16c7e9ba6ee136fcc3c617a3271d9",
+        "src_4cbcb35f3cdafa8ca9bd58adc0cab2623649b75219a396c8ef8b550797d6a16e",
+        "src_ee202067f8dc49a2377c144bd826f690e4026080631c1fb08f0058d881791496",
+        "src_dbb87988ddaad960c1c371556393748ac723f393c2329f0aee3bacdc4f25b556",
+        "src_ef93b392c09a097e2d22471269a22f2fcf613ea65643ce03393f0a6a114c1913",
+        "src_f52fd8fcb454892dab5d2a5a2a65654efa1b4ec07bfc9e1eabfd0596a51aff24",
+        "src_739067d91099cb5464a79198dcb0aa45d695c165d3e03de93e7f38958cff812a",
+        "src_c76e2e64263dc15f34da4f95c0cfa17d98cd48ea50efcbb0bf951d9578a14cde",
+        "src_d82850693279291b9858623b317cba126cf4c632bc5765a9543008d48cd3c9db",
+        "src_59023e41e0bdb88584c8d962ec42349a105bdbe6542760d1d4bff20aec035de1"
+      ],
+      "kind": "INDEPENDENT_BERNOULLI",
+      "probabilities": {
+        "学1": "1/2",
+        "学2": "1/2",
+        "学3": "1/2",
+        "学4": "1/2",
+        "学5": "1/2",
+        "学6": "1/2",
+        "学7": "1/2",
+        "学8": "1/2"
+      },
+      "fixed_count": null,
+      "groups": null,
+      "treated_quotas": null,
+      "clusters": null,
+      "cluster_probabilities": null,
+      "quota_profiles": null,
+      "profile_probabilities": null,
+      "treated_sets": null,
+      "set_probabilities": null,
+      "unit_weights": null,
+      "balance_covariates": null,
+      "balance_tolerance": null
+    },
+    "first_stage_exclusion": null,
+    "assumptions": {
+      "known_assignment_law": {
+        "source_ids": [
+          "src_84a31eb0f7e2d5f047cb87c1c4d2ea67ee3803881127c4f9ca030b2339a12dc3",
+          "src_b27d96fe78546017016673ecbcc762775e5ff66a213ccb10836828e3872c2573",
+          "src_b4cba91c28bbf8477a753a23f58f173200690c0547d74beae41f991d3e4f95d7",
+          "src_c5341eaff2e0d0d82c0adab662bf168dc7b971312e334704233f3db0af7540cc",
+          "src_bccd0412b95dec2350a195c73f67200792785a8a4a0a9b990fca5a687cec3ab9"
+        ],
+        "value": true
+      },
+      "full_vector_randomization": {
+        "source_ids": [
+          "src_84a31eb0f7e2d5f047cb87c1c4d2ea67ee3803881127c4f9ca030b2339a12dc3",
+          "src_b27d96fe78546017016673ecbcc762775e5ff66a213ccb10836828e3872c2573",
+          "src_b4cba91c28bbf8477a753a23f58f173200690c0547d74beae41f991d3e4f95d7",
+          "src_c5341eaff2e0d0d82c0adab662bf168dc7b971312e334704233f3db0af7540cc",
+          "src_bccd0412b95dec2350a195c73f67200792785a8a4a0a9b990fca5a687cec3ab9"
+        ],
+        "value": true
+      },
+      "consistency": {
+        "source_ids": [
+          "src_84a31eb0f7e2d5f047cb87c1c4d2ea67ee3803881127c4f9ca030b2339a12dc3",
+          "src_b27d96fe78546017016673ecbcc762775e5ff66a213ccb10836828e3872c2573",
+          "src_b4cba91c28bbf8477a753a23f58f173200690c0547d74beae41f991d3e4f95d7",
+          "src_c5341eaff2e0d0d82c0adab662bf168dc7b971312e334704233f3db0af7540cc",
+          "src_bccd0412b95dec2350a195c73f67200792785a8a4a0a9b990fca5a687cec3ab9"
+        ],
+        "value": true
+      },
+      "fixed_pretreatment_network": {
+        "source_ids": [
+          "src_84a31eb0f7e2d5f047cb87c1c4d2ea67ee3803881127c4f9ca030b2339a12dc3",
+          "src_b27d96fe78546017016673ecbcc762775e5ff66a213ccb10836828e3872c2573",
+          "src_b4cba91c28bbf8477a753a23f58f173200690c0547d74beae41f991d3e4f95d7",
+          "src_c5341eaff2e0d0d82c0adab662bf168dc7b971312e334704233f3db0af7540cc",
+          "src_bccd0412b95dec2350a195c73f67200792785a8a4a0a9b990fca5a687cec3ab9"
+        ],
+        "value": true
+      },
+      "finite_conditional_first_moments": {
+        "source_ids": [
+          "src_84a31eb0f7e2d5f047cb87c1c4d2ea67ee3803881127c4f9ca030b2339a12dc3",
+          "src_b27d96fe78546017016673ecbcc762775e5ff66a213ccb10836828e3872c2573",
+          "src_b4cba91c28bbf8477a753a23f58f173200690c0547d74beae41f991d3e4f95d7",
+          "src_c5341eaff2e0d0d82c0adab662bf168dc7b971312e334704233f3db0af7540cc",
+          "src_bccd0412b95dec2350a195c73f67200792785a8a4a0a9b990fca5a687cec3ab9"
+        ],
+        "value": true
+      }
+    },
+    "target": {
+      "source_ids": [
+        "src_84a31eb0f7e2d5f047cb87c1c4d2ea67ee3803881127c4f9ca030b2339a12dc3",
+        "src_b27d96fe78546017016673ecbcc762775e5ff66a213ccb10836828e3872c2573",
+        "src_b4cba91c28bbf8477a753a23f58f173200690c0547d74beae41f991d3e4f95d7",
+        "src_c5341eaff2e0d0d82c0adab662bf168dc7b971312e334704233f3db0af7540cc",
+        "src_bccd0412b95dec2350a195c73f67200792785a8a4a0a9b990fca5a687cec3ab9",
+        "src_8f5bf021519718c4b239258ad4e24d992f352667deb963cd9506b5e32286f161",
+        "src_4000708a2f8cf23d62d7b4682fd77033b14ac4c1cb225c8586122c72d3f76301",
+        "src_541702314fbb458bd2f2c5ca29a5ae959528087e80389a6095f437c1756978e5",
+        "src_15d2854627a90846711e942083603c7aafc8d703395a0b58e8ac0486ac448781",
+        "src_e0cf445d6f8a7909af253a809558037f152b4900a9cdebc6c2aea775dc178f63",
+        "src_42112c6b0e34e8210a8d2690ce3c2079aa2d134c15ef324b6474f29edf761ae3",
+        "src_64a8c40bc58a04e33da6f19cb700c44f7ee16c7e9ba6ee136fcc3c617a3271d9",
+        "src_4cbcb35f3cdafa8ca9bd58adc0cab2623649b75219a396c8ef8b550797d6a16e",
+        "src_ee202067f8dc49a2377c144bd826f690e4026080631c1fb08f0058d881791496",
+        "src_dbb87988ddaad960c1c371556393748ac723f393c2329f0aee3bacdc4f25b556",
+        "src_ef93b392c09a097e2d22471269a22f2fcf613ea65643ce03393f0a6a114c1913",
+        "src_f52fd8fcb454892dab5d2a5a2a65654efa1b4ec07bfc9e1eabfd0596a51aff24",
+        "src_739067d91099cb5464a79198dcb0aa45d695c165d3e03de93e7f38958cff812a",
+        "src_c76e2e64263dc15f34da4f95c0cfa17d98cd48ea50efcbb0bf951d9578a14cde",
+        "src_d82850693279291b9858623b317cba126cf4c632bc5765a9543008d48cd3c9db",
+        "src_59023e41e0bdb88584c8d962ec42349a105bdbe6542760d1d4bff20aec035de1"
+      ],
+      "population": [
+        "学1",
+        "学2",
+        "学3",
+        "学4",
+        "学5",
+        "学6",
+        "学7",
+        "学8"
+      ],
+      "aggregation": "EQUAL_MEAN",
+      "components": [],
+      "policy_distribution_complete": {
+        "source_ids": [
+          "src_84a31eb0f7e2d5f047cb87c1c4d2ea67ee3803881127c4f9ca030b2339a12dc3",
+          "src_b27d96fe78546017016673ecbcc762775e5ff66a213ccb10836828e3872c2573",
+          "src_b4cba91c28bbf8477a753a23f58f173200690c0547d74beae41f991d3e4f95d7",
+          "src_c5341eaff2e0d0d82c0adab662bf168dc7b971312e334704233f3db0af7540cc",
+          "src_bccd0412b95dec2350a195c73f67200792785a8a4a0a9b990fca5a687cec3ab9",
+          "src_8f5bf021519718c4b239258ad4e24d992f352667deb963cd9506b5e32286f161",
+          "src_4000708a2f8cf23d62d7b4682fd77033b14ac4c1cb225c8586122c72d3f76301",
+          "src_541702314fbb458bd2f2c5ca29a5ae959528087e80389a6095f437c1756978e5",
+          "src_15d2854627a90846711e942083603c7aafc8d703395a0b58e8ac0486ac448781",
+          "src_e0cf445d6f8a7909af253a809558037f152b4900a9cdebc6c2aea775dc178f63",
+          "src_42112c6b0e34e8210a8d2690ce3c2079aa2d134c15ef324b6474f29edf761ae3",
+          "src_64a8c40bc58a04e33da6f19cb700c44f7ee16c7e9ba6ee136fcc3c617a3271d9",
+          "src_4cbcb35f3cdafa8ca9bd58adc0cab2623649b75219a396c8ef8b550797d6a16e",
+          "src_ee202067f8dc49a2377c144bd826f690e4026080631c1fb08f0058d881791496",
+          "src_dbb87988ddaad960c1c371556393748ac723f393c2329f0aee3bacdc4f25b556",
+          "src_ef93b392c09a097e2d22471269a22f2fcf613ea65643ce03393f0a6a114c1913",
+          "src_f52fd8fcb454892dab5d2a5a2a65654efa1b4ec07bfc9e1eabfd0596a51aff24",
+          "src_739067d91099cb5464a79198dcb0aa45d695c165d3e03de93e7f38958cff812a",
+          "src_c76e2e64263dc15f34da4f95c0cfa17d98cd48ea50efcbb0bf951d9578a14cde",
+          "src_d82850693279291b9858623b317cba126cf4c632bc5765a9543008d48cd3c9db",
+          "src_59023e41e0bdb88584c8d962ec42349a105bdbe6542760d1d4bff20aec035de1"
+        ],
+        "value": null
+      }
+    },
+    "information": [
+      {
+        "source_ids": [
+          "src_84a31eb0f7e2d5f047cb87c1c4d2ea67ee3803881127c4f9ca030b2339a12dc3",
+          "src_b27d96fe78546017016673ecbcc762775e5ff66a213ccb10836828e3872c2573",
+          "src_b4cba91c28bbf8477a753a23f58f173200690c0547d74beae41f991d3e4f95d7",
+          "src_c5341eaff2e0d0d82c0adab662bf168dc7b971312e334704233f3db0af7540cc",
+          "src_bccd0412b95dec2350a195c73f67200792785a8a4a0a9b990fca5a687cec3ab9",
+          "src_8f5bf021519718c4b239258ad4e24d992f352667deb963cd9506b5e32286f161",
+          "src_4000708a2f8cf23d62d7b4682fd77033b14ac4c1cb225c8586122c72d3f76301",
+          "src_541702314fbb458bd2f2c5ca29a5ae959528087e80389a6095f437c1756978e5",
+          "src_15d2854627a90846711e942083603c7aafc8d703395a0b58e8ac0486ac448781",
+          "src_e0cf445d6f8a7909af253a809558037f152b4900a9cdebc6c2aea775dc178f63",
+          "src_42112c6b0e34e8210a8d2690ce3c2079aa2d134c15ef324b6474f29edf761ae3",
+          "src_64a8c40bc58a04e33da6f19cb700c44f7ee16c7e9ba6ee136fcc3c617a3271d9",
+          "src_4cbcb35f3cdafa8ca9bd58adc0cab2623649b75219a396c8ef8b550797d6a16e",
+          "src_ee202067f8dc49a2377c144bd826f690e4026080631c1fb08f0058d881791496",
+          "src_dbb87988ddaad960c1c371556393748ac723f393c2329f0aee3bacdc4f25b556",
+          "src_ef93b392c09a097e2d22471269a22f2fcf613ea65643ce03393f0a6a114c1913",
+          "src_f52fd8fcb454892dab5d2a5a2a65654efa1b4ec07bfc9e1eabfd0596a51aff24",
+          "src_739067d91099cb5464a79198dcb0aa45d695c165d3e03de93e7f38958cff812a",
+          "src_c76e2e64263dc15f34da4f95c0cfa17d98cd48ea50efcbb0bf951d9578a14cde",
+          "src_d82850693279291b9858623b317cba126cf4c632bc5765a9543008d48cd3c9db",
+          "src_59023e41e0bdb88584c8d962ec42349a105bdbe6542760d1d4bff20aec035de1"
+        ],
+        "operator": "NODE_FULL_LAW",
+        "availability": "SYMBOLIC_POPULATION_OPERATOR",
+        "outcome_nodes": [
+          "学1",
+          "学2",
+          "学3",
+          "学4",
+          "学5",
+          "学6",
+          "学7",
+          "学8"
+        ],
+        "assignment_cells": []
+      }
+    ]
+  },
+  "reference_binding": {
+    "context": "c85c1bed195f9",
+    "context_sha256": "85c1bed195f9c4e98c9c2a4a527b77cd486704abc91bf5787f4903d8c98d4402",
+    "aliases": {
+      "s0001": "src_84a31eb0f7e2d5f047cb87c1c4d2ea67ee3803881127c4f9ca030b2339a12dc3",
+      "s0002": "src_b27d96fe78546017016673ecbcc762775e5ff66a213ccb10836828e3872c2573",
+      "s0003": "src_b4cba91c28bbf8477a753a23f58f173200690c0547d74beae41f991d3e4f95d7",
+      "s0004": "src_c5341eaff2e0d0d82c0adab662bf168dc7b971312e334704233f3db0af7540cc",
+      "s0005": "src_bccd0412b95dec2350a195c73f67200792785a8a4a0a9b990fca5a687cec3ab9",
+      "s0006": "src_8f5bf021519718c4b239258ad4e24d992f352667deb963cd9506b5e32286f161",
+      "s0007": "src_4000708a2f8cf23d62d7b4682fd77033b14ac4c1cb225c8586122c72d3f76301",
+      "s0008": "src_541702314fbb458bd2f2c5ca29a5ae959528087e80389a6095f437c1756978e5",
+      "s0009": "src_15d2854627a90846711e942083603c7aafc8d703395a0b58e8ac0486ac448781",
+      "s0010": "src_e0cf445d6f8a7909af253a809558037f152b4900a9cdebc6c2aea775dc178f63",
+      "s0011": "src_42112c6b0e34e8210a8d2690ce3c2079aa2d134c15ef324b6474f29edf761ae3",
+      "s0012": "src_64a8c40bc58a04e33da6f19cb700c44f7ee16c7e9ba6ee136fcc3c617a3271d9",
+      "s0013": "src_4cbcb35f3cdafa8ca9bd58adc0cab2623649b75219a396c8ef8b550797d6a16e",
+      "s0014": "src_ee202067f8dc49a2377c144bd826f690e4026080631c1fb08f0058d881791496",
+      "s0015": "src_dbb87988ddaad960c1c371556393748ac723f393c2329f0aee3bacdc4f25b556",
+      "s0016": "src_ef93b392c09a097e2d22471269a22f2fcf613ea65643ce03393f0a6a114c1913",
+      "s0017": "src_f52fd8fcb454892dab5d2a5a2a65654efa1b4ec07bfc9e1eabfd0596a51aff24",
+      "s0018": "src_739067d91099cb5464a79198dcb0aa45d695c165d3e03de93e7f38958cff812a",
+      "s0019": "src_c76e2e64263dc15f34da4f95c0cfa17d98cd48ea50efcbb0bf951d9578a14cde",
+      "s0020": "src_d82850693279291b9858623b317cba126cf4c632bc5765a9543008d48cd3c9db",
+      "s0021": "src_59023e41e0bdb88584c8d962ec42349a105bdbe6542760d1d4bff20aec035de1"
+    }
+  },
+  "reading_candidate": {
+    "version": "network-finite-policy-reading-1",
+    "reference_context": "c85c1bed195f9",
+    "study": {
+      "source_ids": [
+        "s0001",
+        "s0002",
+        "s0003",
+        "s0004",
+        "s0005",
+        "s0006",
+        "s0007",
+        "s0008",
+        "s0009",
+        "s0010",
+        "s0011",
+        "s0012",
+        "s0013",
+        "s0014",
+        "s0015",
+        "s0016",
+        "s0017",
+        "s0018",
+        "s0019",
+        "s0020",
+        "s0021"
+      ],
+      "nodes": [
+        "学1",
+        "学2",
+        "学3",
+        "学4",
+        "学5",
+        "学6",
+        "学7",
+        "学8"
+      ],
+      "edges": [
+        [
+          "学1",
+          "学2"
+        ],
+        [
+          "学1",
+          "学3"
+        ],
+        [
+          "学1",
+          "学4"
+        ],
+        [
+          "学2",
+          "学3"
+        ],
+        [
+          "学2",
+          "学4"
+        ],
+        [
+          "学3",
+          "学4"
+        ],
+        [
+          "学7",
+          "学5"
+        ],
+        [
+          "学5",
+          "学6"
+        ],
+        [
+          "学6",
+          "学8"
+        ]
+      ],
+      "graph_kind": "SIMPLE_UNDIRECTED",
+      "edge_list_complete": true,
+      "treatment": "担任带学人记1，不担任记0",
+      "outcome": "学年末 GPA 相对学年起点的变化，单位为绩点分",
+      "outcome_kind": "CONTINUOUS",
+      "context": "学年末；八名同学分属两个学习组，组内相邻关系见题面，组间不构成邻居"
+    },
+    "additional_restrictions": [],
+    "unresolved": [],
+    "assignment": {
+      "source_ids": [
+        "s0001",
+        "s0002",
+        "s0003",
+        "s0004",
+        "s0005",
+        "s0006",
+        "s0007",
+        "s0008",
+        "s0009",
+        "s0010",
+        "s0011",
+        "s0012",
+        "s0013",
+        "s0014",
+        "s0015",
+        "s0016",
+        "s0017",
+        "s0018",
+        "s0019",
+        "s0020",
+        "s0021"
+      ],
+      "kind": "INDEPENDENT_BERNOULLI",
+      "probabilities": {
+        "学1": "1/2",
+        "学2": "1/2",
+        "学3": "1/2",
+        "学4": "1/2",
+        "学5": "1/2",
+        "学6": "1/2",
+        "学7": "1/2",
+        "学8": "1/2"
+      },
+      "fixed_count": null
+    },
+    "first_stage_exclusion": null,
+    "assumptions": {
+      "known_assignment_law": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "full_vector_randomization": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "consistency": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "fixed_pretreatment_network": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "finite_conditional_first_moments": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      }
+    },
+    "target": {
+      "source_ids": [
+        "s0001",
+        "s0002",
+        "s0003",
+        "s0004",
+        "s0005",
+        "s0006",
+        "s0007",
+        "s0008",
+        "s0009",
+        "s0010",
+        "s0011",
+        "s0012",
+        "s0013",
+        "s0014",
+        "s0015",
+        "s0016",
+        "s0017",
+        "s0018",
+        "s0019",
+        "s0020",
+        "s0021"
+      ],
+      "population": [
+        "学1",
+        "学2",
+        "学3",
+        "学4",
+        "学5",
+        "学6",
+        "学7",
+        "学8"
+      ],
+      "aggregation": "EQUAL_MEAN",
+      "policy_distribution_complete": {
+        "value": null,
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006",
+          "s0007",
+          "s0008",
+          "s0009",
+          "s0010",
+          "s0011",
+          "s0012",
+          "s0013",
+          "s0014",
+          "s0015",
+          "s0016",
+          "s0017",
+          "s0018",
+          "s0019",
+          "s0020",
+          "s0021"
+        ]
+      },
+      "components": []
+    },
+    "information": [
+      {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006",
+          "s0007",
+          "s0008",
+          "s0009",
+          "s0010",
+          "s0011",
+          "s0012",
+          "s0013",
+          "s0014",
+          "s0015",
+          "s0016",
+          "s0017",
+          "s0018",
+          "s0019",
+          "s0020",
+          "s0021"
+        ],
+        "operator": "NODE_FULL_LAW",
+        "availability": "SYMBOLIC_POPULATION_OPERATOR",
+        "outcome_nodes": [
+          "学1",
+          "学2",
+          "学3",
+          "学4",
+          "学5",
+          "学6",
+          "学7",
+          "学8"
+        ],
+        "assignment_cells": []
+      }
+    ]
+  },
+  "bundle": {
+    "case_id": "LIT-NET-12-missing_condition",
+    "documents": {
+      "proposal": "## study\n\n文献启发的合成演示，不是原论文数据。研究对象是某学院八名新生，学生是研究单位。担任带学人记 1，不担任记 0。结果为该同学学年末 GPA 相对学年起点的变化，单位为绩点分，连续数值。同学之间的来往关系见题面列出的六对与三对，结果只受自己相邻的带学人人数影响，不受同组但不相邻的带学人影响。同伴按相邻的带学人人数度量，不含本人；甲组与乙组之间没有来往关系，不构成邻居。评价时点为学年末，两套带学人安排评价同一批八名同学、同一结果定义。\n\n## trial\n\n过去没有随机试点，学院一直按报名顺序安排带学人，这是历史做法。\n\n## science\n\n本演示拟采用：上述两套带学人安排与来往关系已知；八名同学在两套安排下的潜在 GPA 变化与安排选择独立；观察到的 GPA 变化对应实际执行的安排；同学之间的来往关系在安排执行前固定；按相邻带学人数分档的规则对每名同学一致适用；所需比例存在。\n\n## information\n\n本演示的理论输入是覆盖八名同学的完整带学人名单与各同学 GPA 变化的符号总体分布，来自同一次基线调查；这里没有给定任何 GPA 变化的数值，不是八条样本记录。\n未来只执行一份带学人名单，问题没有说明两套安排各自被采用的机会。本案例只问随机政策下的平均水平，不与某个对照方案相减。",
+      "business_question": "某学院新生入学后已按能力排好两个学习组，甲组四名同学，乙组四名同学，共八名，编号学1到学8，学1至学4在甲组，学5至学8在乙组。同组同学每天一起自习，但真正来往的只是其中相邻的几个。\n\n甲组四名同学两两都来往，共六对：学1与学2、学1与学3、学1与学4、学2与学3、学2与学4、学3与学4。乙组是一条链，来往关系为学7—学5—学6—学8，即学7只与学5来往，学5与学7、学6来往，学6与学5、学8来往，共三对。除此之外没有其他来往，也没有同学与自己来往。\n\n能力分档：学1、学2、学5、学6是高表达能力同学；学3、学4是低能力同学；学7、学8是中等同学。\n\n学院要在两套学业互助安排里抽签。方案 A：每组一名带学人，甲组学1、乙组学5。方案 B：每组两名带学人，甲组学1与学2、乙组学5与学6。带学人只对自己相邻的同学起作用，对自己不起作用。\n\n成绩变化的规则如下。高表达能力同学的成绩不变，无论这次是否担任带学人。低能力同学相邻只有一名带学人时，GPA 提高 0.053 分；相邻两名带学人时，GPA 反而下降 0.061 分，因为这时低能力同学被高表达能力同学夹在中间，转而跟同样低能力的同学结伴，实际不跟带学人来往。中等同学相邻至少一名带学人时，GPA 提高 0.082 分；相邻没有带学人时不变。\n\n明年会从这两套安排里选一套执行。我们想知道，八名同学 GPA 的平均变化在明年采用其中一套安排时是多少。每人等权。"
+    },
+    "question": "某学院新生入学后已按能力排好两个学习组，甲组四名同学，乙组四名同学，共八名，编号学1到学8，学1至学4在甲组，学5至学8在乙组。同组同学每天一起自习，但真正来往的只是其中相邻的几个。\n\n甲组四名同学两两都来往，共六对：学1与学2、学1与学3、学1与学4、学2与学3、学2与学4、学3与学4。乙组是一条链，来往关系为学7—学5—学6—学8，即学7只与学5来往，学5与学7、学6来往，学6与学5、学8来往，共三对。除此之外没有其他来往，也没有同学与自己来往。\n\n能力分档：学1、学2、学5、学6是高表达能力同学；学3、学4是低能力同学；学7、学8是中等同学。\n\n学院要在两套学业互助安排里抽签。方案 A：每组一名带学人，甲组学1、乙组学5。方案 B：每组两名带学人，甲组学1与学2、乙组学5与学6。带学人只对自己相邻的同学起作用，对自己不起作用。\n\n成绩变化的规则如下。高表达能力同学的成绩不变，无论这次是否担任带学人。低能力同学相邻只有一名带学人时，GPA 提高 0.053 分；相邻两名带学人时，GPA 反而下降 0.061 分，因为这时低能力同学被高表达能力同学夹在中间，转而跟同样低能力的同学结伴，实际不跟带学人来往。中等同学相邻至少一名带学人时，GPA 提高 0.082 分；相邻没有带学人时不变。\n\n明年会从这两套安排里选一套执行。我们想知道，八名同学 GPA 的平均变化在明年采用其中一套安排时是多少。每人等权。"
+  }
+}

@@ -1,0 +1,878 @@
+{
+  "state": "POINT",
+  "reason_code": null,
+  "backend_called": true,
+  "independent_replay": true,
+  "mathematical_claim": {
+    "kind": "POINT",
+    "representation": "NATIVE_NETWORK_OBSERVED_FUNCTIONAL",
+    "target": {
+      "node_order": [
+        "父1",
+        "父2",
+        "父3",
+        "父4",
+        "父5",
+        "父6",
+        "父7",
+        "父8"
+      ],
+      "population": [
+        "父2",
+        "父3",
+        "父4"
+      ],
+      "unit_weights": [
+        "0",
+        "1/3",
+        "1/3",
+        "1/3",
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "treatment": "政策生效日之后生孩子记1，之前记0",
+      "outcome": "休假概率相对不推行这项政策时的提高，单位为概率",
+      "context": "政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策",
+      "kind": "FINITE_POLICY_MEAN",
+      "policies": [
+        {
+          "assignment": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "weight": "1/2"
+        },
+        {
+          "assignment": [
+            0,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "weight": "1/2"
+        }
+      ]
+    },
+    "target_fingerprint": "eb9fffe124f7a3168a19fc28e2f4bf543d9631ecb88e3c47cb40ccb3933c392f",
+    "expression": "1/2 * (1/3 * E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)] + 1/3 * E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)] + 1/3 * E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)]) + 1/2 * (1/3 * E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)] + 1/3 * E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)] + 1/3 * E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)])",
+    "numeric_value": null
+  },
+  "certificate": {
+    "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+    "status": "POINT",
+    "verification_status": "VERIFIED",
+    "target_fingerprint": "eb9fffe124f7a3168a19fc28e2f4bf543d9631ecb88e3c47cb40ccb3933c392f",
+    "policy_support": [
+      {
+        "assignment": [
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "policy_probability": "1/2",
+        "experimental_assignment_probability": "1/256",
+        "fixed_policy_certificate": "eeac67531152e9bb03bc685e539194b64e797ed972678733cbbb456905544de7"
+      },
+      {
+        "assignment": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "policy_probability": "1/2",
+        "experimental_assignment_probability": "1/256",
+        "fixed_policy_certificate": "436e5c1576712e73ac5faad97e0906909d132a3fcb6caba2d9e573dd85520616"
+      }
+    ],
+    "identified_functional": "1/2 * (1/3 * E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)] + 1/3 * E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)] + 1/3 * E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)]) + 1/2 * (1/3 * E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)] + 1/3 * E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)] + 1/3 * E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)])",
+    "certificate_sha256": "c92cf10395b61c5478a734e1f1eeec568f428e4022857e9119ed1ee75217b9df",
+    "estimation_request": null,
+    "warning": "Finite mixture of full-assignment population means; no PFN value is estimated"
+  },
+  "answers": [
+    {
+      "method": "R1B_FINITE_POLICY",
+      "mathematical_claim": {
+        "kind": "POINT",
+        "representation": "NATIVE_NETWORK_OBSERVED_FUNCTIONAL",
+        "target": {
+          "node_order": [
+            "父1",
+            "父2",
+            "父3",
+            "父4",
+            "父5",
+            "父6",
+            "父7",
+            "父8"
+          ],
+          "population": [
+            "父2",
+            "父3",
+            "父4"
+          ],
+          "unit_weights": [
+            "0",
+            "1/3",
+            "1/3",
+            "1/3",
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "treatment": "政策生效日之后生孩子记1，之前记0",
+          "outcome": "休假概率相对不推行这项政策时的提高，单位为概率",
+          "context": "政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策",
+          "kind": "FINITE_POLICY_MEAN",
+          "policies": [
+            {
+              "assignment": [
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0
+              ],
+              "weight": "1/2"
+            },
+            {
+              "assignment": [
+                0,
+                0,
+                1,
+                0,
+                1,
+                0,
+                0,
+                0
+              ],
+              "weight": "1/2"
+            }
+          ]
+        },
+        "target_fingerprint": "eb9fffe124f7a3168a19fc28e2f4bf543d9631ecb88e3c47cb40ccb3933c392f",
+        "expression": "1/2 * (1/3 * E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)] + 1/3 * E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)] + 1/3 * E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)]) + 1/2 * (1/3 * E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)] + 1/3 * E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)] + 1/3 * E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)])",
+        "numeric_value": null
+      },
+      "certificate": {
+        "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+        "status": "POINT",
+        "verification_status": "VERIFIED",
+        "target_fingerprint": "eb9fffe124f7a3168a19fc28e2f4bf543d9631ecb88e3c47cb40ccb3933c392f",
+        "policy_support": [
+          {
+            "assignment": [
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              0
+            ],
+            "policy_probability": "1/2",
+            "experimental_assignment_probability": "1/256",
+            "fixed_policy_certificate": "eeac67531152e9bb03bc685e539194b64e797ed972678733cbbb456905544de7"
+          },
+          {
+            "assignment": [
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0
+            ],
+            "policy_probability": "1/2",
+            "experimental_assignment_probability": "1/256",
+            "fixed_policy_certificate": "436e5c1576712e73ac5faad97e0906909d132a3fcb6caba2d9e573dd85520616"
+          }
+        ],
+        "identified_functional": "1/2 * (1/3 * E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)] + 1/3 * E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)] + 1/3 * E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)]) + 1/2 * (1/3 * E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)] + 1/3 * E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)] + 1/3 * E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)])",
+        "certificate_sha256": "c92cf10395b61c5478a734e1f1eeec568f428e4022857e9119ed1ee75217b9df",
+        "estimation_request": null,
+        "warning": "Finite mixture of full-assignment population means; no PFN value is estimated"
+      },
+      "independent_replay": true,
+      "reviewed_input_sha256": "ce6923dc6f42328e78664283bba786d2e4fa77208e5f26b0c7aa9f16bbef61bc",
+      "native_evidence": {
+        "query_type": "FINITE_POLICY_MIXTURE",
+        "status": "POINT",
+        "route": "R1B_FINITE_POLICY",
+        "reason_code": null,
+        "result": {
+          "components": [
+            {
+              "study": {
+                "network_id": "network_639b4224b0d7c7531e5b5f54a0e6db1875c8aa46c40dd4a5bb358a44d9eec54a",
+                "node_order": [
+                  "父1",
+                  "父2",
+                  "父3",
+                  "父4",
+                  "父5",
+                  "父6",
+                  "父7",
+                  "父8"
+                ],
+                "undirected_edges": [
+                  [
+                    "父1",
+                    "父2"
+                  ],
+                  [
+                    "父1",
+                    "父3"
+                  ],
+                  [
+                    "父1",
+                    "父4"
+                  ],
+                  [
+                    "父1",
+                    "父8"
+                  ],
+                  [
+                    "父2",
+                    "父3"
+                  ],
+                  [
+                    "父2",
+                    "父4"
+                  ],
+                  [
+                    "父3",
+                    "父4"
+                  ],
+                  [
+                    "父5",
+                    "父6"
+                  ],
+                  [
+                    "父5",
+                    "父7"
+                  ],
+                  [
+                    "父6",
+                    "父7"
+                  ]
+                ],
+                "treatment_variable": "政策生效日之后生孩子记1，之前记0",
+                "outcome_variable": "休假概率相对不推行这项政策时的提高，单位为概率",
+                "outcome_kind": "continuous",
+                "context_reference": "政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策",
+                "observation_regime": "experimental",
+                "assignment_design_json": "{\"kind\":\"heterogeneous_bernoulli_binary_v1\",\"propensities\":{\"父1\":\"1/2\",\"父2\":\"1/2\",\"父3\":\"1/2\",\"父4\":\"1/2\",\"父5\":\"1/2\",\"父6\":\"1/2\",\"父7\":\"1/2\",\"父8\":\"1/2\"}}",
+                "protocol_provenance": "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909,src_6425a286c8d688e828329c86318cf176a5b575cd44983c2b57372215924d542d,src_0979a046ac458138f660662f0cf411dd0594c7c575b2f014ae41334ff29f912e,src_b4d108bdf5343d30e34455040dac6a6d54a09ad73a775132669455b24046f2a8,src_870df1a04d00269d4f49d273cbe88e82d9728ef57bcc4ca48a7b524ee8e6268e,src_08cdb8a2867d49a8db5a8ced8fc4e2d37cc5874f6640fef0654c72aeee938c4e,src_cc4e252ff1857c0b9d0856b08e505688a77202a434399a5b6a189e3774588a6d,src_512dc91223468edc5758aa186fdcf4a0bf3d8f2672346de823c430bb561c9f5c,src_041c048b160cff6946acba613805408332cccec73c44cba4e316a7adadaee0ac,src_da4fe473c1d554d6ad9e8d0655ffbcab95efb478557c7434f962e8c02e6d1719,src_4b22409a3cc2334cd49fc18e72dce8482c0cde76bc69342889e2cf0720a17437,src_43fd72c088f7cbedf8559499b820b300b4739e0a22dbce7fafc5f1fe46c0376f,src_ef4edd3eeea82d32aea57f3bb40ce3b29452be6206f4fac6a5db806a8bb73663,src_46b220475d6a294568e28de53fc8515900fed3296d8cfaaeb0d764bdc5bd83f4,src_a6a418d401b4333e8c8cc437347d3e36648b85a54fbb477b1bdcace5b52d4078,src_ecfe25ea5635da44f6ad30c499686a505c0b5be1d066f7be7befd4a8f965dd66,src_41de0c644b8408a50206f02af4d2b88091f7cbfa02a072ef1f8be730a3d4bd26,src_7fa1030b9b65d92c6bfcc12485bea1f6130e0e781218ddb1d8a060ba5d1d629d,src_fc196686965e6cb22f1f131d164a50abe139709562138d03f834998fe7603891,src_e51a7c1c30eb13d5e96bf5c5aa252d294a5f7cb96323ca837750c748276c04f7,src_4c0c16318833a31469d6cbaa8e994462e6003513d33b5023bd850570a539afc1,src_f01127208ad7da37098b50e56f8e34874f57b87c8df8f93b7ace651b8da586ad,src_7bbfdfa3cc10d2acf33a82687b89879c91c3971f53ee2af8009360291806ec6c,src_64b398571719a5cfca62e0c6f685c0de5c771b29aa408a88fbaef36bbe2da847,src_69c9cdc8298c4f6d2d1377c91d55b4ae605d60b76d15ee5a53fdac4081ed9c40,src_71bc194f9f70609007cdb20174e2b9fcefa96b261318977fb64e0ca09d7c69e3,src_8ad3bce3999a338025f0a0aaa0c3accdde83baee4f043e5b6eec2e6915d00ec3,src_b93dd773fdca537ad4d00dd215bbf777085f403a6d0a64c7f03bb7c3d5eb12de,src_edcb39a0db31c12323892cc0be3895004a4e5b577763c0215f49a368e3c2d5af,src_cfa49151a328883c4aba6e44cd57c58d03dcf5bdb00f6a8b364f568e002bc265,src_010f6ddbb31eceef5521fec45f388e9e7a31d0b95036d0c3b4230511adfe2382; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                "network_provenance": "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909,src_6425a286c8d688e828329c86318cf176a5b575cd44983c2b57372215924d542d,src_0979a046ac458138f660662f0cf411dd0594c7c575b2f014ae41334ff29f912e,src_b4d108bdf5343d30e34455040dac6a6d54a09ad73a775132669455b24046f2a8,src_870df1a04d00269d4f49d273cbe88e82d9728ef57bcc4ca48a7b524ee8e6268e,src_08cdb8a2867d49a8db5a8ced8fc4e2d37cc5874f6640fef0654c72aeee938c4e,src_cc4e252ff1857c0b9d0856b08e505688a77202a434399a5b6a189e3774588a6d,src_512dc91223468edc5758aa186fdcf4a0bf3d8f2672346de823c430bb561c9f5c,src_041c048b160cff6946acba613805408332cccec73c44cba4e316a7adadaee0ac,src_da4fe473c1d554d6ad9e8d0655ffbcab95efb478557c7434f962e8c02e6d1719,src_4b22409a3cc2334cd49fc18e72dce8482c0cde76bc69342889e2cf0720a17437,src_43fd72c088f7cbedf8559499b820b300b4739e0a22dbce7fafc5f1fe46c0376f,src_ef4edd3eeea82d32aea57f3bb40ce3b29452be6206f4fac6a5db806a8bb73663,src_46b220475d6a294568e28de53fc8515900fed3296d8cfaaeb0d764bdc5bd83f4,src_a6a418d401b4333e8c8cc437347d3e36648b85a54fbb477b1bdcace5b52d4078,src_ecfe25ea5635da44f6ad30c499686a505c0b5be1d066f7be7befd4a8f965dd66,src_41de0c644b8408a50206f02af4d2b88091f7cbfa02a072ef1f8be730a3d4bd26,src_7fa1030b9b65d92c6bfcc12485bea1f6130e0e781218ddb1d8a060ba5d1d629d,src_fc196686965e6cb22f1f131d164a50abe139709562138d03f834998fe7603891,src_e51a7c1c30eb13d5e96bf5c5aa252d294a5f7cb96323ca837750c748276c04f7,src_4c0c16318833a31469d6cbaa8e994462e6003513d33b5023bd850570a539afc1,src_f01127208ad7da37098b50e56f8e34874f57b87c8df8f93b7ace651b8da586ad,src_7bbfdfa3cc10d2acf33a82687b89879c91c3971f53ee2af8009360291806ec6c,src_64b398571719a5cfca62e0c6f685c0de5c771b29aa408a88fbaef36bbe2da847,src_69c9cdc8298c4f6d2d1377c91d55b4ae605d60b76d15ee5a53fdac4081ed9c40,src_71bc194f9f70609007cdb20174e2b9fcefa96b261318977fb64e0ca09d7c69e3,src_8ad3bce3999a338025f0a0aaa0c3accdde83baee4f043e5b6eec2e6915d00ec3,src_b93dd773fdca537ad4d00dd215bbf777085f403a6d0a64c7f03bb7c3d5eb12de,src_edcb39a0db31c12323892cc0be3895004a4e5b577763c0215f49a368e3c2d5af,src_cfa49151a328883c4aba6e44cd57c58d03dcf5bdb00f6a8b364f568e002bc265,src_010f6ddbb31eceef5521fec45f388e9e7a31d0b95036d0c3b4230511adfe2382; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+              },
+              "target": {
+                "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+                "network_fingerprint": "a234c3118da73a18559cbe4ccf570772ca39ef8f266185392b8c7583f0070d4b",
+                "node_order": [
+                  "父1",
+                  "父2",
+                  "父3",
+                  "父4",
+                  "父5",
+                  "父6",
+                  "父7",
+                  "父8"
+                ],
+                "outcome": "休假概率相对不推行这项政策时的提高，单位为概率",
+                "context": "政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策",
+                "averaging_scope": "population_conditional_mean_given_W",
+                "authority": "TRUSTED_FIXTURE",
+                "query_resolution": "RESOLVED",
+                "assignment_law_fingerprint": null,
+                "exposure_fingerprint": null,
+                "node_id": null,
+                "arm": null,
+                "policy_assignment": [
+                  0,
+                  0,
+                  1,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                "unit_weights": [
+                  "0",
+                  "1/3",
+                  "1/3",
+                  "1/3",
+                  "0",
+                  "0",
+                  "0",
+                  "0"
+                ],
+                "target_digest": "9cfdea09bdf632f092708fce93ba5643baf46945c1a58fe02b7395fd67914fb8"
+              },
+              "sources": [
+                {
+                  "source_id": "source_41c12e61114c98c834fba7fbf26f94f0fc6d34d30c2161f224571de06303447f",
+                  "operator": "NODE_FULL_LAW",
+                  "provenance": "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909,src_6425a286c8d688e828329c86318cf176a5b575cd44983c2b57372215924d542d,src_0979a046ac458138f660662f0cf411dd0594c7c575b2f014ae41334ff29f912e,src_b4d108bdf5343d30e34455040dac6a6d54a09ad73a775132669455b24046f2a8,src_870df1a04d00269d4f49d273cbe88e82d9728ef57bcc4ca48a7b524ee8e6268e,src_08cdb8a2867d49a8db5a8ced8fc4e2d37cc5874f6640fef0654c72aeee938c4e,src_cc4e252ff1857c0b9d0856b08e505688a77202a434399a5b6a189e3774588a6d,src_512dc91223468edc5758aa186fdcf4a0bf3d8f2672346de823c430bb561c9f5c,src_041c048b160cff6946acba613805408332cccec73c44cba4e316a7adadaee0ac,src_da4fe473c1d554d6ad9e8d0655ffbcab95efb478557c7434f962e8c02e6d1719,src_4b22409a3cc2334cd49fc18e72dce8482c0cde76bc69342889e2cf0720a17437,src_43fd72c088f7cbedf8559499b820b300b4739e0a22dbce7fafc5f1fe46c0376f,src_ef4edd3eeea82d32aea57f3bb40ce3b29452be6206f4fac6a5db806a8bb73663,src_46b220475d6a294568e28de53fc8515900fed3296d8cfaaeb0d764bdc5bd83f4,src_a6a418d401b4333e8c8cc437347d3e36648b85a54fbb477b1bdcace5b52d4078,src_ecfe25ea5635da44f6ad30c499686a505c0b5be1d066f7be7befd4a8f965dd66,src_41de0c644b8408a50206f02af4d2b88091f7cbfa02a072ef1f8be730a3d4bd26,src_7fa1030b9b65d92c6bfcc12485bea1f6130e0e781218ddb1d8a060ba5d1d629d,src_fc196686965e6cb22f1f131d164a50abe139709562138d03f834998fe7603891,src_e51a7c1c30eb13d5e96bf5c5aa252d294a5f7cb96323ca837750c748276c04f7,src_4c0c16318833a31469d6cbaa8e994462e6003513d33b5023bd850570a539afc1,src_f01127208ad7da37098b50e56f8e34874f57b87c8df8f93b7ace651b8da586ad,src_7bbfdfa3cc10d2acf33a82687b89879c91c3971f53ee2af8009360291806ec6c,src_64b398571719a5cfca62e0c6f685c0de5c771b29aa408a88fbaef36bbe2da847,src_69c9cdc8298c4f6d2d1377c91d55b4ae605d60b76d15ee5a53fdac4081ed9c40,src_71bc194f9f70609007cdb20174e2b9fcefa96b261318977fb64e0ca09d7c69e3,src_8ad3bce3999a338025f0a0aaa0c3accdde83baee4f043e5b6eec2e6915d00ec3,src_b93dd773fdca537ad4d00dd215bbf777085f403a6d0a64c7f03bb7c3d5eb12de,src_edcb39a0db31c12323892cc0be3895004a4e5b577763c0215f49a368e3c2d5af,src_cfa49151a328883c4aba6e44cd57c58d03dcf5bdb00f6a8b364f568e002bc265,src_010f6ddbb31eceef5521fec45f388e9e7a31d0b95036d0c3b4230511adfe2382; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                  "admission": "ADMITTED",
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                  "regime": "experimental",
+                  "shared_scope_digest": "25c48f8ae236cf308bb49beb0deec4e8e9e1b316b3b608403379d2cf592edbd9",
+                  "protocol_digest": "8b795338f080bfaf5445fb3caead74b9cba2f27ca6ff1529e287824d168ac012",
+                  "node_order": [
+                    "父1",
+                    "父2",
+                    "父3",
+                    "父4",
+                    "父5",
+                    "父6",
+                    "父7",
+                    "父8"
+                  ],
+                  "outcome": "休假概率相对不推行这项政策时的提高，单位为概率",
+                  "context": "政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策",
+                  "outcome_nodes": [
+                    "父1",
+                    "父2",
+                    "父3",
+                    "父4",
+                    "父5",
+                    "父6",
+                    "父7",
+                    "父8"
+                  ],
+                  "assignment_cells": [],
+                  "exposure_fingerprint": null
+                }
+              ],
+              "assumptions": [
+                {
+                  "name": "known_assignment_law",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "full_vector_randomization",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "consistency",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "fixed_pretreatment_network",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "finite_conditional_first_moments",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                }
+              ],
+              "route_receipt": {
+                "version": "non-arm-network-inquiry-shadow-v1.7",
+                "study_digest": "3f27d9253a49a8b590b2beb0f56b9b4383de45f8bf2fe2564b493ec282faee3f",
+                "study_declaration_digest": "7d394b7c1f481752fbd3fa8bc20798d7f2b4e7baba904e71249d9c66e9531931",
+                "assumption_evidence_digest": "8980ef4cb3de255357a1a1e8127b61cd832bc7da8b7b90d9b40d726f7cf75429",
+                "policy_assignment_probability": "1/256",
+                "target_digest": "9cfdea09bdf632f092708fce93ba5643baf46945c1a58fe02b7395fd67914fb8",
+                "target_authority": "TRUSTED_FIXTURE",
+                "target_resolution": "RESOLVED",
+                "family_id": "randomized_full_assignment_policy_mean_candidate_v0",
+                "route_status": "THEOREM_BACKEND_UNAVAILABLE",
+                "target_match": "MATCHED",
+                "information_status": "SATISFIED",
+                "assumption_status": "ADMITTED",
+                "validity_status": "POSITIVE_UNDER_DECLARED_Q",
+                "backend_capability": "CANDIDATE_NOT_REGISTERED",
+                "required_observable": {
+                  "operator": "NODE_ASSIGNMENT_MEANS_FOR_POLICY",
+                  "network_fingerprint": "a234c3118da73a18559cbe4ccf570772ca39ef8f266185392b8c7583f0070d4b",
+                  "node_order": [
+                    "父1",
+                    "父2",
+                    "父3",
+                    "父4",
+                    "父5",
+                    "父6",
+                    "父7",
+                    "父8"
+                  ],
+                  "outcome": "休假概率相对不推行这项政策时的提高，单位为概率",
+                  "context": "政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策",
+                  "node_ids": [
+                    "父2",
+                    "父3",
+                    "父4"
+                  ],
+                  "arm_cell": null,
+                  "assignment_cell": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                  ],
+                  "assignment_law_fingerprint": null,
+                  "exposure_fingerprint": null,
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR"
+                },
+                "source_results": [
+                  {
+                    "source_id": "source_41c12e61114c98c834fba7fbf26f94f0fc6d34d30c2161f224571de06303447f",
+                    "source_digest": "29297004326c54251f1ce1c914ae06d0727b7ed975f0f3915fe67b10d71a4f7b",
+                    "information_status": "SATISFIED",
+                    "reason": null,
+                    "rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17"
+                  }
+                ],
+                "blockers": [
+                  "NO_REGISTERED_GENERAL_FIXED_POLICY_THEOREM_OR_VERIFIER"
+                ],
+                "warnings": [
+                  "A4_SATISFIED_DOES_NOT_AUTHORIZE_CAUSAL_IDENTIFICATION"
+                ],
+                "mathematical_identification_from_router": null,
+                "digest": "0d5ae3642e8980c2903c7742e8724550aaf34722f8a70880dcbe3680102d94e8"
+              },
+              "selected_a4_source_id": "source_41c12e61114c98c834fba7fbf26f94f0fc6d34d30c2161f224571de06303447f",
+              "selected_a4_source_digest": "29297004326c54251f1ce1c914ae06d0727b7ed975f0f3915fe67b10d71a4f7b",
+              "a4_rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17",
+              "assignment_probability": "1/256",
+              "weighted_nodes": [
+                "父2",
+                "父3",
+                "父4"
+              ],
+              "node_weights": [
+                "1/3",
+                "1/3",
+                "1/3"
+              ],
+              "required_observables": [
+                "E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)]",
+                "E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)]",
+                "E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)]"
+              ],
+              "identified_functional": "1/3 * E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)] + 1/3 * E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)] + 1/3 * E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)]",
+              "target_fingerprint": "69578692a353c2f5955a2549f1263bd3ab5f5e1a677f349450667b4d0a77d886",
+              "theorem_id": "R1B_RANDOMIZED_FULL_ASSIGNMENT_POLICY_POINT_V1",
+              "certificate_sha256": "eeac67531152e9bb03bc685e539194b64e797ed972678733cbbb456905544de7",
+              "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+              "status": "POINT",
+              "verification_status": "VERIFIED",
+              "estimation_request": null
+            },
+            {
+              "study": {
+                "network_id": "network_639b4224b0d7c7531e5b5f54a0e6db1875c8aa46c40dd4a5bb358a44d9eec54a",
+                "node_order": [
+                  "父1",
+                  "父2",
+                  "父3",
+                  "父4",
+                  "父5",
+                  "父6",
+                  "父7",
+                  "父8"
+                ],
+                "undirected_edges": [
+                  [
+                    "父1",
+                    "父2"
+                  ],
+                  [
+                    "父1",
+                    "父3"
+                  ],
+                  [
+                    "父1",
+                    "父4"
+                  ],
+                  [
+                    "父1",
+                    "父8"
+                  ],
+                  [
+                    "父2",
+                    "父3"
+                  ],
+                  [
+                    "父2",
+                    "父4"
+                  ],
+                  [
+                    "父3",
+                    "父4"
+                  ],
+                  [
+                    "父5",
+                    "父6"
+                  ],
+                  [
+                    "父5",
+                    "父7"
+                  ],
+                  [
+                    "父6",
+                    "父7"
+                  ]
+                ],
+                "treatment_variable": "政策生效日之后生孩子记1，之前记0",
+                "outcome_variable": "休假概率相对不推行这项政策时的提高，单位为概率",
+                "outcome_kind": "continuous",
+                "context_reference": "政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策",
+                "observation_regime": "experimental",
+                "assignment_design_json": "{\"kind\":\"heterogeneous_bernoulli_binary_v1\",\"propensities\":{\"父1\":\"1/2\",\"父2\":\"1/2\",\"父3\":\"1/2\",\"父4\":\"1/2\",\"父5\":\"1/2\",\"父6\":\"1/2\",\"父7\":\"1/2\",\"父8\":\"1/2\"}}",
+                "protocol_provenance": "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909,src_6425a286c8d688e828329c86318cf176a5b575cd44983c2b57372215924d542d,src_0979a046ac458138f660662f0cf411dd0594c7c575b2f014ae41334ff29f912e,src_b4d108bdf5343d30e34455040dac6a6d54a09ad73a775132669455b24046f2a8,src_870df1a04d00269d4f49d273cbe88e82d9728ef57bcc4ca48a7b524ee8e6268e,src_08cdb8a2867d49a8db5a8ced8fc4e2d37cc5874f6640fef0654c72aeee938c4e,src_cc4e252ff1857c0b9d0856b08e505688a77202a434399a5b6a189e3774588a6d,src_512dc91223468edc5758aa186fdcf4a0bf3d8f2672346de823c430bb561c9f5c,src_041c048b160cff6946acba613805408332cccec73c44cba4e316a7adadaee0ac,src_da4fe473c1d554d6ad9e8d0655ffbcab95efb478557c7434f962e8c02e6d1719,src_4b22409a3cc2334cd49fc18e72dce8482c0cde76bc69342889e2cf0720a17437,src_43fd72c088f7cbedf8559499b820b300b4739e0a22dbce7fafc5f1fe46c0376f,src_ef4edd3eeea82d32aea57f3bb40ce3b29452be6206f4fac6a5db806a8bb73663,src_46b220475d6a294568e28de53fc8515900fed3296d8cfaaeb0d764bdc5bd83f4,src_a6a418d401b4333e8c8cc437347d3e36648b85a54fbb477b1bdcace5b52d4078,src_ecfe25ea5635da44f6ad30c499686a505c0b5be1d066f7be7befd4a8f965dd66,src_41de0c644b8408a50206f02af4d2b88091f7cbfa02a072ef1f8be730a3d4bd26,src_7fa1030b9b65d92c6bfcc12485bea1f6130e0e781218ddb1d8a060ba5d1d629d,src_fc196686965e6cb22f1f131d164a50abe139709562138d03f834998fe7603891,src_e51a7c1c30eb13d5e96bf5c5aa252d294a5f7cb96323ca837750c748276c04f7,src_4c0c16318833a31469d6cbaa8e994462e6003513d33b5023bd850570a539afc1,src_f01127208ad7da37098b50e56f8e34874f57b87c8df8f93b7ace651b8da586ad,src_7bbfdfa3cc10d2acf33a82687b89879c91c3971f53ee2af8009360291806ec6c,src_64b398571719a5cfca62e0c6f685c0de5c771b29aa408a88fbaef36bbe2da847,src_69c9cdc8298c4f6d2d1377c91d55b4ae605d60b76d15ee5a53fdac4081ed9c40,src_71bc194f9f70609007cdb20174e2b9fcefa96b261318977fb64e0ca09d7c69e3,src_8ad3bce3999a338025f0a0aaa0c3accdde83baee4f043e5b6eec2e6915d00ec3,src_b93dd773fdca537ad4d00dd215bbf777085f403a6d0a64c7f03bb7c3d5eb12de,src_edcb39a0db31c12323892cc0be3895004a4e5b577763c0215f49a368e3c2d5af,src_cfa49151a328883c4aba6e44cd57c58d03dcf5bdb00f6a8b364f568e002bc265,src_010f6ddbb31eceef5521fec45f388e9e7a31d0b95036d0c3b4230511adfe2382; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                "network_provenance": "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909,src_6425a286c8d688e828329c86318cf176a5b575cd44983c2b57372215924d542d,src_0979a046ac458138f660662f0cf411dd0594c7c575b2f014ae41334ff29f912e,src_b4d108bdf5343d30e34455040dac6a6d54a09ad73a775132669455b24046f2a8,src_870df1a04d00269d4f49d273cbe88e82d9728ef57bcc4ca48a7b524ee8e6268e,src_08cdb8a2867d49a8db5a8ced8fc4e2d37cc5874f6640fef0654c72aeee938c4e,src_cc4e252ff1857c0b9d0856b08e505688a77202a434399a5b6a189e3774588a6d,src_512dc91223468edc5758aa186fdcf4a0bf3d8f2672346de823c430bb561c9f5c,src_041c048b160cff6946acba613805408332cccec73c44cba4e316a7adadaee0ac,src_da4fe473c1d554d6ad9e8d0655ffbcab95efb478557c7434f962e8c02e6d1719,src_4b22409a3cc2334cd49fc18e72dce8482c0cde76bc69342889e2cf0720a17437,src_43fd72c088f7cbedf8559499b820b300b4739e0a22dbce7fafc5f1fe46c0376f,src_ef4edd3eeea82d32aea57f3bb40ce3b29452be6206f4fac6a5db806a8bb73663,src_46b220475d6a294568e28de53fc8515900fed3296d8cfaaeb0d764bdc5bd83f4,src_a6a418d401b4333e8c8cc437347d3e36648b85a54fbb477b1bdcace5b52d4078,src_ecfe25ea5635da44f6ad30c499686a505c0b5be1d066f7be7befd4a8f965dd66,src_41de0c644b8408a50206f02af4d2b88091f7cbfa02a072ef1f8be730a3d4bd26,src_7fa1030b9b65d92c6bfcc12485bea1f6130e0e781218ddb1d8a060ba5d1d629d,src_fc196686965e6cb22f1f131d164a50abe139709562138d03f834998fe7603891,src_e51a7c1c30eb13d5e96bf5c5aa252d294a5f7cb96323ca837750c748276c04f7,src_4c0c16318833a31469d6cbaa8e994462e6003513d33b5023bd850570a539afc1,src_f01127208ad7da37098b50e56f8e34874f57b87c8df8f93b7ace651b8da586ad,src_7bbfdfa3cc10d2acf33a82687b89879c91c3971f53ee2af8009360291806ec6c,src_64b398571719a5cfca62e0c6f685c0de5c771b29aa408a88fbaef36bbe2da847,src_69c9cdc8298c4f6d2d1377c91d55b4ae605d60b76d15ee5a53fdac4081ed9c40,src_71bc194f9f70609007cdb20174e2b9fcefa96b261318977fb64e0ca09d7c69e3,src_8ad3bce3999a338025f0a0aaa0c3accdde83baee4f043e5b6eec2e6915d00ec3,src_b93dd773fdca537ad4d00dd215bbf777085f403a6d0a64c7f03bb7c3d5eb12de,src_edcb39a0db31c12323892cc0be3895004a4e5b577763c0215f49a368e3c2d5af,src_cfa49151a328883c4aba6e44cd57c58d03dcf5bdb00f6a8b364f568e002bc265,src_010f6ddbb31eceef5521fec45f388e9e7a31d0b95036d0c3b4230511adfe2382; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+              },
+              "target": {
+                "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+                "network_fingerprint": "a234c3118da73a18559cbe4ccf570772ca39ef8f266185392b8c7583f0070d4b",
+                "node_order": [
+                  "父1",
+                  "父2",
+                  "父3",
+                  "父4",
+                  "父5",
+                  "父6",
+                  "父7",
+                  "父8"
+                ],
+                "outcome": "休假概率相对不推行这项政策时的提高，单位为概率",
+                "context": "政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策",
+                "averaging_scope": "population_conditional_mean_given_W",
+                "authority": "TRUSTED_FIXTURE",
+                "query_resolution": "RESOLVED",
+                "assignment_law_fingerprint": null,
+                "exposure_fingerprint": null,
+                "node_id": null,
+                "arm": null,
+                "policy_assignment": [
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                "unit_weights": [
+                  "0",
+                  "1/3",
+                  "1/3",
+                  "1/3",
+                  "0",
+                  "0",
+                  "0",
+                  "0"
+                ],
+                "target_digest": "14238eb133080c8c51e78d04fcbf2c16efef8d5a91c01fe0d7fb8d2668b9995f"
+              },
+              "sources": [
+                {
+                  "source_id": "source_41c12e61114c98c834fba7fbf26f94f0fc6d34d30c2161f224571de06303447f",
+                  "operator": "NODE_FULL_LAW",
+                  "provenance": "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909,src_6425a286c8d688e828329c86318cf176a5b575cd44983c2b57372215924d542d,src_0979a046ac458138f660662f0cf411dd0594c7c575b2f014ae41334ff29f912e,src_b4d108bdf5343d30e34455040dac6a6d54a09ad73a775132669455b24046f2a8,src_870df1a04d00269d4f49d273cbe88e82d9728ef57bcc4ca48a7b524ee8e6268e,src_08cdb8a2867d49a8db5a8ced8fc4e2d37cc5874f6640fef0654c72aeee938c4e,src_cc4e252ff1857c0b9d0856b08e505688a77202a434399a5b6a189e3774588a6d,src_512dc91223468edc5758aa186fdcf4a0bf3d8f2672346de823c430bb561c9f5c,src_041c048b160cff6946acba613805408332cccec73c44cba4e316a7adadaee0ac,src_da4fe473c1d554d6ad9e8d0655ffbcab95efb478557c7434f962e8c02e6d1719,src_4b22409a3cc2334cd49fc18e72dce8482c0cde76bc69342889e2cf0720a17437,src_43fd72c088f7cbedf8559499b820b300b4739e0a22dbce7fafc5f1fe46c0376f,src_ef4edd3eeea82d32aea57f3bb40ce3b29452be6206f4fac6a5db806a8bb73663,src_46b220475d6a294568e28de53fc8515900fed3296d8cfaaeb0d764bdc5bd83f4,src_a6a418d401b4333e8c8cc437347d3e36648b85a54fbb477b1bdcace5b52d4078,src_ecfe25ea5635da44f6ad30c499686a505c0b5be1d066f7be7befd4a8f965dd66,src_41de0c644b8408a50206f02af4d2b88091f7cbfa02a072ef1f8be730a3d4bd26,src_7fa1030b9b65d92c6bfcc12485bea1f6130e0e781218ddb1d8a060ba5d1d629d,src_fc196686965e6cb22f1f131d164a50abe139709562138d03f834998fe7603891,src_e51a7c1c30eb13d5e96bf5c5aa252d294a5f7cb96323ca837750c748276c04f7,src_4c0c16318833a31469d6cbaa8e994462e6003513d33b5023bd850570a539afc1,src_f01127208ad7da37098b50e56f8e34874f57b87c8df8f93b7ace651b8da586ad,src_7bbfdfa3cc10d2acf33a82687b89879c91c3971f53ee2af8009360291806ec6c,src_64b398571719a5cfca62e0c6f685c0de5c771b29aa408a88fbaef36bbe2da847,src_69c9cdc8298c4f6d2d1377c91d55b4ae605d60b76d15ee5a53fdac4081ed9c40,src_71bc194f9f70609007cdb20174e2b9fcefa96b261318977fb64e0ca09d7c69e3,src_8ad3bce3999a338025f0a0aaa0c3accdde83baee4f043e5b6eec2e6915d00ec3,src_b93dd773fdca537ad4d00dd215bbf777085f403a6d0a64c7f03bb7c3d5eb12de,src_edcb39a0db31c12323892cc0be3895004a4e5b577763c0215f49a368e3c2d5af,src_cfa49151a328883c4aba6e44cd57c58d03dcf5bdb00f6a8b364f568e002bc265,src_010f6ddbb31eceef5521fec45f388e9e7a31d0b95036d0c3b4230511adfe2382; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                  "admission": "ADMITTED",
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                  "regime": "experimental",
+                  "shared_scope_digest": "25c48f8ae236cf308bb49beb0deec4e8e9e1b316b3b608403379d2cf592edbd9",
+                  "protocol_digest": "8b795338f080bfaf5445fb3caead74b9cba2f27ca6ff1529e287824d168ac012",
+                  "node_order": [
+                    "父1",
+                    "父2",
+                    "父3",
+                    "父4",
+                    "父5",
+                    "父6",
+                    "父7",
+                    "父8"
+                  ],
+                  "outcome": "休假概率相对不推行这项政策时的提高，单位为概率",
+                  "context": "政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策",
+                  "outcome_nodes": [
+                    "父1",
+                    "父2",
+                    "父3",
+                    "父4",
+                    "父5",
+                    "父6",
+                    "父7",
+                    "父8"
+                  ],
+                  "assignment_cells": [],
+                  "exposure_fingerprint": null
+                }
+              ],
+              "assumptions": [
+                {
+                  "name": "known_assignment_law",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "full_vector_randomization",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "consistency",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "fixed_pretreatment_network",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "finite_conditional_first_moments",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_1f7138f3c79c7b3c2f3305e8de29b2803741b87cc997fc5d5ab8aa582d9de349,src_148e0e39b6004312f488db07f9a46d021da18a16e13c60cdf85da182a79523c4,src_8670799b6f92eca422a6b66045befd8c4b96f48ee58a92171a48ea094affd710,src_49ac7c0b05bcb36531ad0b44136466be3d882d8e8781d6b2f0e7793ba896dab0,src_5080e71c4c0531b465407e25d4a5bd7e0756f0fe6a44534989ad419198a5b909; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=38635eacbdc66294ffc43ab99ad989fd1d078f67488a032bbe5dd924a34550c0",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                }
+              ],
+              "route_receipt": {
+                "version": "non-arm-network-inquiry-shadow-v1.7",
+                "study_digest": "3f27d9253a49a8b590b2beb0f56b9b4383de45f8bf2fe2564b493ec282faee3f",
+                "study_declaration_digest": "7d394b7c1f481752fbd3fa8bc20798d7f2b4e7baba904e71249d9c66e9531931",
+                "assumption_evidence_digest": "8980ef4cb3de255357a1a1e8127b61cd832bc7da8b7b90d9b40d726f7cf75429",
+                "policy_assignment_probability": "1/256",
+                "target_digest": "14238eb133080c8c51e78d04fcbf2c16efef8d5a91c01fe0d7fb8d2668b9995f",
+                "target_authority": "TRUSTED_FIXTURE",
+                "target_resolution": "RESOLVED",
+                "family_id": "randomized_full_assignment_policy_mean_candidate_v0",
+                "route_status": "THEOREM_BACKEND_UNAVAILABLE",
+                "target_match": "MATCHED",
+                "information_status": "SATISFIED",
+                "assumption_status": "ADMITTED",
+                "validity_status": "POSITIVE_UNDER_DECLARED_Q",
+                "backend_capability": "CANDIDATE_NOT_REGISTERED",
+                "required_observable": {
+                  "operator": "NODE_ASSIGNMENT_MEANS_FOR_POLICY",
+                  "network_fingerprint": "a234c3118da73a18559cbe4ccf570772ca39ef8f266185392b8c7583f0070d4b",
+                  "node_order": [
+                    "父1",
+                    "父2",
+                    "父3",
+                    "父4",
+                    "父5",
+                    "父6",
+                    "父7",
+                    "父8"
+                  ],
+                  "outcome": "休假概率相对不推行这项政策时的提高，单位为概率",
+                  "context": "政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策",
+                  "node_ids": [
+                    "父2",
+                    "父3",
+                    "父4"
+                  ],
+                  "arm_cell": null,
+                  "assignment_cell": [
+                    1,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                  ],
+                  "assignment_law_fingerprint": null,
+                  "exposure_fingerprint": null,
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR"
+                },
+                "source_results": [
+                  {
+                    "source_id": "source_41c12e61114c98c834fba7fbf26f94f0fc6d34d30c2161f224571de06303447f",
+                    "source_digest": "29297004326c54251f1ce1c914ae06d0727b7ed975f0f3915fe67b10d71a4f7b",
+                    "information_status": "SATISFIED",
+                    "reason": null,
+                    "rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17"
+                  }
+                ],
+                "blockers": [
+                  "NO_REGISTERED_GENERAL_FIXED_POLICY_THEOREM_OR_VERIFIER"
+                ],
+                "warnings": [
+                  "A4_SATISFIED_DOES_NOT_AUTHORIZE_CAUSAL_IDENTIFICATION"
+                ],
+                "mathematical_identification_from_router": null,
+                "digest": "606103cf4b9638bad6b6094c9bb4f1faba5cf7c2e405886479f27e079fb62a9f"
+              },
+              "selected_a4_source_id": "source_41c12e61114c98c834fba7fbf26f94f0fc6d34d30c2161f224571de06303447f",
+              "selected_a4_source_digest": "29297004326c54251f1ce1c914ae06d0727b7ed975f0f3915fe67b10d71a4f7b",
+              "a4_rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17",
+              "assignment_probability": "1/256",
+              "weighted_nodes": [
+                "父2",
+                "父3",
+                "父4"
+              ],
+              "node_weights": [
+                "1/3",
+                "1/3",
+                "1/3"
+              ],
+              "required_observables": [
+                "E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)]",
+                "E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)]",
+                "E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)]"
+              ],
+              "identified_functional": "1/3 * E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)] + 1/3 * E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)] + 1/3 * E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)]",
+              "target_fingerprint": "13581edff5d552aa718791b49a50227d0ee6eccf40f15e3d58d3898c6d71ce16",
+              "theorem_id": "R1B_RANDOMIZED_FULL_ASSIGNMENT_POLICY_POINT_V1",
+              "certificate_sha256": "436e5c1576712e73ac5faad97e0906909d132a3fcb6caba2d9e573dd85520616",
+              "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+              "status": "POINT",
+              "verification_status": "VERIFIED",
+              "estimation_request": null
+            }
+          ],
+          "policy_probabilities": [
+            "1/2",
+            "1/2"
+          ],
+          "target_fingerprint": "eb9fffe124f7a3168a19fc28e2f4bf543d9631ecb88e3c47cb40ccb3933c392f",
+          "identified_functional": "1/2 * (1/3 * E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)] + 1/3 * E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)] + 1/3 * E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(0,0,1,0,1,0,0,0)]) + 1/2 * (1/3 * E[Y_{父2}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)] + 1/3 * E[Y_{父3}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)] + 1/3 * E[Y_{父4}^obs | W=政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策, T_vector=(1,0,0,0,1,0,0,0)])",
+          "certificate_sha256": "c92cf10395b61c5478a734e1f1eeec568f428e4022857e9119ed1ee75217b9df",
+          "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+          "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+          "status": "POINT",
+          "verification_status": "VERIFIED",
+          "estimation_request": null
+        },
+        "attempted_routes": []
+      }
+    }
+  ],
+  "clarification_questions": [],
+  "evidence_status": "CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE",
+  "production_admission": false,
+  "estimation_handoff_allowed": false,
+  "query_id": "q1",
+  "remaining_query_ids": [],
+  "result_scope": "SELECTED_QUERY_ONLY",
+  "fact_family": "NETWORK_FINITE_POLICY_FACTS",
+  "plan_sha256": "2a4877c09734f43117138a3a98ff2f16ce55d0934c28b02a4986a2b94cefacd3",
+  "attempts": [
+    {
+      "stage": "POLICY_COMPONENT",
+      "state": "POINT",
+      "reason_code": null
+    },
+    {
+      "stage": "POLICY_COMPONENT",
+      "state": "POINT",
+      "reason_code": null
+    },
+    {
+      "method": "R1B_FINITE_POLICY",
+      "state": "POINT",
+      "reason_code": null
+    }
+  ],
+  "primary_method": "R1B_FINITE_POLICY",
+  "partial_fallback_performed": false
+}

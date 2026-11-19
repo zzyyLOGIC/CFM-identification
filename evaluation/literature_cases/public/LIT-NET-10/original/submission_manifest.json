@@ -1,0 +1,18 @@
+{
+  "case_id": "LIT-NET-10",
+  "variant": "original",
+  "paper_id": "miguel_kremer2004_deworming",
+  "title": "两种覆盖方案各一半机会时，九校平均出勤率是多少？",
+  "synthetic": true,
+  "gold_oracle_location": "OUTSIDE_PUBLIC_CASE_DIRECTORY",
+  "llm_access_scope": "PUBLIC_CASE_FILES_ONLY",
+  "business_question_file": "business_question.md",
+  "supporting_files": [
+    "study_protocol.md",
+    "data_dictionary.md"
+  ],
+  "heldout": false,
+  "adapted": true,
+  "adaptation_note": "场景改编自学校层面分批发放的公开描述，题目设定为项目自建",
+  "notes": "合成业务材料，改编自 Miguel 与 Kremer (2004, Econometrica 改编) 的学校整群随机发放驱虫药与跨校溢出设计；不是论文数据复现。"
+}

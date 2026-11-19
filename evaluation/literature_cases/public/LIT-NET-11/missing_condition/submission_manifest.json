@@ -1,0 +1,18 @@
+{
+  "case_id": "LIT-NET-11",
+  "variant": "missing_condition",
+  "paper_id": "cai_szeidl2018_meetings",
+  "title": "明年从两种投放方案里选一种执行时，四十家企业平均申请概率是多少？",
+  "synthetic": true,
+  "gold_oracle_location": "OUTSIDE_PUBLIC_CASE_DIRECTORY",
+  "llm_access_scope": "PUBLIC_CASE_FILES_ONLY",
+  "business_question_file": "business_question.md",
+  "supporting_files": [
+    "study_protocol.md",
+    "data_dictionary.md"
+  ],
+  "heldout": false,
+  "adapted": true,
+  "adaptation_note": "场景改编自企业家会议组内信息投放的公开描述，题目设定为项目自建",
+  "notes": "从原题删除两套安排各 1/2 的概率；用于检查系统是否识别材料缺口并停止。"
+}

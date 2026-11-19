@@ -1,0 +1,1319 @@
+{
+  "source": "real LLM run (reading stage only), deepseek-chat, 2026-11-18 20:15 +0800",
+  "provenance": "Fresh LLM call recorded in this case package: three variants, one request each (plus one re-read where the structural check failed). The model only reads the question; it does not pick theorems, approve assumptions or produce identification results.",
+  "case_id": "LIT-NET-10",
+  "results": [
+    {
+      "case_id": "LIT-NET-10",
+      "variant": "original",
+      "run_at": "2026-11-18 20:15:30 +0800",
+      "provider": {
+        "name": "openai-chat-compatible:deepseek-chat",
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat"
+      },
+      "reading_source": "real_llm",
+      "reviews": {
+        "authority": "FROZEN_REFERENCE_APPROVALS",
+        "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+      },
+      "api_calls": 1,
+      "question": "三个片区各三所小学，共九所，编号学1到学9，学1至学3在片区一，学4至学6在片区二，学7至学9在片区三。每个片区随机一所进甲组、一所进乙组、一所进丙组。基线出勤率 0.80。本校发药使出勤率提高 0.06；片区内每多一所发药学校（不含本校），片区内所有学校出勤率再提高 0.03。下一学年有两种覆盖方案：方案 A 每片区发甲、乙两组，共六所；方案 B 九所全部发药。两种覆盖方案各以一半概率被采用，这就是全部候选方案。我们想知道，九所学校平均出勤率在两种覆盖方案各一半机会时是多少。每校等权。",
+      "prompt": {
+        "contract": "network-extended-reading",
+        "system_sha256": "b85c894b47fe99abb57717eceb0af0620d62d17a048a89e38bdcee1f02fa3d8a",
+        "system_characters": 2556,
+        "user_characters": 16243
+      },
+      "reread": {
+        "performed": false,
+        "reason": "first answer used as-is; a re-read is a separate call"
+      },
+      "answer_seconds": 3.484,
+      "first_answer": {
+        "reference_context": "c2e85789c4df3",
+        "study": {
+          "source_ids": [
+            "s0002",
+            "s0009"
+          ],
+          "nodes": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6",
+            "学7",
+            "学8",
+            "学9"
+          ],
+          "edges": [
+            [
+              "学1",
+              "学2"
+            ],
+            [
+              "学1",
+              "学3"
+            ],
+            [
+              "学2",
+              "学3"
+            ],
+            [
+              "学4",
+              "学5"
+            ],
+            [
+              "学4",
+              "学6"
+            ],
+            [
+              "学5",
+              "学6"
+            ],
+            [
+              "学7",
+              "学8"
+            ],
+            [
+              "学7",
+              "学9"
+            ],
+            [
+              "学8",
+              "学9"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "发药（1=发药，0=不发药）",
+          "outcome": "出勤率",
+          "outcome_kind": "CONTINUOUS",
+          "context": "三个片区各三所小学；片区内学校之间存在疾病传播，结果受同片区其他学校是否发药影响；片区间不构成邻居；评价时点为下一学年。"
+        },
+        "additional_restrictions": [
+          {
+            "source_ids": [
+              "s0009"
+            ],
+            "text": "每校等权；片区间不构成邻居。"
+          }
+        ],
+        "unresolved": [],
+        "version": "network-finite-policy-reading-1",
+        "assignment": {
+          "source_ids": [
+            "s0002",
+            "s0006",
+            "s0009"
+          ],
+          "kind": "MULTI_GROUP_FIXED_QUOTA",
+          "probabilities": null,
+          "fixed_count": null,
+          "groups": [
+            [
+              "学1",
+              "学2",
+              "学3"
+            ],
+            [
+              "学4",
+              "学5",
+              "学6"
+            ],
+            [
+              "学7",
+              "学8",
+              "学9"
+            ]
+          ],
+          "treated_quotas": [
+            1,
+            1,
+            1
+          ],
+          "clusters": null,
+          "cluster_probabilities": null,
+          "quota_profiles": null,
+          "profile_probabilities": null,
+          "treated_sets": null,
+          "set_probabilities": null,
+          "unit_weights": null,
+          "balance_covariates": null,
+          "balance_tolerance": null
+        },
+        "first_stage_exclusion": null,
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0002",
+              "s0006"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          }
+        },
+        "target": {
+          "source_ids": [
+            "s0008",
+            "s0009",
+            "s0010"
+          ],
+          "population": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6",
+            "学7",
+            "学8",
+            "学9"
+          ],
+          "aggregation": "EQUAL_MEAN",
+          "components": [
+            {
+              "source_ids": [
+                "s0009"
+              ],
+              "assignment": {
+                "学1": 1,
+                "学2": 1,
+                "学3": 0,
+                "学4": 1,
+                "学5": 1,
+                "学6": 0,
+                "学7": 1,
+                "学8": 1,
+                "学9": 0
+              },
+              "weight": "1/2"
+            },
+            {
+              "source_ids": [
+                "s0009"
+              ],
+              "assignment": {
+                "学1": 1,
+                "学2": 1,
+                "学3": 1,
+                "学4": 1,
+                "学5": 1,
+                "学6": 1,
+                "学7": 1,
+                "学8": 1,
+                "学9": 1
+              },
+              "weight": "1/2"
+            }
+          ],
+          "policy_distribution_complete": {
+            "source_ids": [
+              "s0008",
+              "s0009"
+            ],
+            "value": true
+          }
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0008"
+            ],
+            "operator": "NODE_FULL_LAW",
+            "availability": "SYMBOLIC_POPULATION_OPERATOR",
+            "outcome_nodes": [
+              "学1",
+              "学2",
+              "学3",
+              "学4",
+              "学5",
+              "学6",
+              "学7",
+              "学8",
+              "学9"
+            ],
+            "assignment_cells": []
+          }
+        ]
+      },
+      "transport": {
+        "stream": false,
+        "json_mode_sent": true,
+        "output_token_parameter": null,
+        "output_token_limit": null,
+        "require_finish_reason": false,
+        "max_stream_wire_bytes": 2000000,
+        "transport_calls": 1,
+        "response_bytes": 3189,
+        "content_characters": 2055,
+        "content_bytes": 2373,
+        "stream_events": 0,
+        "stage": "complete",
+        "status": "json_object_received",
+        "http_status": 200,
+        "headers_seconds": 0.344,
+        "returned_model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 6967,
+          "completion_tokens": 816,
+          "total_tokens": 7783,
+          "prompt_cache_hit_tokens": 1280,
+          "prompt_cache_miss_tokens": 5687
+        },
+        "finish_reason": "stop",
+        "json_envelope_received": "bare",
+        "elapsed_seconds": 3.484
+      },
+      "parsed_reference_context_sha256": "2e85789c4df314118a9fba0d54f9a481974611daebf26accd6b83e0171d26745",
+      "confirmation": {
+        "confirmed": true,
+        "compared": [
+          "study.nodes",
+          "study.edges",
+          "study.graph_kind",
+          "study.edge_list_complete",
+          "study.outcome_kind",
+          "exposure.kind",
+          "target.population",
+          "target.kind",
+          "target.operation",
+          "target.aggregation",
+          "target.averaging",
+          "regime.kind",
+          "conditioning.kind",
+          "target.components",
+          "assumptions.*"
+        ],
+        "not_compared": [
+          "study.treatment",
+          "study.outcome",
+          "study.context",
+          "free-text notes"
+        ],
+        "contradictions": [],
+        "not_declared": [],
+        "extra": []
+      },
+      "declared_notes": {
+        "additional_restrictions": [
+          "每校等权；片区间不构成邻居。"
+        ],
+        "unresolved": [],
+        "adopted": false,
+        "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+      },
+      "plan_state": "REVIEW_REQUIRED",
+      "plan_reason": null,
+      "observed": "POINT",
+      "reason_code": null,
+      "independent_replay": true,
+      "mathematical_claim": {
+        "target_fingerprint": "bda5dec6b683b2d6d8c94c744e4292b5168852ff3fbc954901f6f7761f758416"
+      },
+      "outcome": {
+        "state": "POINT",
+        "reason_code": null,
+        "independent_replay": true
+      }
+    },
+    {
+      "case_id": "LIT-NET-10",
+      "variant": "missing_condition",
+      "run_at": "2026-11-18 20:15:34 +0800",
+      "provider": {
+        "name": "openai-chat-compatible:deepseek-chat",
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat"
+      },
+      "reading_source": "real_llm",
+      "reviews": {
+        "authority": "FROZEN_REFERENCE_APPROVALS",
+        "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+      },
+      "api_calls": 1,
+      "question": "三个片区各三所小学，共九所，编号学1到学9，学1至学3在片区一，学4至学6在片区二，学7至学9在片区三。每个片区随机一所进甲组、一所进乙组、一所进丙组。基线出勤率 0.80。本校发药使出勤率提高 0.06；片区内每多一所发药学校（不含本校），片区内所有学校出勤率再提高 0.03。下一学年有两种覆盖方案：方案 A 每片区发甲、乙两组，共六所；方案 B 九所全部发药。明年会从这两种覆盖方案里选一种执行。我们想知道，九所学校平均出勤率在明年采用其中一种覆盖方案时是多少。每校等权。",
+      "prompt": {
+        "contract": "network-extended-reading",
+        "system_sha256": "b85c894b47fe99abb57717eceb0af0620d62d17a048a89e38bdcee1f02fa3d8a",
+        "system_characters": 2556,
+        "user_characters": 16234
+      },
+      "reread": {
+        "performed": false,
+        "reason": "first answer used as-is; a re-read is a separate call"
+      },
+      "answer_seconds": 3.922,
+      "first_answer": {
+        "reference_context": "c34e901e7ebb4",
+        "study": {
+          "source_ids": [
+            "s0002",
+            "s0009"
+          ],
+          "nodes": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6",
+            "学7",
+            "学8",
+            "学9"
+          ],
+          "edges": [
+            [
+              "学1",
+              "学2"
+            ],
+            [
+              "学1",
+              "学3"
+            ],
+            [
+              "学2",
+              "学3"
+            ],
+            [
+              "学4",
+              "学5"
+            ],
+            [
+              "学4",
+              "学6"
+            ],
+            [
+              "学5",
+              "学6"
+            ],
+            [
+              "学7",
+              "学8"
+            ],
+            [
+              "学7",
+              "学9"
+            ],
+            [
+              "学8",
+              "学9"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "发药记1，不发药记0",
+          "outcome": "出勤率",
+          "outcome_kind": "CONTINUOUS",
+          "context": "三个片区各三所小学；片区内存在传播，片区之间不构成邻居；评价时点为下一学年，两种覆盖方案评价同一批九所学校、同一结果定义。"
+        },
+        "additional_restrictions": [
+          {
+            "source_ids": [
+              "s0009"
+            ],
+            "text": "基线出勤率为0.80；本校发药使出勤率提高0.06；片区内每多一所发药学校（不含本校），片区内所有学校出勤率再提高0.03。"
+          },
+          {
+            "source_ids": [
+              "s0009"
+            ],
+            "text": "每个片区随机一所进甲组、一所进乙组、一所进丙组。"
+          },
+          {
+            "source_ids": [
+              "s0009"
+            ],
+            "text": "方案A为每片区发甲、乙两组，共六所；方案B为九所全部发药。"
+          },
+          {
+            "source_ids": [
+              "s0009"
+            ],
+            "text": "明年从方案A和方案B中选一种执行；只问九所学校平均出勤率，每校等权。"
+          }
+        ],
+        "unresolved": [
+          {
+            "source_ids": [
+              "s0009",
+              "s0008"
+            ],
+            "text": "问题没有说明方案A与方案B各自被采用的概率，无法确定随机政策下两种未来完整处理方案的选择概率。"
+          }
+        ],
+        "version": "network-finite-policy-reading-1",
+        "assignment": {
+          "source_ids": [
+            "s0009"
+          ],
+          "kind": "UNIFORM_FIXED_QUOTA",
+          "probabilities": null,
+          "fixed_count": 3
+        },
+        "first_stage_exclusion": null,
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0006",
+              "s0002"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [
+              "s0006",
+              "s0008"
+            ],
+            "value": true
+          }
+        },
+        "target": {
+          "source_ids": [
+            "s0009",
+            "s0008"
+          ],
+          "population": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6",
+            "学7",
+            "学8",
+            "学9"
+          ],
+          "aggregation": "EQUAL_MEAN",
+          "components": [
+            {
+              "source_ids": [
+                "s0009"
+              ],
+              "assignment": {
+                "学1": 0,
+                "学2": 0,
+                "学3": 0,
+                "学4": 0,
+                "学5": 0,
+                "学6": 0,
+                "学7": 0,
+                "学8": 0,
+                "学9": 0
+              },
+              "weight": null
+            },
+            {
+              "source_ids": [
+                "s0009"
+              ],
+              "assignment": {
+                "学1": 0,
+                "学2": 0,
+                "学3": 0,
+                "学4": 0,
+                "学5": 0,
+                "学6": 0,
+                "学7": 0,
+                "学8": 0,
+                "学9": 0
+              },
+              "weight": null
+            }
+          ],
+          "policy_distribution_complete": {
+            "source_ids": [
+              "s0009",
+              "s0008"
+            ],
+            "value": null
+          }
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0008"
+            ],
+            "operator": "OTHER",
+            "availability": "UNKNOWN",
+            "outcome_nodes": [
+              "学1",
+              "学2",
+              "学3",
+              "学4",
+              "学5",
+              "学6",
+              "学7",
+              "学8",
+              "学9"
+            ],
+            "assignment_cells": []
+          }
+        ]
+      },
+      "transport": {
+        "stream": false,
+        "json_mode_sent": true,
+        "output_token_parameter": null,
+        "output_token_limit": null,
+        "require_finish_reason": false,
+        "max_stream_wire_bytes": 2000000,
+        "transport_calls": 1,
+        "response_bytes": 3456,
+        "content_characters": 2028,
+        "content_bytes": 2654,
+        "stream_events": 0,
+        "stage": "complete",
+        "status": "json_object_received",
+        "http_status": 200,
+        "headers_seconds": 0.187,
+        "returned_model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 6952,
+          "completion_tokens": 859,
+          "total_tokens": 7811,
+          "prompt_cache_hit_tokens": 1280,
+          "prompt_cache_miss_tokens": 5672
+        },
+        "finish_reason": "stop",
+        "json_envelope_received": "bare",
+        "elapsed_seconds": 3.922
+      },
+      "parsed_reference_context_sha256": "34e901e7ebb4195f2aece35257b7426a37be316a970f5971be6c67fdc5994b0e",
+      "confirmation": {
+        "confirmed": true,
+        "compared": [
+          "study.nodes",
+          "study.edges",
+          "study.graph_kind",
+          "study.edge_list_complete",
+          "study.outcome_kind",
+          "exposure.kind",
+          "target.population",
+          "target.kind",
+          "target.operation",
+          "target.aggregation",
+          "target.averaging",
+          "regime.kind",
+          "conditioning.kind",
+          "target.components",
+          "assumptions.*"
+        ],
+        "not_compared": [
+          "study.treatment",
+          "study.outcome",
+          "study.context",
+          "free-text notes"
+        ],
+        "contradictions": [],
+        "not_declared": [],
+        "extra": [
+          {
+            "field": "target.components",
+            "reading": [
+              {
+                "source_ids": [
+                  "src_ad45404e1d77145a407e1433d715ae2d225789b8ac9a4761a78fccb073198470"
+                ],
+                "assignment": {
+                  "学1": 0,
+                  "学2": 0,
+                  "学3": 0,
+                  "学4": 0,
+                  "学5": 0,
+                  "学6": 0,
+                  "学7": 0,
+                  "学8": 0,
+                  "学9": 0
+                },
+                "weight": null
+              },
+              {
+                "source_ids": [
+                  "src_ad45404e1d77145a407e1433d715ae2d225789b8ac9a4761a78fccb073198470"
+                ],
+                "assignment": {
+                  "学1": 0,
+                  "学2": 0,
+                  "学3": 0,
+                  "学4": 0,
+                  "学5": 0,
+                  "学6": 0,
+                  "学7": 0,
+                  "学8": 0,
+                  "学9": 0
+                },
+                "weight": null
+              }
+            ]
+          }
+        ]
+      },
+      "declared_notes": {
+        "additional_restrictions": [
+          "基线出勤率为0.80；本校发药使出勤率提高0.06；片区内每多一所发药学校（不含本校），片区内所有学校出勤率再提高0.03。",
+          "每个片区随机一所进甲组、一所进乙组、一所进丙组。",
+          "方案A为每片区发甲、乙两组，共六所；方案B为九所全部发药。",
+          "明年从方案A和方案B中选一种执行；只问九所学校平均出勤率，每校等权。"
+        ],
+        "unresolved": [
+          "问题没有说明方案A与方案B各自被采用的概率，无法确定随机政策下两种未来完整处理方案的选择概率。"
+        ],
+        "adopted": false,
+        "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+      },
+      "plan_state": "NEEDS_INPUT",
+      "plan_reason": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+      "observed": "NEEDS_INPUT",
+      "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+      "independent_replay": false,
+      "mathematical_claim": {},
+      "outcome": {
+        "state": "NEEDS_INPUT",
+        "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+        "independent_replay": false
+      }
+    },
+    {
+      "case_id": "LIT-NET-10",
+      "variant": "changed_target",
+      "run_at": "2026-11-18 20:15:38 +0800",
+      "provider": {
+        "name": "openai-chat-compatible:deepseek-chat",
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat"
+      },
+      "reading_source": "real_llm",
+      "reviews": {
+        "authority": "FROZEN_REFERENCE_APPROVALS",
+        "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+      },
+      "api_calls": 2,
+      "question": "三个片区各三所小学，共九所，编号学1到学9，学1至学3在片区一，学4至学6在片区二，学7至学9在片区三。每个片区随机一所进甲组、一所进乙组、一所进丙组。基线出勤率 0.80。本校发药使出勤率提高 0.06；片区内每多一所发药学校（不含本校），片区内所有学校出勤率再提高 0.03。下一学年有两种覆盖方案：方案 A 每片区发甲、乙两组，共六所；方案 B 九所全部发药。两种覆盖方案各以一半概率被采用，这就是全部候选方案。丙组是每个片区未进甲乙两组的第三所，共三所。我们想知道，丙组三所学校的平均出勤率在两种覆盖方案各一半机会时是多少。每校等权。",
+      "prompt": {
+        "contract": "network-extended-reading",
+        "system_sha256": "b85c894b47fe99abb57717eceb0af0620d62d17a048a89e38bdcee1f02fa3d8a",
+        "system_characters": 2556,
+        "user_characters": 16324
+      },
+      "reread": {
+        "performed": true,
+        "trigger": "1 validation error for MixtureReading\nassignment\n  Value error, CONFLICTING_DESIGN_FIELDS [type=value_error, input_value={'source_ids': ['s0009'],...alance_tolerance': None}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/value_error",
+        "feedback": "你上一次的回答没有通过结构检查：1 validation error for MixtureReading\nassignment\n  Value error, CONFLICTING_DESIGN_FIELDS [type=value_error, input_value={'source_ids': ['s0009'],...alance_tolerance': None}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/value_error。请重新阅读材料原文，修正该问题后给出完整回答；只有材料本身确实没有依据时才维持原判。"
+      },
+      "answer_seconds": 3.719,
+      "first_answer": {
+        "reference_context": "c9d7d9d691c9b",
+        "study": {
+          "source_ids": [
+            "s0002",
+            "s0008",
+            "s0009"
+          ],
+          "nodes": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6",
+            "学7",
+            "学8",
+            "学9"
+          ],
+          "edges": [
+            [
+              "学1",
+              "学2"
+            ],
+            [
+              "学1",
+              "学3"
+            ],
+            [
+              "学2",
+              "学3"
+            ],
+            [
+              "学4",
+              "学5"
+            ],
+            [
+              "学4",
+              "学6"
+            ],
+            [
+              "学5",
+              "学6"
+            ],
+            [
+              "学7",
+              "学8"
+            ],
+            [
+              "学7",
+              "学9"
+            ],
+            [
+              "学8",
+              "学9"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "发药",
+          "outcome": "出勤率",
+          "outcome_kind": "CONTINUOUS",
+          "context": "三个片区的九所小学；片区内存在传播，片区之间不构成邻居；评价时点为下一学年。"
+        },
+        "additional_restrictions": [
+          {
+            "source_ids": [
+              "s0009"
+            ],
+            "text": "基线出勤率为0.80；本校发药使出勤率提高0.06；片区内每多一所发药学校（不含本校），片区内所有学校出勤率再提高0.03。"
+          },
+          {
+            "source_ids": [
+              "s0009"
+            ],
+            "text": "每个片区随机一所进甲组、一所进乙组、一所进丙组；方案A每片区发甲、乙两组，共六所；方案B九所全部发药；丙组为每片区未进甲乙两组的第三所。"
+          },
+          {
+            "source_ids": [
+              "s0008",
+              "s0009"
+            ],
+            "text": "未来政策只含方案A与方案B两份完整覆盖名单，各占1/2；每校等权，丙组三所学校的平均出勤率按等权聚合。"
+          }
+        ],
+        "unresolved": [],
+        "version": "network-finite-policy-reading-1",
+        "assignment": {
+          "source_ids": [
+            "s0009"
+          ],
+          "kind": "MULTI_GROUP_FIXED_QUOTA",
+          "probabilities": null,
+          "fixed_count": 3,
+          "groups": [
+            [
+              "学1",
+              "学2",
+              "学3"
+            ],
+            [
+              "学4",
+              "学5",
+              "学6"
+            ],
+            [
+              "学7",
+              "学8",
+              "学9"
+            ]
+          ],
+          "treated_quotas": [
+            1,
+            1,
+            1
+          ],
+          "clusters": null,
+          "cluster_probabilities": null,
+          "quota_profiles": null,
+          "profile_probabilities": null,
+          "treated_sets": null,
+          "set_probabilities": null,
+          "unit_weights": null,
+          "balance_covariates": null,
+          "balance_tolerance": null
+        },
+        "first_stage_exclusion": null,
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [],
+            "value": null
+          }
+        },
+        "target": {
+          "source_ids": [
+            "s0008",
+            "s0009",
+            "s0010"
+          ],
+          "population": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6",
+            "学7",
+            "学8",
+            "学9"
+          ],
+          "aggregation": "EQUAL_MEAN",
+          "components": [
+            {
+              "source_ids": [
+                "s0008",
+                "s0009"
+              ],
+              "assignment": {
+                "学1": 1,
+                "学2": 1,
+                "学3": 0,
+                "学4": 1,
+                "学5": 1,
+                "学6": 0,
+                "学7": 1,
+                "学8": 1,
+                "学9": 0
+              },
+              "weight": "1/2"
+            },
+            {
+              "source_ids": [
+                "s0008",
+                "s0009"
+              ],
+              "assignment": {
+                "学1": 1,
+                "学2": 1,
+                "学3": 1,
+                "学4": 1,
+                "学5": 1,
+                "学6": 1,
+                "学7": 1,
+                "学8": 1,
+                "学9": 1
+              },
+              "weight": "1/2"
+            }
+          ],
+          "policy_distribution_complete": {
+            "source_ids": [
+              "s0008",
+              "s0009"
+            ],
+            "value": true
+          }
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0008"
+            ],
+            "operator": "OTHER",
+            "availability": "SYMBOLIC_POPULATION_OPERATOR",
+            "outcome_nodes": [
+              "学1",
+              "学2",
+              "学3",
+              "学4",
+              "学5",
+              "学6",
+              "学7",
+              "学8",
+              "学9"
+            ],
+            "assignment_cells": []
+          }
+        ]
+      },
+      "transport": {
+        "stream": false,
+        "json_mode_sent": true,
+        "output_token_parameter": null,
+        "output_token_limit": null,
+        "require_finish_reason": false,
+        "max_stream_wire_bytes": 2000000,
+        "transport_calls": 1,
+        "response_bytes": 3512,
+        "content_characters": 2083,
+        "content_bytes": 2693,
+        "stream_events": 0,
+        "stage": "complete",
+        "status": "json_object_received",
+        "http_status": 200,
+        "headers_seconds": 0.141,
+        "returned_model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 7138,
+          "completion_tokens": 900,
+          "total_tokens": 8038,
+          "prompt_cache_hit_tokens": 6912,
+          "prompt_cache_miss_tokens": 226
+        },
+        "finish_reason": "stop",
+        "json_envelope_received": "bare",
+        "elapsed_seconds": 3.719
+      },
+      "reading_rejected": "1 validation error for MixtureReading\nassignment\n  Value error, CONFLICTING_DESIGN_FIELDS [type=value_error, input_value={'source_ids': ['s0009'],...alance_tolerance': None}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.14/v/value_error",
+      "reread_answer": {
+        "reference_context": "c9d7d9d691c9b",
+        "study": {
+          "source_ids": [
+            "s0002",
+            "s0008",
+            "s0009"
+          ],
+          "nodes": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6",
+            "学7",
+            "学8",
+            "学9"
+          ],
+          "edges": [
+            [
+              "学1",
+              "学2"
+            ],
+            [
+              "学1",
+              "学3"
+            ],
+            [
+              "学2",
+              "学3"
+            ],
+            [
+              "学4",
+              "学5"
+            ],
+            [
+              "学4",
+              "学6"
+            ],
+            [
+              "学5",
+              "学6"
+            ],
+            [
+              "学7",
+              "学8"
+            ],
+            [
+              "学7",
+              "学9"
+            ],
+            [
+              "学8",
+              "学9"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "发药记1，不发药记0",
+          "outcome": "出勤率",
+          "outcome_kind": "CONTINUOUS",
+          "context": "三个片区各三所小学，共九所；片区内存在疾病传播，片区间不构成邻居；评价时点为下一学年"
+        },
+        "additional_restrictions": [
+          {
+            "source_ids": [
+              "s0009",
+              "s0010"
+            ],
+            "text": "丙组为每个片区未进甲、乙两组的第三所学校，共三所；丙组三所每校等权。"
+          },
+          {
+            "source_ids": [
+              "s0009",
+              "s0010"
+            ],
+            "text": "覆盖方案A为每片区发甲、乙两组，共六所；覆盖方案B为九所全部发药；两种方案各以一半概率被采用，且这是全部候选方案。"
+          },
+          {
+            "source_ids": [
+              "s0009",
+              "s0010"
+            ],
+            "text": "出勤率模型：基线0.80；本校发药提高0.06；片区内每多一所发药学校（不含本校），片区内所有学校出勤率再提高0.03。"
+          }
+        ],
+        "unresolved": [
+          {
+            "source_ids": [
+              "s0003",
+              "s0004"
+            ],
+            "text": "原文明确过去没有随机试点；历史做法是每片区按甲、乙、丙顺序发药。本案例原试点分配机制没有随机化参数可读。"
+          }
+        ],
+        "version": "network-finite-policy-reading-1",
+        "assignment": {
+          "source_ids": [
+            "s0003",
+            "s0004",
+            "s0009"
+          ],
+          "kind": "UNKNOWN",
+          "probabilities": null,
+          "fixed_count": null
+        },
+        "first_stage_exclusion": null,
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0006"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0002",
+              "s0006"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [
+              "s0008",
+              "s0009"
+            ],
+            "value": true
+          }
+        },
+        "target": {
+          "source_ids": [
+            "s0008",
+            "s0009",
+            "s0010"
+          ],
+          "population": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6",
+            "学7",
+            "学8",
+            "学9"
+          ],
+          "aggregation": "EQUAL_MEAN",
+          "components": [
+            {
+              "source_ids": [
+                "s0009",
+                "s0010"
+              ],
+              "assignment": {
+                "学1": 1,
+                "学2": 1,
+                "学3": 0,
+                "学4": 1,
+                "学5": 1,
+                "学6": 0,
+                "学7": 1,
+                "学8": 1,
+                "学9": 0
+              },
+              "weight": "1/2"
+            },
+            {
+              "source_ids": [
+                "s0009",
+                "s0010"
+              ],
+              "assignment": {
+                "学1": 1,
+                "学2": 1,
+                "学3": 1,
+                "学4": 1,
+                "学5": 1,
+                "学6": 1,
+                "学7": 1,
+                "学8": 1,
+                "学9": 1
+              },
+              "weight": "1/2"
+            }
+          ],
+          "policy_distribution_complete": {
+            "source_ids": [
+              "s0008",
+              "s0009",
+              "s0010"
+            ],
+            "value": true
+          }
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0008",
+              "s0009"
+            ],
+            "operator": "OTHER",
+            "availability": "SYMBOLIC_POPULATION_OPERATOR",
+            "outcome_nodes": [
+              "学1",
+              "学2",
+              "学3",
+              "学4",
+              "学5",
+              "学6",
+              "学7",
+              "学8",
+              "学9"
+            ],
+            "assignment_cells": []
+          }
+        ]
+      },
+      "parsed_reference_context_sha256": "9d7d9d691c9b3ee29aac42db09a7cca7011b667a3f1d11bbac069240c7bea690",
+      "confirmation": {
+        "confirmed": false,
+        "compared": [
+          "study.nodes",
+          "study.edges",
+          "study.graph_kind",
+          "study.edge_list_complete",
+          "study.outcome_kind",
+          "exposure.kind",
+          "target.population",
+          "target.kind",
+          "target.operation",
+          "target.aggregation",
+          "target.averaging",
+          "regime.kind",
+          "conditioning.kind",
+          "target.components",
+          "assumptions.*"
+        ],
+        "not_compared": [
+          "study.treatment",
+          "study.outcome",
+          "study.context",
+          "free-text notes"
+        ],
+        "contradictions": [
+          {
+            "field": "target.population",
+            "reading": [
+              "#1",
+              "#2",
+              "#3",
+              "#4",
+              "#5",
+              "#6",
+              "#7",
+              "#8",
+              "#9"
+            ],
+            "approved": [
+              "#3",
+              "#6",
+              "#9"
+            ]
+          }
+        ],
+        "not_declared": [],
+        "extra": []
+      },
+      "declared_notes": {
+        "additional_restrictions": [
+          "丙组为每个片区未进甲、乙两组的第三所学校，共三所；丙组三所每校等权。",
+          "覆盖方案A为每片区发甲、乙两组，共六所；覆盖方案B为九所全部发药；两种方案各以一半概率被采用，且这是全部候选方案。",
+          "出勤率模型：基线0.80；本校发药提高0.06；片区内每多一所发药学校（不含本校），片区内所有学校出勤率再提高0.03。"
+        ],
+        "unresolved": [
+          "原文明确过去没有随机试点；历史做法是每片区按甲、乙、丙顺序发药。本案例原试点分配机制没有随机化参数可读。"
+        ],
+        "adopted": false,
+        "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+      },
+      "observed": "READING_NOT_CONFIRMED",
+      "outcome": {
+        "state": "READING_NOT_CONFIRMED",
+        "reason_code": "READING_DIFFERS_FROM_APPROVED_READING"
+      }
+    }
+  ]
+}

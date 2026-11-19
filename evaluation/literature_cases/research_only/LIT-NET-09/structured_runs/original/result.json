@@ -1,0 +1,920 @@
+{
+  "state": "POINT",
+  "reason_code": null,
+  "backend_called": true,
+  "independent_replay": true,
+  "mathematical_claim": {
+    "kind": "POINT",
+    "representation": "NATIVE_NETWORK_OBSERVED_FUNCTIONAL",
+    "target": {
+      "node_order": [
+        "户1",
+        "户2",
+        "户3",
+        "户4",
+        "户5",
+        "户6",
+        "户7",
+        "户8"
+      ],
+      "population": [
+        "户1",
+        "户2",
+        "户3",
+        "户4",
+        "户5",
+        "户6",
+        "户7",
+        "户8"
+      ],
+      "unit_weights": [
+        "1/8",
+        "1/8",
+        "1/8",
+        "1/8",
+        "1/8",
+        "1/8",
+        "1/8",
+        "1/8"
+      ],
+      "treatment": "被核实记1，未核实记0",
+      "outcome": "该户家底被摸清记1，没摸清记0",
+      "context": "核实结果在村内公开之后；两个村共八户",
+      "kind": "FINITE_POLICY_MEAN",
+      "policies": [
+        {
+          "assignment": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "weight": "1/2"
+        },
+        {
+          "assignment": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0
+          ],
+          "weight": "1/2"
+        }
+      ]
+    },
+    "target_fingerprint": "2abdafd27f18b5bc77113a8d7dbef99c27c60ef9f7e05d241c79d417a15a82fb",
+    "expression": "1/2 * (1/8 * E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]) + 1/2 * (1/8 * E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)])",
+    "numeric_value": null
+  },
+  "certificate": {
+    "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+    "status": "POINT",
+    "verification_status": "VERIFIED",
+    "target_fingerprint": "2abdafd27f18b5bc77113a8d7dbef99c27c60ef9f7e05d241c79d417a15a82fb",
+    "policy_support": [
+      {
+        "assignment": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "policy_probability": "1/2",
+        "experimental_assignment_probability": "1/256",
+        "fixed_policy_certificate": "43a6bc4e86156b379703871d790a2119cf8f9f86f9db3c713f5455f45f6ca86f"
+      },
+      {
+        "assignment": [
+          1,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "policy_probability": "1/2",
+        "experimental_assignment_probability": "1/256",
+        "fixed_policy_certificate": "27dec7910ee2887f8db8dcde8a774f354ded007e9ed89320dda9140aec81ffd3"
+      }
+    ],
+    "identified_functional": "1/2 * (1/8 * E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]) + 1/2 * (1/8 * E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)])",
+    "certificate_sha256": "b91004a4e59ce068a48e431185f276bee2a43e9e6d07c2c930b3d97c3f6e4fa9",
+    "estimation_request": null,
+    "warning": "Finite mixture of full-assignment population means; no PFN value is estimated"
+  },
+  "answers": [
+    {
+      "method": "R1B_FINITE_POLICY",
+      "mathematical_claim": {
+        "kind": "POINT",
+        "representation": "NATIVE_NETWORK_OBSERVED_FUNCTIONAL",
+        "target": {
+          "node_order": [
+            "户1",
+            "户2",
+            "户3",
+            "户4",
+            "户5",
+            "户6",
+            "户7",
+            "户8"
+          ],
+          "population": [
+            "户1",
+            "户2",
+            "户3",
+            "户4",
+            "户5",
+            "户6",
+            "户7",
+            "户8"
+          ],
+          "unit_weights": [
+            "1/8",
+            "1/8",
+            "1/8",
+            "1/8",
+            "1/8",
+            "1/8",
+            "1/8",
+            "1/8"
+          ],
+          "treatment": "被核实记1，未核实记0",
+          "outcome": "该户家底被摸清记1，没摸清记0",
+          "context": "核实结果在村内公开之后；两个村共八户",
+          "kind": "FINITE_POLICY_MEAN",
+          "policies": [
+            {
+              "assignment": [
+                1,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0
+              ],
+              "weight": "1/2"
+            },
+            {
+              "assignment": [
+                1,
+                0,
+                1,
+                0,
+                1,
+                1,
+                0,
+                0
+              ],
+              "weight": "1/2"
+            }
+          ]
+        },
+        "target_fingerprint": "2abdafd27f18b5bc77113a8d7dbef99c27c60ef9f7e05d241c79d417a15a82fb",
+        "expression": "1/2 * (1/8 * E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]) + 1/2 * (1/8 * E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)])",
+        "numeric_value": null
+      },
+      "certificate": {
+        "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+        "status": "POINT",
+        "verification_status": "VERIFIED",
+        "target_fingerprint": "2abdafd27f18b5bc77113a8d7dbef99c27c60ef9f7e05d241c79d417a15a82fb",
+        "policy_support": [
+          {
+            "assignment": [
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0
+            ],
+            "policy_probability": "1/2",
+            "experimental_assignment_probability": "1/256",
+            "fixed_policy_certificate": "43a6bc4e86156b379703871d790a2119cf8f9f86f9db3c713f5455f45f6ca86f"
+          },
+          {
+            "assignment": [
+              1,
+              0,
+              1,
+              0,
+              1,
+              1,
+              0,
+              0
+            ],
+            "policy_probability": "1/2",
+            "experimental_assignment_probability": "1/256",
+            "fixed_policy_certificate": "27dec7910ee2887f8db8dcde8a774f354ded007e9ed89320dda9140aec81ffd3"
+          }
+        ],
+        "identified_functional": "1/2 * (1/8 * E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]) + 1/2 * (1/8 * E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)])",
+        "certificate_sha256": "b91004a4e59ce068a48e431185f276bee2a43e9e6d07c2c930b3d97c3f6e4fa9",
+        "estimation_request": null,
+        "warning": "Finite mixture of full-assignment population means; no PFN value is estimated"
+      },
+      "independent_replay": true,
+      "reviewed_input_sha256": "a39868743be06466499f6513c6ec026790fdef91859590aa071ee4a7272834ed",
+      "native_evidence": {
+        "query_type": "FINITE_POLICY_MIXTURE",
+        "status": "POINT",
+        "route": "R1B_FINITE_POLICY",
+        "reason_code": null,
+        "result": {
+          "components": [
+            {
+              "study": {
+                "network_id": "network_67181978ba0ef54d37ecd01117595af4b85b36540204528e6d361332c1834363",
+                "node_order": [
+                  "户1",
+                  "户2",
+                  "户3",
+                  "户4",
+                  "户5",
+                  "户6",
+                  "户7",
+                  "户8"
+                ],
+                "undirected_edges": [
+                  [
+                    "户1",
+                    "户2"
+                  ],
+                  [
+                    "户1",
+                    "户3"
+                  ],
+                  [
+                    "户1",
+                    "户4"
+                  ],
+                  [
+                    "户2",
+                    "户3"
+                  ],
+                  [
+                    "户2",
+                    "户4"
+                  ],
+                  [
+                    "户3",
+                    "户4"
+                  ],
+                  [
+                    "户5",
+                    "户6"
+                  ],
+                  [
+                    "户6",
+                    "户7"
+                  ],
+                  [
+                    "户7",
+                    "户8"
+                  ]
+                ],
+                "treatment_variable": "被核实记1，未核实记0",
+                "outcome_variable": "该户家底被摸清记1，没摸清记0",
+                "outcome_kind": "binary",
+                "context_reference": "核实结果在村内公开之后；两个村共八户",
+                "observation_regime": "experimental",
+                "assignment_design_json": "{\"kind\":\"heterogeneous_bernoulli_binary_v1\",\"propensities\":{\"户1\":\"1/2\",\"户2\":\"1/2\",\"户3\":\"1/2\",\"户4\":\"1/2\",\"户5\":\"1/2\",\"户6\":\"1/2\",\"户7\":\"1/2\",\"户8\":\"1/2\"}}",
+                "protocol_provenance": "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a,src_d81794c23ffb70800b181269481816092b8fc3ae8a26931926e9d24b10e20fd1,src_379fa1ff7fc29184b2d04ed52f6a9c37b3cab1d2547c93fad1928d65acbea9e5,src_64db4aefe04dfe84d7b51b9c17a3692a7dc671356be2e676d1ff9b4b5b9fa8bd,src_fe2797398421bda41db47148079d38458f3e353ee81f344fce6925a9becf8876,src_f704a0e7be38ec807d5e1f3cfd7abb134a72a4a879a19bfb79ecb4a756b59e16,src_6fda0221f98e162daa957e71419192f9aad216fb0885c323b8a4162130e2753c,src_080876a0af9fb86285ba273eea51da937c349ed2adb02b22e7fb8a4fe8f4f2f2,src_4280306c1a6104509f38b6a432cf59ae37de5652e2041151932a64a80bdfc388,src_3107fac365fd24fab44414abd9e6b53260a367cd4fac312b725c94372fecc458,src_82aa770512c5a1e11aa5f3cf3f0d93dea9f5e68e5f2e756be81c47ae5640a47e,src_362e14292ac791c7c24ea9600755de01a0f0e4001352f218171dcba6dd79b659; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                "network_provenance": "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a,src_d81794c23ffb70800b181269481816092b8fc3ae8a26931926e9d24b10e20fd1,src_379fa1ff7fc29184b2d04ed52f6a9c37b3cab1d2547c93fad1928d65acbea9e5,src_64db4aefe04dfe84d7b51b9c17a3692a7dc671356be2e676d1ff9b4b5b9fa8bd,src_fe2797398421bda41db47148079d38458f3e353ee81f344fce6925a9becf8876,src_f704a0e7be38ec807d5e1f3cfd7abb134a72a4a879a19bfb79ecb4a756b59e16,src_6fda0221f98e162daa957e71419192f9aad216fb0885c323b8a4162130e2753c,src_080876a0af9fb86285ba273eea51da937c349ed2adb02b22e7fb8a4fe8f4f2f2,src_4280306c1a6104509f38b6a432cf59ae37de5652e2041151932a64a80bdfc388,src_3107fac365fd24fab44414abd9e6b53260a367cd4fac312b725c94372fecc458,src_82aa770512c5a1e11aa5f3cf3f0d93dea9f5e68e5f2e756be81c47ae5640a47e,src_362e14292ac791c7c24ea9600755de01a0f0e4001352f218171dcba6dd79b659; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+              },
+              "target": {
+                "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+                "network_fingerprint": "3546af22655d26e8e105e1849f1f329fbb99a05d3663df19abbb9e4a186b5048",
+                "node_order": [
+                  "户1",
+                  "户2",
+                  "户3",
+                  "户4",
+                  "户5",
+                  "户6",
+                  "户7",
+                  "户8"
+                ],
+                "outcome": "该户家底被摸清记1，没摸清记0",
+                "context": "核实结果在村内公开之后；两个村共八户",
+                "averaging_scope": "population_conditional_mean_given_W",
+                "authority": "TRUSTED_FIXTURE",
+                "query_resolution": "RESOLVED",
+                "assignment_law_fingerprint": null,
+                "exposure_fingerprint": null,
+                "node_id": null,
+                "arm": null,
+                "policy_assignment": [
+                  1,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0
+                ],
+                "unit_weights": [
+                  "1/8",
+                  "1/8",
+                  "1/8",
+                  "1/8",
+                  "1/8",
+                  "1/8",
+                  "1/8",
+                  "1/8"
+                ],
+                "target_digest": "91c706b99808b8829f0a862403b5183e14ff0bb9f0b00be93bc14a892529b0da"
+              },
+              "sources": [
+                {
+                  "source_id": "source_635be570839b4ff8fffaaed5d533fe132ae66ace2944ef112eb8dcafdf74244d",
+                  "operator": "NODE_FULL_LAW",
+                  "provenance": "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a,src_d81794c23ffb70800b181269481816092b8fc3ae8a26931926e9d24b10e20fd1,src_379fa1ff7fc29184b2d04ed52f6a9c37b3cab1d2547c93fad1928d65acbea9e5,src_64db4aefe04dfe84d7b51b9c17a3692a7dc671356be2e676d1ff9b4b5b9fa8bd,src_fe2797398421bda41db47148079d38458f3e353ee81f344fce6925a9becf8876,src_f704a0e7be38ec807d5e1f3cfd7abb134a72a4a879a19bfb79ecb4a756b59e16,src_6fda0221f98e162daa957e71419192f9aad216fb0885c323b8a4162130e2753c,src_080876a0af9fb86285ba273eea51da937c349ed2adb02b22e7fb8a4fe8f4f2f2,src_4280306c1a6104509f38b6a432cf59ae37de5652e2041151932a64a80bdfc388,src_3107fac365fd24fab44414abd9e6b53260a367cd4fac312b725c94372fecc458,src_82aa770512c5a1e11aa5f3cf3f0d93dea9f5e68e5f2e756be81c47ae5640a47e,src_362e14292ac791c7c24ea9600755de01a0f0e4001352f218171dcba6dd79b659; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                  "admission": "ADMITTED",
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                  "regime": "experimental",
+                  "shared_scope_digest": "a02ac8b97846a6369a6a4afcef8697fc399811e11fe1efd31e734fab272e1b1d",
+                  "protocol_digest": "04007102f2453ccb7dba90d328569de94adfa8a8ab609c771eab146fbe94a25e",
+                  "node_order": [
+                    "户1",
+                    "户2",
+                    "户3",
+                    "户4",
+                    "户5",
+                    "户6",
+                    "户7",
+                    "户8"
+                  ],
+                  "outcome": "该户家底被摸清记1，没摸清记0",
+                  "context": "核实结果在村内公开之后；两个村共八户",
+                  "outcome_nodes": [
+                    "户1",
+                    "户2",
+                    "户3",
+                    "户4",
+                    "户5",
+                    "户6",
+                    "户7",
+                    "户8"
+                  ],
+                  "assignment_cells": [],
+                  "exposure_fingerprint": null
+                }
+              ],
+              "assumptions": [
+                {
+                  "name": "known_assignment_law",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "full_vector_randomization",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "consistency",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "fixed_pretreatment_network",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "finite_conditional_first_moments",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                }
+              ],
+              "route_receipt": {
+                "version": "non-arm-network-inquiry-shadow-v1.7",
+                "study_digest": "e19d63a26a96f2c4a1a11514cbbac1c3eed7487c67e3ab72e0498ef42597a9cf",
+                "study_declaration_digest": "62cebdff9c2d97bedffdfa58b0924836776c2e0bb43df874b4c9b58935c35281",
+                "assumption_evidence_digest": "c5c40745bba5b0528e26575c429947e6c656a4798e259c27635e7d16aaa3ca23",
+                "policy_assignment_probability": "1/256",
+                "target_digest": "91c706b99808b8829f0a862403b5183e14ff0bb9f0b00be93bc14a892529b0da",
+                "target_authority": "TRUSTED_FIXTURE",
+                "target_resolution": "RESOLVED",
+                "family_id": "randomized_full_assignment_policy_mean_candidate_v0",
+                "route_status": "THEOREM_BACKEND_UNAVAILABLE",
+                "target_match": "MATCHED",
+                "information_status": "SATISFIED",
+                "assumption_status": "ADMITTED",
+                "validity_status": "POSITIVE_UNDER_DECLARED_Q",
+                "backend_capability": "CANDIDATE_NOT_REGISTERED",
+                "required_observable": {
+                  "operator": "NODE_ASSIGNMENT_MEANS_FOR_POLICY",
+                  "network_fingerprint": "3546af22655d26e8e105e1849f1f329fbb99a05d3663df19abbb9e4a186b5048",
+                  "node_order": [
+                    "户1",
+                    "户2",
+                    "户3",
+                    "户4",
+                    "户5",
+                    "户6",
+                    "户7",
+                    "户8"
+                  ],
+                  "outcome": "该户家底被摸清记1，没摸清记0",
+                  "context": "核实结果在村内公开之后；两个村共八户",
+                  "node_ids": [
+                    "户1",
+                    "户2",
+                    "户3",
+                    "户4",
+                    "户5",
+                    "户6",
+                    "户7",
+                    "户8"
+                  ],
+                  "arm_cell": null,
+                  "assignment_cell": [
+                    1,
+                    0,
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                  ],
+                  "assignment_law_fingerprint": null,
+                  "exposure_fingerprint": null,
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR"
+                },
+                "source_results": [
+                  {
+                    "source_id": "source_635be570839b4ff8fffaaed5d533fe132ae66ace2944ef112eb8dcafdf74244d",
+                    "source_digest": "bdbb1db0a71c2e7cce39afb9d5c516d2d89f5e9520f6e9cb584ad3975ae472ca",
+                    "information_status": "SATISFIED",
+                    "reason": null,
+                    "rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17"
+                  }
+                ],
+                "blockers": [
+                  "NO_REGISTERED_GENERAL_FIXED_POLICY_THEOREM_OR_VERIFIER"
+                ],
+                "warnings": [
+                  "A4_SATISFIED_DOES_NOT_AUTHORIZE_CAUSAL_IDENTIFICATION"
+                ],
+                "mathematical_identification_from_router": null,
+                "digest": "bd883acb82008a165f0cff96691c06e63efa0fc32e5320cb85f0b8295080a07c"
+              },
+              "selected_a4_source_id": "source_635be570839b4ff8fffaaed5d533fe132ae66ace2944ef112eb8dcafdf74244d",
+              "selected_a4_source_digest": "bdbb1db0a71c2e7cce39afb9d5c516d2d89f5e9520f6e9cb584ad3975ae472ca",
+              "a4_rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17",
+              "assignment_probability": "1/256",
+              "weighted_nodes": [
+                "户1",
+                "户2",
+                "户3",
+                "户4",
+                "户5",
+                "户6",
+                "户7",
+                "户8"
+              ],
+              "node_weights": [
+                "1/8",
+                "1/8",
+                "1/8",
+                "1/8",
+                "1/8",
+                "1/8",
+                "1/8",
+                "1/8"
+              ],
+              "required_observables": [
+                "E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]",
+                "E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]",
+                "E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]",
+                "E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]",
+                "E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]",
+                "E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]",
+                "E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]",
+                "E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]"
+              ],
+              "identified_functional": "1/8 * E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]",
+              "target_fingerprint": "af9c77052153a4ee1d9ff6b93f3dfe7f843911d04c29c4b3f4beadfc3928bace",
+              "theorem_id": "R1B_RANDOMIZED_FULL_ASSIGNMENT_POLICY_POINT_V1",
+              "certificate_sha256": "43a6bc4e86156b379703871d790a2119cf8f9f86f9db3c713f5455f45f6ca86f",
+              "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+              "status": "POINT",
+              "verification_status": "VERIFIED",
+              "estimation_request": null
+            },
+            {
+              "study": {
+                "network_id": "network_67181978ba0ef54d37ecd01117595af4b85b36540204528e6d361332c1834363",
+                "node_order": [
+                  "户1",
+                  "户2",
+                  "户3",
+                  "户4",
+                  "户5",
+                  "户6",
+                  "户7",
+                  "户8"
+                ],
+                "undirected_edges": [
+                  [
+                    "户1",
+                    "户2"
+                  ],
+                  [
+                    "户1",
+                    "户3"
+                  ],
+                  [
+                    "户1",
+                    "户4"
+                  ],
+                  [
+                    "户2",
+                    "户3"
+                  ],
+                  [
+                    "户2",
+                    "户4"
+                  ],
+                  [
+                    "户3",
+                    "户4"
+                  ],
+                  [
+                    "户5",
+                    "户6"
+                  ],
+                  [
+                    "户6",
+                    "户7"
+                  ],
+                  [
+                    "户7",
+                    "户8"
+                  ]
+                ],
+                "treatment_variable": "被核实记1，未核实记0",
+                "outcome_variable": "该户家底被摸清记1，没摸清记0",
+                "outcome_kind": "binary",
+                "context_reference": "核实结果在村内公开之后；两个村共八户",
+                "observation_regime": "experimental",
+                "assignment_design_json": "{\"kind\":\"heterogeneous_bernoulli_binary_v1\",\"propensities\":{\"户1\":\"1/2\",\"户2\":\"1/2\",\"户3\":\"1/2\",\"户4\":\"1/2\",\"户5\":\"1/2\",\"户6\":\"1/2\",\"户7\":\"1/2\",\"户8\":\"1/2\"}}",
+                "protocol_provenance": "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a,src_d81794c23ffb70800b181269481816092b8fc3ae8a26931926e9d24b10e20fd1,src_379fa1ff7fc29184b2d04ed52f6a9c37b3cab1d2547c93fad1928d65acbea9e5,src_64db4aefe04dfe84d7b51b9c17a3692a7dc671356be2e676d1ff9b4b5b9fa8bd,src_fe2797398421bda41db47148079d38458f3e353ee81f344fce6925a9becf8876,src_f704a0e7be38ec807d5e1f3cfd7abb134a72a4a879a19bfb79ecb4a756b59e16,src_6fda0221f98e162daa957e71419192f9aad216fb0885c323b8a4162130e2753c,src_080876a0af9fb86285ba273eea51da937c349ed2adb02b22e7fb8a4fe8f4f2f2,src_4280306c1a6104509f38b6a432cf59ae37de5652e2041151932a64a80bdfc388,src_3107fac365fd24fab44414abd9e6b53260a367cd4fac312b725c94372fecc458,src_82aa770512c5a1e11aa5f3cf3f0d93dea9f5e68e5f2e756be81c47ae5640a47e,src_362e14292ac791c7c24ea9600755de01a0f0e4001352f218171dcba6dd79b659; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                "network_provenance": "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a,src_d81794c23ffb70800b181269481816092b8fc3ae8a26931926e9d24b10e20fd1,src_379fa1ff7fc29184b2d04ed52f6a9c37b3cab1d2547c93fad1928d65acbea9e5,src_64db4aefe04dfe84d7b51b9c17a3692a7dc671356be2e676d1ff9b4b5b9fa8bd,src_fe2797398421bda41db47148079d38458f3e353ee81f344fce6925a9becf8876,src_f704a0e7be38ec807d5e1f3cfd7abb134a72a4a879a19bfb79ecb4a756b59e16,src_6fda0221f98e162daa957e71419192f9aad216fb0885c323b8a4162130e2753c,src_080876a0af9fb86285ba273eea51da937c349ed2adb02b22e7fb8a4fe8f4f2f2,src_4280306c1a6104509f38b6a432cf59ae37de5652e2041151932a64a80bdfc388,src_3107fac365fd24fab44414abd9e6b53260a367cd4fac312b725c94372fecc458,src_82aa770512c5a1e11aa5f3cf3f0d93dea9f5e68e5f2e756be81c47ae5640a47e,src_362e14292ac791c7c24ea9600755de01a0f0e4001352f218171dcba6dd79b659; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+              },
+              "target": {
+                "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+                "network_fingerprint": "3546af22655d26e8e105e1849f1f329fbb99a05d3663df19abbb9e4a186b5048",
+                "node_order": [
+                  "户1",
+                  "户2",
+                  "户3",
+                  "户4",
+                  "户5",
+                  "户6",
+                  "户7",
+                  "户8"
+                ],
+                "outcome": "该户家底被摸清记1，没摸清记0",
+                "context": "核实结果在村内公开之后；两个村共八户",
+                "averaging_scope": "population_conditional_mean_given_W",
+                "authority": "TRUSTED_FIXTURE",
+                "query_resolution": "RESOLVED",
+                "assignment_law_fingerprint": null,
+                "exposure_fingerprint": null,
+                "node_id": null,
+                "arm": null,
+                "policy_assignment": [
+                  1,
+                  0,
+                  1,
+                  0,
+                  1,
+                  1,
+                  0,
+                  0
+                ],
+                "unit_weights": [
+                  "1/8",
+                  "1/8",
+                  "1/8",
+                  "1/8",
+                  "1/8",
+                  "1/8",
+                  "1/8",
+                  "1/8"
+                ],
+                "target_digest": "2ad2a993274f9a96a855099c5e5f317255d0789cfe67fee36a0fe6d5eccef437"
+              },
+              "sources": [
+                {
+                  "source_id": "source_635be570839b4ff8fffaaed5d533fe132ae66ace2944ef112eb8dcafdf74244d",
+                  "operator": "NODE_FULL_LAW",
+                  "provenance": "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a,src_d81794c23ffb70800b181269481816092b8fc3ae8a26931926e9d24b10e20fd1,src_379fa1ff7fc29184b2d04ed52f6a9c37b3cab1d2547c93fad1928d65acbea9e5,src_64db4aefe04dfe84d7b51b9c17a3692a7dc671356be2e676d1ff9b4b5b9fa8bd,src_fe2797398421bda41db47148079d38458f3e353ee81f344fce6925a9becf8876,src_f704a0e7be38ec807d5e1f3cfd7abb134a72a4a879a19bfb79ecb4a756b59e16,src_6fda0221f98e162daa957e71419192f9aad216fb0885c323b8a4162130e2753c,src_080876a0af9fb86285ba273eea51da937c349ed2adb02b22e7fb8a4fe8f4f2f2,src_4280306c1a6104509f38b6a432cf59ae37de5652e2041151932a64a80bdfc388,src_3107fac365fd24fab44414abd9e6b53260a367cd4fac312b725c94372fecc458,src_82aa770512c5a1e11aa5f3cf3f0d93dea9f5e68e5f2e756be81c47ae5640a47e,src_362e14292ac791c7c24ea9600755de01a0f0e4001352f218171dcba6dd79b659; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                  "admission": "ADMITTED",
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                  "regime": "experimental",
+                  "shared_scope_digest": "a02ac8b97846a6369a6a4afcef8697fc399811e11fe1efd31e734fab272e1b1d",
+                  "protocol_digest": "04007102f2453ccb7dba90d328569de94adfa8a8ab609c771eab146fbe94a25e",
+                  "node_order": [
+                    "户1",
+                    "户2",
+                    "户3",
+                    "户4",
+                    "户5",
+                    "户6",
+                    "户7",
+                    "户8"
+                  ],
+                  "outcome": "该户家底被摸清记1，没摸清记0",
+                  "context": "核实结果在村内公开之后；两个村共八户",
+                  "outcome_nodes": [
+                    "户1",
+                    "户2",
+                    "户3",
+                    "户4",
+                    "户5",
+                    "户6",
+                    "户7",
+                    "户8"
+                  ],
+                  "assignment_cells": [],
+                  "exposure_fingerprint": null
+                }
+              ],
+              "assumptions": [
+                {
+                  "name": "known_assignment_law",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "full_vector_randomization",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "consistency",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "fixed_pretreatment_network",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "finite_conditional_first_moments",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_5c0f1543f97d15e35e9d7ee74b5f7bb5508d8405d4c94f6b1815c23104b7c191,src_9ea44bd9a3e9cd8db0bcfab2b62bcdb9fb29af2a7977cf1a6aadecbea825e6fe,src_bdd326fad1ffe3b8302319a2561f546d32c2cd0a13ff5e4f8a579abf539f4a30,src_377d2f7528ed5b03b40cb4838922f1825ac2781b14fc128302c3cf2c76c2ef7b,src_cf7cd281e845b97d9c6b41141e712f1056ddb915b1dae0ebae064b2c644bdd3a; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=8a01fdb34deae9e7fac0543d98ee3d0b0dc721ed37e9a316324e3e6b6839f5e6",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                }
+              ],
+              "route_receipt": {
+                "version": "non-arm-network-inquiry-shadow-v1.7",
+                "study_digest": "e19d63a26a96f2c4a1a11514cbbac1c3eed7487c67e3ab72e0498ef42597a9cf",
+                "study_declaration_digest": "62cebdff9c2d97bedffdfa58b0924836776c2e0bb43df874b4c9b58935c35281",
+                "assumption_evidence_digest": "c5c40745bba5b0528e26575c429947e6c656a4798e259c27635e7d16aaa3ca23",
+                "policy_assignment_probability": "1/256",
+                "target_digest": "2ad2a993274f9a96a855099c5e5f317255d0789cfe67fee36a0fe6d5eccef437",
+                "target_authority": "TRUSTED_FIXTURE",
+                "target_resolution": "RESOLVED",
+                "family_id": "randomized_full_assignment_policy_mean_candidate_v0",
+                "route_status": "THEOREM_BACKEND_UNAVAILABLE",
+                "target_match": "MATCHED",
+                "information_status": "SATISFIED",
+                "assumption_status": "ADMITTED",
+                "validity_status": "POSITIVE_UNDER_DECLARED_Q",
+                "backend_capability": "CANDIDATE_NOT_REGISTERED",
+                "required_observable": {
+                  "operator": "NODE_ASSIGNMENT_MEANS_FOR_POLICY",
+                  "network_fingerprint": "3546af22655d26e8e105e1849f1f329fbb99a05d3663df19abbb9e4a186b5048",
+                  "node_order": [
+                    "户1",
+                    "户2",
+                    "户3",
+                    "户4",
+                    "户5",
+                    "户6",
+                    "户7",
+                    "户8"
+                  ],
+                  "outcome": "该户家底被摸清记1，没摸清记0",
+                  "context": "核实结果在村内公开之后；两个村共八户",
+                  "node_ids": [
+                    "户1",
+                    "户2",
+                    "户3",
+                    "户4",
+                    "户5",
+                    "户6",
+                    "户7",
+                    "户8"
+                  ],
+                  "arm_cell": null,
+                  "assignment_cell": [
+                    1,
+                    0,
+                    1,
+                    0,
+                    1,
+                    1,
+                    0,
+                    0
+                  ],
+                  "assignment_law_fingerprint": null,
+                  "exposure_fingerprint": null,
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR"
+                },
+                "source_results": [
+                  {
+                    "source_id": "source_635be570839b4ff8fffaaed5d533fe132ae66ace2944ef112eb8dcafdf74244d",
+                    "source_digest": "bdbb1db0a71c2e7cce39afb9d5c516d2d89f5e9520f6e9cb584ad3975ae472ca",
+                    "information_status": "SATISFIED",
+                    "reason": null,
+                    "rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17"
+                  }
+                ],
+                "blockers": [
+                  "NO_REGISTERED_GENERAL_FIXED_POLICY_THEOREM_OR_VERIFIER"
+                ],
+                "warnings": [
+                  "A4_SATISFIED_DOES_NOT_AUTHORIZE_CAUSAL_IDENTIFICATION"
+                ],
+                "mathematical_identification_from_router": null,
+                "digest": "a6bf2d915be3b4b20722abb3362e2a39d88a864551189ee6b5bde170e2f22f3d"
+              },
+              "selected_a4_source_id": "source_635be570839b4ff8fffaaed5d533fe132ae66ace2944ef112eb8dcafdf74244d",
+              "selected_a4_source_digest": "bdbb1db0a71c2e7cce39afb9d5c516d2d89f5e9520f6e9cb584ad3975ae472ca",
+              "a4_rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17",
+              "assignment_probability": "1/256",
+              "weighted_nodes": [
+                "户1",
+                "户2",
+                "户3",
+                "户4",
+                "户5",
+                "户6",
+                "户7",
+                "户8"
+              ],
+              "node_weights": [
+                "1/8",
+                "1/8",
+                "1/8",
+                "1/8",
+                "1/8",
+                "1/8",
+                "1/8",
+                "1/8"
+              ],
+              "required_observables": [
+                "E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)]",
+                "E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)]",
+                "E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)]",
+                "E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)]",
+                "E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)]",
+                "E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)]",
+                "E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)]",
+                "E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)]"
+              ],
+              "identified_functional": "1/8 * E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)]",
+              "target_fingerprint": "0e76daece211cf2c421e6977a6323ee4feea42511e53daf19575b9edb6579cb4",
+              "theorem_id": "R1B_RANDOMIZED_FULL_ASSIGNMENT_POLICY_POINT_V1",
+              "certificate_sha256": "27dec7910ee2887f8db8dcde8a774f354ded007e9ed89320dda9140aec81ffd3",
+              "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+              "status": "POINT",
+              "verification_status": "VERIFIED",
+              "estimation_request": null
+            }
+          ],
+          "policy_probabilities": [
+            "1/2",
+            "1/2"
+          ],
+          "target_fingerprint": "2abdafd27f18b5bc77113a8d7dbef99c27c60ef9f7e05d241c79d417a15a82fb",
+          "identified_functional": "1/2 * (1/8 * E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)] + 1/8 * E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,0,0,1,0,0,0)]) + 1/2 * (1/8 * E[Y_{户1}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户2}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户3}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户4}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户5}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户6}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户7}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)] + 1/8 * E[Y_{户8}^obs | W=核实结果在村内公开之后；两个村共八户, T_vector=(1,0,1,0,1,1,0,0)])",
+          "certificate_sha256": "b91004a4e59ce068a48e431185f276bee2a43e9e6d07c2c930b3d97c3f6e4fa9",
+          "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+          "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+          "status": "POINT",
+          "verification_status": "VERIFIED",
+          "estimation_request": null
+        },
+        "attempted_routes": []
+      }
+    }
+  ],
+  "clarification_questions": [],
+  "evidence_status": "CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE",
+  "production_admission": false,
+  "estimation_handoff_allowed": false,
+  "query_id": "q1",
+  "remaining_query_ids": [],
+  "result_scope": "SELECTED_QUERY_ONLY",
+  "fact_family": "NETWORK_FINITE_POLICY_FACTS",
+  "plan_sha256": "7e85aa351a44298fd4faf1ace3dfb8b8cf3fd1daf2e8d5014ce3ff5282bc25e9",
+  "attempts": [
+    {
+      "stage": "POLICY_COMPONENT",
+      "state": "POINT",
+      "reason_code": null
+    },
+    {
+      "stage": "POLICY_COMPONENT",
+      "state": "POINT",
+      "reason_code": null
+    },
+    {
+      "method": "R1B_FINITE_POLICY",
+      "state": "POINT",
+      "reason_code": null
+    }
+  ],
+  "primary_method": "R1B_FINITE_POLICY",
+  "partial_fallback_performed": false
+}

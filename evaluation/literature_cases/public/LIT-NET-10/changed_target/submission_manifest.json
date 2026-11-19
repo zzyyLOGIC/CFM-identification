@@ -1,0 +1,18 @@
+{
+  "case_id": "LIT-NET-10",
+  "variant": "changed_target",
+  "paper_id": "miguel_kremer2004_deworming",
+  "title": "两种覆盖方案各一半机会时，丙组三校平均出勤率是多少？",
+  "synthetic": true,
+  "gold_oracle_location": "OUTSIDE_PUBLIC_CASE_DIRECTORY",
+  "llm_access_scope": "PUBLIC_CASE_FILES_ONLY",
+  "business_question_file": "business_question.md",
+  "supporting_files": [
+    "study_protocol.md",
+    "data_dictionary.md"
+  ],
+  "heldout": false,
+  "adapted": true,
+  "adaptation_note": "场景改编自学校层面分批发放的公开描述，题目设定为项目自建",
+  "notes": "评价名单改为 C 组三所学校（3、6、9）；目标与权重相应缩小，其余设定与原始版本相同。"
+}

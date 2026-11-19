@@ -1,0 +1,32 @@
+{
+  "evidence_kind": "HAND_AUTHORED_REFERENCE_FIXTURE",
+  "automatic_business_reading": false,
+  "api_calls": 0,
+  "synthetic_reviews": true,
+  "rows": [
+    {
+      "variant": "original",
+      "plan_state": "REVIEW_REQUIRED",
+      "final_state": "POINT",
+      "reason": null,
+      "independent_replay": true,
+      "target_fingerprint": "2abdafd27f18b5bc77113a8d7dbef99c27c60ef9f7e05d241c79d417a15a82fb"
+    },
+    {
+      "variant": "missing_condition",
+      "plan_state": "NEEDS_INPUT",
+      "final_state": "NEEDS_INPUT",
+      "reason": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+      "independent_replay": false,
+      "target_fingerprint": null
+    },
+    {
+      "variant": "changed_target",
+      "plan_state": "REVIEW_REQUIRED",
+      "final_state": "POINT",
+      "reason": null,
+      "independent_replay": true,
+      "target_fingerprint": "44ea2fc636d4e31345721f7ca0a6325aac92a937d6a44b490ff7d51b63af11a7"
+    }
+  ]
+}

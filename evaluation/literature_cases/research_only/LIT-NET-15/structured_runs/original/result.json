@@ -1,0 +1,828 @@
+{
+  "state": "POINT",
+  "reason_code": null,
+  "backend_called": true,
+  "independent_replay": true,
+  "mathematical_claim": {
+    "kind": "POINT",
+    "representation": "NATIVE_NETWORK_OBSERVED_FUNCTIONAL",
+    "target": {
+      "node_order": [
+        "学1",
+        "学2",
+        "学3",
+        "学4",
+        "学5",
+        "学6"
+      ],
+      "population": [
+        "学1",
+        "学2",
+        "学3",
+        "学4",
+        "学5",
+        "学6"
+      ],
+      "unit_weights": [
+        "1/6",
+        "1/6",
+        "1/6",
+        "1/6",
+        "1/6",
+        "1/6"
+      ],
+      "treatment": "被辅导记1，其余记0",
+      "outcome": "成绩相对不推行计划时的提高，单位为分",
+      "context": "辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系",
+      "kind": "FINITE_POLICY_MEAN",
+      "policies": [
+        {
+          "assignment": [
+            1,
+            1,
+            0,
+            0,
+            1,
+            0
+          ],
+          "weight": "1/2"
+        },
+        {
+          "assignment": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          "weight": "1/2"
+        }
+      ]
+    },
+    "target_fingerprint": "0c8fb6b4633a4e862a803276b610b50d235576e09acd95b098134e6c5de0e789",
+    "expression": "1/2 * (1/6 * E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)]) + 1/2 * (1/6 * E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)])",
+    "numeric_value": null
+  },
+  "certificate": {
+    "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+    "status": "POINT",
+    "verification_status": "VERIFIED",
+    "target_fingerprint": "0c8fb6b4633a4e862a803276b610b50d235576e09acd95b098134e6c5de0e789",
+    "policy_support": [
+      {
+        "assignment": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          1
+        ],
+        "policy_probability": "1/2",
+        "experimental_assignment_probability": "1/64",
+        "fixed_policy_certificate": "ad7462f8d249aa15e188e664890db9a2c1b9bcf6210e5554ea208609699cc0b0"
+      },
+      {
+        "assignment": [
+          1,
+          1,
+          0,
+          0,
+          1,
+          0
+        ],
+        "policy_probability": "1/2",
+        "experimental_assignment_probability": "1/64",
+        "fixed_policy_certificate": "e1992bc47f1976e2b05c0f5fee8b805456d85b9b2bc7feb033178bfffb63963a"
+      }
+    ],
+    "identified_functional": "1/2 * (1/6 * E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)]) + 1/2 * (1/6 * E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)])",
+    "certificate_sha256": "b99a4fb1be19426fca979d7b1cedaea46853a5d9df16aef1517761c7d414d38f",
+    "estimation_request": null,
+    "warning": "Finite mixture of full-assignment population means; no PFN value is estimated"
+  },
+  "answers": [
+    {
+      "method": "R1B_FINITE_POLICY",
+      "mathematical_claim": {
+        "kind": "POINT",
+        "representation": "NATIVE_NETWORK_OBSERVED_FUNCTIONAL",
+        "target": {
+          "node_order": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6"
+          ],
+          "population": [
+            "学1",
+            "学2",
+            "学3",
+            "学4",
+            "学5",
+            "学6"
+          ],
+          "unit_weights": [
+            "1/6",
+            "1/6",
+            "1/6",
+            "1/6",
+            "1/6",
+            "1/6"
+          ],
+          "treatment": "被辅导记1，其余记0",
+          "outcome": "成绩相对不推行计划时的提高，单位为分",
+          "context": "辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系",
+          "kind": "FINITE_POLICY_MEAN",
+          "policies": [
+            {
+              "assignment": [
+                1,
+                1,
+                0,
+                0,
+                1,
+                0
+              ],
+              "weight": "1/2"
+            },
+            {
+              "assignment": [
+                0,
+                0,
+                1,
+                0,
+                0,
+                1
+              ],
+              "weight": "1/2"
+            }
+          ]
+        },
+        "target_fingerprint": "0c8fb6b4633a4e862a803276b610b50d235576e09acd95b098134e6c5de0e789",
+        "expression": "1/2 * (1/6 * E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)]) + 1/2 * (1/6 * E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)])",
+        "numeric_value": null
+      },
+      "certificate": {
+        "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+        "status": "POINT",
+        "verification_status": "VERIFIED",
+        "target_fingerprint": "0c8fb6b4633a4e862a803276b610b50d235576e09acd95b098134e6c5de0e789",
+        "policy_support": [
+          {
+            "assignment": [
+              0,
+              0,
+              1,
+              0,
+              0,
+              1
+            ],
+            "policy_probability": "1/2",
+            "experimental_assignment_probability": "1/64",
+            "fixed_policy_certificate": "ad7462f8d249aa15e188e664890db9a2c1b9bcf6210e5554ea208609699cc0b0"
+          },
+          {
+            "assignment": [
+              1,
+              1,
+              0,
+              0,
+              1,
+              0
+            ],
+            "policy_probability": "1/2",
+            "experimental_assignment_probability": "1/64",
+            "fixed_policy_certificate": "e1992bc47f1976e2b05c0f5fee8b805456d85b9b2bc7feb033178bfffb63963a"
+          }
+        ],
+        "identified_functional": "1/2 * (1/6 * E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)]) + 1/2 * (1/6 * E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)])",
+        "certificate_sha256": "b99a4fb1be19426fca979d7b1cedaea46853a5d9df16aef1517761c7d414d38f",
+        "estimation_request": null,
+        "warning": "Finite mixture of full-assignment population means; no PFN value is estimated"
+      },
+      "independent_replay": true,
+      "reviewed_input_sha256": "c08871b697c04d2e66e97e4c3f773c71d5dd7c159e02207300b733380203e806",
+      "native_evidence": {
+        "query_type": "FINITE_POLICY_MIXTURE",
+        "status": "POINT",
+        "route": "R1B_FINITE_POLICY",
+        "reason_code": null,
+        "result": {
+          "components": [
+            {
+              "study": {
+                "network_id": "network_a3c02b439f1be18cd7a2507b76e66ac8d2d23c1b62f5ddd8523e6cc1bbafed4e",
+                "node_order": [
+                  "学1",
+                  "学2",
+                  "学3",
+                  "学4",
+                  "学5",
+                  "学6"
+                ],
+                "undirected_edges": [
+                  [
+                    "学1",
+                    "学2"
+                  ],
+                  [
+                    "学1",
+                    "学3"
+                  ],
+                  [
+                    "学1",
+                    "学4"
+                  ],
+                  [
+                    "学2",
+                    "学3"
+                  ],
+                  [
+                    "学2",
+                    "学4"
+                  ],
+                  [
+                    "学3",
+                    "学4"
+                  ],
+                  [
+                    "学5",
+                    "学6"
+                  ]
+                ],
+                "treatment_variable": "被辅导记1，其余记0",
+                "outcome_variable": "成绩相对不推行计划时的提高，单位为分",
+                "outcome_kind": "continuous",
+                "context_reference": "辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系",
+                "observation_regime": "experimental",
+                "assignment_design_json": "{\"kind\":\"heterogeneous_bernoulli_binary_v1\",\"propensities\":{\"学1\":\"1/2\",\"学2\":\"1/2\",\"学3\":\"1/2\",\"学4\":\"1/2\",\"学5\":\"1/2\",\"学6\":\"1/2\"}}",
+                "protocol_provenance": "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755,src_2137bdd33434d7e0ed80953fc9abba8739e81836bef0481f6516b4abd9bbbf76,src_8b36407c133c752eefb7968136bf999ba9ef236a5dabe970119894d6746598d3,src_c36e63f7505553150738048266116e62ef2fa0bbbb8c85159c0552857995cd21,src_056277dbb45448fbd0599458fabe5480249a95f7fe54597a8637088e4acc32c0,src_867d613980904a6006b8f44dc8e71a88a13715aca6d93208fd1935ac4c415e46,src_2676cd269e6dbd23d6b4b1ad4718aae2b4801bb9804b02fad75d228b2f1da16b,src_10a9c437c8d23e89eddd04658f5643a5004cef8dacaf7d9034af5afc489e1d40,src_a1c8e161a09fabbdd8d82fd33de6d7035328c05b649384843e96951cae6cf13e,src_0e33947e27b94c42c6e097a53bc2e899fe9ff90e7b770cb8c8923677e5158aea,src_a2825823a9ce50290797353e7ff91485303a10907005debb4c55137cc0c098ca,src_2284dfa3fe5761c7dc0bd2658b5414c189afba2c94d16dca8a885e598e10ef0c,src_19e2faf996bcaf45b91a0209c6f5deb076529327a8fb01abd57537fe6f8fc996,src_936fccc054f7343cc1b2b3e1626dd9c9181a95797d70bc2e50101ebafbac4d32,src_b2d6ca0044b9ecc281cfa1f9d6170ff90c717e3db8f9f3f570e710de030a89ea,src_efd6bf6c52e80e2aafad99542d90c7ce567fd005eef85695c2d274668741a4a7,src_581e7dd507e5d5ee856882c153ddcaf3a87907c58d7959e8e16cf482a567725f,src_a6f61f4f7b9563550d704d99ea5e18c5accd93d5ee826aaa8dd543d27d7bad94,src_94488fe17e0331d15fe7e7f133381f9e30ad1ccd090f05a92fe5aeb027ae9ad3,src_5405f483241a230c565e50721455ebe60d7ef9c796edac6ab3d797a7805d8e82,src_96d1c238b25bf845d37a0680a46e1fad3334ae2648f95ebb1a66d86e86a54e5e,src_d77a135a3d6ad3e2acbb46e34d7f34a95fc4d766b96535c39cdc132e6e872f86,src_3059254af119b224c584b671ecbdeb8b306bb3212006946bd8dd1f334c83ac8b,src_aeca92d8cff47a86687a1bc01986f6af1f66c95c1b400ebcffd9f2524feba7ee,src_6835f4c5e9fc0267da98a6b1c54fba11e650d8da16f22a6a1bdfc0505d1ee18e; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                "network_provenance": "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755,src_2137bdd33434d7e0ed80953fc9abba8739e81836bef0481f6516b4abd9bbbf76,src_8b36407c133c752eefb7968136bf999ba9ef236a5dabe970119894d6746598d3,src_c36e63f7505553150738048266116e62ef2fa0bbbb8c85159c0552857995cd21,src_056277dbb45448fbd0599458fabe5480249a95f7fe54597a8637088e4acc32c0,src_867d613980904a6006b8f44dc8e71a88a13715aca6d93208fd1935ac4c415e46,src_2676cd269e6dbd23d6b4b1ad4718aae2b4801bb9804b02fad75d228b2f1da16b,src_10a9c437c8d23e89eddd04658f5643a5004cef8dacaf7d9034af5afc489e1d40,src_a1c8e161a09fabbdd8d82fd33de6d7035328c05b649384843e96951cae6cf13e,src_0e33947e27b94c42c6e097a53bc2e899fe9ff90e7b770cb8c8923677e5158aea,src_a2825823a9ce50290797353e7ff91485303a10907005debb4c55137cc0c098ca,src_2284dfa3fe5761c7dc0bd2658b5414c189afba2c94d16dca8a885e598e10ef0c,src_19e2faf996bcaf45b91a0209c6f5deb076529327a8fb01abd57537fe6f8fc996,src_936fccc054f7343cc1b2b3e1626dd9c9181a95797d70bc2e50101ebafbac4d32,src_b2d6ca0044b9ecc281cfa1f9d6170ff90c717e3db8f9f3f570e710de030a89ea,src_efd6bf6c52e80e2aafad99542d90c7ce567fd005eef85695c2d274668741a4a7,src_581e7dd507e5d5ee856882c153ddcaf3a87907c58d7959e8e16cf482a567725f,src_a6f61f4f7b9563550d704d99ea5e18c5accd93d5ee826aaa8dd543d27d7bad94,src_94488fe17e0331d15fe7e7f133381f9e30ad1ccd090f05a92fe5aeb027ae9ad3,src_5405f483241a230c565e50721455ebe60d7ef9c796edac6ab3d797a7805d8e82,src_96d1c238b25bf845d37a0680a46e1fad3334ae2648f95ebb1a66d86e86a54e5e,src_d77a135a3d6ad3e2acbb46e34d7f34a95fc4d766b96535c39cdc132e6e872f86,src_3059254af119b224c584b671ecbdeb8b306bb3212006946bd8dd1f334c83ac8b,src_aeca92d8cff47a86687a1bc01986f6af1f66c95c1b400ebcffd9f2524feba7ee,src_6835f4c5e9fc0267da98a6b1c54fba11e650d8da16f22a6a1bdfc0505d1ee18e; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+              },
+              "target": {
+                "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+                "network_fingerprint": "702afe871ce41d21191574c12cdb27494c9ae74cbf1cd1b1acddab2ca9f9ca66",
+                "node_order": [
+                  "学1",
+                  "学2",
+                  "学3",
+                  "学4",
+                  "学5",
+                  "学6"
+                ],
+                "outcome": "成绩相对不推行计划时的提高，单位为分",
+                "context": "辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系",
+                "averaging_scope": "population_conditional_mean_given_W",
+                "authority": "TRUSTED_FIXTURE",
+                "query_resolution": "RESOLVED",
+                "assignment_law_fingerprint": null,
+                "exposure_fingerprint": null,
+                "node_id": null,
+                "arm": null,
+                "policy_assignment": [
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  1
+                ],
+                "unit_weights": [
+                  "1/6",
+                  "1/6",
+                  "1/6",
+                  "1/6",
+                  "1/6",
+                  "1/6"
+                ],
+                "target_digest": "f183ec115db3a99a77d820cfe4d02a14205525ca5bb575ba26603084af2ea42d"
+              },
+              "sources": [
+                {
+                  "source_id": "source_e4692032ffa255c806c7a2d78adac5e18649a80bceb36dc87dd0d8b17de96fd9",
+                  "operator": "NODE_FULL_LAW",
+                  "provenance": "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755,src_2137bdd33434d7e0ed80953fc9abba8739e81836bef0481f6516b4abd9bbbf76,src_8b36407c133c752eefb7968136bf999ba9ef236a5dabe970119894d6746598d3,src_c36e63f7505553150738048266116e62ef2fa0bbbb8c85159c0552857995cd21,src_056277dbb45448fbd0599458fabe5480249a95f7fe54597a8637088e4acc32c0,src_867d613980904a6006b8f44dc8e71a88a13715aca6d93208fd1935ac4c415e46,src_2676cd269e6dbd23d6b4b1ad4718aae2b4801bb9804b02fad75d228b2f1da16b,src_10a9c437c8d23e89eddd04658f5643a5004cef8dacaf7d9034af5afc489e1d40,src_a1c8e161a09fabbdd8d82fd33de6d7035328c05b649384843e96951cae6cf13e,src_0e33947e27b94c42c6e097a53bc2e899fe9ff90e7b770cb8c8923677e5158aea,src_a2825823a9ce50290797353e7ff91485303a10907005debb4c55137cc0c098ca,src_2284dfa3fe5761c7dc0bd2658b5414c189afba2c94d16dca8a885e598e10ef0c,src_19e2faf996bcaf45b91a0209c6f5deb076529327a8fb01abd57537fe6f8fc996,src_936fccc054f7343cc1b2b3e1626dd9c9181a95797d70bc2e50101ebafbac4d32,src_b2d6ca0044b9ecc281cfa1f9d6170ff90c717e3db8f9f3f570e710de030a89ea,src_efd6bf6c52e80e2aafad99542d90c7ce567fd005eef85695c2d274668741a4a7,src_581e7dd507e5d5ee856882c153ddcaf3a87907c58d7959e8e16cf482a567725f,src_a6f61f4f7b9563550d704d99ea5e18c5accd93d5ee826aaa8dd543d27d7bad94,src_94488fe17e0331d15fe7e7f133381f9e30ad1ccd090f05a92fe5aeb027ae9ad3,src_5405f483241a230c565e50721455ebe60d7ef9c796edac6ab3d797a7805d8e82,src_96d1c238b25bf845d37a0680a46e1fad3334ae2648f95ebb1a66d86e86a54e5e,src_d77a135a3d6ad3e2acbb46e34d7f34a95fc4d766b96535c39cdc132e6e872f86,src_3059254af119b224c584b671ecbdeb8b306bb3212006946bd8dd1f334c83ac8b,src_aeca92d8cff47a86687a1bc01986f6af1f66c95c1b400ebcffd9f2524feba7ee,src_6835f4c5e9fc0267da98a6b1c54fba11e650d8da16f22a6a1bdfc0505d1ee18e; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                  "admission": "ADMITTED",
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                  "regime": "experimental",
+                  "shared_scope_digest": "bdac0030eae65fc803204305dc3319d7c0e969b5399122d10c3b288ad43ddda6",
+                  "protocol_digest": "dc0c4fc6a89d2b0995fd4ef7996efa2184fa116d62bd368effeaf97cc1b5d17c",
+                  "node_order": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6"
+                  ],
+                  "outcome": "成绩相对不推行计划时的提高，单位为分",
+                  "context": "辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系",
+                  "outcome_nodes": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6"
+                  ],
+                  "assignment_cells": [],
+                  "exposure_fingerprint": null
+                }
+              ],
+              "assumptions": [
+                {
+                  "name": "known_assignment_law",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "full_vector_randomization",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "consistency",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "fixed_pretreatment_network",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "finite_conditional_first_moments",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                }
+              ],
+              "route_receipt": {
+                "version": "non-arm-network-inquiry-shadow-v1.7",
+                "study_digest": "58b48d8ddf7bb9ba159a97bc34b611a436fa0c5ed9089a0b0b1bd7fe45a6a7df",
+                "study_declaration_digest": "2cbe7312b6d100947eeb963e4dbfec1ee20e2bc9700a066d73630b17eadb789e",
+                "assumption_evidence_digest": "ac69662bf9fdfc7daa1a2fda9fd396ab7cc31f36fc92561bfb8e7127396fa030",
+                "policy_assignment_probability": "1/64",
+                "target_digest": "f183ec115db3a99a77d820cfe4d02a14205525ca5bb575ba26603084af2ea42d",
+                "target_authority": "TRUSTED_FIXTURE",
+                "target_resolution": "RESOLVED",
+                "family_id": "randomized_full_assignment_policy_mean_candidate_v0",
+                "route_status": "THEOREM_BACKEND_UNAVAILABLE",
+                "target_match": "MATCHED",
+                "information_status": "SATISFIED",
+                "assumption_status": "ADMITTED",
+                "validity_status": "POSITIVE_UNDER_DECLARED_Q",
+                "backend_capability": "CANDIDATE_NOT_REGISTERED",
+                "required_observable": {
+                  "operator": "NODE_ASSIGNMENT_MEANS_FOR_POLICY",
+                  "network_fingerprint": "702afe871ce41d21191574c12cdb27494c9ae74cbf1cd1b1acddab2ca9f9ca66",
+                  "node_order": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6"
+                  ],
+                  "outcome": "成绩相对不推行计划时的提高，单位为分",
+                  "context": "辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系",
+                  "node_ids": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6"
+                  ],
+                  "arm_cell": null,
+                  "assignment_cell": [
+                    0,
+                    0,
+                    1,
+                    0,
+                    0,
+                    1
+                  ],
+                  "assignment_law_fingerprint": null,
+                  "exposure_fingerprint": null,
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR"
+                },
+                "source_results": [
+                  {
+                    "source_id": "source_e4692032ffa255c806c7a2d78adac5e18649a80bceb36dc87dd0d8b17de96fd9",
+                    "source_digest": "ecd198258c9b7f669ffd78207a94d0c50c7aba724c9e28e1feb984db66c9a772",
+                    "information_status": "SATISFIED",
+                    "reason": null,
+                    "rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17"
+                  }
+                ],
+                "blockers": [
+                  "NO_REGISTERED_GENERAL_FIXED_POLICY_THEOREM_OR_VERIFIER"
+                ],
+                "warnings": [
+                  "A4_SATISFIED_DOES_NOT_AUTHORIZE_CAUSAL_IDENTIFICATION"
+                ],
+                "mathematical_identification_from_router": null,
+                "digest": "df08eaf1a1b2229b51edbbfce4b29a821ea08c8d2b580e7e398bc0e93187b528"
+              },
+              "selected_a4_source_id": "source_e4692032ffa255c806c7a2d78adac5e18649a80bceb36dc87dd0d8b17de96fd9",
+              "selected_a4_source_digest": "ecd198258c9b7f669ffd78207a94d0c50c7aba724c9e28e1feb984db66c9a772",
+              "a4_rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17",
+              "assignment_probability": "1/64",
+              "weighted_nodes": [
+                "学1",
+                "学2",
+                "学3",
+                "学4",
+                "学5",
+                "学6"
+              ],
+              "node_weights": [
+                "1/6",
+                "1/6",
+                "1/6",
+                "1/6",
+                "1/6",
+                "1/6"
+              ],
+              "required_observables": [
+                "E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)]",
+                "E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)]",
+                "E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)]",
+                "E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)]",
+                "E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)]",
+                "E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)]"
+              ],
+              "identified_functional": "1/6 * E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)]",
+              "target_fingerprint": "dfd55cb255f8e817f5c4bd21713fa6d3f09717a54468bc20d9bd88a5d8e012b9",
+              "theorem_id": "R1B_RANDOMIZED_FULL_ASSIGNMENT_POLICY_POINT_V1",
+              "certificate_sha256": "ad7462f8d249aa15e188e664890db9a2c1b9bcf6210e5554ea208609699cc0b0",
+              "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+              "status": "POINT",
+              "verification_status": "VERIFIED",
+              "estimation_request": null
+            },
+            {
+              "study": {
+                "network_id": "network_a3c02b439f1be18cd7a2507b76e66ac8d2d23c1b62f5ddd8523e6cc1bbafed4e",
+                "node_order": [
+                  "学1",
+                  "学2",
+                  "学3",
+                  "学4",
+                  "学5",
+                  "学6"
+                ],
+                "undirected_edges": [
+                  [
+                    "学1",
+                    "学2"
+                  ],
+                  [
+                    "学1",
+                    "学3"
+                  ],
+                  [
+                    "学1",
+                    "学4"
+                  ],
+                  [
+                    "学2",
+                    "学3"
+                  ],
+                  [
+                    "学2",
+                    "学4"
+                  ],
+                  [
+                    "学3",
+                    "学4"
+                  ],
+                  [
+                    "学5",
+                    "学6"
+                  ]
+                ],
+                "treatment_variable": "被辅导记1，其余记0",
+                "outcome_variable": "成绩相对不推行计划时的提高，单位为分",
+                "outcome_kind": "continuous",
+                "context_reference": "辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系",
+                "observation_regime": "experimental",
+                "assignment_design_json": "{\"kind\":\"heterogeneous_bernoulli_binary_v1\",\"propensities\":{\"学1\":\"1/2\",\"学2\":\"1/2\",\"学3\":\"1/2\",\"学4\":\"1/2\",\"学5\":\"1/2\",\"学6\":\"1/2\"}}",
+                "protocol_provenance": "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755,src_2137bdd33434d7e0ed80953fc9abba8739e81836bef0481f6516b4abd9bbbf76,src_8b36407c133c752eefb7968136bf999ba9ef236a5dabe970119894d6746598d3,src_c36e63f7505553150738048266116e62ef2fa0bbbb8c85159c0552857995cd21,src_056277dbb45448fbd0599458fabe5480249a95f7fe54597a8637088e4acc32c0,src_867d613980904a6006b8f44dc8e71a88a13715aca6d93208fd1935ac4c415e46,src_2676cd269e6dbd23d6b4b1ad4718aae2b4801bb9804b02fad75d228b2f1da16b,src_10a9c437c8d23e89eddd04658f5643a5004cef8dacaf7d9034af5afc489e1d40,src_a1c8e161a09fabbdd8d82fd33de6d7035328c05b649384843e96951cae6cf13e,src_0e33947e27b94c42c6e097a53bc2e899fe9ff90e7b770cb8c8923677e5158aea,src_a2825823a9ce50290797353e7ff91485303a10907005debb4c55137cc0c098ca,src_2284dfa3fe5761c7dc0bd2658b5414c189afba2c94d16dca8a885e598e10ef0c,src_19e2faf996bcaf45b91a0209c6f5deb076529327a8fb01abd57537fe6f8fc996,src_936fccc054f7343cc1b2b3e1626dd9c9181a95797d70bc2e50101ebafbac4d32,src_b2d6ca0044b9ecc281cfa1f9d6170ff90c717e3db8f9f3f570e710de030a89ea,src_efd6bf6c52e80e2aafad99542d90c7ce567fd005eef85695c2d274668741a4a7,src_581e7dd507e5d5ee856882c153ddcaf3a87907c58d7959e8e16cf482a567725f,src_a6f61f4f7b9563550d704d99ea5e18c5accd93d5ee826aaa8dd543d27d7bad94,src_94488fe17e0331d15fe7e7f133381f9e30ad1ccd090f05a92fe5aeb027ae9ad3,src_5405f483241a230c565e50721455ebe60d7ef9c796edac6ab3d797a7805d8e82,src_96d1c238b25bf845d37a0680a46e1fad3334ae2648f95ebb1a66d86e86a54e5e,src_d77a135a3d6ad3e2acbb46e34d7f34a95fc4d766b96535c39cdc132e6e872f86,src_3059254af119b224c584b671ecbdeb8b306bb3212006946bd8dd1f334c83ac8b,src_aeca92d8cff47a86687a1bc01986f6af1f66c95c1b400ebcffd9f2524feba7ee,src_6835f4c5e9fc0267da98a6b1c54fba11e650d8da16f22a6a1bdfc0505d1ee18e; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                "network_provenance": "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755,src_2137bdd33434d7e0ed80953fc9abba8739e81836bef0481f6516b4abd9bbbf76,src_8b36407c133c752eefb7968136bf999ba9ef236a5dabe970119894d6746598d3,src_c36e63f7505553150738048266116e62ef2fa0bbbb8c85159c0552857995cd21,src_056277dbb45448fbd0599458fabe5480249a95f7fe54597a8637088e4acc32c0,src_867d613980904a6006b8f44dc8e71a88a13715aca6d93208fd1935ac4c415e46,src_2676cd269e6dbd23d6b4b1ad4718aae2b4801bb9804b02fad75d228b2f1da16b,src_10a9c437c8d23e89eddd04658f5643a5004cef8dacaf7d9034af5afc489e1d40,src_a1c8e161a09fabbdd8d82fd33de6d7035328c05b649384843e96951cae6cf13e,src_0e33947e27b94c42c6e097a53bc2e899fe9ff90e7b770cb8c8923677e5158aea,src_a2825823a9ce50290797353e7ff91485303a10907005debb4c55137cc0c098ca,src_2284dfa3fe5761c7dc0bd2658b5414c189afba2c94d16dca8a885e598e10ef0c,src_19e2faf996bcaf45b91a0209c6f5deb076529327a8fb01abd57537fe6f8fc996,src_936fccc054f7343cc1b2b3e1626dd9c9181a95797d70bc2e50101ebafbac4d32,src_b2d6ca0044b9ecc281cfa1f9d6170ff90c717e3db8f9f3f570e710de030a89ea,src_efd6bf6c52e80e2aafad99542d90c7ce567fd005eef85695c2d274668741a4a7,src_581e7dd507e5d5ee856882c153ddcaf3a87907c58d7959e8e16cf482a567725f,src_a6f61f4f7b9563550d704d99ea5e18c5accd93d5ee826aaa8dd543d27d7bad94,src_94488fe17e0331d15fe7e7f133381f9e30ad1ccd090f05a92fe5aeb027ae9ad3,src_5405f483241a230c565e50721455ebe60d7ef9c796edac6ab3d797a7805d8e82,src_96d1c238b25bf845d37a0680a46e1fad3334ae2648f95ebb1a66d86e86a54e5e,src_d77a135a3d6ad3e2acbb46e34d7f34a95fc4d766b96535c39cdc132e6e872f86,src_3059254af119b224c584b671ecbdeb8b306bb3212006946bd8dd1f334c83ac8b,src_aeca92d8cff47a86687a1bc01986f6af1f66c95c1b400ebcffd9f2524feba7ee,src_6835f4c5e9fc0267da98a6b1c54fba11e650d8da16f22a6a1bdfc0505d1ee18e; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+              },
+              "target": {
+                "kind": "FIXED_FULL_ASSIGNMENT_POLICY_MEAN",
+                "network_fingerprint": "702afe871ce41d21191574c12cdb27494c9ae74cbf1cd1b1acddab2ca9f9ca66",
+                "node_order": [
+                  "学1",
+                  "学2",
+                  "学3",
+                  "学4",
+                  "学5",
+                  "学6"
+                ],
+                "outcome": "成绩相对不推行计划时的提高，单位为分",
+                "context": "辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系",
+                "averaging_scope": "population_conditional_mean_given_W",
+                "authority": "TRUSTED_FIXTURE",
+                "query_resolution": "RESOLVED",
+                "assignment_law_fingerprint": null,
+                "exposure_fingerprint": null,
+                "node_id": null,
+                "arm": null,
+                "policy_assignment": [
+                  1,
+                  1,
+                  0,
+                  0,
+                  1,
+                  0
+                ],
+                "unit_weights": [
+                  "1/6",
+                  "1/6",
+                  "1/6",
+                  "1/6",
+                  "1/6",
+                  "1/6"
+                ],
+                "target_digest": "cc561fd92b5686ba321f6e489037cf6e256c6cc6afe6fa6366eb916f491c7bf8"
+              },
+              "sources": [
+                {
+                  "source_id": "source_e4692032ffa255c806c7a2d78adac5e18649a80bceb36dc87dd0d8b17de96fd9",
+                  "operator": "NODE_FULL_LAW",
+                  "provenance": "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755,src_2137bdd33434d7e0ed80953fc9abba8739e81836bef0481f6516b4abd9bbbf76,src_8b36407c133c752eefb7968136bf999ba9ef236a5dabe970119894d6746598d3,src_c36e63f7505553150738048266116e62ef2fa0bbbb8c85159c0552857995cd21,src_056277dbb45448fbd0599458fabe5480249a95f7fe54597a8637088e4acc32c0,src_867d613980904a6006b8f44dc8e71a88a13715aca6d93208fd1935ac4c415e46,src_2676cd269e6dbd23d6b4b1ad4718aae2b4801bb9804b02fad75d228b2f1da16b,src_10a9c437c8d23e89eddd04658f5643a5004cef8dacaf7d9034af5afc489e1d40,src_a1c8e161a09fabbdd8d82fd33de6d7035328c05b649384843e96951cae6cf13e,src_0e33947e27b94c42c6e097a53bc2e899fe9ff90e7b770cb8c8923677e5158aea,src_a2825823a9ce50290797353e7ff91485303a10907005debb4c55137cc0c098ca,src_2284dfa3fe5761c7dc0bd2658b5414c189afba2c94d16dca8a885e598e10ef0c,src_19e2faf996bcaf45b91a0209c6f5deb076529327a8fb01abd57537fe6f8fc996,src_936fccc054f7343cc1b2b3e1626dd9c9181a95797d70bc2e50101ebafbac4d32,src_b2d6ca0044b9ecc281cfa1f9d6170ff90c717e3db8f9f3f570e710de030a89ea,src_efd6bf6c52e80e2aafad99542d90c7ce567fd005eef85695c2d274668741a4a7,src_581e7dd507e5d5ee856882c153ddcaf3a87907c58d7959e8e16cf482a567725f,src_a6f61f4f7b9563550d704d99ea5e18c5accd93d5ee826aaa8dd543d27d7bad94,src_94488fe17e0331d15fe7e7f133381f9e30ad1ccd090f05a92fe5aeb027ae9ad3,src_5405f483241a230c565e50721455ebe60d7ef9c796edac6ab3d797a7805d8e82,src_96d1c238b25bf845d37a0680a46e1fad3334ae2648f95ebb1a66d86e86a54e5e,src_d77a135a3d6ad3e2acbb46e34d7f34a95fc4d766b96535c39cdc132e6e872f86,src_3059254af119b224c584b671ecbdeb8b306bb3212006946bd8dd1f334c83ac8b,src_aeca92d8cff47a86687a1bc01986f6af1f66c95c1b400ebcffd9f2524feba7ee,src_6835f4c5e9fc0267da98a6b1c54fba11e650d8da16f22a6a1bdfc0505d1ee18e; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                  "admission": "ADMITTED",
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                  "regime": "experimental",
+                  "shared_scope_digest": "bdac0030eae65fc803204305dc3319d7c0e969b5399122d10c3b288ad43ddda6",
+                  "protocol_digest": "dc0c4fc6a89d2b0995fd4ef7996efa2184fa116d62bd368effeaf97cc1b5d17c",
+                  "node_order": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6"
+                  ],
+                  "outcome": "成绩相对不推行计划时的提高，单位为分",
+                  "context": "辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系",
+                  "outcome_nodes": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6"
+                  ],
+                  "assignment_cells": [],
+                  "exposure_fingerprint": null
+                }
+              ],
+              "assumptions": [
+                {
+                  "name": "known_assignment_law",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "full_vector_randomization",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "consistency",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "fixed_pretreatment_network",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                },
+                {
+                  "name": "finite_conditional_first_moments",
+                  "source": "demo_specification",
+                  "confirmed": true,
+                  "status": "ADMITTED",
+                  "evidence": [
+                    "Reviewed original source locators: src_8c1da7b85e7bc953835d4243e0402d83d3d7972215308d7fa22f4901612dbf25,src_210e9b0ba1a30e0d0ed57f965c4d10b93ed2d497c3e73b9f8201fcfd9520d391,src_f3d5662df0968d8417eac1df1c8569f240c305f68cf31b09040201fd021dbde9,src_1a0dc7ee5d997690b5794b9fec0712b8873d4ac077b79ed53b77288a8bcc69ec,src_954de795b43e8fb0043d439a286e664b2a560bf09fef4b75c16d3ef351a84755; Frozen hypothetical target and declared model independently stipulated; no real-world approval.; review=e375d5d06020e296ef5e56c0d609e81cdf9e21e32f5f7851daf573af4cb021eb",
+                    "Independent synthetic protocol reviewer"
+                  ],
+                  "details": ""
+                }
+              ],
+              "route_receipt": {
+                "version": "non-arm-network-inquiry-shadow-v1.7",
+                "study_digest": "58b48d8ddf7bb9ba159a97bc34b611a436fa0c5ed9089a0b0b1bd7fe45a6a7df",
+                "study_declaration_digest": "2cbe7312b6d100947eeb963e4dbfec1ee20e2bc9700a066d73630b17eadb789e",
+                "assumption_evidence_digest": "ac69662bf9fdfc7daa1a2fda9fd396ab7cc31f36fc92561bfb8e7127396fa030",
+                "policy_assignment_probability": "1/64",
+                "target_digest": "cc561fd92b5686ba321f6e489037cf6e256c6cc6afe6fa6366eb916f491c7bf8",
+                "target_authority": "TRUSTED_FIXTURE",
+                "target_resolution": "RESOLVED",
+                "family_id": "randomized_full_assignment_policy_mean_candidate_v0",
+                "route_status": "THEOREM_BACKEND_UNAVAILABLE",
+                "target_match": "MATCHED",
+                "information_status": "SATISFIED",
+                "assumption_status": "ADMITTED",
+                "validity_status": "POSITIVE_UNDER_DECLARED_Q",
+                "backend_capability": "CANDIDATE_NOT_REGISTERED",
+                "required_observable": {
+                  "operator": "NODE_ASSIGNMENT_MEANS_FOR_POLICY",
+                  "network_fingerprint": "702afe871ce41d21191574c12cdb27494c9ae74cbf1cd1b1acddab2ca9f9ca66",
+                  "node_order": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6"
+                  ],
+                  "outcome": "成绩相对不推行计划时的提高，单位为分",
+                  "context": "辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系",
+                  "node_ids": [
+                    "学1",
+                    "学2",
+                    "学3",
+                    "学4",
+                    "学5",
+                    "学6"
+                  ],
+                  "arm_cell": null,
+                  "assignment_cell": [
+                    1,
+                    1,
+                    0,
+                    0,
+                    1,
+                    0
+                  ],
+                  "assignment_law_fingerprint": null,
+                  "exposure_fingerprint": null,
+                  "availability": "SYMBOLIC_POPULATION_OPERATOR"
+                },
+                "source_results": [
+                  {
+                    "source_id": "source_e4692032ffa255c806c7a2d78adac5e18649a80bceb36dc87dd0d8b17de96fd9",
+                    "source_digest": "ecd198258c9b7f669ffd78207a94d0c50c7aba724c9e28e1feb984db66c9a772",
+                    "information_status": "SATISFIED",
+                    "reason": null,
+                    "rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17"
+                  }
+                ],
+                "blockers": [
+                  "NO_REGISTERED_GENERAL_FIXED_POLICY_THEOREM_OR_VERIFIER"
+                ],
+                "warnings": [
+                  "A4_SATISFIED_DOES_NOT_AUTHORIZE_CAUSAL_IDENTIFICATION"
+                ],
+                "mathematical_identification_from_router": null,
+                "digest": "34029ea16e4269230a05453f5d9038b337ac0ac443c96d67065da615687b77fd"
+              },
+              "selected_a4_source_id": "source_e4692032ffa255c806c7a2d78adac5e18649a80bceb36dc87dd0d8b17de96fd9",
+              "selected_a4_source_digest": "ecd198258c9b7f669ffd78207a94d0c50c7aba724c9e28e1feb984db66c9a772",
+              "a4_rule_id": "A4_NODE_FULL_LAW_TO_ASSIGNMENT_MEAN_V17",
+              "assignment_probability": "1/64",
+              "weighted_nodes": [
+                "学1",
+                "学2",
+                "学3",
+                "学4",
+                "学5",
+                "学6"
+              ],
+              "node_weights": [
+                "1/6",
+                "1/6",
+                "1/6",
+                "1/6",
+                "1/6",
+                "1/6"
+              ],
+              "required_observables": [
+                "E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)]",
+                "E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)]",
+                "E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)]",
+                "E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)]",
+                "E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)]",
+                "E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)]"
+              ],
+              "identified_functional": "1/6 * E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)]",
+              "target_fingerprint": "84f9d96231a1ee37c0228770d02c56b35bf1b7b92d8d213fe4d1c469eb57b373",
+              "theorem_id": "R1B_RANDOMIZED_FULL_ASSIGNMENT_POLICY_POINT_V1",
+              "certificate_sha256": "e1992bc47f1976e2b05c0f5fee8b805456d85b9b2bc7feb033178bfffb63963a",
+              "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+              "status": "POINT",
+              "verification_status": "VERIFIED",
+              "estimation_request": null
+            }
+          ],
+          "policy_probabilities": [
+            "1/2",
+            "1/2"
+          ],
+          "target_fingerprint": "0c8fb6b4633a4e862a803276b610b50d235576e09acd95b098134e6c5de0e789",
+          "identified_functional": "1/2 * (1/6 * E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)] + 1/6 * E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(0,0,1,0,0,1)]) + 1/2 * (1/6 * E[Y_{学1}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学2}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学3}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学4}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学5}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)] + 1/6 * E[Y_{学6}^obs | W=辅导执行后的期末；六名学生分属甲乙两班，甲班四名学生互为参照组，乙班两名学生互为参照组，班间无参照关系, T_vector=(1,1,0,0,1,0)])",
+          "certificate_sha256": "b99a4fb1be19426fca979d7b1cedaea46853a5d9df16aef1517761c7d414d38f",
+          "theorem_id": "R1B_FINITE_SUPPORT_STOCHASTIC_POLICY_POINT_V1",
+          "version": "randomized-network-fixed-full-assignment-policy-point-v1.9",
+          "status": "POINT",
+          "verification_status": "VERIFIED",
+          "estimation_request": null
+        },
+        "attempted_routes": []
+      }
+    }
+  ],
+  "clarification_questions": [],
+  "evidence_status": "CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE",
+  "production_admission": false,
+  "estimation_handoff_allowed": false,
+  "query_id": "q1",
+  "remaining_query_ids": [],
+  "result_scope": "SELECTED_QUERY_ONLY",
+  "fact_family": "NETWORK_FINITE_POLICY_FACTS",
+  "plan_sha256": "c8b3327a8838b460bc4f58bfd1e2247015a61132a3cf545bb6c512878c7232aa",
+  "attempts": [
+    {
+      "stage": "POLICY_COMPONENT",
+      "state": "POINT",
+      "reason_code": null
+    },
+    {
+      "stage": "POLICY_COMPONENT",
+      "state": "POINT",
+      "reason_code": null
+    },
+    {
+      "method": "R1B_FINITE_POLICY",
+      "state": "POINT",
+      "reason_code": null
+    }
+  ],
+  "primary_method": "R1B_FINITE_POLICY",
+  "partial_fallback_performed": false
+}

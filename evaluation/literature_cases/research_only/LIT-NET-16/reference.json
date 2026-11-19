@@ -1,0 +1,481 @@
+{
+  "case_id": "LIT-NET-16",
+  "paper_id": "imbens_manski2004_confidence_intervals",
+  "paper": {
+    "author": "Guido W. Imbens and Charles F. Manski",
+    "year": 2004,
+    "title": "Confidence Intervals for Partially Identified Parameters",
+    "venue": "Econometrica",
+    "volume": "72",
+    "pages": "1845-1857",
+    "doi": null,
+    "version_checked": "User-provided published PDF, pp. 1845-1857, full text extracted; 17 verbatim quotes checked back to pages (PDF page + 1844)."
+  },
+  "paper_reference": {
+    "paper_question": "部分识别参数的置信区间应覆盖真值还是覆盖识别区域？在有界结果、部分数据缺失、缺失机制已知时，总体均值的识别区域是什么、区间如何构造？",
+    "target": "项目自建有限模型中的六团队链式全政策均值：六个团队全部启用练习计划时，等权平均完成率的识别区域。",
+    "source_location": "Section 3 (p. 1847) for the missing-data structure: bounded outcome, known p, theta = mu*p + lambda*(1-p) with lambda in [0,1], and the identification region [mu*p, mu*p + (1-p)]; p. 1847 'In the point identified case with p = 1' for the point-identification limit; p. 1846 for the substantive choice between covering the true value and covering the region. The numeric [1/6, 5/6] is NOT from this paper.",
+    "formula": "参照组：链式网络 团队1—团队2—团队3—团队4—团队5—团队6，同伴暴露=严格过半邻居启用，平票为0。原试点每轮均匀固定抽 2 个名额；目标政策为全启用（每个团队自身处理=1）。全启用情形下每个团队的暴露均为 1，故目标格子为（自身=1、暴露=1）。已知：团队1、团队6 在该格子均值 1/2；内部团队 团队2–5 的该格子均值只知在 [0,1]（该情形需 3 个名额、试点只有 2 个，在分配律下概率为零，框架允许其落在逐对象界限内）。识别区域：下界 (2×1/2 + 0)/6 = 1/6；上界 (2×1/2 + 1)/6 = 5/6；宽度 4/6 = 2/3。与论文公式的对应：µ = 1/2（被观测子群均值），p = 2/6 = 1/3（其权重质量），1−p = 2/3，[µ·p, µ·p + (1−p)] = [1/6, 5/6]，逐符号同构。目标变化版只评团队1、团队6（各 1/2）：两点均已知，坍缩为点识别 [1/2, 1/2]，宽度 0——对应论文中被观测子群均值 µ 的点识别与总体均值 θ 的区间识别之对照。",
+    "conditions": [
+      "Complete finite mean model: only the listed exact population signature means are known.",
+      "No full joint distribution and no extra aggregate means are provided.",
+      "Each team's mean lies in [0,1] under every complete binary assignment.",
+      "Mean sufficiency: each team's potential-outcome mean depends only on own treatment and strict-majority peer exposure, for all binary assignments.",
+      "Known assignment law: uniform fixed quota of 2 out of 6.",
+      "Consistency, randomization independence, fixed pre-treatment network, finite first moments.",
+      "No additional cross-unit or cross-context coupling constraints."
+    ],
+    "sharpness_argument": "The two known endpoint means contribute 1/2×2/6 = 1/6 in total. Each interior team's full-exposure cell mean can independently attain 0 and 1 within its declared bound, so the lower endpoint 1/6 and upper endpoint 5/6 are attainable. The interval is sharp relative to the declared finite mean model; the engine certificate reports sharp=true.",
+    "what_paper_supports": [
+      "The abstract structure of partially identified parameters (Section 2, p. 1846).",
+      "The missing-data identification region [mu*p, mu*p + (1-p)] with known p and bounded outcome (Section 3, p. 1847).",
+      "The point-identification limit as p approaches 1 (p. 1847).",
+      "The substantive choice between covering the true value and covering the region (p. 1846)."
+    ],
+    "what_paper_does_not_support": [
+      "It does not supply the numeric [1/6, 5/6] or [1/2, 1/2].",
+      "It does not supply the six-team chain network, the quota design, or the known/missing split.",
+      "Its confidence-interval machinery (three intervals, C_N equation, Lemmas 1-10) has no counterpart in this deterministic finite model; only the Section 3 identification region and the point-identification limit are borrowed."
+    ]
+  },
+  "available_information_a4": {
+    "population": "Six teams: 团队1–团队6, equal weight 1/6.",
+    "network": "Fixed chain: 团队1—团队2—团队3—团队4—团队5—团队6; no other edges.",
+    "assignment": "Original pilot: uniform fixed quota of exactly 2 treated teams.",
+    "information": "Two exact population signature means: 团队1 and 团队6 each at (own=1, exposure=1) equal 1/2. Interior teams' (own=1, exposure=1) cells never occur under the quota-2 pilot (they would need three treated teams), so their means are only bounded in [0,1].",
+    "complete_model": "Only the listed means are known; no full joint law or extra aggregate means."
+  },
+  "scientific_assumptions_a5": {
+    "status": "PROPOSED_AND_REQUIRES_INDEPENDENT_REVIEW",
+    "items": [
+      "Mean sufficiency: potential-outcome mean depends only on own treatment and strict-majority peer exposure, for all binary assignments.",
+      "Known uniform fixed-quota assignment law.",
+      "Consistency.",
+      "Randomization independence.",
+      "Fixed pre-treatment network.",
+      "Finite first moments.",
+      "No additional coupling restrictions."
+    ],
+    "not_adopted": [
+      "No extra monotonicity or other shape restrictions in the original case.",
+      "No full joint distribution.",
+      "No additional aggregate means or coupling constraints."
+    ]
+  },
+  "software_expected": {
+    "original": {
+      "status": "PARTIAL",
+      "interval": [
+        "1/6",
+        "5/6"
+      ],
+      "sharp": true,
+      "reason": "The current bounded-policy adapter supports the complete finite mean model and certifies the sharp interval."
+    },
+    "missing_condition": {
+      "status": "NEEDS_INPUT",
+      "reason": "The complete-model declarations are removed; the system cannot certify sharpness."
+    },
+    "changed_target": {
+      "status": "POINT",
+      "interval": [
+        "1/2",
+        "1/2"
+      ],
+      "sharp": true,
+      "reason": "Restricting the target population to the two pilot-revealed endpoints leaves both target cells known; the mean collapses to a point, mirroring the paper's point-identified mu."
+    }
+  },
+  "actual_run": {
+    "method": "LOCAL_STRUCTURED_BOUNDED_POLICY_RUN_NO_LLM",
+    "provenance": "2026-11-17 local structured run through the existing bounded-policy business entry with explicit synthetic reviews; api_calls=0.",
+    "original": {
+      "state": "PARTIAL",
+      "independent_replay": true,
+      "interval": [
+        "1/6",
+        "5/6"
+      ],
+      "width": "2/3",
+      "sharp": true,
+      "target_sha256": "7b5f6c392aa7783df0736ca79cfa94acb39ac696a8939a7accc173f2e1d8a93c",
+      "certificate": {
+        "version": "bounded-policy-mean-1",
+        "theorem": "FINITE_SIGNATURE_MEAN_BOX",
+        "input_sha256": "6f0e449bdee65989c4f4d9f7f8298e8e7ea984d2178bf0c5ccc5acc05f927a99",
+        "target_sha256": "7b5f6c392aa7783df0736ca79cfa94acb39ac696a8939a7accc173f2e1d8a93c",
+        "status": "PARTIAL",
+        "lower": "1/6",
+        "upper": "5/6",
+        "width": "2/3",
+        "logical_range": [
+          "0",
+          "1"
+        ],
+        "informative": true,
+        "sharp": true,
+        "model_scope": "SIGNATURE_MEANS_AND_NODE_BOUNDS_ONLY",
+        "cells": [
+          {
+            "cell": [
+              "团队1",
+              0,
+              0
+            ],
+            "support": "2/5",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队1",
+              0,
+              1
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队1",
+              1,
+              0
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队1",
+              1,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": "1/2",
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队2",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队2",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队2",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队2",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "0",
+            "upper_world": "1"
+          },
+          {
+            "cell": [
+              "团队3",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队3",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队3",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队3",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "0",
+            "upper_world": "1"
+          },
+          {
+            "cell": [
+              "团队4",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队4",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队4",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队4",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "0",
+            "upper_world": "1"
+          },
+          {
+            "cell": [
+              "团队5",
+              0,
+              0
+            ],
+            "support": "3/5",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队5",
+              0,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队5",
+              1,
+              0
+            ],
+            "support": "1/3",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队5",
+              1,
+              1
+            ],
+            "support": "0",
+            "a4_value": null,
+            "lower_world": "0",
+            "upper_world": "1"
+          },
+          {
+            "cell": [
+              "团队6",
+              0,
+              0
+            ],
+            "support": "2/5",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队6",
+              0,
+              1
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队6",
+              1,
+              0
+            ],
+            "support": "4/15",
+            "a4_value": null,
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          },
+          {
+            "cell": [
+              "团队6",
+              1,
+              1
+            ],
+            "support": "1/15",
+            "a4_value": "1/2",
+            "lower_world": "1/2",
+            "upper_world": "1/2"
+          }
+        ],
+        "bound_terms": [
+          {
+            "cell": [
+              "团队1",
+              1,
+              1
+            ],
+            "coefficient": "1/6",
+            "basis": "A4_EQUALITY",
+            "lower": "1/2",
+            "upper": "1/2"
+          },
+          {
+            "cell": [
+              "团队2",
+              1,
+              1
+            ],
+            "coefficient": "1/6",
+            "basis": "MEAN_BOUNDS",
+            "lower": "0",
+            "upper": "1"
+          },
+          {
+            "cell": [
+              "团队3",
+              1,
+              1
+            ],
+            "coefficient": "1/6",
+            "basis": "MEAN_BOUNDS",
+            "lower": "0",
+            "upper": "1"
+          },
+          {
+            "cell": [
+              "团队4",
+              1,
+              1
+            ],
+            "coefficient": "1/6",
+            "basis": "MEAN_BOUNDS",
+            "lower": "0",
+            "upper": "1"
+          },
+          {
+            "cell": [
+              "团队5",
+              1,
+              1
+            ],
+            "coefficient": "1/6",
+            "basis": "MEAN_BOUNDS",
+            "lower": "0",
+            "upper": "1"
+          },
+          {
+            "cell": [
+              "团队6",
+              1,
+              1
+            ],
+            "coefficient": "1/6",
+            "basis": "A4_EQUALITY",
+            "lower": "1/2",
+            "upper": "1/2"
+          }
+        ],
+        "realization": "BERNOULLI_PER_NODE_SIGNATURE",
+        "production_admission": false,
+        "estimation_handoff_allowed": false,
+        "certificate_sha256": "198f702a9f7c53f685f9a64924d3f98ca3c3c9c894035d8a3327b75901ad2357"
+      },
+      "output_file": "structured_runs/original/result.json"
+    },
+    "missing_condition": {
+      "state": "NEEDS_INPUT",
+      "reason_code": "BOUNDED_MODEL_DECLARATIONS_INCOMPLETE",
+      "output_file": "structured_runs/missing_condition/result.json"
+    },
+    "changed_target": {
+      "state": "POINT",
+      "independent_replay": true,
+      "interval": [
+        "1/2",
+        "1/2"
+      ],
+      "width": "0",
+      "sharp": true,
+      "target_sha256": "e110bb6a66266b8183014de2f90d246b8796c30b35f40b39ae3cc44d6bf168c2",
+      "output_file": "structured_runs/changed_target/result.json"
+    }
+  },
+  "review_status": "PENDING_TEACHER",
+  "reviewer": "teacher (to be completed)",
+  "holdout": false,
+  "notes": "PARTIAL case in the LIT-NET-03/04 bounded family. The [1/6, 5/6] interval is a project finite-model result reproducing the Section 3 identification-region formula of Imbens & Manski (2004), not a numeric answer from the paper. Missing complete-model scope is NEEDS_INPUT; the population-restricted changed target is POINT. Missingness in this case is structural (the quota-2 pilot never reveals interior teams' full-exposure cells), matching the bounded adapter's coherence rule; it is not stochastic survey nonresponse as in the paper."
+}

@@ -1,0 +1,1168 @@
+{
+  "source": "real LLM run (reading stage only), deepseek-chat, 2026-11-18 20:15 +0800",
+  "provenance": "Fresh LLM call recorded in this case package: three variants, one request each (plus one re-read where the structural check failed). The model only reads the question; it does not pick theorems, approve assumptions or produce identification results.",
+  "case_id": "LIT-NET-17",
+  "results": [
+    {
+      "case_id": "LIT-NET-17",
+      "variant": "original",
+      "run_at": "2026-11-18 20:17:16 +0800",
+      "provider": {
+        "name": "openai-chat-compatible:deepseek-chat",
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat"
+      },
+      "reading_source": "real_llm",
+      "reviews": {
+        "authority": "FROZEN_REFERENCE_APPROVALS",
+        "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+      },
+      "api_calls": 1,
+      "question": "如果这6家门店都接入共享库存，评价全部这些门店、每家权重相同，平均达标率能否由现有总体信息唯一确定？",
+      "prompt": {
+        "contract": "network-policy-reading-bounded",
+        "system_sha256": "a9067da06a8562e6ded9204ee483b9fdaf713cb9574913db4c810939e3211bc9",
+        "system_characters": 4055,
+        "user_characters": 21000
+      },
+      "reread": {
+        "performed": false,
+        "reason": "first answer used as-is; a re-read is a separate call"
+      },
+      "answer_seconds": 4.719,
+      "first_answer": {
+        "version": "network-policy-reading-1",
+        "reference_context": "ccf9d4aed7964",
+        "study": {
+          "source_ids": [
+            "s0001",
+            "s0002"
+          ],
+          "nodes": [
+            "门店1",
+            "门店2",
+            "门店3",
+            "门店4",
+            "门店5",
+            "门店6"
+          ],
+          "edges": [
+            [
+              "门店1",
+              "门店2"
+            ],
+            [
+              "门店2",
+              "门店3"
+            ],
+            [
+              "门店3",
+              "门店4"
+            ],
+            [
+              "门店4",
+              "门店5"
+            ],
+            [
+              "门店5",
+              "门店6"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "每家门店接入共享库存记1、不接入记0",
+          "outcome": "该门店在考核月内是否达标，达标记1、未达标记0",
+          "outcome_kind": "BINARY",
+          "context": "考核月；共享库存计划推广；6家门店参与"
+        },
+        "assignment": {
+          "source_ids": [
+            "s0003"
+          ],
+          "kind": "UNIFORM_FIXED_QUOTA",
+          "probabilities": null,
+          "fixed_count": 2,
+          "groups": null,
+          "treated_quotas": null,
+          "clusters": null,
+          "cluster_probabilities": null,
+          "quota_profiles": null,
+          "profile_probabilities": null,
+          "treated_sets": null,
+          "set_probabilities": null,
+          "unit_weights": null,
+          "balance_covariates": null,
+          "balance_tolerance": null
+        },
+        "first_stage_exclusion": null,
+        "target": {
+          "source_ids": [
+            "s0018",
+            "s0019",
+            "s0001"
+          ],
+          "kind": "FIXED_POLICY_MEAN",
+          "assignment": {
+            "门店1": 1,
+            "门店2": 1,
+            "门店3": 1,
+            "门店4": 1,
+            "门店5": 1,
+            "门店6": 1
+          },
+          "population": [
+            "门店1",
+            "门店2",
+            "门店3",
+            "门店4",
+            "门店5",
+            "门店6"
+          ],
+          "aggregation": "EQUAL_MEAN"
+        },
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          }
+        },
+        "exposure": {
+          "source_ids": [
+            "s0008"
+          ],
+          "kind": "STRICT_MAJORITY_TIES_LOW",
+          "core_collaborators": null,
+          "weights": null,
+          "mode": null,
+          "groups": null
+        },
+        "mean_sufficiency": {
+          "source_ids": [
+            "s0009"
+          ],
+          "value": true,
+          "scope": "ALL_BINARY_ASSIGNMENTS",
+          "covered_nodes": [
+            "门店1",
+            "门店2",
+            "门店3",
+            "门店4",
+            "门店5",
+            "门店6"
+          ]
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0005",
+              "s0006",
+              "s0007"
+            ],
+            "operator": "NODE_SIGNATURE_MEANS",
+            "availability": "EXACT_POPULATION_VALUE",
+            "outcome_nodes": [
+              "门店1",
+              "门店6"
+            ],
+            "assignment_cells": [],
+            "signature_cells": [
+              {
+                "node": "门店1",
+                "own": 1,
+                "exposure": 1,
+                "value": "3/4"
+              },
+              {
+                "node": "门店6",
+                "own": 1,
+                "exposure": 1,
+                "value": "3/4"
+              }
+            ]
+          }
+        ],
+        "additional_restrictions": [
+          {
+            "source_ids": [
+              "s0010",
+              "s0011",
+              "s0012",
+              "s0013",
+              "s0014",
+              "s0015",
+              "s0016",
+              "s0017"
+            ],
+            "text": "档案界限：对每家门店、每一种完整二元安排均成立，限制潜在结果均值；结果定义为考核月内是否达标，达标记1、未达标记0；单位为0/1指标，期间为考核月。"
+          },
+          {
+            "source_ids": [
+              "s0017"
+            ],
+            "text": "总体信息只有以上逐项列出的精确总体均值与档案界限，不包含完整联合分布、其他总体信息或额外聚合均值；除前述随机化、一致性、固定网络、有限矩、全安排均值暴露充分性以及上述界限外，没有跨门店、跨情境的额外耦合限制。"
+          }
+        ],
+        "unresolved": [],
+        "bounded_model": {
+          "source_ids": [
+            "s0010",
+            "s0011",
+            "s0012",
+            "s0013",
+            "s0014",
+            "s0015",
+            "s0016",
+            "s0017"
+          ],
+          "bounds_kind": "CONDITIONAL_MEAN",
+          "bounds_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+          "bounds": [
+            {
+              "source_ids": [
+                "s0011"
+              ],
+              "node": "门店1",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0012"
+              ],
+              "node": "门店2",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0013"
+              ],
+              "node": "门店3",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0014"
+              ],
+              "node": "门店4",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0015"
+              ],
+              "node": "门店5",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0016"
+              ],
+              "node": "门店6",
+              "lower": "1/2",
+              "upper": "3/4"
+            }
+          ],
+          "outcome_definition": "考核月内是否达标，达标记1、未达标记0",
+          "outcome_unit": "0/1指标",
+          "outcome_period": "考核月",
+          "listed_means_are_complete_information": {
+            "source_ids": [
+              "s0017"
+            ],
+            "value": true
+          },
+          "no_additional_coupling_constraints": {
+            "source_ids": [
+              "s0017"
+            ],
+            "value": true
+          }
+        }
+      },
+      "transport": {
+        "stream": false,
+        "json_mode_sent": true,
+        "output_token_parameter": null,
+        "output_token_limit": null,
+        "require_finish_reason": false,
+        "max_stream_wire_bytes": 2000000,
+        "transport_calls": 1,
+        "response_bytes": 4767,
+        "content_characters": 3139,
+        "content_bytes": 3815,
+        "stream_events": 0,
+        "stage": "complete",
+        "status": "json_object_received",
+        "http_status": 200,
+        "headers_seconds": 0.14,
+        "returned_model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 9306,
+          "completion_tokens": 1189,
+          "total_tokens": 10495,
+          "prompt_cache_hit_tokens": 1792,
+          "prompt_cache_miss_tokens": 7514
+        },
+        "finish_reason": "stop",
+        "json_envelope_received": "bare",
+        "elapsed_seconds": 4.719
+      },
+      "parsed_reference_context_sha256": "cf9d4aed7964f2ffd664344b550e5834b879c6a814c086c3ca0f5c9db5738128",
+      "confirmation": {
+        "confirmed": true,
+        "compared": [
+          "study.nodes",
+          "study.edges",
+          "study.graph_kind",
+          "study.edge_list_complete",
+          "study.outcome_kind",
+          "exposure.kind",
+          "target.population",
+          "target.kind",
+          "target.operation",
+          "target.aggregation",
+          "target.averaging",
+          "regime.kind",
+          "conditioning.kind",
+          "assignment.kind",
+          "assignment.probabilities",
+          "assignment.fixed_count",
+          "assumptions.*"
+        ],
+        "not_compared": [
+          "study.treatment",
+          "study.outcome",
+          "study.context",
+          "free-text notes"
+        ],
+        "contradictions": [],
+        "not_declared": [],
+        "extra": []
+      },
+      "declared_notes": {
+        "additional_restrictions": [
+          "档案界限：对每家门店、每一种完整二元安排均成立，限制潜在结果均值；结果定义为考核月内是否达标，达标记1、未达标记0；单位为0/1指标，期间为考核月。",
+          "总体信息只有以上逐项列出的精确总体均值与档案界限，不包含完整联合分布、其他总体信息或额外聚合均值；除前述随机化、一致性、固定网络、有限矩、全安排均值暴露充分性以及上述界限外，没有跨门店、跨情境的额外耦合限制。"
+        ],
+        "unresolved": [],
+        "adopted": false,
+        "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+      },
+      "plan_state": "REVIEW_REQUIRED",
+      "plan_reason": null,
+      "observed": "PARTIAL",
+      "reason_code": null,
+      "independent_replay": true,
+      "mathematical_claim": {
+        "interval": [
+          "7/12",
+          "3/4"
+        ],
+        "sharp": true,
+        "width": "1/6"
+      },
+      "outcome": {
+        "state": "PARTIAL",
+        "reason_code": null,
+        "independent_replay": true
+      }
+    },
+    {
+      "case_id": "LIT-NET-17",
+      "variant": "missing_condition",
+      "run_at": "2026-11-18 20:17:21 +0800",
+      "provider": {
+        "name": "openai-chat-compatible:deepseek-chat",
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat"
+      },
+      "reading_source": "real_llm",
+      "reviews": {
+        "authority": "FROZEN_REFERENCE_APPROVALS",
+        "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+      },
+      "api_calls": 1,
+      "question": "如果这6家门店都接入共享库存，评价全部这些门店、每家权重相同，平均达标率能否由现有总体信息唯一确定？",
+      "prompt": {
+        "contract": "network-policy-reading-bounded",
+        "system_sha256": "a9067da06a8562e6ded9204ee483b9fdaf713cb9574913db4c810939e3211bc9",
+        "system_characters": 4055,
+        "user_characters": 20910
+      },
+      "reread": {
+        "performed": false,
+        "reason": "first answer used as-is; a re-read is a separate call"
+      },
+      "answer_seconds": 4.125,
+      "first_answer": {
+        "version": "network-policy-reading-1",
+        "reference_context": "c1892606ae95a",
+        "study": {
+          "source_ids": [
+            "s0001",
+            "s0002"
+          ],
+          "nodes": [
+            "门店1",
+            "门店2",
+            "门店3",
+            "门店4",
+            "门店5",
+            "门店6"
+          ],
+          "edges": [
+            [
+              "门店1",
+              "门店2"
+            ],
+            [
+              "门店2",
+              "门店3"
+            ],
+            [
+              "门店3",
+              "门店4"
+            ],
+            [
+              "门店4",
+              "门店5"
+            ],
+            [
+              "门店5",
+              "门店6"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "每家门店接入共享库存记1、不接入记0",
+          "outcome": "该门店在考核月内是否达标，达标记1、未达标记0",
+          "outcome_kind": "BINARY",
+          "context": "考核月共有6家门店参与共享库存计划推广"
+        },
+        "assignment": {
+          "source_ids": [
+            "s0003"
+          ],
+          "kind": "UNIFORM_FIXED_QUOTA",
+          "probabilities": null,
+          "fixed_count": 2,
+          "groups": null,
+          "treated_quotas": null,
+          "clusters": null,
+          "cluster_probabilities": null,
+          "quota_profiles": null,
+          "profile_probabilities": null,
+          "treated_sets": null,
+          "set_probabilities": null,
+          "unit_weights": null,
+          "balance_covariates": null,
+          "balance_tolerance": null
+        },
+        "first_stage_exclusion": null,
+        "target": {
+          "source_ids": [
+            "s0018",
+            "s0019"
+          ],
+          "kind": "FIXED_POLICY_MEAN",
+          "assignment": {
+            "门店1": 1,
+            "门店2": 1,
+            "门店3": 1,
+            "门店4": 1,
+            "门店5": 1,
+            "门店6": 1
+          },
+          "population": [
+            "门店1",
+            "门店2",
+            "门店3",
+            "门店4",
+            "门店5",
+            "门店6"
+          ],
+          "aggregation": "EQUAL_MEAN"
+        },
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          }
+        },
+        "exposure": {
+          "source_ids": [
+            "s0008"
+          ],
+          "kind": "STRICT_MAJORITY_TIES_LOW",
+          "core_collaborators": null
+        },
+        "mean_sufficiency": {
+          "source_ids": [
+            "s0009"
+          ],
+          "value": true,
+          "scope": "ALL_BINARY_ASSIGNMENTS",
+          "covered_nodes": [
+            "门店1",
+            "门店2",
+            "门店3",
+            "门店4",
+            "门店5",
+            "门店6"
+          ]
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0005",
+              "s0006",
+              "s0007"
+            ],
+            "operator": "NODE_SIGNATURE_MEANS",
+            "availability": "EXACT_POPULATION_VALUE",
+            "outcome_nodes": [
+              "门店1",
+              "门店6"
+            ],
+            "assignment_cells": [],
+            "signature_cells": [
+              {
+                "node": "门店1",
+                "own": 1,
+                "exposure": 1,
+                "value": "3/4"
+              },
+              {
+                "node": "门店6",
+                "own": 1,
+                "exposure": 1,
+                "value": "3/4"
+              }
+            ]
+          }
+        ],
+        "additional_restrictions": [
+          {
+            "source_ids": [
+              "s0010"
+            ],
+            "text": "界限来自集团历史档案对同类门店该指标的记录，对每家门店、每一种完整二元安排均成立，限制潜在结果均值。结果定义为考核月内是否达标，达标记1、未达标记0；单位为0/1指标，期间为考核月。"
+          }
+        ],
+        "unresolved": [
+          {
+            "source_ids": [
+              "s0017"
+            ],
+            "text": "原文称研究暂未确认是否还有其他总体信息或耦合条件。"
+          }
+        ],
+        "bounded_model": {
+          "source_ids": [
+            "s0010",
+            "s0011",
+            "s0012",
+            "s0013",
+            "s0014",
+            "s0015",
+            "s0016"
+          ],
+          "bounds_kind": "CONDITIONAL_MEAN",
+          "bounds_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+          "bounds": [
+            {
+              "source_ids": [
+                "s0011"
+              ],
+              "node": "门店1",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0012"
+              ],
+              "node": "门店2",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0013"
+              ],
+              "node": "门店3",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0014"
+              ],
+              "node": "门店4",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0015"
+              ],
+              "node": "门店5",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0016"
+              ],
+              "node": "门店6",
+              "lower": "1/2",
+              "upper": "3/4"
+            }
+          ],
+          "outcome_definition": "考核月内是否达标，达标记1、未达标记0",
+          "outcome_unit": "0/1指标",
+          "outcome_period": "考核月",
+          "listed_means_are_complete_information": {
+            "source_ids": [
+              "s0017"
+            ],
+            "value": null
+          },
+          "no_additional_coupling_constraints": {
+            "source_ids": [
+              "s0017"
+            ],
+            "value": null
+          }
+        }
+      },
+      "transport": {
+        "stream": false,
+        "json_mode_sent": true,
+        "output_token_parameter": null,
+        "output_token_limit": null,
+        "require_finish_reason": false,
+        "max_stream_wire_bytes": 2000000,
+        "transport_calls": 1,
+        "response_bytes": 4443,
+        "content_characters": 2963,
+        "content_bytes": 3515,
+        "stream_events": 0,
+        "stage": "complete",
+        "status": "json_object_received",
+        "http_status": 200,
+        "headers_seconds": 0.125,
+        "returned_model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 9246,
+          "completion_tokens": 1097,
+          "total_tokens": 10343,
+          "prompt_cache_hit_tokens": 1792,
+          "prompt_cache_miss_tokens": 7454
+        },
+        "finish_reason": "stop",
+        "json_envelope_received": "bare",
+        "elapsed_seconds": 4.125
+      },
+      "parsed_reference_context_sha256": "1892606ae95a6efa0b4f815f29327a0be73aeeacb48134f82cab0f01ea130f5e",
+      "confirmation": {
+        "confirmed": true,
+        "compared": [
+          "study.nodes",
+          "study.edges",
+          "study.graph_kind",
+          "study.edge_list_complete",
+          "study.outcome_kind",
+          "exposure.kind",
+          "target.population",
+          "target.kind",
+          "target.operation",
+          "target.aggregation",
+          "target.averaging",
+          "regime.kind",
+          "conditioning.kind",
+          "assignment.kind",
+          "assignment.probabilities",
+          "assignment.fixed_count",
+          "assumptions.*"
+        ],
+        "not_compared": [
+          "study.treatment",
+          "study.outcome",
+          "study.context",
+          "free-text notes"
+        ],
+        "contradictions": [],
+        "not_declared": [],
+        "extra": []
+      },
+      "declared_notes": {
+        "additional_restrictions": [
+          "界限来自集团历史档案对同类门店该指标的记录，对每家门店、每一种完整二元安排均成立，限制潜在结果均值。结果定义为考核月内是否达标，达标记1、未达标记0；单位为0/1指标，期间为考核月。"
+        ],
+        "unresolved": [
+          "原文称研究暂未确认是否还有其他总体信息或耦合条件。"
+        ],
+        "adopted": false,
+        "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+      },
+      "plan_state": "NEEDS_INPUT",
+      "plan_reason": "BOUNDED_MODEL_DECLARATIONS_INCOMPLETE",
+      "observed": "NEEDS_INPUT",
+      "reason_code": "BOUNDED_MODEL_DECLARATIONS_INCOMPLETE",
+      "independent_replay": false,
+      "mathematical_claim": {},
+      "outcome": {
+        "state": "NEEDS_INPUT",
+        "reason_code": "BOUNDED_MODEL_DECLARATIONS_INCOMPLETE",
+        "independent_replay": false
+      }
+    },
+    {
+      "case_id": "LIT-NET-17",
+      "variant": "changed_target",
+      "run_at": "2026-11-18 20:17:25 +0800",
+      "provider": {
+        "name": "openai-chat-compatible:deepseek-chat",
+        "base_url": "https://api.deepseek.com/v1",
+        "model": "deepseek-chat"
+      },
+      "reading_source": "real_llm",
+      "reviews": {
+        "authority": "FROZEN_REFERENCE_APPROVALS",
+        "note": "Scientific worksheets are approved by the frozen reference approvals, exactly as in the hand-authored runners; disclosed here. The model's answer is never the source of its own approval."
+      },
+      "api_calls": 1,
+      "question": "如果这6家门店都接入共享库存，只评价由历史档案给出均值区间的门店2到门店5、每家权重相同，平均达标率能否由现有总体信息唯一确定？",
+      "prompt": {
+        "contract": "network-policy-reading-bounded",
+        "system_sha256": "a9067da06a8562e6ded9204ee483b9fdaf713cb9574913db4c810939e3211bc9",
+        "system_characters": 4055,
+        "user_characters": 21042
+      },
+      "reread": {
+        "performed": false,
+        "reason": "first answer used as-is; a re-read is a separate call"
+      },
+      "answer_seconds": 4.688,
+      "first_answer": {
+        "version": "network-policy-reading-1",
+        "reference_context": "c2ac9eea7610d",
+        "study": {
+          "source_ids": [
+            "s0001",
+            "s0002"
+          ],
+          "nodes": [
+            "门店1",
+            "门店2",
+            "门店3",
+            "门店4",
+            "门店5",
+            "门店6"
+          ],
+          "edges": [
+            [
+              "门店1",
+              "门店2"
+            ],
+            [
+              "门店2",
+              "门店3"
+            ],
+            [
+              "门店3",
+              "门店4"
+            ],
+            [
+              "门店4",
+              "门店5"
+            ],
+            [
+              "门店5",
+              "门店6"
+            ]
+          ],
+          "graph_kind": "SIMPLE_UNDIRECTED",
+          "edge_list_complete": true,
+          "treatment": "每家门店接入共享库存记1、不接入记0",
+          "outcome": "该门店在考核月内是否达标，达标记1、未达标记0",
+          "outcome_kind": "BINARY",
+          "context": "考核月共享库存计划推广；相邻关系为固定的处理前简单无向网络。"
+        },
+        "assignment": {
+          "source_ids": [
+            "s0003"
+          ],
+          "kind": "UNIFORM_FIXED_QUOTA",
+          "probabilities": null,
+          "fixed_count": 2,
+          "groups": null,
+          "treated_quotas": null,
+          "clusters": null,
+          "cluster_probabilities": null,
+          "quota_profiles": null,
+          "profile_probabilities": null,
+          "treated_sets": null,
+          "set_probabilities": null,
+          "unit_weights": null,
+          "balance_covariates": null,
+          "balance_tolerance": null
+        },
+        "first_stage_exclusion": null,
+        "target": {
+          "source_ids": [
+            "s0018",
+            "s0019"
+          ],
+          "kind": "FIXED_POLICY_MEAN",
+          "assignment": {
+            "门店1": 1,
+            "门店2": 1,
+            "门店3": 1,
+            "门店4": 1,
+            "门店5": 1,
+            "门店6": 1
+          },
+          "population": [
+            "门店2",
+            "门店3",
+            "门店4",
+            "门店5"
+          ],
+          "aggregation": "EQUAL_MEAN"
+        },
+        "assumptions": {
+          "known_assignment_law": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "full_vector_randomization": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "consistency": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "fixed_pretreatment_network": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          },
+          "finite_conditional_first_moments": {
+            "source_ids": [
+              "s0004"
+            ],
+            "value": true
+          }
+        },
+        "exposure": {
+          "source_ids": [
+            "s0008"
+          ],
+          "kind": "STRICT_MAJORITY_TIES_LOW",
+          "core_collaborators": null,
+          "weights": null,
+          "mode": null,
+          "groups": null
+        },
+        "mean_sufficiency": {
+          "source_ids": [
+            "s0009"
+          ],
+          "value": true,
+          "scope": "ALL_BINARY_ASSIGNMENTS",
+          "covered_nodes": [
+            "门店1",
+            "门店2",
+            "门店3",
+            "门店4",
+            "门店5",
+            "门店6"
+          ]
+        },
+        "information": [
+          {
+            "source_ids": [
+              "s0005",
+              "s0006",
+              "s0007"
+            ],
+            "operator": "NODE_SIGNATURE_MEANS",
+            "availability": "EXACT_POPULATION_VALUE",
+            "outcome_nodes": [
+              "门店1",
+              "门店6"
+            ],
+            "assignment_cells": [],
+            "signature_cells": [
+              {
+                "node": "门店1",
+                "own": 1,
+                "exposure": 1,
+                "value": "3/4"
+              },
+              {
+                "node": "门店6",
+                "own": 1,
+                "exposure": 1,
+                "value": "3/4"
+              }
+            ]
+          }
+        ],
+        "additional_restrictions": [
+          {
+            "source_ids": [
+              "s0010",
+              "s0011",
+              "s0012",
+              "s0013",
+              "s0014",
+              "s0015",
+              "s0016"
+            ],
+            "text": "集团历史档案给出对每家门店、每一种完整二元安排均成立的潜在结果条件均值界限：门店1至门店6的下界均为1/2、上界均为3/4；结果定义为考核月内是否达标（达标记1、未达标记0），单位为0/1指标，期间为考核月。"
+          },
+          {
+            "source_ids": [
+              "s0017"
+            ],
+            "text": "总体信息只有逐项列出的精确总体均值与档案界限，不包含完整联合分布、其他总体信息或额外聚合均值；除已述随机化、一致性、固定网络、有限矩、全安排均值暴露充分性及上述界限外，没有跨门店、跨情境的额外耦合限制。"
+          }
+        ],
+        "unresolved": [],
+        "bounded_model": {
+          "source_ids": [
+            "s0010",
+            "s0011",
+            "s0012",
+            "s0013",
+            "s0014",
+            "s0015",
+            "s0016",
+            "s0017"
+          ],
+          "bounds_kind": "CONDITIONAL_MEAN",
+          "bounds_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+          "bounds": [
+            {
+              "source_ids": [
+                "s0011"
+              ],
+              "node": "门店1",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0012"
+              ],
+              "node": "门店2",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0013"
+              ],
+              "node": "门店3",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0014"
+              ],
+              "node": "门店4",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0015"
+              ],
+              "node": "门店5",
+              "lower": "1/2",
+              "upper": "3/4"
+            },
+            {
+              "source_ids": [
+                "s0016"
+              ],
+              "node": "门店6",
+              "lower": "1/2",
+              "upper": "3/4"
+            }
+          ],
+          "outcome_definition": "考核月内是否达标，达标记1、未达标记0",
+          "outcome_unit": "0/1指标",
+          "outcome_period": "考核月",
+          "listed_means_are_complete_information": {
+            "source_ids": [
+              "s0017"
+            ],
+            "value": true
+          },
+          "no_additional_coupling_constraints": {
+            "source_ids": [
+              "s0017"
+            ],
+            "value": true
+          }
+        }
+      },
+      "transport": {
+        "stream": false,
+        "json_mode_sent": true,
+        "output_token_parameter": null,
+        "output_token_limit": null,
+        "require_finish_reason": false,
+        "max_stream_wire_bytes": 2000000,
+        "transport_calls": 1,
+        "response_bytes": 4823,
+        "content_characters": 3149,
+        "content_bytes": 3879,
+        "stream_events": 0,
+        "stage": "complete",
+        "status": "json_object_received",
+        "http_status": 200,
+        "headers_seconds": 0.344,
+        "returned_model": "deepseek-flash",
+        "usage": {
+          "prompt_tokens": 9336,
+          "completion_tokens": 1201,
+          "total_tokens": 10537,
+          "prompt_cache_hit_tokens": 1920,
+          "prompt_cache_miss_tokens": 7416
+        },
+        "finish_reason": "stop",
+        "json_envelope_received": "bare",
+        "elapsed_seconds": 4.688
+      },
+      "parsed_reference_context_sha256": "2ac9eea7610db17741fadbf1257b3e86d2910768ea43ce872654c82b48f85ba7",
+      "confirmation": {
+        "confirmed": true,
+        "compared": [
+          "study.nodes",
+          "study.edges",
+          "study.graph_kind",
+          "study.edge_list_complete",
+          "study.outcome_kind",
+          "exposure.kind",
+          "target.population",
+          "target.kind",
+          "target.operation",
+          "target.aggregation",
+          "target.averaging",
+          "regime.kind",
+          "conditioning.kind",
+          "assignment.kind",
+          "assignment.probabilities",
+          "assignment.fixed_count",
+          "assumptions.*"
+        ],
+        "not_compared": [
+          "study.treatment",
+          "study.outcome",
+          "study.context",
+          "free-text notes"
+        ],
+        "contradictions": [],
+        "not_declared": [],
+        "extra": []
+      },
+      "declared_notes": {
+        "additional_restrictions": [
+          "集团历史档案给出对每家门店、每一种完整二元安排均成立的潜在结果条件均值界限：门店1至门店6的下界均为1/2、上界均为3/4；结果定义为考核月内是否达标（达标记1、未达标记0），单位为0/1指标，期间为考核月。",
+          "总体信息只有逐项列出的精确总体均值与档案界限，不包含完整联合分布、其他总体信息或额外聚合均值；除已述随机化、一致性、固定网络、有限矩、全安排均值暴露充分性及上述界限外，没有跨门店、跨情境的额外耦合限制。"
+        ],
+        "unresolved": [],
+        "adopted": false,
+        "reason": "Recorded, not adopted: the engine routes additional restrictions to a separate adapter, and the frozen reference approvals are the only scientific approval in this run."
+      },
+      "plan_state": "REVIEW_REQUIRED",
+      "plan_reason": null,
+      "observed": "PARTIAL",
+      "reason_code": null,
+      "independent_replay": true,
+      "mathematical_claim": {
+        "interval": [
+          "1/2",
+          "3/4"
+        ],
+        "sharp": true,
+        "width": "1/4"
+      },
+      "outcome": {
+        "state": "PARTIAL",
+        "reason_code": null,
+        "independent_replay": true
+      }
+    }
+  ]
+}

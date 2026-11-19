@@ -1,0 +1,645 @@
+{
+  "state": "NEEDS_INPUT",
+  "reason_code": "BOUNDED_MODEL_DECLARATIONS_INCOMPLETE",
+  "backend_called": false,
+  "independent_replay": false,
+  "mathematical_claim": null,
+  "certificate": null,
+  "answers": [],
+  "clarification_questions": [
+    "请核对逐对象界限、均值界或结果界、期间单位、全部安排范围，以及信息完整性和无额外耦合限制声明。"
+  ],
+  "evidence_status": "CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE",
+  "production_admission": false,
+  "estimation_handoff_allowed": false,
+  "query_id": "q1",
+  "result_scope": "SELECTED_QUERY_ONLY",
+  "remaining_query_ids": [],
+  "fact_family": "NETWORK_FIXED_POLICY_FACTS",
+  "request_sha256": "dd34e678f97f76e811162d1ffc170d9c06c7ccd8e3b9070d567aa9c15411f4d0",
+  "methods": [],
+  "exclusions": [],
+  "method_matching": "NOT_CHECKED_BEFORE_SCIENCE_REVIEW",
+  "query_review": {
+    "version": "business-dispatch-review-1",
+    "binding_sha256": "7c7a196231ec1b4f1fa77eb5caa12bdeaa38a61c9a8c588238c28c4571b7b990",
+    "reviewer": "Independent synthetic protocol reviewer",
+    "evidence": "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+    "authority": "SYNTHETIC_TEST",
+    "decisions": {
+      "business_target_and_population": "ACCEPTED",
+      "research_structure": "ACCEPTED",
+      "source_entailment": "ACCEPTED"
+    }
+  },
+  "facts": {
+    "version": "network-policy-reading-1",
+    "reference_context": "c1ea005238631",
+    "study": {
+      "source_ids": [
+        "src_ca89778afe1b49eb73d27cb197ab51ed292dd73c52375d1682637384a474c30a",
+        "src_5e4e69fd8d643763f2f71065b1fbba8f4136997a8f077929d18ffcb140599181"
+      ],
+      "nodes": [
+        "团队1",
+        "团队2",
+        "团队3",
+        "团队4",
+        "团队5",
+        "团队6"
+      ],
+      "edges": [
+        [
+          "团队1",
+          "团队2"
+        ],
+        [
+          "团队2",
+          "团队3"
+        ],
+        [
+          "团队3",
+          "团队4"
+        ],
+        [
+          "团队4",
+          "团队5"
+        ],
+        [
+          "团队5",
+          "团队6"
+        ]
+      ],
+      "graph_kind": "SIMPLE_UNDIRECTED",
+      "edge_list_complete": true,
+      "treatment": "启用练习计划",
+      "outcome": "考核周内是否完成全部练习",
+      "outcome_kind": "BINARY",
+      "context": "考核周练习计划推广"
+    },
+    "assignment": {
+      "source_ids": [
+        "src_c45b64a378eaaba8f937a65d92c6b75d08bdf36a1f2cef7b85926f4864edc7e0"
+      ],
+      "kind": "UNIFORM_FIXED_QUOTA",
+      "probabilities": null,
+      "fixed_count": 2,
+      "groups": null,
+      "treated_quotas": null,
+      "clusters": null,
+      "cluster_probabilities": null,
+      "quota_profiles": null,
+      "profile_probabilities": null,
+      "treated_sets": null,
+      "set_probabilities": null,
+      "unit_weights": null,
+      "balance_covariates": null,
+      "balance_tolerance": null
+    },
+    "first_stage_exclusion": null,
+    "target": {
+      "source_ids": [
+        "src_cfac40b101dce56ea999d941a8f3eae67ae8d2604717618988802c5dd81a2de1"
+      ],
+      "kind": "FIXED_POLICY_MEAN",
+      "assignment": {
+        "团队1": 1,
+        "团队2": 1,
+        "团队3": 1,
+        "团队4": 1,
+        "团队5": 1,
+        "团队6": 1
+      },
+      "population": [
+        "团队1",
+        "团队2",
+        "团队3",
+        "团队4",
+        "团队5",
+        "团队6"
+      ],
+      "aggregation": "EQUAL_MEAN"
+    },
+    "assumptions": {
+      "known_assignment_law": {
+        "source_ids": [
+          "src_e845b2650a0683d654ac2fe5c0776f4c89c0ad2f7394198b3167ef5dbde29be3"
+        ],
+        "value": true
+      },
+      "full_vector_randomization": {
+        "source_ids": [
+          "src_e845b2650a0683d654ac2fe5c0776f4c89c0ad2f7394198b3167ef5dbde29be3"
+        ],
+        "value": true
+      },
+      "consistency": {
+        "source_ids": [
+          "src_e845b2650a0683d654ac2fe5c0776f4c89c0ad2f7394198b3167ef5dbde29be3"
+        ],
+        "value": true
+      },
+      "fixed_pretreatment_network": {
+        "source_ids": [
+          "src_e845b2650a0683d654ac2fe5c0776f4c89c0ad2f7394198b3167ef5dbde29be3"
+        ],
+        "value": true
+      },
+      "finite_conditional_first_moments": {
+        "source_ids": [
+          "src_e845b2650a0683d654ac2fe5c0776f4c89c0ad2f7394198b3167ef5dbde29be3"
+        ],
+        "value": true
+      }
+    },
+    "exposure": {
+      "source_ids": [
+        "src_5d1e752ea8ae6a02ae0939b7f3202c5a39db9fd44799f269339565c589efbcf2"
+      ],
+      "kind": "STRICT_MAJORITY_TIES_LOW",
+      "core_collaborators": null,
+      "weights": null,
+      "mode": null,
+      "groups": null
+    },
+    "mean_sufficiency": {
+      "source_ids": [
+        "src_106e5dc542ba9a6e2ce5e1dba35deaeaf2aadd02d1692c3aacda4ab359f329aa"
+      ],
+      "value": true,
+      "scope": "ALL_BINARY_ASSIGNMENTS",
+      "covered_nodes": [
+        "团队1",
+        "团队2",
+        "团队3",
+        "团队4",
+        "团队5",
+        "团队6"
+      ]
+    },
+    "information": [
+      {
+        "source_ids": [
+          "src_61330d8dcc5132bb3f3c763d4c07d9ed05f9149cbcea11a32cd5fdf416e93bb7",
+          "src_9bb8716d2cc1a4daab7595d20ec86ba7b88913cfa68d18894e6d8caa29e73001",
+          "src_102ea65546aeda76524fd07b5f35955168343aa3e379e3983b3759f6ad21e88d"
+        ],
+        "operator": "NODE_SIGNATURE_MEANS",
+        "availability": "EXACT_POPULATION_VALUE",
+        "outcome_nodes": [
+          "团队1",
+          "团队6"
+        ],
+        "assignment_cells": [],
+        "signature_cells": [
+          {
+            "node": "团队1",
+            "own": 1,
+            "exposure": 1,
+            "value": "1/2"
+          },
+          {
+            "node": "团队6",
+            "own": 1,
+            "exposure": 1,
+            "value": "1/2"
+          }
+        ]
+      }
+    ],
+    "additional_restrictions": [],
+    "unresolved": [],
+    "bounded_model": {
+      "source_ids": [
+        "src_f2ab6ce68a31fc4018b536aa70cab5fa92f10052150786b596bedcf6565b2308",
+        "src_06594e7ccd95bd4d943152751d0ff407dfba067b1fa5a70be040f1f2ba0abdf0",
+        "src_fb7c0b1e4e3db7bfafb22244aa4349ac2c9b84f12c4359bc444d3a9fd3baf50a",
+        "src_25a5d8dee488f4bfd232bb3502cf2329543b9b02160edcc54517b60255c6d28c",
+        "src_aea408320d0f4033826e125ad09df0f872445ab7f7c4d6ff6211445145d69824",
+        "src_77ffd6943be4d9d48d2b54a9ae518498412f6eabaf3bd16e99470c746bb8f8ee",
+        "src_f8bd8b537a9ab614121b9d15ba4b8ee65a316cd074107056d31dc26548614acc"
+      ],
+      "bounds_kind": "CONDITIONAL_MEAN",
+      "bounds_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+      "bounds": [
+        {
+          "source_ids": [
+            "src_f2ab6ce68a31fc4018b536aa70cab5fa92f10052150786b596bedcf6565b2308",
+            "src_06594e7ccd95bd4d943152751d0ff407dfba067b1fa5a70be040f1f2ba0abdf0",
+            "src_fb7c0b1e4e3db7bfafb22244aa4349ac2c9b84f12c4359bc444d3a9fd3baf50a",
+            "src_25a5d8dee488f4bfd232bb3502cf2329543b9b02160edcc54517b60255c6d28c",
+            "src_aea408320d0f4033826e125ad09df0f872445ab7f7c4d6ff6211445145d69824",
+            "src_77ffd6943be4d9d48d2b54a9ae518498412f6eabaf3bd16e99470c746bb8f8ee",
+            "src_f8bd8b537a9ab614121b9d15ba4b8ee65a316cd074107056d31dc26548614acc"
+          ],
+          "node": "团队1",
+          "lower": "0",
+          "upper": "1"
+        },
+        {
+          "source_ids": [
+            "src_f2ab6ce68a31fc4018b536aa70cab5fa92f10052150786b596bedcf6565b2308",
+            "src_06594e7ccd95bd4d943152751d0ff407dfba067b1fa5a70be040f1f2ba0abdf0",
+            "src_fb7c0b1e4e3db7bfafb22244aa4349ac2c9b84f12c4359bc444d3a9fd3baf50a",
+            "src_25a5d8dee488f4bfd232bb3502cf2329543b9b02160edcc54517b60255c6d28c",
+            "src_aea408320d0f4033826e125ad09df0f872445ab7f7c4d6ff6211445145d69824",
+            "src_77ffd6943be4d9d48d2b54a9ae518498412f6eabaf3bd16e99470c746bb8f8ee",
+            "src_f8bd8b537a9ab614121b9d15ba4b8ee65a316cd074107056d31dc26548614acc"
+          ],
+          "node": "团队2",
+          "lower": "0",
+          "upper": "1"
+        },
+        {
+          "source_ids": [
+            "src_f2ab6ce68a31fc4018b536aa70cab5fa92f10052150786b596bedcf6565b2308",
+            "src_06594e7ccd95bd4d943152751d0ff407dfba067b1fa5a70be040f1f2ba0abdf0",
+            "src_fb7c0b1e4e3db7bfafb22244aa4349ac2c9b84f12c4359bc444d3a9fd3baf50a",
+            "src_25a5d8dee488f4bfd232bb3502cf2329543b9b02160edcc54517b60255c6d28c",
+            "src_aea408320d0f4033826e125ad09df0f872445ab7f7c4d6ff6211445145d69824",
+            "src_77ffd6943be4d9d48d2b54a9ae518498412f6eabaf3bd16e99470c746bb8f8ee",
+            "src_f8bd8b537a9ab614121b9d15ba4b8ee65a316cd074107056d31dc26548614acc"
+          ],
+          "node": "团队3",
+          "lower": "0",
+          "upper": "1"
+        },
+        {
+          "source_ids": [
+            "src_f2ab6ce68a31fc4018b536aa70cab5fa92f10052150786b596bedcf6565b2308",
+            "src_06594e7ccd95bd4d943152751d0ff407dfba067b1fa5a70be040f1f2ba0abdf0",
+            "src_fb7c0b1e4e3db7bfafb22244aa4349ac2c9b84f12c4359bc444d3a9fd3baf50a",
+            "src_25a5d8dee488f4bfd232bb3502cf2329543b9b02160edcc54517b60255c6d28c",
+            "src_aea408320d0f4033826e125ad09df0f872445ab7f7c4d6ff6211445145d69824",
+            "src_77ffd6943be4d9d48d2b54a9ae518498412f6eabaf3bd16e99470c746bb8f8ee",
+            "src_f8bd8b537a9ab614121b9d15ba4b8ee65a316cd074107056d31dc26548614acc"
+          ],
+          "node": "团队4",
+          "lower": "0",
+          "upper": "1"
+        },
+        {
+          "source_ids": [
+            "src_f2ab6ce68a31fc4018b536aa70cab5fa92f10052150786b596bedcf6565b2308",
+            "src_06594e7ccd95bd4d943152751d0ff407dfba067b1fa5a70be040f1f2ba0abdf0",
+            "src_fb7c0b1e4e3db7bfafb22244aa4349ac2c9b84f12c4359bc444d3a9fd3baf50a",
+            "src_25a5d8dee488f4bfd232bb3502cf2329543b9b02160edcc54517b60255c6d28c",
+            "src_aea408320d0f4033826e125ad09df0f872445ab7f7c4d6ff6211445145d69824",
+            "src_77ffd6943be4d9d48d2b54a9ae518498412f6eabaf3bd16e99470c746bb8f8ee",
+            "src_f8bd8b537a9ab614121b9d15ba4b8ee65a316cd074107056d31dc26548614acc"
+          ],
+          "node": "团队5",
+          "lower": "0",
+          "upper": "1"
+        },
+        {
+          "source_ids": [
+            "src_f2ab6ce68a31fc4018b536aa70cab5fa92f10052150786b596bedcf6565b2308",
+            "src_06594e7ccd95bd4d943152751d0ff407dfba067b1fa5a70be040f1f2ba0abdf0",
+            "src_fb7c0b1e4e3db7bfafb22244aa4349ac2c9b84f12c4359bc444d3a9fd3baf50a",
+            "src_25a5d8dee488f4bfd232bb3502cf2329543b9b02160edcc54517b60255c6d28c",
+            "src_aea408320d0f4033826e125ad09df0f872445ab7f7c4d6ff6211445145d69824",
+            "src_77ffd6943be4d9d48d2b54a9ae518498412f6eabaf3bd16e99470c746bb8f8ee",
+            "src_f8bd8b537a9ab614121b9d15ba4b8ee65a316cd074107056d31dc26548614acc"
+          ],
+          "node": "团队6",
+          "lower": "0",
+          "upper": "1"
+        }
+      ],
+      "outcome_definition": "考核周内完成全部练习记1、未完成记0",
+      "outcome_unit": "0/1指标",
+      "outcome_period": "考核周",
+      "listed_means_are_complete_information": {
+        "source_ids": [
+          "src_259dea730ebc4c1655a3963db8843483aff4b88441f1f6fb5339e2f967d1e3f1"
+        ],
+        "value": null
+      },
+      "no_additional_coupling_constraints": {
+        "source_ids": [
+          "src_259dea730ebc4c1655a3963db8843483aff4b88441f1f6fb5339e2f967d1e3f1"
+        ],
+        "value": null
+      }
+    }
+  },
+  "reference_binding": {
+    "context": "c1ea005238631",
+    "context_sha256": "1ea005238631816f96b2a6a5e1e84e1022af94c91879514f7840a704ac82a9fd",
+    "aliases": {
+      "s0001": "src_ca89778afe1b49eb73d27cb197ab51ed292dd73c52375d1682637384a474c30a",
+      "s0002": "src_5e4e69fd8d643763f2f71065b1fbba8f4136997a8f077929d18ffcb140599181",
+      "s0003": "src_c45b64a378eaaba8f937a65d92c6b75d08bdf36a1f2cef7b85926f4864edc7e0",
+      "s0004": "src_e845b2650a0683d654ac2fe5c0776f4c89c0ad2f7394198b3167ef5dbde29be3",
+      "s0005": "src_61330d8dcc5132bb3f3c763d4c07d9ed05f9149cbcea11a32cd5fdf416e93bb7",
+      "s0006": "src_9bb8716d2cc1a4daab7595d20ec86ba7b88913cfa68d18894e6d8caa29e73001",
+      "s0007": "src_102ea65546aeda76524fd07b5f35955168343aa3e379e3983b3759f6ad21e88d",
+      "s0008": "src_5d1e752ea8ae6a02ae0939b7f3202c5a39db9fd44799f269339565c589efbcf2",
+      "s0009": "src_106e5dc542ba9a6e2ce5e1dba35deaeaf2aadd02d1692c3aacda4ab359f329aa",
+      "s0010": "src_f2ab6ce68a31fc4018b536aa70cab5fa92f10052150786b596bedcf6565b2308",
+      "s0011": "src_06594e7ccd95bd4d943152751d0ff407dfba067b1fa5a70be040f1f2ba0abdf0",
+      "s0012": "src_fb7c0b1e4e3db7bfafb22244aa4349ac2c9b84f12c4359bc444d3a9fd3baf50a",
+      "s0013": "src_25a5d8dee488f4bfd232bb3502cf2329543b9b02160edcc54517b60255c6d28c",
+      "s0014": "src_aea408320d0f4033826e125ad09df0f872445ab7f7c4d6ff6211445145d69824",
+      "s0015": "src_77ffd6943be4d9d48d2b54a9ae518498412f6eabaf3bd16e99470c746bb8f8ee",
+      "s0016": "src_f8bd8b537a9ab614121b9d15ba4b8ee65a316cd074107056d31dc26548614acc",
+      "s0017": "src_259dea730ebc4c1655a3963db8843483aff4b88441f1f6fb5339e2f967d1e3f1",
+      "s0018": "src_1bbc2dc2cfafd1050ec69ec19dfd7f858a8db518b95055f77c26fa3876fc9fc6",
+      "s0019": "src_cfac40b101dce56ea999d941a8f3eae67ae8d2604717618988802c5dd81a2de1"
+    }
+  },
+  "reading_candidate": {
+    "version": "network-policy-reading-1",
+    "reference_context": "c1ea005238631",
+    "study": {
+      "nodes": [
+        "团队1",
+        "团队2",
+        "团队3",
+        "团队4",
+        "团队5",
+        "团队6"
+      ],
+      "edges": [
+        [
+          "团队1",
+          "团队2"
+        ],
+        [
+          "团队2",
+          "团队3"
+        ],
+        [
+          "团队3",
+          "团队4"
+        ],
+        [
+          "团队4",
+          "团队5"
+        ],
+        [
+          "团队5",
+          "团队6"
+        ]
+      ],
+      "graph_kind": "SIMPLE_UNDIRECTED",
+      "edge_list_complete": true,
+      "treatment": "启用练习计划",
+      "outcome": "考核周内是否完成全部练习",
+      "outcome_kind": "BINARY",
+      "context": "考核周练习计划推广",
+      "source_ids": [
+        "s0001",
+        "s0002"
+      ]
+    },
+    "assignment": {
+      "kind": "UNIFORM_FIXED_QUOTA",
+      "probabilities": null,
+      "fixed_count": 2,
+      "source_ids": [
+        "s0003"
+      ]
+    },
+    "target": {
+      "kind": "FIXED_POLICY_MEAN",
+      "assignment": {
+        "团队1": 1,
+        "团队2": 1,
+        "团队3": 1,
+        "团队4": 1,
+        "团队5": 1,
+        "团队6": 1
+      },
+      "population": [
+        "团队1",
+        "团队2",
+        "团队3",
+        "团队4",
+        "团队5",
+        "团队6"
+      ],
+      "aggregation": "EQUAL_MEAN",
+      "source_ids": [
+        "s0019"
+      ]
+    },
+    "assumptions": {
+      "known_assignment_law": {
+        "value": true,
+        "source_ids": [
+          "s0004"
+        ]
+      },
+      "full_vector_randomization": {
+        "value": true,
+        "source_ids": [
+          "s0004"
+        ]
+      },
+      "consistency": {
+        "value": true,
+        "source_ids": [
+          "s0004"
+        ]
+      },
+      "fixed_pretreatment_network": {
+        "value": true,
+        "source_ids": [
+          "s0004"
+        ]
+      },
+      "finite_conditional_first_moments": {
+        "value": true,
+        "source_ids": [
+          "s0004"
+        ]
+      }
+    },
+    "exposure": {
+      "kind": "STRICT_MAJORITY_TIES_LOW",
+      "source_ids": [
+        "s0008"
+      ]
+    },
+    "mean_sufficiency": {
+      "value": true,
+      "scope": "ALL_BINARY_ASSIGNMENTS",
+      "covered_nodes": [
+        "团队1",
+        "团队2",
+        "团队3",
+        "团队4",
+        "团队5",
+        "团队6"
+      ],
+      "source_ids": [
+        "s0009"
+      ]
+    },
+    "information": [
+      {
+        "operator": "NODE_SIGNATURE_MEANS",
+        "availability": "EXACT_POPULATION_VALUE",
+        "outcome_nodes": [
+          "团队1",
+          "团队6"
+        ],
+        "assignment_cells": [],
+        "signature_cells": [
+          {
+            "node": "团队1",
+            "own": 1,
+            "exposure": 1,
+            "value": "1/2"
+          },
+          {
+            "node": "团队6",
+            "own": 1,
+            "exposure": 1,
+            "value": "1/2"
+          }
+        ],
+        "source_ids": [
+          "s0005",
+          "s0006",
+          "s0007"
+        ]
+      }
+    ],
+    "additional_restrictions": [],
+    "unresolved": [],
+    "bounded_model": {
+      "source_ids": [
+        "s0010",
+        "s0011",
+        "s0012",
+        "s0013",
+        "s0014",
+        "s0015",
+        "s0016"
+      ],
+      "bounds_kind": "CONDITIONAL_MEAN",
+      "bounds_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+      "outcome_definition": "考核周内完成全部练习记1、未完成记0",
+      "outcome_unit": "0/1指标",
+      "outcome_period": "考核周",
+      "bounds": [
+        {
+          "node": "团队1",
+          "lower": "0",
+          "upper": "1",
+          "source_ids": [
+            "s0010",
+            "s0011",
+            "s0012",
+            "s0013",
+            "s0014",
+            "s0015",
+            "s0016"
+          ]
+        },
+        {
+          "node": "团队2",
+          "lower": "0",
+          "upper": "1",
+          "source_ids": [
+            "s0010",
+            "s0011",
+            "s0012",
+            "s0013",
+            "s0014",
+            "s0015",
+            "s0016"
+          ]
+        },
+        {
+          "node": "团队3",
+          "lower": "0",
+          "upper": "1",
+          "source_ids": [
+            "s0010",
+            "s0011",
+            "s0012",
+            "s0013",
+            "s0014",
+            "s0015",
+            "s0016"
+          ]
+        },
+        {
+          "node": "团队4",
+          "lower": "0",
+          "upper": "1",
+          "source_ids": [
+            "s0010",
+            "s0011",
+            "s0012",
+            "s0013",
+            "s0014",
+            "s0015",
+            "s0016"
+          ]
+        },
+        {
+          "node": "团队5",
+          "lower": "0",
+          "upper": "1",
+          "source_ids": [
+            "s0010",
+            "s0011",
+            "s0012",
+            "s0013",
+            "s0014",
+            "s0015",
+            "s0016"
+          ]
+        },
+        {
+          "node": "团队6",
+          "lower": "0",
+          "upper": "1",
+          "source_ids": [
+            "s0010",
+            "s0011",
+            "s0012",
+            "s0013",
+            "s0014",
+            "s0015",
+            "s0016"
+          ]
+        }
+      ],
+      "listed_means_are_complete_information": {
+        "value": null,
+        "source_ids": [
+          "s0017"
+        ]
+      },
+      "no_additional_coupling_constraints": {
+        "value": null,
+        "source_ids": [
+          "s0017"
+        ]
+      }
+    }
+  },
+  "bundle": {
+    "case_id": "network_D2_6_2_bounded_partial",
+    "documents": {
+      "study": "考核周共有6个团队参与练习计划推广，名单为团队1、团队2、团队3、团队4、团队5、团队6。每个团队启用练习计划记1、不启用记0；结果是该团队在考核周内是否完成全部练习，完成记1、未完成记0。",
+      "network": "协作网络为固定的处理前简单无向网络，完整边为团队1—团队2、团队2—团队3、团队3—团队4、团队4—团队5、团队5—团队6，没有其他边。",
+      "assignment": "原试点每轮均匀随机抽取恰好2个团队启用练习计划；所有同人数名单等概率。",
+      "science": "研究明确采用：已知上述完整分配律；完整处理向量与所有团队在所有完整安排下的潜在结果独立；一致性，即观察结果等于实际安排下的潜在结果；处理前固定网络；所需条件一阶矩有限。",
+      "information": "以下是季度末按试点整理出的精确总体条件均值，不是有限样本估计：\n团队1，自身处理=1、同伴暴露=1时，考核周完成全部练习的总体条件均值=1/2。\n团队6，自身处理=1、同伴暴露=1时，考核周完成全部练习的总体条件均值=1/2。",
+      "exposure": "同伴暴露定义为协作邻居中严格超过一半启用练习计划时为1，否则为0；平票为0，孤立节点为0。",
+      "sufficiency": "研究另行拟采用：对全部团队、所有完整二元安排，每个团队的潜在结果均值只依赖自身处理与上述同伴暴露。",
+      "bounds": "界限与上文研究背景相同，对每个团队、每一种完整二元安排均成立，限制潜在结果均值。结果定义为考核周内完成全部练习记1、未完成记0；单位为0/1指标，期间为考核周。\n团队1的下界为0，上界为1。\n团队2的下界为0，上界为1。\n团队3的下界为0，上界为1。\n团队4的下界为0，上界为1。\n团队5的下界为0，上界为1。\n团队6的下界为0，上界为1。",
+      "complete_model": "研究暂未确认是否还有其他总体信息或耦合条件。",
+      "business_question": "如果这6个团队都启用练习计划，评价全部这些团队、每个团队权重相同，平均完成率能否由现有总体信息唯一确定？"
+    },
+    "question": "如果这6个团队都启用练习计划，评价全部这些团队、每个团队权重相同，平均完成率能否由现有总体信息唯一确定？"
+  },
+  "unsupported_reasons": []
+}

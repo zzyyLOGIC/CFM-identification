@@ -1,0 +1,524 @@
+{
+  "state": "NEEDS_INPUT",
+  "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+  "backend_called": false,
+  "independent_replay": false,
+  "mathematical_claim": null,
+  "certificate": null,
+  "answers": [],
+  "clarification_questions": [
+    "请明确本次分析是否采用这一条件：未来政策的有限概率分布完整。",
+    "请列出未来政策的全部完整方案与选择概率。"
+  ],
+  "evidence_status": "CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE",
+  "production_admission": false,
+  "estimation_handoff_allowed": false,
+  "query_id": "q1",
+  "remaining_query_ids": [],
+  "result_scope": "SELECTED_QUERY_ONLY",
+  "fact_family": "NETWORK_FINITE_POLICY_FACTS",
+  "query_review": {
+    "version": "business-dispatch-review-1",
+    "binding_sha256": "cac5c20f1a7b7410bc1537ecf9cef38b0021eff41c3e329c477b41706103faff",
+    "reviewer": "Independent synthetic protocol reviewer",
+    "evidence": "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+    "authority": "SYNTHETIC_TEST",
+    "decisions": {
+      "business_target_and_population": "ACCEPTED",
+      "research_structure": "ACCEPTED",
+      "source_entailment": "ACCEPTED"
+    }
+  },
+  "request_sha256": "b6366b378b6f7053c4033810b3c999adc43e038df3e8c566be60a619e33639e7",
+  "methods": [],
+  "exclusions": [],
+  "facts": {
+    "reference_context": "c02765618fa9a",
+    "study": {
+      "source_ids": [
+        "src_81407778fa199cf6df4541e94874aa2a362839c36af8e5bfd7ea721d843b2194",
+        "src_8a27c42a3d3399b7afb8316b78a416ec65ac5cc4966f449af1591da48a51c17e",
+        "src_e61a9949ddbdf5d6885ea8690984a2c4c6ec3a7b5e322d676fdf57f6c5859c34",
+        "src_464a13d5400bcd7238fbb3bccac9dcd2b875c3c61cec23cb9427af45b9ae8f5f",
+        "src_b6f1cdfc03dede8b1a0116a788f8fd6f6ff5cc966ad2a280372850a80c016f9d",
+        "src_c6cce2abd7b51b632c8d1fd35741eb927964a097d312b4123201ef330e92ae7c",
+        "src_90c5bba0106997cde2cf325270c81c69766487497dd4070ea81467926f8ba976",
+        "src_fbee2edbbe461b3b252ca16ca5325f446e3db15e0f2ae626815dcd34d52c7ccb",
+        "src_ad45404e1d77145a407e1433d715ae2d225789b8ac9a4761a78fccb073198470",
+        "src_da98fe5c557c9a72001a893cdb782c75fe401f3103f28d2b29cd1f5966bad1ad"
+      ],
+      "nodes": [
+        "学1",
+        "学2",
+        "学3",
+        "学4",
+        "学5",
+        "学6",
+        "学7",
+        "学8",
+        "学9"
+      ],
+      "edges": [
+        [
+          "学1",
+          "学2"
+        ],
+        [
+          "学1",
+          "学3"
+        ],
+        [
+          "学2",
+          "学3"
+        ],
+        [
+          "学4",
+          "学5"
+        ],
+        [
+          "学4",
+          "学6"
+        ],
+        [
+          "学5",
+          "学6"
+        ],
+        [
+          "学7",
+          "学8"
+        ],
+        [
+          "学7",
+          "学9"
+        ],
+        [
+          "学8",
+          "学9"
+        ]
+      ],
+      "graph_kind": "SIMPLE_UNDIRECTED",
+      "edge_list_complete": true,
+      "treatment": "发药记1，不发药记0",
+      "outcome": "学校该学年的出勤率，取值为0到1的比例",
+      "outcome_kind": "CONTINUOUS",
+      "context": "下一学年；九所学校分属三个片区，片区内彼此相邻"
+    },
+    "additional_restrictions": [],
+    "unresolved": [],
+    "version": "network-finite-policy-reading-1",
+    "assignment": {
+      "source_ids": [
+        "src_81407778fa199cf6df4541e94874aa2a362839c36af8e5bfd7ea721d843b2194",
+        "src_8a27c42a3d3399b7afb8316b78a416ec65ac5cc4966f449af1591da48a51c17e",
+        "src_e61a9949ddbdf5d6885ea8690984a2c4c6ec3a7b5e322d676fdf57f6c5859c34",
+        "src_464a13d5400bcd7238fbb3bccac9dcd2b875c3c61cec23cb9427af45b9ae8f5f",
+        "src_b6f1cdfc03dede8b1a0116a788f8fd6f6ff5cc966ad2a280372850a80c016f9d",
+        "src_c6cce2abd7b51b632c8d1fd35741eb927964a097d312b4123201ef330e92ae7c",
+        "src_90c5bba0106997cde2cf325270c81c69766487497dd4070ea81467926f8ba976",
+        "src_fbee2edbbe461b3b252ca16ca5325f446e3db15e0f2ae626815dcd34d52c7ccb",
+        "src_ad45404e1d77145a407e1433d715ae2d225789b8ac9a4761a78fccb073198470",
+        "src_da98fe5c557c9a72001a893cdb782c75fe401f3103f28d2b29cd1f5966bad1ad"
+      ],
+      "kind": "INDEPENDENT_BERNOULLI",
+      "probabilities": {
+        "学1": "1/2",
+        "学2": "1/2",
+        "学3": "1/2",
+        "学4": "1/2",
+        "学5": "1/2",
+        "学6": "1/2",
+        "学7": "1/2",
+        "学8": "1/2",
+        "学9": "1/2"
+      },
+      "fixed_count": null,
+      "groups": null,
+      "treated_quotas": null,
+      "clusters": null,
+      "cluster_probabilities": null,
+      "quota_profiles": null,
+      "profile_probabilities": null,
+      "treated_sets": null,
+      "set_probabilities": null,
+      "unit_weights": null,
+      "balance_covariates": null,
+      "balance_tolerance": null
+    },
+    "first_stage_exclusion": null,
+    "assumptions": {
+      "known_assignment_law": {
+        "source_ids": [
+          "src_81407778fa199cf6df4541e94874aa2a362839c36af8e5bfd7ea721d843b2194",
+          "src_8a27c42a3d3399b7afb8316b78a416ec65ac5cc4966f449af1591da48a51c17e",
+          "src_e61a9949ddbdf5d6885ea8690984a2c4c6ec3a7b5e322d676fdf57f6c5859c34",
+          "src_464a13d5400bcd7238fbb3bccac9dcd2b875c3c61cec23cb9427af45b9ae8f5f",
+          "src_b6f1cdfc03dede8b1a0116a788f8fd6f6ff5cc966ad2a280372850a80c016f9d"
+        ],
+        "value": true
+      },
+      "full_vector_randomization": {
+        "source_ids": [
+          "src_81407778fa199cf6df4541e94874aa2a362839c36af8e5bfd7ea721d843b2194",
+          "src_8a27c42a3d3399b7afb8316b78a416ec65ac5cc4966f449af1591da48a51c17e",
+          "src_e61a9949ddbdf5d6885ea8690984a2c4c6ec3a7b5e322d676fdf57f6c5859c34",
+          "src_464a13d5400bcd7238fbb3bccac9dcd2b875c3c61cec23cb9427af45b9ae8f5f",
+          "src_b6f1cdfc03dede8b1a0116a788f8fd6f6ff5cc966ad2a280372850a80c016f9d"
+        ],
+        "value": true
+      },
+      "consistency": {
+        "source_ids": [
+          "src_81407778fa199cf6df4541e94874aa2a362839c36af8e5bfd7ea721d843b2194",
+          "src_8a27c42a3d3399b7afb8316b78a416ec65ac5cc4966f449af1591da48a51c17e",
+          "src_e61a9949ddbdf5d6885ea8690984a2c4c6ec3a7b5e322d676fdf57f6c5859c34",
+          "src_464a13d5400bcd7238fbb3bccac9dcd2b875c3c61cec23cb9427af45b9ae8f5f",
+          "src_b6f1cdfc03dede8b1a0116a788f8fd6f6ff5cc966ad2a280372850a80c016f9d"
+        ],
+        "value": true
+      },
+      "fixed_pretreatment_network": {
+        "source_ids": [
+          "src_81407778fa199cf6df4541e94874aa2a362839c36af8e5bfd7ea721d843b2194",
+          "src_8a27c42a3d3399b7afb8316b78a416ec65ac5cc4966f449af1591da48a51c17e",
+          "src_e61a9949ddbdf5d6885ea8690984a2c4c6ec3a7b5e322d676fdf57f6c5859c34",
+          "src_464a13d5400bcd7238fbb3bccac9dcd2b875c3c61cec23cb9427af45b9ae8f5f",
+          "src_b6f1cdfc03dede8b1a0116a788f8fd6f6ff5cc966ad2a280372850a80c016f9d"
+        ],
+        "value": true
+      },
+      "finite_conditional_first_moments": {
+        "source_ids": [
+          "src_81407778fa199cf6df4541e94874aa2a362839c36af8e5bfd7ea721d843b2194",
+          "src_8a27c42a3d3399b7afb8316b78a416ec65ac5cc4966f449af1591da48a51c17e",
+          "src_e61a9949ddbdf5d6885ea8690984a2c4c6ec3a7b5e322d676fdf57f6c5859c34",
+          "src_464a13d5400bcd7238fbb3bccac9dcd2b875c3c61cec23cb9427af45b9ae8f5f",
+          "src_b6f1cdfc03dede8b1a0116a788f8fd6f6ff5cc966ad2a280372850a80c016f9d"
+        ],
+        "value": true
+      }
+    },
+    "target": {
+      "source_ids": [
+        "src_81407778fa199cf6df4541e94874aa2a362839c36af8e5bfd7ea721d843b2194",
+        "src_8a27c42a3d3399b7afb8316b78a416ec65ac5cc4966f449af1591da48a51c17e",
+        "src_e61a9949ddbdf5d6885ea8690984a2c4c6ec3a7b5e322d676fdf57f6c5859c34",
+        "src_464a13d5400bcd7238fbb3bccac9dcd2b875c3c61cec23cb9427af45b9ae8f5f",
+        "src_b6f1cdfc03dede8b1a0116a788f8fd6f6ff5cc966ad2a280372850a80c016f9d",
+        "src_c6cce2abd7b51b632c8d1fd35741eb927964a097d312b4123201ef330e92ae7c",
+        "src_90c5bba0106997cde2cf325270c81c69766487497dd4070ea81467926f8ba976",
+        "src_fbee2edbbe461b3b252ca16ca5325f446e3db15e0f2ae626815dcd34d52c7ccb",
+        "src_ad45404e1d77145a407e1433d715ae2d225789b8ac9a4761a78fccb073198470",
+        "src_da98fe5c557c9a72001a893cdb782c75fe401f3103f28d2b29cd1f5966bad1ad"
+      ],
+      "population": [
+        "学1",
+        "学2",
+        "学3",
+        "学4",
+        "学5",
+        "学6",
+        "学7",
+        "学8",
+        "学9"
+      ],
+      "aggregation": "EQUAL_MEAN",
+      "components": [],
+      "policy_distribution_complete": {
+        "source_ids": [
+          "src_81407778fa199cf6df4541e94874aa2a362839c36af8e5bfd7ea721d843b2194",
+          "src_8a27c42a3d3399b7afb8316b78a416ec65ac5cc4966f449af1591da48a51c17e",
+          "src_e61a9949ddbdf5d6885ea8690984a2c4c6ec3a7b5e322d676fdf57f6c5859c34",
+          "src_464a13d5400bcd7238fbb3bccac9dcd2b875c3c61cec23cb9427af45b9ae8f5f",
+          "src_b6f1cdfc03dede8b1a0116a788f8fd6f6ff5cc966ad2a280372850a80c016f9d",
+          "src_c6cce2abd7b51b632c8d1fd35741eb927964a097d312b4123201ef330e92ae7c",
+          "src_90c5bba0106997cde2cf325270c81c69766487497dd4070ea81467926f8ba976",
+          "src_fbee2edbbe461b3b252ca16ca5325f446e3db15e0f2ae626815dcd34d52c7ccb",
+          "src_ad45404e1d77145a407e1433d715ae2d225789b8ac9a4761a78fccb073198470",
+          "src_da98fe5c557c9a72001a893cdb782c75fe401f3103f28d2b29cd1f5966bad1ad"
+        ],
+        "value": null
+      }
+    },
+    "information": [
+      {
+        "source_ids": [
+          "src_81407778fa199cf6df4541e94874aa2a362839c36af8e5bfd7ea721d843b2194",
+          "src_8a27c42a3d3399b7afb8316b78a416ec65ac5cc4966f449af1591da48a51c17e",
+          "src_e61a9949ddbdf5d6885ea8690984a2c4c6ec3a7b5e322d676fdf57f6c5859c34",
+          "src_464a13d5400bcd7238fbb3bccac9dcd2b875c3c61cec23cb9427af45b9ae8f5f",
+          "src_b6f1cdfc03dede8b1a0116a788f8fd6f6ff5cc966ad2a280372850a80c016f9d",
+          "src_c6cce2abd7b51b632c8d1fd35741eb927964a097d312b4123201ef330e92ae7c",
+          "src_90c5bba0106997cde2cf325270c81c69766487497dd4070ea81467926f8ba976",
+          "src_fbee2edbbe461b3b252ca16ca5325f446e3db15e0f2ae626815dcd34d52c7ccb",
+          "src_ad45404e1d77145a407e1433d715ae2d225789b8ac9a4761a78fccb073198470",
+          "src_da98fe5c557c9a72001a893cdb782c75fe401f3103f28d2b29cd1f5966bad1ad"
+        ],
+        "operator": "NODE_FULL_LAW",
+        "availability": "SYMBOLIC_POPULATION_OPERATOR",
+        "outcome_nodes": [
+          "学1",
+          "学2",
+          "学3",
+          "学4",
+          "学5",
+          "学6",
+          "学7",
+          "学8",
+          "学9"
+        ],
+        "assignment_cells": []
+      }
+    ]
+  },
+  "reference_binding": {
+    "context": "c02765618fa9a",
+    "context_sha256": "02765618fa9a7676a37269f5cdcc165a2045ac0cf9698abed88cdad6df597677",
+    "aliases": {
+      "s0001": "src_81407778fa199cf6df4541e94874aa2a362839c36af8e5bfd7ea721d843b2194",
+      "s0002": "src_8a27c42a3d3399b7afb8316b78a416ec65ac5cc4966f449af1591da48a51c17e",
+      "s0003": "src_e61a9949ddbdf5d6885ea8690984a2c4c6ec3a7b5e322d676fdf57f6c5859c34",
+      "s0004": "src_464a13d5400bcd7238fbb3bccac9dcd2b875c3c61cec23cb9427af45b9ae8f5f",
+      "s0005": "src_b6f1cdfc03dede8b1a0116a788f8fd6f6ff5cc966ad2a280372850a80c016f9d",
+      "s0006": "src_c6cce2abd7b51b632c8d1fd35741eb927964a097d312b4123201ef330e92ae7c",
+      "s0007": "src_90c5bba0106997cde2cf325270c81c69766487497dd4070ea81467926f8ba976",
+      "s0008": "src_fbee2edbbe461b3b252ca16ca5325f446e3db15e0f2ae626815dcd34d52c7ccb",
+      "s0009": "src_ad45404e1d77145a407e1433d715ae2d225789b8ac9a4761a78fccb073198470",
+      "s0010": "src_da98fe5c557c9a72001a893cdb782c75fe401f3103f28d2b29cd1f5966bad1ad"
+    }
+  },
+  "reading_candidate": {
+    "version": "network-finite-policy-reading-1",
+    "reference_context": "c02765618fa9a",
+    "study": {
+      "source_ids": [
+        "s0001",
+        "s0002",
+        "s0003",
+        "s0004",
+        "s0005",
+        "s0006",
+        "s0007",
+        "s0008",
+        "s0009",
+        "s0010"
+      ],
+      "nodes": [
+        "学1",
+        "学2",
+        "学3",
+        "学4",
+        "学5",
+        "学6",
+        "学7",
+        "学8",
+        "学9"
+      ],
+      "edges": [
+        [
+          "学1",
+          "学2"
+        ],
+        [
+          "学1",
+          "学3"
+        ],
+        [
+          "学2",
+          "学3"
+        ],
+        [
+          "学4",
+          "学5"
+        ],
+        [
+          "学4",
+          "学6"
+        ],
+        [
+          "学5",
+          "学6"
+        ],
+        [
+          "学7",
+          "学8"
+        ],
+        [
+          "学7",
+          "学9"
+        ],
+        [
+          "学8",
+          "学9"
+        ]
+      ],
+      "graph_kind": "SIMPLE_UNDIRECTED",
+      "edge_list_complete": true,
+      "treatment": "发药记1，不发药记0",
+      "outcome": "学校该学年的出勤率，取值为0到1的比例",
+      "outcome_kind": "CONTINUOUS",
+      "context": "下一学年；九所学校分属三个片区，片区内彼此相邻"
+    },
+    "additional_restrictions": [],
+    "unresolved": [],
+    "assignment": {
+      "source_ids": [
+        "s0001",
+        "s0002",
+        "s0003",
+        "s0004",
+        "s0005",
+        "s0006",
+        "s0007",
+        "s0008",
+        "s0009",
+        "s0010"
+      ],
+      "kind": "INDEPENDENT_BERNOULLI",
+      "probabilities": {
+        "学1": "1/2",
+        "学2": "1/2",
+        "学3": "1/2",
+        "学4": "1/2",
+        "学5": "1/2",
+        "学6": "1/2",
+        "学7": "1/2",
+        "学8": "1/2",
+        "学9": "1/2"
+      },
+      "fixed_count": null
+    },
+    "first_stage_exclusion": null,
+    "assumptions": {
+      "known_assignment_law": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "full_vector_randomization": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "consistency": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "fixed_pretreatment_network": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "finite_conditional_first_moments": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      }
+    },
+    "target": {
+      "source_ids": [
+        "s0001",
+        "s0002",
+        "s0003",
+        "s0004",
+        "s0005",
+        "s0006",
+        "s0007",
+        "s0008",
+        "s0009",
+        "s0010"
+      ],
+      "population": [
+        "学1",
+        "学2",
+        "学3",
+        "学4",
+        "学5",
+        "学6",
+        "学7",
+        "学8",
+        "学9"
+      ],
+      "aggregation": "EQUAL_MEAN",
+      "policy_distribution_complete": {
+        "value": null,
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006",
+          "s0007",
+          "s0008",
+          "s0009",
+          "s0010"
+        ]
+      },
+      "components": []
+    },
+    "information": [
+      {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006",
+          "s0007",
+          "s0008",
+          "s0009",
+          "s0010"
+        ],
+        "operator": "NODE_FULL_LAW",
+        "availability": "SYMBOLIC_POPULATION_OPERATOR",
+        "outcome_nodes": [
+          "学1",
+          "学2",
+          "学3",
+          "学4",
+          "学5",
+          "学6",
+          "学7",
+          "学8",
+          "学9"
+        ],
+        "assignment_cells": []
+      }
+    ]
+  },
+  "bundle": {
+    "case_id": "LIT-NET-10-missing_condition",
+    "documents": {
+      "proposal": "## study\n\n文献启发的合成演示，不是原论文数据。研究对象是三个片区的九所小学，学校是研究单位。发药记 1，不发药记 0。结果为出勤率，取值为 0 到 1 的比例。片区内学校之间存在疾病传播，结果受同片区其他学校是否发药影响。同伴按同片区发药学校数度量，不含本校；片区之间不构成邻居。评价时点为下一学年，两种方案评价同一批九所学校、同一结果定义。\n\n## trial\n\n过去没有随机试点，三个片区一直按甲、乙、丙的顺序发药，这是历史做法。\n\n## science\n\n本演示拟采用：上述覆盖方案与分组办法已知；九所学校在两种方案下的潜在出勤率与方案选择独立；观察到的出勤率对应实际执行的方案；片区内相邻关系在发药前固定；所需比例存在。\n\n## information\n\n本演示的理论输入是覆盖九所学校的完整覆盖名单与各校出勤率的符号总体分布，来自同一次基线调查；这里没有给定任何出勤率数值，不是九条样本记录。 未来只执行一份覆盖名单，问题没有说明两份方案各自被采用的机会。本案例只问随机政策下的平均水平，不与某个对照方案相减。",
+      "business_question": "三个片区各三所小学，共九所，编号学1到学9，学1至学3在片区一，学4至学6在片区二，学7至学9在片区三。每个片区随机一所进甲组、一所进乙组、一所进丙组。基线出勤率 0.80。本校发药使出勤率提高 0.06；片区内每多一所发药学校（不含本校），片区内所有学校出勤率再提高 0.03。下一学年有两种覆盖方案：方案 A 每片区发甲、乙两组，共六所；方案 B 九所全部发药。明年会从这两种覆盖方案里选一种执行。我们想知道，九所学校平均出勤率在明年采用其中一种覆盖方案时是多少。每校等权。"
+    },
+    "question": "三个片区各三所小学，共九所，编号学1到学9，学1至学3在片区一，学4至学6在片区二，学7至学9在片区三。每个片区随机一所进甲组、一所进乙组、一所进丙组。基线出勤率 0.80。本校发药使出勤率提高 0.06；片区内每多一所发药学校（不含本校），片区内所有学校出勤率再提高 0.03。下一学年有两种覆盖方案：方案 A 每片区发甲、乙两组，共六所；方案 B 九所全部发药。明年会从这两种覆盖方案里选一种执行。我们想知道，九所学校平均出勤率在明年采用其中一种覆盖方案时是多少。每校等权。"
+  }
+}

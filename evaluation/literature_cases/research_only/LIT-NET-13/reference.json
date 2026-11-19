@@ -1,0 +1,81 @@
+{
+  "case_id": "LIT-NET-13",
+  "paper_id": "dahl2014_paternity_leave",
+  "paper": {
+    "authors": [
+      "Gordon B. Dahl",
+      "Katrine V. Løken",
+      "Magne Mogstad"
+    ],
+    "year": 2014,
+    "title": "Peer Effects in Program Participation",
+    "venue": "American Economic Review",
+    "doi": "10.1257/aer.104.7.2049"
+  },
+  "paper_reference": {
+    "paper_question": "以 1993 年 4 月 1 日为界、界后生孩子的父亲才享有带薪育儿假，这一外生资格变化会不会传给同事与兄弟，以及这种效应在同一家厂内如何随出生顺序逐层放大？",
+    "target": "八名父亲在两套生效安排各 1/2 的随机政策下，休假概率相对不推行政策时的平均提高；每人等权。",
+    "source_location": "Dahl, Løken and Mogstad (2014) American Economic Review 104(7):2049-2074, DOI 10.1257/aer.104.7.2049. Abstract (p. 2049) for the 11 and 15 percentage point peer effects; Introduction (pp. 2049-2051) for the 3 to 35 percent take-up, the 32 percentage point first stage and the policy role of first participants; Section I (pp. 2052-2053) for the April 1, 1993 cutoff; Section IV and Table 1 (p. 2060) for the 0.317 first stage, the 0.035 and 0.047 reduced forms and the 0.110 and 0.153 second stage; Section VI and Table 4 Panel B (p. 2069) for 0.026, 0.037, 0.060 and the 0, 30, 57 percent snowball shares; p. 2067 for sequential ordering. Project-built scenario; the paper does not pose this question.",
+    "formula": "同事关系：甲厂六条边（1 至 4 号两两相连），乙厂三条边（5 至 7 号两两相连）；兄弟关系一条边：1 号与 8 号。方案 A：1 号、5 号被覆盖。甲厂 1 号 +0.32，2 号距 1 号一档 +0.026，3 号两档 +0.037，4 号三档 +0.060，合计 0.443；乙厂 5 号 +0.32，6 号 +0.026，7 号 +0.037，合计 0.383；8 号因 1 号被覆盖 +0.047；方案 A 合计 0.873，平均 0.109125。方案 B：3 号、5 号被覆盖。甲厂 1、2 号为 0，3 号 +0.32，4 号 +0.026，合计 0.346；乙厂同方案 A，0.383；8 号为 0；合计 0.729，平均 0.091125。Target = 1/2×0.109125 + 1/2×0.091125 = 801/8000 = 0.100125。目标变化版取 2、3、4 号，权重各 1/3：方案 A 合计 0.123，平均 0.041；方案 B 合计 0.346，平均 173/1500；Target = 469/6000 = 0.078166…。",
+    "conditions": [
+      "Two complete start-date schedules with known probabilities of 1/2 each.",
+      "Schedule choice independent of the eight fathers' potential leave-probability changes.",
+      "Observed leave-probability changes correspond to the executed schedule.",
+      "Coworker and brother links are fixed before the schedule is executed, and plant C is outside the policy.",
+      "The birth-order distance rule applies uniformly to every father, and 0.026, 0.037, 0.060 already contain the snowball."
+    ],
+    "what_paper_supports": [
+      "The reform made fathers of children born after April 1, 1993 eligible for paid leave and raised take-up from 3 to 35 percent, a first stage of 32 percentage points (p. 2050; Table 1 p. 2060 reports 0.317).",
+      "Coworker effects rise with birth order inside a firm: 0.026, 0.037 and 0.060 for the first three coworkers, with snowball shares of 0, 30 and 57 percent (Table 4 Panel B p. 2069).",
+      "Brothers respond more strongly than coworkers, 0.153 versus 0.110 in the second stage (Table 1 p. 2060), and earlier fathers influence later ones but not the reverse (p. 2067)."
+    ],
+    "what_paper_does_not_support": [
+      "No claim that 0.32 is a leave take-up level: 35 percent is the post-reform participation rate, while the case only uses a change relative to no policy.",
+      "No claim that 0.026, 0.037, 0.060 add up across upstream fathers: they are reduced-form totals relative to the first covered coworker, and stacking them double-counts the snowball.",
+      "No claim that the start date is endogenous in the paper: the April 1, 1993 cutoff is set by the reform, and treating it as a schedulable date turns an identification design into a policy design.",
+      "No claim that the brother effect propagates further: the paper does not test whether a brother then moves his own coworkers, and the case does not include that path.",
+      "No claim that this reproduces equations (6)-(9): the paper does not report the structural beta coefficients, and the case uses reduced forms without solving for them.",
+      "No claim that eight fathers stand for the paper's sample: 26,851 and 12,495 are coworker and brother observations, not persons, and the case does not extrapolate to Norway.",
+      "No claim that a higher leave probability is a welfare gain: the outcome is leave take-up only, not earnings, careers or gender equality."
+    ]
+  },
+  "software_expected": {
+    "original": {
+      "status": "POINT"
+    },
+    "missing_condition": {
+      "status": "NEEDS_INPUT",
+      "reason": "The probabilities of the two start-date schedules are omitted; the fact layer stops with EXTENDED_NETWORK_FACTS_INCOMPLETE."
+    },
+    "changed_target": {
+      "status": "POINT",
+      "reason": "Evaluation population moves to fathers 2, 3 and 4 of plant A; target and weights must be rebound."
+    }
+  },
+  "actual_run": {
+    "method": "LOCAL_STRUCTURED_FINITE_POLICY_RUN_NO_LLM",
+    "provenance": "2026-11-16 local structured run through the extended network finite-policy entry with explicit synthetic reviews; api_calls=0.",
+    "original": {
+      "state": "POINT",
+      "independent_replay": true,
+      "target_fingerprint": "a8ca0d8d7bba68dbf5a7b5e0c3f734d90f62163fec406cc317fe029b3472e164",
+      "output_file": "structured_runs/original/result.json"
+    },
+    "missing_condition": {
+      "state": "NEEDS_INPUT",
+      "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+      "output_file": "structured_runs/missing_condition/result.json"
+    },
+    "changed_target": {
+      "state": "POINT",
+      "independent_replay": true,
+      "target_fingerprint": "eb9fffe124f7a3168a19fc28e2f4bf543d9631ecb88e3c47cb40ccb3933c392f",
+      "output_file": "structured_runs/changed_target/result.json"
+    },
+    "note": "三个变体均在本地结构化运行；不调用 LLM；不读取公开材料以外的参考内容。"
+  },
+  "review_status": "PENDING_TEACHER",
+  "reviewer": "teacher",
+  "holdout": false,
+  "notes": "Scenario adaptation; the paper does not pose this question. Network enters the target through birth-order distance: a father's change depends on how many births separate him from the covered coworker in his plant, so the edge set and the ordering are both required. The policy form departs furthest from the paper: the April 1, 1993 cutoff is exogenous there, while the case lets the group choose between two schedules. The mixture schema carries one fixed adjacency for all policies, so the case never changes edges across schedules; only the covered father moves, from 1 to 3 in plant A."
+}

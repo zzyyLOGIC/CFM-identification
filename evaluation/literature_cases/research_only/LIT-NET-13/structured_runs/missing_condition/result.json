@@ -1,0 +1,799 @@
+{
+  "state": "NEEDS_INPUT",
+  "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+  "backend_called": false,
+  "independent_replay": false,
+  "mathematical_claim": null,
+  "certificate": null,
+  "answers": [],
+  "clarification_questions": [
+    "请明确本次分析是否采用这一条件：未来政策的有限概率分布完整。",
+    "请列出未来政策的全部完整方案与选择概率。"
+  ],
+  "evidence_status": "CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE",
+  "production_admission": false,
+  "estimation_handoff_allowed": false,
+  "query_id": "q1",
+  "remaining_query_ids": [],
+  "result_scope": "SELECTED_QUERY_ONLY",
+  "fact_family": "NETWORK_FINITE_POLICY_FACTS",
+  "query_review": {
+    "version": "business-dispatch-review-1",
+    "binding_sha256": "ec9689fa7afa6027b4591fc23433aca8858c32d039e68fc043471f98abc69ed7",
+    "reviewer": "Independent synthetic protocol reviewer",
+    "evidence": "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+    "authority": "SYNTHETIC_TEST",
+    "decisions": {
+      "business_target_and_population": "ACCEPTED",
+      "research_structure": "ACCEPTED",
+      "source_entailment": "ACCEPTED"
+    }
+  },
+  "request_sha256": "1bc703a5391af3a931b60830a5175b3875d6aacfe65c353bad9e95823f71a402",
+  "methods": [],
+  "exclusions": [],
+  "facts": {
+    "reference_context": "c389dfc4d0fa3",
+    "study": {
+      "source_ids": [
+        "src_d4524e9c75e7c91407fb7c2018eea13c5e7774d9a12701783388ff9e4bec977d",
+        "src_9d59cac92e85d6562b6e70b0f6152d46b60351af19371b629fd353be3cf70626",
+        "src_162d551b6c95ecff747c02a374dc01ca305dd3e2d7ea986165a6651106e81478",
+        "src_2311442a72adff785d51202e3da6c89c920065ead8437d04c8e60d17e08117cc",
+        "src_027cc0a112656f3f90a904c6129fef7bf0f3d8f50924894dac458ace448d9935",
+        "src_012ff346871c91e2b3555bf40eae78bccb8208447b123d84ac05316b95022b64",
+        "src_920d8787685cc5953e87e12b021cd271bab7b9bc8322052be96f740e83998a66",
+        "src_f84da360660aac46de8a1188c26bb26fcebff574d5bcb30defc04cfa2aa11d55",
+        "src_7f6f6f655dccf389dd502d523f8145786fd976b8c121a951b95be3f1ce2e38d5",
+        "src_f2d1b1f42fb2cafa4fc6a783a20146a31dfac5908e2c5f7568ab02d60a92ea9c",
+        "src_b085e9f01c0b17cdf415b11783e147e31204785fb8e7781082086b0951df3025",
+        "src_1d09ec0b53cf9e06090de73cfa6b2637cfcbcd506228679718fdc223ef439d97",
+        "src_dcfb15e7a6fbdcf5eb94fb4014191c766259af2f76df19c56e66c74949ac067e",
+        "src_85a3e9d261f88714ccbc5fa25bd60cc58a63eb0ef461af608c1b95f2fced9c54",
+        "src_39399e98c99b5112ad459592c5afdee7eff2c116e3d17cf0b15f9b19701847a5",
+        "src_e53d970fdf1031ee61033307f05cd205559ebc19caf92908640aa31847a440fa",
+        "src_1d8afb0d500305261fa10cbe0a8565b7a31621aba0fcdd6255765fedb945c3cc",
+        "src_c160d37a091e30e7fc9200131d6bc5fb0a1a7cabeedbec1ac0b076205c9ed929",
+        "src_56cc253c7aa284aaad72aab45c09936cc4b1b61b252ee5e7a2c4f155de6cebf1",
+        "src_e7f58aeed4ca8361bc4cde2836ec99c9da5642c30782b8c55ef8b0505df7556e",
+        "src_245dc69ee8b8413b8f2e71172245c9e097708402f2ce15a648129b6a133ed6d1",
+        "src_cb2d29f0d1d3238b37c72fae3b3ec9c88949ea82af137e12224faa47a537a93f",
+        "src_dba8521384fa7f54dd936c4cd148dd8bc3a1713a5d9ac518a0c88d610fa6813e",
+        "src_435bcc683d78a225b5ecd05cc07d4030b9671ee66e2d6777713b1b3eaafa5f6e",
+        "src_2b8a2a47daf60431490c762847f260cd884cce207a15f60cd089a4a67b3c7eb7",
+        "src_d3b5cceca32132d039b7a84a7e06161572fb7248925cc16bff007448e76e14e0",
+        "src_216e00db1569007cdf3f878b35b4f4e59543e70ab38438bd76d6dbffe3db256e",
+        "src_f53e22f618db1f2af733a034b3b0417eb071e079e7994d65068c138004b528e0",
+        "src_abe3bbd34fb886e238c5886396c4f0116ac3068021169e8d8672832323c927ba",
+        "src_bb6d0604215e10dd1d76875b27d44a243c83fbed88e65de3d2092517b6942dfc",
+        "src_961ab47d1c21bc4fa65f426002fc3d615bbd15e9a2b8c764d6d1f14b99929770",
+        "src_a3fd4029a509355a87758dda475457f13ccdd8ba09625f740d8bf166bce09fad",
+        "src_6f7af679f3dcef1cd92bdc3c9e10ed38dc7e53492f5ad28a13750c16f4770a19",
+        "src_78b4bab6dc459fafcba475d8a4e71ed1d89a7d70f83e6348319660543380765e",
+        "src_70ff17628e9783914547f5c8d633520cff06e953c347a9e6ac267dec5a9ed40e"
+      ],
+      "nodes": [
+        "父1",
+        "父2",
+        "父3",
+        "父4",
+        "父5",
+        "父6",
+        "父7",
+        "父8"
+      ],
+      "edges": [
+        [
+          "父1",
+          "父2"
+        ],
+        [
+          "父1",
+          "父3"
+        ],
+        [
+          "父1",
+          "父4"
+        ],
+        [
+          "父2",
+          "父3"
+        ],
+        [
+          "父2",
+          "父4"
+        ],
+        [
+          "父3",
+          "父4"
+        ],
+        [
+          "父5",
+          "父6"
+        ],
+        [
+          "父5",
+          "父7"
+        ],
+        [
+          "父6",
+          "父7"
+        ],
+        [
+          "父1",
+          "父8"
+        ]
+      ],
+      "graph_kind": "SIMPLE_UNDIRECTED",
+      "edge_list_complete": true,
+      "treatment": "政策生效日之后生孩子记1，之前记0",
+      "outcome": "休假概率相对不推行这项政策时的提高，单位为概率",
+      "outcome_kind": "CONTINUOUS",
+      "context": "政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策"
+    },
+    "additional_restrictions": [],
+    "unresolved": [],
+    "version": "network-finite-policy-reading-1",
+    "assignment": {
+      "source_ids": [
+        "src_d4524e9c75e7c91407fb7c2018eea13c5e7774d9a12701783388ff9e4bec977d",
+        "src_9d59cac92e85d6562b6e70b0f6152d46b60351af19371b629fd353be3cf70626",
+        "src_162d551b6c95ecff747c02a374dc01ca305dd3e2d7ea986165a6651106e81478",
+        "src_2311442a72adff785d51202e3da6c89c920065ead8437d04c8e60d17e08117cc",
+        "src_027cc0a112656f3f90a904c6129fef7bf0f3d8f50924894dac458ace448d9935",
+        "src_012ff346871c91e2b3555bf40eae78bccb8208447b123d84ac05316b95022b64",
+        "src_920d8787685cc5953e87e12b021cd271bab7b9bc8322052be96f740e83998a66",
+        "src_f84da360660aac46de8a1188c26bb26fcebff574d5bcb30defc04cfa2aa11d55",
+        "src_7f6f6f655dccf389dd502d523f8145786fd976b8c121a951b95be3f1ce2e38d5",
+        "src_f2d1b1f42fb2cafa4fc6a783a20146a31dfac5908e2c5f7568ab02d60a92ea9c",
+        "src_b085e9f01c0b17cdf415b11783e147e31204785fb8e7781082086b0951df3025",
+        "src_1d09ec0b53cf9e06090de73cfa6b2637cfcbcd506228679718fdc223ef439d97",
+        "src_dcfb15e7a6fbdcf5eb94fb4014191c766259af2f76df19c56e66c74949ac067e",
+        "src_85a3e9d261f88714ccbc5fa25bd60cc58a63eb0ef461af608c1b95f2fced9c54",
+        "src_39399e98c99b5112ad459592c5afdee7eff2c116e3d17cf0b15f9b19701847a5",
+        "src_e53d970fdf1031ee61033307f05cd205559ebc19caf92908640aa31847a440fa",
+        "src_1d8afb0d500305261fa10cbe0a8565b7a31621aba0fcdd6255765fedb945c3cc",
+        "src_c160d37a091e30e7fc9200131d6bc5fb0a1a7cabeedbec1ac0b076205c9ed929",
+        "src_56cc253c7aa284aaad72aab45c09936cc4b1b61b252ee5e7a2c4f155de6cebf1",
+        "src_e7f58aeed4ca8361bc4cde2836ec99c9da5642c30782b8c55ef8b0505df7556e",
+        "src_245dc69ee8b8413b8f2e71172245c9e097708402f2ce15a648129b6a133ed6d1",
+        "src_cb2d29f0d1d3238b37c72fae3b3ec9c88949ea82af137e12224faa47a537a93f",
+        "src_dba8521384fa7f54dd936c4cd148dd8bc3a1713a5d9ac518a0c88d610fa6813e",
+        "src_435bcc683d78a225b5ecd05cc07d4030b9671ee66e2d6777713b1b3eaafa5f6e",
+        "src_2b8a2a47daf60431490c762847f260cd884cce207a15f60cd089a4a67b3c7eb7",
+        "src_d3b5cceca32132d039b7a84a7e06161572fb7248925cc16bff007448e76e14e0",
+        "src_216e00db1569007cdf3f878b35b4f4e59543e70ab38438bd76d6dbffe3db256e",
+        "src_f53e22f618db1f2af733a034b3b0417eb071e079e7994d65068c138004b528e0",
+        "src_abe3bbd34fb886e238c5886396c4f0116ac3068021169e8d8672832323c927ba",
+        "src_bb6d0604215e10dd1d76875b27d44a243c83fbed88e65de3d2092517b6942dfc",
+        "src_961ab47d1c21bc4fa65f426002fc3d615bbd15e9a2b8c764d6d1f14b99929770",
+        "src_a3fd4029a509355a87758dda475457f13ccdd8ba09625f740d8bf166bce09fad",
+        "src_6f7af679f3dcef1cd92bdc3c9e10ed38dc7e53492f5ad28a13750c16f4770a19",
+        "src_78b4bab6dc459fafcba475d8a4e71ed1d89a7d70f83e6348319660543380765e",
+        "src_70ff17628e9783914547f5c8d633520cff06e953c347a9e6ac267dec5a9ed40e"
+      ],
+      "kind": "INDEPENDENT_BERNOULLI",
+      "probabilities": {
+        "父1": "1/2",
+        "父2": "1/2",
+        "父3": "1/2",
+        "父4": "1/2",
+        "父5": "1/2",
+        "父6": "1/2",
+        "父7": "1/2",
+        "父8": "1/2"
+      },
+      "fixed_count": null,
+      "groups": null,
+      "treated_quotas": null,
+      "clusters": null,
+      "cluster_probabilities": null,
+      "quota_profiles": null,
+      "profile_probabilities": null,
+      "treated_sets": null,
+      "set_probabilities": null,
+      "unit_weights": null,
+      "balance_covariates": null,
+      "balance_tolerance": null
+    },
+    "first_stage_exclusion": null,
+    "assumptions": {
+      "known_assignment_law": {
+        "source_ids": [
+          "src_d4524e9c75e7c91407fb7c2018eea13c5e7774d9a12701783388ff9e4bec977d",
+          "src_9d59cac92e85d6562b6e70b0f6152d46b60351af19371b629fd353be3cf70626",
+          "src_162d551b6c95ecff747c02a374dc01ca305dd3e2d7ea986165a6651106e81478",
+          "src_2311442a72adff785d51202e3da6c89c920065ead8437d04c8e60d17e08117cc",
+          "src_027cc0a112656f3f90a904c6129fef7bf0f3d8f50924894dac458ace448d9935"
+        ],
+        "value": true
+      },
+      "full_vector_randomization": {
+        "source_ids": [
+          "src_d4524e9c75e7c91407fb7c2018eea13c5e7774d9a12701783388ff9e4bec977d",
+          "src_9d59cac92e85d6562b6e70b0f6152d46b60351af19371b629fd353be3cf70626",
+          "src_162d551b6c95ecff747c02a374dc01ca305dd3e2d7ea986165a6651106e81478",
+          "src_2311442a72adff785d51202e3da6c89c920065ead8437d04c8e60d17e08117cc",
+          "src_027cc0a112656f3f90a904c6129fef7bf0f3d8f50924894dac458ace448d9935"
+        ],
+        "value": true
+      },
+      "consistency": {
+        "source_ids": [
+          "src_d4524e9c75e7c91407fb7c2018eea13c5e7774d9a12701783388ff9e4bec977d",
+          "src_9d59cac92e85d6562b6e70b0f6152d46b60351af19371b629fd353be3cf70626",
+          "src_162d551b6c95ecff747c02a374dc01ca305dd3e2d7ea986165a6651106e81478",
+          "src_2311442a72adff785d51202e3da6c89c920065ead8437d04c8e60d17e08117cc",
+          "src_027cc0a112656f3f90a904c6129fef7bf0f3d8f50924894dac458ace448d9935"
+        ],
+        "value": true
+      },
+      "fixed_pretreatment_network": {
+        "source_ids": [
+          "src_d4524e9c75e7c91407fb7c2018eea13c5e7774d9a12701783388ff9e4bec977d",
+          "src_9d59cac92e85d6562b6e70b0f6152d46b60351af19371b629fd353be3cf70626",
+          "src_162d551b6c95ecff747c02a374dc01ca305dd3e2d7ea986165a6651106e81478",
+          "src_2311442a72adff785d51202e3da6c89c920065ead8437d04c8e60d17e08117cc",
+          "src_027cc0a112656f3f90a904c6129fef7bf0f3d8f50924894dac458ace448d9935"
+        ],
+        "value": true
+      },
+      "finite_conditional_first_moments": {
+        "source_ids": [
+          "src_d4524e9c75e7c91407fb7c2018eea13c5e7774d9a12701783388ff9e4bec977d",
+          "src_9d59cac92e85d6562b6e70b0f6152d46b60351af19371b629fd353be3cf70626",
+          "src_162d551b6c95ecff747c02a374dc01ca305dd3e2d7ea986165a6651106e81478",
+          "src_2311442a72adff785d51202e3da6c89c920065ead8437d04c8e60d17e08117cc",
+          "src_027cc0a112656f3f90a904c6129fef7bf0f3d8f50924894dac458ace448d9935"
+        ],
+        "value": true
+      }
+    },
+    "target": {
+      "source_ids": [
+        "src_d4524e9c75e7c91407fb7c2018eea13c5e7774d9a12701783388ff9e4bec977d",
+        "src_9d59cac92e85d6562b6e70b0f6152d46b60351af19371b629fd353be3cf70626",
+        "src_162d551b6c95ecff747c02a374dc01ca305dd3e2d7ea986165a6651106e81478",
+        "src_2311442a72adff785d51202e3da6c89c920065ead8437d04c8e60d17e08117cc",
+        "src_027cc0a112656f3f90a904c6129fef7bf0f3d8f50924894dac458ace448d9935",
+        "src_012ff346871c91e2b3555bf40eae78bccb8208447b123d84ac05316b95022b64",
+        "src_920d8787685cc5953e87e12b021cd271bab7b9bc8322052be96f740e83998a66",
+        "src_f84da360660aac46de8a1188c26bb26fcebff574d5bcb30defc04cfa2aa11d55",
+        "src_7f6f6f655dccf389dd502d523f8145786fd976b8c121a951b95be3f1ce2e38d5",
+        "src_f2d1b1f42fb2cafa4fc6a783a20146a31dfac5908e2c5f7568ab02d60a92ea9c",
+        "src_b085e9f01c0b17cdf415b11783e147e31204785fb8e7781082086b0951df3025",
+        "src_1d09ec0b53cf9e06090de73cfa6b2637cfcbcd506228679718fdc223ef439d97",
+        "src_dcfb15e7a6fbdcf5eb94fb4014191c766259af2f76df19c56e66c74949ac067e",
+        "src_85a3e9d261f88714ccbc5fa25bd60cc58a63eb0ef461af608c1b95f2fced9c54",
+        "src_39399e98c99b5112ad459592c5afdee7eff2c116e3d17cf0b15f9b19701847a5",
+        "src_e53d970fdf1031ee61033307f05cd205559ebc19caf92908640aa31847a440fa",
+        "src_1d8afb0d500305261fa10cbe0a8565b7a31621aba0fcdd6255765fedb945c3cc",
+        "src_c160d37a091e30e7fc9200131d6bc5fb0a1a7cabeedbec1ac0b076205c9ed929",
+        "src_56cc253c7aa284aaad72aab45c09936cc4b1b61b252ee5e7a2c4f155de6cebf1",
+        "src_e7f58aeed4ca8361bc4cde2836ec99c9da5642c30782b8c55ef8b0505df7556e",
+        "src_245dc69ee8b8413b8f2e71172245c9e097708402f2ce15a648129b6a133ed6d1",
+        "src_cb2d29f0d1d3238b37c72fae3b3ec9c88949ea82af137e12224faa47a537a93f",
+        "src_dba8521384fa7f54dd936c4cd148dd8bc3a1713a5d9ac518a0c88d610fa6813e",
+        "src_435bcc683d78a225b5ecd05cc07d4030b9671ee66e2d6777713b1b3eaafa5f6e",
+        "src_2b8a2a47daf60431490c762847f260cd884cce207a15f60cd089a4a67b3c7eb7",
+        "src_d3b5cceca32132d039b7a84a7e06161572fb7248925cc16bff007448e76e14e0",
+        "src_216e00db1569007cdf3f878b35b4f4e59543e70ab38438bd76d6dbffe3db256e",
+        "src_f53e22f618db1f2af733a034b3b0417eb071e079e7994d65068c138004b528e0",
+        "src_abe3bbd34fb886e238c5886396c4f0116ac3068021169e8d8672832323c927ba",
+        "src_bb6d0604215e10dd1d76875b27d44a243c83fbed88e65de3d2092517b6942dfc",
+        "src_961ab47d1c21bc4fa65f426002fc3d615bbd15e9a2b8c764d6d1f14b99929770",
+        "src_a3fd4029a509355a87758dda475457f13ccdd8ba09625f740d8bf166bce09fad",
+        "src_6f7af679f3dcef1cd92bdc3c9e10ed38dc7e53492f5ad28a13750c16f4770a19",
+        "src_78b4bab6dc459fafcba475d8a4e71ed1d89a7d70f83e6348319660543380765e",
+        "src_70ff17628e9783914547f5c8d633520cff06e953c347a9e6ac267dec5a9ed40e"
+      ],
+      "population": [
+        "父1",
+        "父2",
+        "父3",
+        "父4",
+        "父5",
+        "父6",
+        "父7",
+        "父8"
+      ],
+      "aggregation": "EQUAL_MEAN",
+      "components": [],
+      "policy_distribution_complete": {
+        "source_ids": [
+          "src_d4524e9c75e7c91407fb7c2018eea13c5e7774d9a12701783388ff9e4bec977d",
+          "src_9d59cac92e85d6562b6e70b0f6152d46b60351af19371b629fd353be3cf70626",
+          "src_162d551b6c95ecff747c02a374dc01ca305dd3e2d7ea986165a6651106e81478",
+          "src_2311442a72adff785d51202e3da6c89c920065ead8437d04c8e60d17e08117cc",
+          "src_027cc0a112656f3f90a904c6129fef7bf0f3d8f50924894dac458ace448d9935",
+          "src_012ff346871c91e2b3555bf40eae78bccb8208447b123d84ac05316b95022b64",
+          "src_920d8787685cc5953e87e12b021cd271bab7b9bc8322052be96f740e83998a66",
+          "src_f84da360660aac46de8a1188c26bb26fcebff574d5bcb30defc04cfa2aa11d55",
+          "src_7f6f6f655dccf389dd502d523f8145786fd976b8c121a951b95be3f1ce2e38d5",
+          "src_f2d1b1f42fb2cafa4fc6a783a20146a31dfac5908e2c5f7568ab02d60a92ea9c",
+          "src_b085e9f01c0b17cdf415b11783e147e31204785fb8e7781082086b0951df3025",
+          "src_1d09ec0b53cf9e06090de73cfa6b2637cfcbcd506228679718fdc223ef439d97",
+          "src_dcfb15e7a6fbdcf5eb94fb4014191c766259af2f76df19c56e66c74949ac067e",
+          "src_85a3e9d261f88714ccbc5fa25bd60cc58a63eb0ef461af608c1b95f2fced9c54",
+          "src_39399e98c99b5112ad459592c5afdee7eff2c116e3d17cf0b15f9b19701847a5",
+          "src_e53d970fdf1031ee61033307f05cd205559ebc19caf92908640aa31847a440fa",
+          "src_1d8afb0d500305261fa10cbe0a8565b7a31621aba0fcdd6255765fedb945c3cc",
+          "src_c160d37a091e30e7fc9200131d6bc5fb0a1a7cabeedbec1ac0b076205c9ed929",
+          "src_56cc253c7aa284aaad72aab45c09936cc4b1b61b252ee5e7a2c4f155de6cebf1",
+          "src_e7f58aeed4ca8361bc4cde2836ec99c9da5642c30782b8c55ef8b0505df7556e",
+          "src_245dc69ee8b8413b8f2e71172245c9e097708402f2ce15a648129b6a133ed6d1",
+          "src_cb2d29f0d1d3238b37c72fae3b3ec9c88949ea82af137e12224faa47a537a93f",
+          "src_dba8521384fa7f54dd936c4cd148dd8bc3a1713a5d9ac518a0c88d610fa6813e",
+          "src_435bcc683d78a225b5ecd05cc07d4030b9671ee66e2d6777713b1b3eaafa5f6e",
+          "src_2b8a2a47daf60431490c762847f260cd884cce207a15f60cd089a4a67b3c7eb7",
+          "src_d3b5cceca32132d039b7a84a7e06161572fb7248925cc16bff007448e76e14e0",
+          "src_216e00db1569007cdf3f878b35b4f4e59543e70ab38438bd76d6dbffe3db256e",
+          "src_f53e22f618db1f2af733a034b3b0417eb071e079e7994d65068c138004b528e0",
+          "src_abe3bbd34fb886e238c5886396c4f0116ac3068021169e8d8672832323c927ba",
+          "src_bb6d0604215e10dd1d76875b27d44a243c83fbed88e65de3d2092517b6942dfc",
+          "src_961ab47d1c21bc4fa65f426002fc3d615bbd15e9a2b8c764d6d1f14b99929770",
+          "src_a3fd4029a509355a87758dda475457f13ccdd8ba09625f740d8bf166bce09fad",
+          "src_6f7af679f3dcef1cd92bdc3c9e10ed38dc7e53492f5ad28a13750c16f4770a19",
+          "src_78b4bab6dc459fafcba475d8a4e71ed1d89a7d70f83e6348319660543380765e",
+          "src_70ff17628e9783914547f5c8d633520cff06e953c347a9e6ac267dec5a9ed40e"
+        ],
+        "value": null
+      }
+    },
+    "information": [
+      {
+        "source_ids": [
+          "src_d4524e9c75e7c91407fb7c2018eea13c5e7774d9a12701783388ff9e4bec977d",
+          "src_9d59cac92e85d6562b6e70b0f6152d46b60351af19371b629fd353be3cf70626",
+          "src_162d551b6c95ecff747c02a374dc01ca305dd3e2d7ea986165a6651106e81478",
+          "src_2311442a72adff785d51202e3da6c89c920065ead8437d04c8e60d17e08117cc",
+          "src_027cc0a112656f3f90a904c6129fef7bf0f3d8f50924894dac458ace448d9935",
+          "src_012ff346871c91e2b3555bf40eae78bccb8208447b123d84ac05316b95022b64",
+          "src_920d8787685cc5953e87e12b021cd271bab7b9bc8322052be96f740e83998a66",
+          "src_f84da360660aac46de8a1188c26bb26fcebff574d5bcb30defc04cfa2aa11d55",
+          "src_7f6f6f655dccf389dd502d523f8145786fd976b8c121a951b95be3f1ce2e38d5",
+          "src_f2d1b1f42fb2cafa4fc6a783a20146a31dfac5908e2c5f7568ab02d60a92ea9c",
+          "src_b085e9f01c0b17cdf415b11783e147e31204785fb8e7781082086b0951df3025",
+          "src_1d09ec0b53cf9e06090de73cfa6b2637cfcbcd506228679718fdc223ef439d97",
+          "src_dcfb15e7a6fbdcf5eb94fb4014191c766259af2f76df19c56e66c74949ac067e",
+          "src_85a3e9d261f88714ccbc5fa25bd60cc58a63eb0ef461af608c1b95f2fced9c54",
+          "src_39399e98c99b5112ad459592c5afdee7eff2c116e3d17cf0b15f9b19701847a5",
+          "src_e53d970fdf1031ee61033307f05cd205559ebc19caf92908640aa31847a440fa",
+          "src_1d8afb0d500305261fa10cbe0a8565b7a31621aba0fcdd6255765fedb945c3cc",
+          "src_c160d37a091e30e7fc9200131d6bc5fb0a1a7cabeedbec1ac0b076205c9ed929",
+          "src_56cc253c7aa284aaad72aab45c09936cc4b1b61b252ee5e7a2c4f155de6cebf1",
+          "src_e7f58aeed4ca8361bc4cde2836ec99c9da5642c30782b8c55ef8b0505df7556e",
+          "src_245dc69ee8b8413b8f2e71172245c9e097708402f2ce15a648129b6a133ed6d1",
+          "src_cb2d29f0d1d3238b37c72fae3b3ec9c88949ea82af137e12224faa47a537a93f",
+          "src_dba8521384fa7f54dd936c4cd148dd8bc3a1713a5d9ac518a0c88d610fa6813e",
+          "src_435bcc683d78a225b5ecd05cc07d4030b9671ee66e2d6777713b1b3eaafa5f6e",
+          "src_2b8a2a47daf60431490c762847f260cd884cce207a15f60cd089a4a67b3c7eb7",
+          "src_d3b5cceca32132d039b7a84a7e06161572fb7248925cc16bff007448e76e14e0",
+          "src_216e00db1569007cdf3f878b35b4f4e59543e70ab38438bd76d6dbffe3db256e",
+          "src_f53e22f618db1f2af733a034b3b0417eb071e079e7994d65068c138004b528e0",
+          "src_abe3bbd34fb886e238c5886396c4f0116ac3068021169e8d8672832323c927ba",
+          "src_bb6d0604215e10dd1d76875b27d44a243c83fbed88e65de3d2092517b6942dfc",
+          "src_961ab47d1c21bc4fa65f426002fc3d615bbd15e9a2b8c764d6d1f14b99929770",
+          "src_a3fd4029a509355a87758dda475457f13ccdd8ba09625f740d8bf166bce09fad",
+          "src_6f7af679f3dcef1cd92bdc3c9e10ed38dc7e53492f5ad28a13750c16f4770a19",
+          "src_78b4bab6dc459fafcba475d8a4e71ed1d89a7d70f83e6348319660543380765e",
+          "src_70ff17628e9783914547f5c8d633520cff06e953c347a9e6ac267dec5a9ed40e"
+        ],
+        "operator": "NODE_FULL_LAW",
+        "availability": "SYMBOLIC_POPULATION_OPERATOR",
+        "outcome_nodes": [
+          "父1",
+          "父2",
+          "父3",
+          "父4",
+          "父5",
+          "父6",
+          "父7",
+          "父8"
+        ],
+        "assignment_cells": []
+      }
+    ]
+  },
+  "reference_binding": {
+    "context": "c389dfc4d0fa3",
+    "context_sha256": "389dfc4d0fa3db9cdedd1d71dc85a76dbc8b51a5fdf82f9e1dc37c33783badd4",
+    "aliases": {
+      "s0001": "src_d4524e9c75e7c91407fb7c2018eea13c5e7774d9a12701783388ff9e4bec977d",
+      "s0002": "src_9d59cac92e85d6562b6e70b0f6152d46b60351af19371b629fd353be3cf70626",
+      "s0003": "src_162d551b6c95ecff747c02a374dc01ca305dd3e2d7ea986165a6651106e81478",
+      "s0004": "src_2311442a72adff785d51202e3da6c89c920065ead8437d04c8e60d17e08117cc",
+      "s0005": "src_027cc0a112656f3f90a904c6129fef7bf0f3d8f50924894dac458ace448d9935",
+      "s0006": "src_012ff346871c91e2b3555bf40eae78bccb8208447b123d84ac05316b95022b64",
+      "s0007": "src_920d8787685cc5953e87e12b021cd271bab7b9bc8322052be96f740e83998a66",
+      "s0008": "src_f84da360660aac46de8a1188c26bb26fcebff574d5bcb30defc04cfa2aa11d55",
+      "s0009": "src_7f6f6f655dccf389dd502d523f8145786fd976b8c121a951b95be3f1ce2e38d5",
+      "s0010": "src_f2d1b1f42fb2cafa4fc6a783a20146a31dfac5908e2c5f7568ab02d60a92ea9c",
+      "s0011": "src_b085e9f01c0b17cdf415b11783e147e31204785fb8e7781082086b0951df3025",
+      "s0012": "src_1d09ec0b53cf9e06090de73cfa6b2637cfcbcd506228679718fdc223ef439d97",
+      "s0013": "src_dcfb15e7a6fbdcf5eb94fb4014191c766259af2f76df19c56e66c74949ac067e",
+      "s0014": "src_85a3e9d261f88714ccbc5fa25bd60cc58a63eb0ef461af608c1b95f2fced9c54",
+      "s0015": "src_39399e98c99b5112ad459592c5afdee7eff2c116e3d17cf0b15f9b19701847a5",
+      "s0016": "src_e53d970fdf1031ee61033307f05cd205559ebc19caf92908640aa31847a440fa",
+      "s0017": "src_1d8afb0d500305261fa10cbe0a8565b7a31621aba0fcdd6255765fedb945c3cc",
+      "s0018": "src_c160d37a091e30e7fc9200131d6bc5fb0a1a7cabeedbec1ac0b076205c9ed929",
+      "s0019": "src_56cc253c7aa284aaad72aab45c09936cc4b1b61b252ee5e7a2c4f155de6cebf1",
+      "s0020": "src_e7f58aeed4ca8361bc4cde2836ec99c9da5642c30782b8c55ef8b0505df7556e",
+      "s0021": "src_245dc69ee8b8413b8f2e71172245c9e097708402f2ce15a648129b6a133ed6d1",
+      "s0022": "src_cb2d29f0d1d3238b37c72fae3b3ec9c88949ea82af137e12224faa47a537a93f",
+      "s0023": "src_dba8521384fa7f54dd936c4cd148dd8bc3a1713a5d9ac518a0c88d610fa6813e",
+      "s0024": "src_435bcc683d78a225b5ecd05cc07d4030b9671ee66e2d6777713b1b3eaafa5f6e",
+      "s0025": "src_2b8a2a47daf60431490c762847f260cd884cce207a15f60cd089a4a67b3c7eb7",
+      "s0026": "src_d3b5cceca32132d039b7a84a7e06161572fb7248925cc16bff007448e76e14e0",
+      "s0027": "src_216e00db1569007cdf3f878b35b4f4e59543e70ab38438bd76d6dbffe3db256e",
+      "s0028": "src_f53e22f618db1f2af733a034b3b0417eb071e079e7994d65068c138004b528e0",
+      "s0029": "src_abe3bbd34fb886e238c5886396c4f0116ac3068021169e8d8672832323c927ba",
+      "s0030": "src_bb6d0604215e10dd1d76875b27d44a243c83fbed88e65de3d2092517b6942dfc",
+      "s0031": "src_961ab47d1c21bc4fa65f426002fc3d615bbd15e9a2b8c764d6d1f14b99929770",
+      "s0032": "src_a3fd4029a509355a87758dda475457f13ccdd8ba09625f740d8bf166bce09fad",
+      "s0033": "src_6f7af679f3dcef1cd92bdc3c9e10ed38dc7e53492f5ad28a13750c16f4770a19",
+      "s0034": "src_78b4bab6dc459fafcba475d8a4e71ed1d89a7d70f83e6348319660543380765e",
+      "s0035": "src_70ff17628e9783914547f5c8d633520cff06e953c347a9e6ac267dec5a9ed40e"
+    }
+  },
+  "reading_candidate": {
+    "version": "network-finite-policy-reading-1",
+    "reference_context": "c389dfc4d0fa3",
+    "study": {
+      "source_ids": [
+        "s0001",
+        "s0002",
+        "s0003",
+        "s0004",
+        "s0005",
+        "s0006",
+        "s0007",
+        "s0008",
+        "s0009",
+        "s0010",
+        "s0011",
+        "s0012",
+        "s0013",
+        "s0014",
+        "s0015",
+        "s0016",
+        "s0017",
+        "s0018",
+        "s0019",
+        "s0020",
+        "s0021",
+        "s0022",
+        "s0023",
+        "s0024",
+        "s0025",
+        "s0026",
+        "s0027",
+        "s0028",
+        "s0029",
+        "s0030",
+        "s0031",
+        "s0032",
+        "s0033",
+        "s0034",
+        "s0035"
+      ],
+      "nodes": [
+        "父1",
+        "父2",
+        "父3",
+        "父4",
+        "父5",
+        "父6",
+        "父7",
+        "父8"
+      ],
+      "edges": [
+        [
+          "父1",
+          "父2"
+        ],
+        [
+          "父1",
+          "父3"
+        ],
+        [
+          "父1",
+          "父4"
+        ],
+        [
+          "父2",
+          "父3"
+        ],
+        [
+          "父2",
+          "父4"
+        ],
+        [
+          "父3",
+          "父4"
+        ],
+        [
+          "父5",
+          "父6"
+        ],
+        [
+          "父5",
+          "父7"
+        ],
+        [
+          "父6",
+          "父7"
+        ],
+        [
+          "父1",
+          "父8"
+        ]
+      ],
+      "graph_kind": "SIMPLE_UNDIRECTED",
+      "edge_list_complete": true,
+      "treatment": "政策生效日之后生孩子记1，之前记0",
+      "outcome": "休假概率相对不推行这项政策时的提高，单位为概率",
+      "outcome_kind": "CONTINUOUS",
+      "context": "政策执行后；八名父亲分属三个厂，甲厂与乙厂为同事关系，1 号与 8 号为兄弟，丙厂不推行这项政策"
+    },
+    "additional_restrictions": [],
+    "unresolved": [],
+    "assignment": {
+      "source_ids": [
+        "s0001",
+        "s0002",
+        "s0003",
+        "s0004",
+        "s0005",
+        "s0006",
+        "s0007",
+        "s0008",
+        "s0009",
+        "s0010",
+        "s0011",
+        "s0012",
+        "s0013",
+        "s0014",
+        "s0015",
+        "s0016",
+        "s0017",
+        "s0018",
+        "s0019",
+        "s0020",
+        "s0021",
+        "s0022",
+        "s0023",
+        "s0024",
+        "s0025",
+        "s0026",
+        "s0027",
+        "s0028",
+        "s0029",
+        "s0030",
+        "s0031",
+        "s0032",
+        "s0033",
+        "s0034",
+        "s0035"
+      ],
+      "kind": "INDEPENDENT_BERNOULLI",
+      "probabilities": {
+        "父1": "1/2",
+        "父2": "1/2",
+        "父3": "1/2",
+        "父4": "1/2",
+        "父5": "1/2",
+        "父6": "1/2",
+        "父7": "1/2",
+        "父8": "1/2"
+      },
+      "fixed_count": null
+    },
+    "first_stage_exclusion": null,
+    "assumptions": {
+      "known_assignment_law": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "full_vector_randomization": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "consistency": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "fixed_pretreatment_network": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      },
+      "finite_conditional_first_moments": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005"
+        ],
+        "value": true
+      }
+    },
+    "target": {
+      "source_ids": [
+        "s0001",
+        "s0002",
+        "s0003",
+        "s0004",
+        "s0005",
+        "s0006",
+        "s0007",
+        "s0008",
+        "s0009",
+        "s0010",
+        "s0011",
+        "s0012",
+        "s0013",
+        "s0014",
+        "s0015",
+        "s0016",
+        "s0017",
+        "s0018",
+        "s0019",
+        "s0020",
+        "s0021",
+        "s0022",
+        "s0023",
+        "s0024",
+        "s0025",
+        "s0026",
+        "s0027",
+        "s0028",
+        "s0029",
+        "s0030",
+        "s0031",
+        "s0032",
+        "s0033",
+        "s0034",
+        "s0035"
+      ],
+      "population": [
+        "父1",
+        "父2",
+        "父3",
+        "父4",
+        "父5",
+        "父6",
+        "父7",
+        "父8"
+      ],
+      "aggregation": "EQUAL_MEAN",
+      "policy_distribution_complete": {
+        "value": null,
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006",
+          "s0007",
+          "s0008",
+          "s0009",
+          "s0010",
+          "s0011",
+          "s0012",
+          "s0013",
+          "s0014",
+          "s0015",
+          "s0016",
+          "s0017",
+          "s0018",
+          "s0019",
+          "s0020",
+          "s0021",
+          "s0022",
+          "s0023",
+          "s0024",
+          "s0025",
+          "s0026",
+          "s0027",
+          "s0028",
+          "s0029",
+          "s0030",
+          "s0031",
+          "s0032",
+          "s0033",
+          "s0034",
+          "s0035"
+        ]
+      },
+      "components": []
+    },
+    "information": [
+      {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006",
+          "s0007",
+          "s0008",
+          "s0009",
+          "s0010",
+          "s0011",
+          "s0012",
+          "s0013",
+          "s0014",
+          "s0015",
+          "s0016",
+          "s0017",
+          "s0018",
+          "s0019",
+          "s0020",
+          "s0021",
+          "s0022",
+          "s0023",
+          "s0024",
+          "s0025",
+          "s0026",
+          "s0027",
+          "s0028",
+          "s0029",
+          "s0030",
+          "s0031",
+          "s0032",
+          "s0033",
+          "s0034",
+          "s0035"
+        ],
+        "operator": "NODE_FULL_LAW",
+        "availability": "SYMBOLIC_POPULATION_OPERATOR",
+        "outcome_nodes": [
+          "父1",
+          "父2",
+          "父3",
+          "父4",
+          "父5",
+          "父6",
+          "父7",
+          "父8"
+        ],
+        "assignment_cells": []
+      }
+    ]
+  },
+  "bundle": {
+    "case_id": "LIT-NET-13-missing_condition",
+    "documents": {
+      "proposal": "## study\n\n文献启发的合成演示，不是原论文数据。研究对象是某集团的八名父亲，父亲是研究单位。政策生效日之后生孩子的父亲记 1，同一家厂只认定排在生效日之后的第一位、其后生孩子的父亲记 0。结果为该父亲休带薪育儿假的概率相对不推行这项政策时的提高，取值在 0 与 1 之间，连续数值。同一家厂内的同事关系见题面列出的六对与三对；影响只沿出生顺序单向传导，排在覆盖者之前的人不受其身后同事的影响，兄弟关系只连接 1 号与 8 号，丙厂不推行这项政策。评价时点为政策执行后，两套生效安排评价同一批八名父亲、同一结果定义。\n\n## trial\n\n过去没有随机试点，集团各厂一直统一按政策规定执行，生效时间由集团排定，这是历史做法。\n\n## science\n\n本演示拟采用：上述两套生效安排与同事、兄弟关系已知；八名父亲在两套安排下的潜在休假概率提高与安排选择独立；观察到的休假概率提高对应实际执行的那套安排；同事关系与兄弟关系在安排执行前固定；按与覆盖者的出生先后距离分档的规则对每名父亲一致适用；所需比例存在。\n\n## information\n\n本演示的理论输入是覆盖八名父亲的完整生效安排与各父亲休假概率提高的符号总体分布，来自同一次基线调查；这里没有给定任何休假概率的数值，不是八条样本记录。\n未来只执行一份生效安排，问题没有说明两套安排各自被采用的机会。本案例只问随机政策下的平均水平，不与某个对照方案相减。",
+      "business_question": "某国推行一项新的带薪育儿假，只有政策生效日之后第一位生孩子的父亲才享有（同一家厂只认定一位）。一家集团下属两个厂在推行范围内，另有一名员工在集团外的厂里，那家厂不推行这项政策。\n\n甲厂四名员工，编号 1 至 4，两两互为同事，当爸爸的先后是 1 号、2 号、3 号、4 号。乙厂三名员工，编号 5 至 7，两两互为同事，先后是 5 号、6 号、7 号。8 号是 1 号的弟弟，在丙厂上班，丙厂只有他一名研究对象。\n\n同事之间互相知道对方休没休，但影响只沿着出生顺序单向走：先有孩子的人影响后有的人，不反过来。兄弟之间同样互相知道。\n\n集团要在两套生效安排里抽签：\n\n- 方案 A：甲厂生效日定在 1 号之前，1 号是排在生效日之后的第一位、被覆盖；乙厂生效日定在 5 号之前，5 号是排在生效日之后的第一位、被覆盖；\n- 方案 B：甲厂生效日推到 2 号与 3 号之间，1 号、2 号在生效日之前生孩子、不被覆盖，3 号是排在生效日之后的第一位、被覆盖；乙厂不变。\n\n休假概率的提高规则如下：\n\n- 同一家厂只认定排在生效日之后的第一位父亲为被覆盖者；其后生孩子的父亲不重复认定覆盖，只按下面的同厂规则拿增量；\n- 被覆盖的父亲，休假概率提高 0.32；\n- 同厂内排在覆盖者之后第一位、第二位、第三位的父亲，休假概率分别提高 0.026、0.037、0.060；这三个数已经把「排在前面的人休假又带动后面的人」算在里面，不得再逐层叠加；\n- 兄弟被覆盖，本人提高 0.047；8 号所在的丙厂不推行这项政策，8 号本人不会被覆盖；\n- 排在覆盖者之前的人、以及本厂无人被覆盖的人，不拿同厂这一项。\n\n集团明年会从这两套安排里选一套执行。我们想知道，八名父亲休假概率相对不推行这项政策时的平均提高在明年采用其中一套安排时是多少。每人等权。"
+    },
+    "question": "某国推行一项新的带薪育儿假，只有政策生效日之后第一位生孩子的父亲才享有（同一家厂只认定一位）。一家集团下属两个厂在推行范围内，另有一名员工在集团外的厂里，那家厂不推行这项政策。\n\n甲厂四名员工，编号 1 至 4，两两互为同事，当爸爸的先后是 1 号、2 号、3 号、4 号。乙厂三名员工，编号 5 至 7，两两互为同事，先后是 5 号、6 号、7 号。8 号是 1 号的弟弟，在丙厂上班，丙厂只有他一名研究对象。\n\n同事之间互相知道对方休没休，但影响只沿着出生顺序单向走：先有孩子的人影响后有的人，不反过来。兄弟之间同样互相知道。\n\n集团要在两套生效安排里抽签：\n\n- 方案 A：甲厂生效日定在 1 号之前，1 号是排在生效日之后的第一位、被覆盖；乙厂生效日定在 5 号之前，5 号是排在生效日之后的第一位、被覆盖；\n- 方案 B：甲厂生效日推到 2 号与 3 号之间，1 号、2 号在生效日之前生孩子、不被覆盖，3 号是排在生效日之后的第一位、被覆盖；乙厂不变。\n\n休假概率的提高规则如下：\n\n- 同一家厂只认定排在生效日之后的第一位父亲为被覆盖者；其后生孩子的父亲不重复认定覆盖，只按下面的同厂规则拿增量；\n- 被覆盖的父亲，休假概率提高 0.32；\n- 同厂内排在覆盖者之后第一位、第二位、第三位的父亲，休假概率分别提高 0.026、0.037、0.060；这三个数已经把「排在前面的人休假又带动后面的人」算在里面，不得再逐层叠加；\n- 兄弟被覆盖，本人提高 0.047；8 号所在的丙厂不推行这项政策，8 号本人不会被覆盖；\n- 排在覆盖者之前的人、以及本厂无人被覆盖的人，不拿同厂这一项。\n\n集团明年会从这两套安排里选一套执行。我们想知道，八名父亲休假概率相对不推行这项政策时的平均提高在明年采用其中一套安排时是多少。每人等权。"
+  }
+}

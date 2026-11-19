@@ -1,0 +1,14 @@
+[
+  {
+    "node": "门店1",
+    "own": 1,
+    "exposure": 1,
+    "value": "3/4"
+  },
+  {
+    "node": "门店6",
+    "own": 1,
+    "exposure": 1,
+    "value": "3/4"
+  }
+]

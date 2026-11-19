@@ -1,0 +1,18 @@
+{
+  "case_id": "LIT-NET-09",
+  "variant": "missing_condition",
+  "paper_id": "alatas_etal2016_targeting",
+  "title": "抽查核实怎么安排，家底被摸清的比例是多少？",
+  "synthetic": true,
+  "gold_oracle_location": "OUTSIDE_PUBLIC_CASE_DIRECTORY",
+  "llm_access_scope": "PUBLIC_CASE_FILES_ONLY",
+  "business_question_file": "business_question.md",
+  "supporting_files": [
+    "study_protocol.md",
+    "data_dictionary.md"
+  ],
+  "heldout": false,
+  "adapted": true,
+  "adaptation_note": "场景改编自社区入户核实与贫困认定的公开描述，题目设定为项目自建",
+  "notes": "从原题删除两套安排各 1/2 的概率；用于检查系统是否识别材料缺口并停止。"
+}

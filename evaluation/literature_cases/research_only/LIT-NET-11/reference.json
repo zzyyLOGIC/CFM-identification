@@ -1,0 +1,81 @@
+{
+  "case_id": "LIT-NET-11",
+  "paper_id": "cai_szeidl2018_meetings",
+  "paper": {
+    "authors": [
+      "Jing Cai",
+      "Adam Szeidl"
+    ],
+    "year": 2018,
+    "title": "Interfirm Relationships and Business Performance",
+    "venue": "The Quarterly Journal of Economics",
+    "doi": "10.1093/qje/qjx049"
+  },
+  "paper_reference": {
+    "paper_question": "企业家会议是否通过同伴学习提高小微企业绩效，组内信息投放与产品市场竞争又如何影响信息在组内的扩散？",
+    "target": "四十家企业在两种投放方案各 1/2 的随机政策下的平均申请概率；每家等权。",
+    "source_location": "Cai and Szeidl (2018) QJE 133(3):1229-1282, DOI 10.1093/qje/qjx049. Abstract (p. 1229) for the paper question; Section II.B (pp. 1238-1239) for group formation and the 0/50/80 percent information placement; Section II.D (p. 1245) for sample selection; Section IV.A and Table IX (pp. 1265-1266) for the three coefficients; footnote 30 (p. 1268) for the flat diffusion rate across coverage levels. Project-built scenario; the paper does not pose this question.",
+    "formula": "同行业组未被告知者的概率 = 0.291 − 0.212 = 0.079。方案A（每组五家）：同行业组 0.5×0.300 + 0.5×0.079 = 0.1895，混合行业组 0.5×0.300 + 0.5×0.291 = 0.2955，四十家均值 97/400 = 0.2425；方案B（每组八家）：同行业组 0.8×0.300 + 0.2×0.079 = 0.2558，混合行业组 0.8×0.300 + 0.2×0.291 = 0.2982，四十家均值 277/1000 = 0.277；Target = 1/2×0.2425 + 1/2×0.277 = 1039/4000 = 0.25975。目标变化版取同行业两组二十家：Target = 1/2×0.1895 + 1/2×0.2558 = 4453/20000 = 0.22265。",
+    "conditions": [
+      "Two complete placement lists with known probabilities 1/2 each.",
+      "Placement choice independent of the forty firms' potential application outcomes.",
+      "Observed applications correspond to the executed placement.",
+      "Group membership fixed before placement; groups are not neighbours of each other.",
+      "Within-group diffusion enters only through the presence of an informed peer, not through the number of informed peers."
+    ],
+    "what_paper_supports": [
+      "Within-group information placement randomized at 0, 50 and 80 percent coverage, with peers random conditional on strata and subregion (Section II.B).",
+      "Direct information raises application by 30 pp, an informed peer by 29.1 pp, and same-industry competition dampens diffusion by 21.2 pp (Table IX).",
+      "Diffusion is similar at 50 and 80 percent coverage, supporting a threshold exposure rather than a count-based one (footnote 30)."
+    ],
+    "what_paper_does_not_support": [
+      "No claim that this adapts the paper's main question: the main intervention is a year of monthly meetings and the main outcomes are revenue and profit; the case adapts only the Section IV.A mechanism experiment.",
+      "No claim that forty synthetic firms represent the 2,820 study firms, or that their level of applications matches the paper's sample.",
+      "No claim that 0.300, 0.291 and 0.212 predict an individual firm's probability: they are coefficients from three regressions in Table IX, never combined into a prediction formula.",
+      "No claim that 0.300 and 0.291 come from the same population: 0.300 is the Info coefficient on the full sample, 0.291 only the subsample of uninformed members in meeting groups; adding them is a project-built additivity assumption.",
+      "No claim that groups 1 and 2 are the paper's competition split: the paper's Competition indicator is above-median average self-reported competitors within a group (footnote 28, p. 1265); the case assigns it directly.",
+      "No claim that the zero baseline is the paper's control: 40 percent of managers in the control group also received information, and a never-treated sample does not exist in the paper.",
+      "No claim that application for the subsidy measures firm performance: the main outcome is an 8.1 percent revenue gain, and information placement has no reported revenue effect.",
+      "No extrapolation to all small firms: the sample is self-selected and interested in attending the meetings (Section II.D p. 1245)."
+    ]
+  },
+  "software_expected": {
+    "original": {
+      "status": "POINT"
+    },
+    "missing_condition": {
+      "status": "NEEDS_INPUT",
+      "reason": "The probabilities of the two placement lists are omitted; the fact layer stops with EXTENDED_NETWORK_FACTS_INCOMPLETE."
+    },
+    "changed_target": {
+      "status": "POINT",
+      "reason": "Evaluation population moves to the twenty same-industry firms; target and weights must be rebound."
+    }
+  },
+  "actual_run": {
+    "method": "LOCAL_STRUCTURED_FINITE_POLICY_RUN_NO_LLM",
+    "provenance": "2026-11-16 local structured run through the extended network finite-policy entry with explicit synthetic reviews; api_calls=0.",
+    "original": {
+      "state": "POINT",
+      "independent_replay": true,
+      "target_fingerprint": "acc577d6ae294db3b9792d12211f31430a24d525c5ca5120ecca1aa7316924aa",
+      "output_file": "structured_runs/original/result.json"
+    },
+    "missing_condition": {
+      "state": "NEEDS_INPUT",
+      "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+      "output_file": "structured_runs/missing_condition/result.json"
+    },
+    "changed_target": {
+      "state": "POINT",
+      "independent_replay": true,
+      "target_fingerprint": "4f315472a22852c9b52092aa52cdde624282d80358356c722eabacd189da563f",
+      "output_file": "structured_runs/changed_target/result.json"
+    },
+    "note": "三个变体均在本地结构化运行；不调用 LLM；不读取公开材料以外的参考内容。"
+  },
+  "review_status": "PENDING_TEACHER",
+  "reviewer": "teacher",
+  "holdout": false,
+  "notes": "Scenario adaptation; the paper does not pose this question. The adapted layer is the Section IV.A mechanism experiment, not the main intervention or the main outcome. The two placement lists differ in coverage (five versus eight per group), so the target is a randomized-policy mixture rather than an endpoint contrast."
+}

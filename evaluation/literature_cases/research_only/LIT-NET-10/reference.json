@@ -1,0 +1,80 @@
+{
+  "case_id": "LIT-NET-10",
+  "paper_id": "miguel_kremer2004_deworming",
+  "paper": {
+    "authors": [
+      "Edward Miguel",
+      "Michael Kremer"
+    ],
+    "year": 2004,
+    "title": "Worms: Identifying Impacts on Education and Health in the Presence of Treatment Externalities",
+    "venue": "Econometrica",
+    "doi": "10.1111/j.1468-0262.2004.00481.x"
+  },
+  "paper_reference": {
+    "paper_question": "学校层面整群随机分批发放驱虫药，项目整体效应与跨校溢出各有多大？",
+    "target": "九所学校在两种覆盖方案各 1/2 的随机政策下的平均出勤率；九校等权。",
+    "source_location": "Miguel and Kremer (2004) Econometrica 72(1):159-217, DOI 10.1111/j.1468-0262.2004.00481.x. Abstract and Introduction (pp. 159-161) for the externality motivation; Section 3 (p. 165) for the three-group phased roll-out; Section 4.1 (p. 175) for cluster randomization and cross-school spillovers. Project-built scenario; the paper does not pose this question.",
+    "formula": "方案A(六所)：甲0.89、乙0.89、丙0.86，均值 44/50=0.88；方案B(九所全发)：各校 0.92，均值 0.92；Target = 1/2*0.88 + 1/2*0.92 = 0.90。",
+    "conditions": [
+      "Two complete coverage lists with known probabilities 1/2 each.",
+      "Coverage choice independent of the nine schools' potential attendance.",
+      "Observed attendance corresponds to the executed coverage.",
+      "Neighbourhood within a zone fixed before treatment.",
+      "Spillover enters only through the number of treated schools in the zone; no common annual shock.",
+      "Required means exist."
+    ],
+    "what_paper_supports": [
+      "School-level cluster randomization as business context, identifying the programme effect under within-school spillovers (Section 4.1).",
+      "Cross-school spillovers identified from the local density of treated schools (Section 4.1).",
+      "Wider coverage must count the extra benefit to already-covered schools from neighbouring coverage (Abstract; Introduction)."
+    ],
+    "what_paper_does_not_support": [
+      "The 6 and 3 percentage points are synthetic parameters, not paper estimates.",
+      "No decomposition of the treated-school effect into direct and within-school spillover.",
+      "No extrapolation from attendance to test scores.",
+      "No claim that nine synthetic schools represent Busia or the 75 schools.",
+      "No claim that the 0.04 phase difference is the paper's policy effect: the paper randomized once, and the phases differ in years.",
+      "No claim that groups 1 and 2 have identical direct effects: exposure lasts two years in group 1 and one year in group 2."
+    ]
+  },
+  "software_expected": {
+    "original": {
+      "status": "POINT"
+    },
+    "missing_condition": {
+      "status": "NEEDS_INPUT",
+      "reason": "The probabilities of the two coverage plans are omitted; the fact layer stops with EXTENDED_NETWORK_FACTS_INCOMPLETE."
+    },
+    "changed_target": {
+      "status": "POINT",
+      "reason": "Evaluation population moves to the three schools of group C (3, 6, 9); target and weights must be rebound."
+    }
+  },
+  "actual_run": {
+    "method": "LOCAL_STRUCTURED_FINITE_POLICY_RUN_NO_LLM",
+    "provenance": "2026-11-15 local structured run through the extended network finite-policy entry with explicit synthetic reviews; api_calls=0.",
+    "original": {
+      "state": "POINT",
+      "independent_replay": true,
+      "target_fingerprint": "bda5dec6b683b2d6d8c94c744e4292b5168852ff3fbc954901f6f7761f758416",
+      "output_file": "structured_runs/original/result.json"
+    },
+    "missing_condition": {
+      "state": "NEEDS_INPUT",
+      "reason_code": "EXTENDED_NETWORK_FACTS_INCOMPLETE",
+      "output_file": "structured_runs/missing_condition/result.json"
+    },
+    "changed_target": {
+      "state": "POINT",
+      "independent_replay": true,
+      "target_fingerprint": "e5740d645854dc382ef47570db5a08aa2b02afbba740bc28b0a4584211ee78c8",
+      "output_file": "structured_runs/changed_target/result.json"
+    },
+    "note": "三个变体均在本地结构化运行；不调用 LLM；不读取公开材料以外的参考内容。"
+  },
+  "review_status": "PENDING_TEACHER",
+  "reviewer": "teacher",
+  "holdout": false,
+  "notes": "Scenario adaptation; the paper does not pose this question. The two plans map to the treatment status of groups 1 and 3 of the paper. Coverage sizes differ (six versus nine schools), so the target is a randomized-policy mixture rather than an endpoint contrast."
+}
