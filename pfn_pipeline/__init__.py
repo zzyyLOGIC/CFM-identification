@@ -1,19 +1,4 @@
-"""Unified research pipeline; heavy backends are imported only when requested.
-
-Typical use::
-
-    model = load_checkpoint()
-    task, reference = simulate_task(adjacency=load_graph(model.graph_record),
-                                    return_reference=True)
-    identified = identify(task)
-    estimates = estimate_effects(task, identified, model)
-    allocation = optimize_offline(task, estimates)
-    metrics = evaluate_estimates(estimates, reference)
-
-The imported ER demo checkpoint supports inference. Its training prior differs
-from this simulation, so these metrics are a cross-prior functional check.
-The causalPFN baseline and legacy weights cannot substitute for it.
-"""
+"""Network identification, verified compositions, and independent replay."""
 from importlib import import_module
 
 from .contracts import TaskSpec, IdentificationResult, EstimateBundle, PolicyResult
@@ -23,8 +8,8 @@ _EXPORTS = {
     "identify_randomized_network_batch": "identification_batch",
     "replay_network_arm_batch": "identification_batch",
     "bind_legacy_response_batch": "identification_batch",
-    "replay_legacy_response_batch_bridge": "identification_batch",
     "estimate_bound_legacy_response": "identification_batch",
+    "replay_legacy_response_batch_bridge": "identification_batch",
     "ArmLinearTerm": "identification_composition",
     "CompositionUnavailable": "identification_composition",
     "VerifiedCompositionV18": "identification_composition",
@@ -124,13 +109,7 @@ _EXPORTS = {
     "make_two_stage_quota_arm_task": "identification",
     "make_heterogeneous_bernoulli_arm_task": "identification",
     "replay_population_identification": "identification",
-    "PFNModel": "pfn", "build_model": "pfn", "load_checkpoint": "pfn",
-    "train_model": "pfn", "predict": "pfn", "estimate_effects": "estimation",
-    "optimize_offline": "policy", "simulate_task": "simulation", "load_graph": "simulation",
-    "effect_table": "evaluation", "evaluate_estimates": "evaluation",
-    "evaluate_policy": "evaluation", "evaluate_checkpoint": "evaluation",
-    "plot_response_surface": "visualization", "plot_effects": "visualization",
-    "plot_policy": "visualization",
+
 }
 __all__ = ["TaskSpec", "IdentificationResult", "EstimateBundle", "PolicyResult", *_EXPORTS]
 

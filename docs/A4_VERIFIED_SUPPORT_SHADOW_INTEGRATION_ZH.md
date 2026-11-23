@@ -7,7 +7,7 @@
 ## 1. 本次实际新增
 
 - `pfn_pipeline/identification_a4_shadow.py`：显式 typed A4 source、`VerifiedSupportAdapter`、single-arm A4 matcher、可重验 receipts、与原始 `identify()` 的非权威差异评估。
-- `examples/run_randomized_arm_a4_shadow.py`：三节点旧 A4 假阳/假阴反例、真实 ER300 单臂；真实支持计算不枚举完整 assignment 空间。
+- 历史独立演示检查三节点反例及 ER300 网络的单臂支持。[旧版脚本](https://github.com/zzyyLOGIC/CFM-identification/tree/cb322b4061fe981a8b5fd6fbd39660209c433911/examples/run_randomized_arm_a4_shadow.py)
 - `tests/test_a4_shadow_integration.py`：20 个测试（其中 1 个覆盖全部 9 种 D×E 组合），涵盖边界、来源、篡改、独立对拍。
 - `.github/workflows/ci.yml`：新增 shadow 测试步骤；其他原测试步骤保持原样。
 
@@ -83,8 +83,7 @@ assert replay_a4_shadow(task, typed_source, shadow)
 
 ```bash
 python -B -m unittest discover -s tests -p 'test_a4_shadow_integration.py' -q
-python -B -m examples.run_randomized_arm_a4_shadow
-python -B -m examples.run_randomized_arm_a4_shadow --er300
+python -m pytest tests/test_production_a4_and_business.py tests/test_randomized_network_arm_integration.py
 ```
 
 ## 5. 必须在下一阶段解决的迁移问题

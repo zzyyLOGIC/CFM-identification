@@ -4,12 +4,37 @@ All projections are explicit. Requested roles constrain the method search, not
 the scientific model. No route is allowed to bypass a pending/rejected review.
 """
 from copy import deepcopy
+import re
 from cfm_id_llm.dag_frontdoor_reading import parse
 from . import dag_business as native
 from .business_dispatch import (sha, worksheet, checked_review, empty_result,
                                 DispatchError, PLAN_DECISIONS)
 
 METHODS = (native.CLASSICAL_ROUTE, native.ADJUSTMENT_ROUTE, native.FRONTDOOR_ROUTE)
+
+
+def _legacy_binary_view(entry, target):
+    """Bind only values explicitly assigned to the selected treatment in the reviewed question."""
+    question=entry['bundle']['question']
+    if entry.get('remaining_query_ids') or not target.treatment or not target.outcome or target.outcome not in question:
+        return None
+    if not re.search(r'(总体|干预|概率)分布',question) or re.search(r'分别比较|相减|多少差|差值',question):
+        return None
+    pattern=(r'[“「"]?'+re.escape(target.treatment)+r'[”」"]?(?:分别)?(?:统一)?(?:设为|置为|设定为)'
+             r'\s*([01])(?:\s*[和与、]\s*([01]))?(?=\s*[，,。；、？?时])')
+    matches=list(re.finditer(pattern,question))
+    if len(matches)!=1 or len(re.findall(r'设为|置为|设定为',question))!=1:
+        return None
+    match=matches[0]
+    if re.match(r'\s*[、，,]\s*\d',question[match.end():]):
+        return None
+    values=[int(v) for v in match.groups() if v is not None]
+    if len(set(values))==len(values):
+        from .source_locations import build_catalog
+        locations=build_catalog({'__question__':question})
+        ids=[sid for sid,row in locations.items() if row['start']<=match.start() and match.end()<=row['end']]
+        if len(ids)==1:
+            return dict(kind='TREATMENT_VALUES',values=values,source_ids=ids)
 
 
 def inspect_methods(entry, candidate):
@@ -33,6 +58,10 @@ def inspect_methods(entry, candidate):
             if projection['query_scope']['kind'] == 'OTHER':
                 return dict(out, state='ADAPTER_NOT_CONNECTED', reason_code='QUERY_SCOPE_OUTSIDE_KERNEL_VIEW')
         c = parse(entry['bundle'], native_candidate)
+        if 'query_scope' not in out:
+            scope=_legacy_binary_view(entry,c.target)
+            if scope:
+                out['query_scope']=scope
         out['reading_candidate'] = deepcopy(candidate)
         choice = c.frontdoor_choice.status
         if choice == 'UNDECIDED':
@@ -77,7 +106,10 @@ def inspect_methods(entry, candidate):
             raise DispatchError('ADAPTER_NOT_CONNECTED', 'NO_CONNECTED_METHOD_RESPECTS_REQUEST')
         # Bind the full original candidate as well as projections; changing a
         # role field must invalidate approval even if a common projection is equal.
-        binding = sha(dict(entry=entry, candidate=candidate, methods=out['methods'], exclusions=out['exclusions']))
+        bound=dict(entry=entry, candidate=candidate, methods=out['methods'], exclusions=out['exclusions'])
+        if entry.get('reference_format')!='short_refs' and out.get('query_scope'):
+            bound['query_scope']=out['query_scope']
+        binding = sha(bound)
         return dict(out, state='REVIEW_REQUIRED', plan_sha256=binding,
                     plan_worksheet=worksheet(binding, PLAN_DECISIONS + (
                         ('requested_intervention_values_and_kernel_view',) if 'query_scope' in out else ())))

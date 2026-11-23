@@ -24,7 +24,8 @@ dist/
 checkpoints/
 .cache/
 showcase*/
-# demo/ contains the maintained ID-only web source. Runtime data goes to outputs/.
+# Both local web launchers save studies and receipts here.
+web_runs/
 local_*/
 
 # Internal task assignments and publication-excluded development history

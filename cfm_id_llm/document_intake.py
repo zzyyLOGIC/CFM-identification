@@ -199,7 +199,7 @@ def _read_csv(raw: bytes, filename: str, warnings: list[str]) -> str:
     try:
         dialect = csv.Sniffer().sniff(content[:4096], delimiters=',\t;|')
     except csv.Error:
-        dialect = csv.excel
+        dialect = csv.excel_tab if Path(filename).suffix.lower() == '.tsv' else csv.excel
     # Keep the reader bounded and never materialize cell values in any source.
     reader = csv.reader(StringIO(content), dialect)
     try:
@@ -210,11 +210,12 @@ def _read_csv(raw: bytes, filename: str, warnings: list[str]) -> str:
     except StopIteration:
         columns = []
     count = 0
+    truncated = False
     for _ in reader:
-        count += 1
-        if count >= MAX_TABLE_SCAN_ROWS:
+        if count == MAX_TABLE_SCAN_ROWS:
+            truncated = True
             break
-    truncated = count >= MAX_TABLE_SCAN_ROWS
+        count += 1
     return _schema_summary(filename, [('CSV', columns, count, truncated)], warnings)
 
 
@@ -251,8 +252,7 @@ def _read_xlsx(raw: bytes, filename: str, warnings: list[str]) -> str:
         strings = []
         if 'xl/sharedStrings.xml' in z.namelist():
             shared = _zip_xml(z, 'xl/sharedStrings.xml')
-            for item in shared.findall('m:si', ns)[:10000]:
-                strings.append(''.join(t.text or '' for t in item.findall('.//m:t', ns)))
+            strings = shared.findall('m:si', ns)
         result = []
         for sheet in workbook.findall('m:sheets/m:sheet', ns)[:12]:
             name = sheet.attrib.get('name', 'Sheet')[:100]
@@ -278,9 +278,11 @@ def _read_xlsx(raw: bytes, filename: str, warnings: list[str]) -> str:
                     val = cell.find('m:v', ns)
                     if ty == 'inlineStr':
                         text = ''.join(t.text or '' for t in cell.findall('.//m:t', ns))
-                    elif ty == 's' and val is not None and (val.text or '').isdigit():
-                        si = int(val.text or '0')
-                        text = strings[si] if si < len(strings) else '[invalid shared string]'
+                    elif ty == 's':
+                        index = val.text if val is not None else None
+                        if not index or not index.isdecimal() or int(index) >= len(strings):
+                            raise AttachmentError('Invalid workbook header shared string index')
+                        text = ''.join(t.text or '' for t in strings[int(index)].findall('.//m:t', ns))
                     else:
                         text = (val.text or '') if val is not None else ''
                     names[idx] = text[:100]

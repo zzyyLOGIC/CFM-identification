@@ -25,7 +25,7 @@ Object.assign(labels,{
  outcome_same_variable_units_scale_and_direction_without_transformation:'结果变量、单位、尺度和方向完全对应',
  context_same_fixed_pretreatment_background_without_added_selection:'固定背景对应，未增加新的筛选条件'
 });
-const methodNames={R1B_FULL_ASSIGNMENT:'完整分配识别',R1A_COMPOSITION:'局部效应组合识别',R2_MEAN_SUFFICIENCY:'均值充分性识别'};
+function methodLabel(id){return coverageInfo?.method_labels?.[id]||'识别方法（见验证记录）';}
 async function api(path,body){const res=await fetch(path,{method:body===undefined?'GET':'POST',headers:body===undefined?{}:{'Content-Type':'application/json','X-CSRF-Token':csrf},body:body===undefined?undefined:JSON.stringify(body)});const value=await res.json();if(!res.ok)throw Error(value.error||'请求未完成');return value;}
 function message(text,error=false){$('#input-message').textContent=text;$('#input-message').className='message'+(error?' error':'');}
 function syncProviderOptions(h){
@@ -117,14 +117,164 @@ for(const selector of ['#model-id','#custom-model-id','#model-base-url','#model-
 $('#model-id').onchange=()=>{$('#custom-model-field').hidden=$('#model-id').value!=='__custom__';providerSettingsDirty=true;$('#key-status').textContent='模型已修改，请保存连接设置';};
 $('#start').onclick=async()=>{
  if($('#start').disabled)return;$('#start').disabled=true;
- try{providerTouched=true;if(providerSettingsDirty)throw Error('模型连接已修改，请先保存模型设置。');if(!$('#allow-send').checked)throw Error('请先确认允许将业务文字与提取材料发送给所选模型。');const h=await health();if(!h.configured)throw Error('请先配置 API Key。');if($('#provider').value!==h.provider)throw Error('所选模型与已配置密钥不对应，请先保存模型设置。');if(!serviceFeatures.includes('background_reading_review'))throw Error('后台仍是旧版本。请更新本地服务后使用自动流程；当前已保存的读取不会被删除。');if($('#question').value.trim().length<3)throw Error('请先描述业务问题。');$('#start').disabled=true;
+ try{const local=$('#reading-mode').value==='network_local_review';providerTouched=true;if(!local && providerSettingsDirty)throw Error('模型连接已修改，请先保存模型设置。');if(!local && !$('#allow-send').checked)throw Error('请先确认允许将业务文字与提取材料发送给所选模型。');const h=await health();if(!local && !h.configured)throw Error('请先配置 API Key。');if(!local && $('#provider').value!==h.provider)throw Error('所选模型与已配置密钥不对应，请先保存模型设置。');if(!serviceFeatures.includes('background_reading_review'))throw Error('后台仍是旧版本。请更新本地服务后使用自动流程；当前已保存的读取不会被删除。');if($('#question').value.trim().length<3)throw Error('请先描述业务问题。');$('#start').disabled=true;
  const uploadInput=await buildUploadInput();await checkUploadInput(uploadInput);
- const response=await api('/api/start',{question:$('#question').value,provider:$('#provider').value,...uploadInput,...inputSelection(),synthetic:$('#synthetic').checked,allow_send:true,automatic_review:true});runId=response.id;history.replaceState(null,'','#run='+runId);reviewSignature='';$('#workspace').hidden=false;$('#saved').hidden=true;$('#workspace').scrollIntoView({behavior:'smooth',block:'start'});message('已开始分析。上方输入框的后续修改不影响本次运行。');poll();
+ const response=await api('/api/start',{question:$('#question').value,provider:local?null:$('#provider').value,reading_mode:$('#reading-mode').value,...uploadInput,...inputSelection(),synthetic:$('#synthetic').checked,allow_send:!local,automatic_review:true});runId=response.id;history.replaceState(null,'','#run='+runId);reviewSignature='';$('#workspace').hidden=false;$('#saved').hidden=true;$('#workspace').scrollIntoView({behavior:'smooth',block:'start'});message('已开始分析。上方输入框的后续修改不影响本次运行。');poll();
  }catch(e){message(e.message,true);}finally{$('#start').disabled=false;}
 };
 async function poll(){clearTimeout(timer);try{const run=await api('/api/run?id='+encodeURIComponent(runId));current=run;renderRun(run);if(run.busy)timer=setTimeout(poll,1600);}catch(e){$('#progress').textContent='连接暂时中断：'+e.message+'。3 秒后尝试获取当前任务状态，不重复调用模型。';timer=setTimeout(poll,3000);}}
+function boundContrastHTML(report){
+ const proof=report.proof,target=report.effective_answer?.target;
+ if(!proof?.bound_fields||!target)return '';
+ const items=[['评价对象',target.population,'population'],['原设计分配的变量',proof.assigned_variable,'treatment'],
+              ['比较两端',[target.intervention,target.reference],'ends']];
+ return '<details class="bound-contrast"><summary>核验采用的目标与原文</summary>'+items.map(([label,value,key])=>{
+  const spans=proof.bound_fields[key]||[];
+  return '<h4>'+esc(label)+'</h4><p>'+esc(Array.isArray(value)?value.join(' / '):value)+'</p>'+
+   spans.map(s=>'<blockquote>'+esc(s.source_id)+' · '+esc(s.quote)+'</blockquote>').join('');
+ }).join('')+'</details>';
+}
+function renderNetworkConditions(run){
+ const panel=$('#network-conditions'), form=$('#network-condition-form'), sheet=run.result?.condition_review;
+ panel.hidden=!sheet||run.result.estimation_handoff_allowed||run.busy;
+ if(panel.hidden)return;
+ if(form.dataset.binding!==sheet.binding){
+  form.dataset.binding=sheet.binding;
+  $('#network-condition-message').textContent='';
+  $('#network-condition-items').innerHTML=sheet.items.map(item=>`<label><b>${esc(item.label)}</b><span>${esc(item.quote)}</span><select required name="${esc(item.code)}"><option value="">请选择</option><option value="ADOPTED">本次采用</option><option value="UNSURE">暂不确定</option><option value="DECLINED">本次不采用</option></select></label>`).join('');
+  for(const [key,value] of Object.entries(run.result.review_record?.decisions||{}))form.elements.namedItem(key).value=value;
+ }
+ if(run.result.review_record)$('#network-condition-message').textContent='已保存本次判断。所列前提均采用后可向估计端交接。';
+}
+$('#network-condition-form').onsubmit=async event=>{
+ event.preventDefault();
+ const form=event.currentTarget, button=form.querySelector('button'), message=$('#network-condition-message');
+ if(button.disabled||current?.busy)return;
+ button.disabled=true;
+ try{
+  await api('/api/action',{id:current.id,action:'review_network_conditions',payload:{binding:form.dataset.binding,decisions:Object.fromEntries(new FormData(form))}});
+  await poll();
+ }catch(error){message.textContent=error.message;}
+ finally{button.disabled=false;}
+};
+function isDirectVerification(result){
+ return /^direct-verification\/[1-9]\d*$/.test(result?.version) && Array.isArray(result.checks) && typeof result.decision==='string';
+}
+function networkAlignmentHTML(alignment){
+ if(!alignment || alignment.matched)return '';
+ const labels={population:'焦点人群与权重',ends:'比较两端及顺序',exposure:'暴露映射与关系表',assignment:'分配变量与联合抽签规则'};
+ const kinds={stratified:'分层抽签',grouped:'分组抽签',joint_list:'完整名单的联合分布',shared:'共同抽签'};
+ const maps={any:'至少一名邻居接受处理',majority:'严格过半的邻居接受处理',count:'接受处理的邻居人数'};
+ const value=(key,v)=>{
+  if(v==null)return '尚未核准';
+  if(key==='ends'&&Array.isArray(v)&&v.length===2&&v.every(Array.isArray))return v.map(e=>'('+e.join(',')+')').join(' 减 ');
+  if(key==='population'&&typeof v==='object'&&!Array.isArray(v)){
+   if(typeof v.scope==='string'&&Object.hasOwn(v,'population')){
+    const scopes={whole:'全体名册',subgroup:'子人群',compliers:'依从者'};
+    const names=Array.isArray(v.population)?v.population.join('、'):v.population;
+    return '范围填写为'+(scopes[v.scope]??v.scope)+(names?'，同时填写的评价对象为'+names:'');
+   }
+   return Object.entries(v).map(([n,w])=>n+'（权重 '+w+'）').join('、');
+  }
+  if(key==='exposure'&&typeof v==='string')return Object.hasOwn(maps,v)?maps[v]:v;
+  if(key==='assignment'&&typeof v==='object'){
+   if(Object.hasOwn(kinds,v.protocol))return kinds[v.protocol];
+   const subject=v.variable?'，分配变量为 '+v.variable:'';
+   if(v.kind==='fixed'&&v.quota!=null){
+    if(/^\d+$/.test(String(v.quota)))return '全网等概率无放回抽 '+v.quota+' 个'+subject;
+    return [v.description,v.quota].filter(Boolean).join('，')+subject;
+   }
+   if(v.kind==='stratified'&&v.groups?.length===2&&Array.isArray(v.groups)&&v.groups.every(Array.isArray)&&Array.isArray(v.quotas)&&v.quotas.length===2)return '两层独立抽签，'+v.groups.map((g,i)=>'第 '+(i+1)+' 层（'+g.join('、')+'）等概率抽 '+v.quotas[i]+' 个').join('，')+subject;
+   if(v.kind==='shared')return '共同抽签，概率 '+v.p+subject;
+   if(v.kind==='independent')return '各对象独立抽签'+subject+'，概率 '+JSON.stringify(v.p??v.probabilities??'尚未核准');
+  }
+  return typeof v==='string'?v:JSON.stringify(v);
+ };
+ const items=Object.entries(alignment.fields).filter(([,f])=>f.state!=='MATCH').map(([key,f])=>
+  '<li><strong>'+esc(labels[key])+'</strong><div>材料所示　'+esc(value(key,f.source))+'</div><div>求解器采用　'+esc(value(key,f.solver))+'</div>'+
+  (f.model!=null?'<div>模型摘录　'+esc(value(key,f.model))+'</div>':'')+
+  (f.table_note?'<p>'+esc(f.table_note)+'</p>':'')+
+  (f.evidence||[]).map(e=>'<blockquote>'+esc(e.source_id)+' · '+esc(e.quote)+'</blockquote>').join('')+'</li>').join('');
+ const heading=alignment.source_target_complete?'模型答卷与原材料存在分歧':'数学库尚未核准的项目';
+ const note=alignment.source_target_complete?'网页已读取名册和关系表。模型原答保留供复核，本次未发送估计查询。':'本次未发送估计查询。';
+ return '<section class="network-alignment"><h4>'+heading+'</h4><p>'+note+'</p><ul>'+items+'</ul></section>';
+}
+function directResultHTML(report,receipt){
+ return directAnswerHTML(report,receipt)+networkAlignmentHTML(report.network_alignment);
+}
+function directAnswerHTML(report,receipt){
+ const method=report.proof?.method;
+ if(['TWO_STAGE_POLICY_BRANCH_MEANS','INCOMPLETE_NETWORK_FOCAL_SUPPORT','RANDOM_INVITATION_RECEIPT_NOT_IDENTIFIED'].includes(method)){
+  const a=report.effective_answer,p=report.proof,h=a.estimate_handoff;
+  let title,details='';
+  if(method==='TWO_STAGE_POLICY_BRANCH_MEANS'){
+   title=a.value==null?'档案已算出加权值，政策水平待核实':'已核实目标对象的政策水平';
+   const cells=p.terms.map(t=>'<tr>'+[t.history,t.action,t.weight,t.mean,t.contribution].map(x=>'<td>'+esc(x)+'</td>').join('')+'</tr>').join('');
+   details='<table><thead><tr><th>分支</th><th>政策动作</th><th>权重</th><th>总体均值</th><th>加权项</th></tr></thead><tbody>'+cells+'</tbody></table>';
+  }else if(method==='INCOMPLETE_NETWORK_FOCAL_SUPPORT'){
+   title=p.probabilities?'效应和两端支持均已核实':'效应可点识别，具体支持概率待补';
+  }else{
+   title='现有邀请资料无法点识别实际'+p.intervention+'效果';
+  }
+  const spans=[...p.sources,...(p.terms||[]).flatMap(t=>[t.weight_source,t.source])];
+  const refs=[...new Set(spans.map(s=>s.source_id+' · '+s.quote))].map(x=>'<blockquote>'+esc(x)+'</blockquote>').join('');
+  const formula=a.functional===a.reason?'':'<p>'+esc(a.functional)+'</p>';
+  return '<section><h3>'+esc(title)+'</h3>'+details+formula+'<p>'+esc(a.reason)+'</p>'+
+   '<details><summary>目标、原文和估计交接</summary>'+refs+'<pre>'+esc(JSON.stringify({target:a.target,estimate_handoff:h},null,2))+'</pre></details>'+
+   '<details><summary>查看模型原答</summary><pre>'+esc(JSON.stringify(report.draft,null,2))+'</pre></details></section>';
+ }
+ if(report.proof?.method==='POPULATION_WEIGHTED_SAVINGS'){
+  const a=report.effective_answer;
+  return '<section><h3>全体成员的平均节约量</h3><p>'+esc(a.functional)+'</p>'+(a.value!=null?'<p>'+esc(a.reason)+'</p>':'')+'<details><summary>分组结果与原文依据</summary>'+
+   report.proof.sources.map(s=>'<blockquote>'+esc(s.quote)+'</blockquote>').join('')+'</details></section>';
+ }
+ if(report.scope_worksheet&&!report.scope_choice)return '<p>请先选定本次评价范围，再核验支持概率。</p>';
+ if(report.proof?.binder==='source-policy-registration/1'){
+  const a=report.conditional_answer,h=a.estimate_handoff;
+  const received=report.estimation_handoff_allowed&&receipt?.binding===report.condition_review?.binding&&receipt?.state==='RECEIVED'&&receipt.consumer==='autocfm_estimation_query_intake';
+  const bounds=h.mode==='ESTIMATE_BOUNDS';
+  const description=bounds?`下界 ${h.lower}、上界 ${h.upper}`:`${h.queries.length} 条加权的完整名单条件均值查询`;
+  const notAdopted=Object.values(report.review_record?.decisions||{}).some(v=>v!=='ADOPTED');
+  const state=received?'估计端已收到':report.estimation_handoff_allowed?'交接已登记':notAdopted?'本次前提尚未全部采用，暂缓交接':'确认前提后可交接';
+  const sources=[...a.assumptions,...a.source_facts].map(s=>`<li>${esc(s.statement||s.label)}<blockquote>${esc(s.source||s.source_id)} · ${esc(s.quote)}</blockquote></li>`).join('');
+  return `<section><h3>${bounds?'全体政策水平的锐界':'完整名单政策的加权均值'}</h3><p>${esc(a.target.population.join('、'))}，${esc(a.target.outcome)}。</p><p>${esc(a.functional)}</p><p>${esc(a.reason)}</p><p>${esc(state)}${esc(description)}。</p><details><summary>科学前提与材料依据</summary><ul>${sources}</ul></details><details><summary>查看估计查询与权重或界的计算依据</summary><pre>${esc(JSON.stringify(h,null,2))}</pre></details></section>`;
+ }
+ if(report.proof?.binder==='uploaded-network-comparison/1'){
+  const a=report.effective_answer,proof=report.proof, n=proof.population.length;
+  const titles={PREMISES_REQUIRED:'原比较有识别公式，等待确认前提',CORRECTED:'已按原设计纠正识别结论',CONDITIONAL_RESULT:'网络比较的核验结果'};
+  const registered=report.estimation_handoff_allowed;
+  const received=receipt?.state==='RECEIVED'&&receipt.consumer==='autocfm_estimation_query_intake';
+  const summary=a.status==='UNDEFINED'?a.functional:`对 ${n} 个评价对象，将 (${proof.ordered_events[0]}) 的条件均值减去 (${proof.ordered_events[1]}) 的条件均值后等权平均。`;
+  const details=registered?`${received?'估计端已收到':'交接已登记'} ${a.estimate_handoff.queries.length} 条逐单位均值查询。`:a.reason;
+  const natural=proof.binding_source==='natural-network-materials/1';
+  const fromFiles=natural||proof.binding_source==='uploaded-materials/1';
+  const manifest=report.network_manifest;
+  const source=fromFiles&&manifest?`<p>上传的名册有 ${manifest.nodes.length} 个对象，关系表有 ${manifest.edges.length} 条关系。网页已按原分配规则逐一计算比较两端的联合概率。</p>`:'';
+  let probabilities='';
+  if(natural){
+   const [left,right]=proof.ordered_events;
+   const rows=proof.population.map(unit=>`<tr><th scope="row">${esc(unit)}</th><td>${esc(proof.joint_probabilities[unit][left])}</td><td>${esc(proof.joint_probabilities[unit][right])}</td></tr>`).join('');
+   probabilities=`<details${n<=8?' open':''}><summary>逐对象的联合概率</summary><table><thead><tr><th>评价对象</th><th>左端 (${esc(left)})</th><th>右端 (${esc(right)})</th></tr></thead><tbody>${rows}</tbody></table></details>`;
+  }
+  const hasDraft=report.draft&&Object.keys(report.draft).length>0;
+  const diagnostic={target:a.target,support:proof.joint_probabilities,formula:report.conditional_answer?.functional,
+   assumptions:report.condition_review?.items||a.assumptions,estimate_handoff:report.conditional_answer?.estimate_handoff};
+  if(hasDraft)diagnostic.draft=report.draft;
+  if(natural)diagnostic.source_evidence=report.network_alignment?.fields;
+  return `<section><h3>${esc(titles[report.decision])}</h3><p>${esc(summary)}</p>${source}${probabilities}<p>${esc(details)}</p><details><summary>${hasDraft?'查看联合概率、公式与模型原答':'查看联合概率与公式'}</summary><pre>${esc(JSON.stringify(diagnostic,null,2))}</pre></details></section>`;
+ }
+ const titles={UNCHECKED:'当前材料需进一步核验',CONDITIONAL_RESULT:'完整声明下的数学结果',RETAINED:'保留模型草案',CORRECTED:'数学核验已纠正原答',WITHHELD:'原答已拦下，需核对'};
+ if(report.clarification_questions?.length)titles[report.decision]='需要补充研究信息';
+ const show=value=>esc(typeof value==='string'?value:JSON.stringify(value,null,2));
+ const a=report.effective_answer?.answer??report.effective_answer;
+ const sourceStates={CITED:'引文存在，取值待核对',UNVERIFIED:'缺少可核对的引文',SOURCE_ONLY:'按原文重算',AGREES:'与按原文重算的取值一致',CORRECTED_FROM_SOURCE:'已按原文纠正摘录'};
+ const fields=Array.isArray(a?.answers)?a.answers.map((p,i)=>[p.question_part||('子问题 '+(i+1)),p]):a?[['研究目标',a.target],['识别结论',a.status],['识别公式或依据',a.functional],['数值',a.value],['科学假设',a.assumptions],['估计交接建议',a.estimate_handoff],['推导',a.reason]]:[];
+ const evidence=report.checks.map(c=>`<li><b>${esc(({CHECKED:'已检查',CONFLICT:'有冲突',UNCHECKED:'待核对'})[c.state]||c.state)}</b> ${esc(c.detail)}</li>`).join('');
+ return `<section><h3>${esc(titles[report.decision])}</h3><p>以下为研究草案。正式估计仍需研究者确认条件。</p>${fields.filter(([,v])=>v!==null&&v!==undefined).map(([label,v])=>`<h4>${esc(label)}</h4><pre>${show(v)}</pre>`).join('')} ${boundContrastHTML(report)}${report.network_reading?'<details><summary>网络事实与原文依据</summary>'+Object.entries(report.network_reading.fields).map(([k,v])=>'<h4>'+esc(({network:'处理前网络',exposure:'暴露映射',assignment:'分配规则',contrast:'比较两端'})[k])+'</h4><p>'+esc(sourceStates[v.state]||v.state)+'</p>'+(v.proposed!=null?'<pre>'+show(v.proposed)+'</pre>':'')+(v.source_value!=null?'<p>原文核验取值</p><pre>'+show(v.source_value)+'</pre>':'')+(v.evidence?.length?'<p>模型所引原文</p>':v.source_candidates?.length?'<p>程序定位的相关原文</p>':'')+((v.evidence?.length?v.evidence:v.source_candidates)||[]).map(e=>'<blockquote><strong>'+esc(e.source_id)+'</strong> '+esc(e.quote)+'</blockquote>').join('')).join('')+'</details>':''}<h4>程序核对记录</h4><ul>${evidence}</ul><details><summary>模型原答</summary><pre>${show(report.draft)}</pre></details>${report.proof?`<details><summary>条件化数学结果与重放证据</summary><pre>${show(report.conditional_answer)}</pre><pre>${show(report.proof)}</pre></details>`:''}</section>`;
+}
 function renderRun(r){
  $('#steps').hidden=!!r.automatic_review;
+ renderStudyReview(r);
  $('#workspace-title').textContent=r.result?'本次分析结果':'正在分析你的问题';
  $('#run-label').textContent=(r.synthetic?'合成研究':'研究审核')+' · '+r.provider+' · '+r.id.slice(0,8);
  const last=r.events.at(-1),elapsed=Math.round((Date.now()/1000)-(last?.time||r.created));$('#progress').innerHTML=(r.busy?'<span class="spinner"></span>':'')+esc(last?.message||stageNames[r.stage])+ (r.busy?` <span class="muted">本阶段 ${elapsed} 秒</span>`:'');
@@ -145,16 +295,63 @@ function renderRun(r){
  else if(r.review_kind)renderCompactReview(r);
  $('#review').hidden=!r.review_kind||r.busy||(r.automatic_review&&!['science','data','information'].includes(r.review_kind));$('#submit-review').disabled=r.busy;
  renderClarification(r);
+ renderNetworkConditions(r);
  const goal=r.queries.find(q=>q.query_id===r.query_id)?.business_goal;
- $('#result').innerHTML=r.result?`${goal?`<p class="answer-goal"><b>你提出的问题</b><br>${esc(claim(goal))}</p>`:''}`+resultHTML(r.result,null,{questionsInForm:!$('#clarification').hidden}):'';
+ $('#result').innerHTML=isDirectVerification(r.result)?directResultHTML(r.result,r.estimate_receipt):r.result?`${goal?`<p class="answer-goal"><b>你提出的问题</b><br>${esc(claim(goal))}</p>`:''}`+resultHTML(r.result,null,{questionsInForm:!$('#clarification').hidden}):'';
+ $('#request-point').hidden=!(r.stage==='RESULT' && r.result?.proof?.point_optional && !r.result?.clarification_questions?.length);
+ $('#request-point').disabled=r.busy;
  $('#events').innerHTML=r.events.map(e=>`<li>${new Date(e.time*1000).toLocaleTimeString()} · ${esc(e.message)}</li>`).join('');
  $('#downloads').innerHTML=`<details class="optional"><summary>下载输入与结果</summary><div class="download-links">${r.downloads.map(n=>`<a href="/api/download?id=${encodeURIComponent(r.id)}&name=${encodeURIComponent(n)}">${esc(n)}.json ↓</a>`).join('')}</div></details>`;
+ if(!r.busy&&r.result&&['direct_verify','network_direct_verify','network_local_review'].includes(r.reading_mode)){
+  const link=document.createElement('a');link.href='/math-library#source='+encodeURIComponent(r.id);
+  link.textContent='用同一份原文和上传材料进入完整识别库';$('#downloads').append(link);
+ }
 }
+$('#result').addEventListener('click',async event=>{
+ const button=event.target.closest('[data-retry-registration]');
+ if(!button||current?.busy)return;
+ button.disabled=true;
+ try{await api('/api/action',{id:runId,action:'retry_estimate_registration',payload:{}});await poll();}
+ catch(error){$('#run-error').hidden=false;$('#run-error').textContent=error.message;}
+ finally{button.disabled=false;}
+});
+$('#request-point').onclick=async()=>{
+ try{$('#request-point').disabled=true;await api('/api/action',{id:runId,action:'request_point',payload:{}});await poll();}
+ catch(error){$('#run-error').hidden=false;$('#run-error').textContent=error.message;}
+ finally{$('#request-point').disabled=!!current?.busy;}
+};
 $('#retry-reading').onclick=async()=>{
  try{$('#retry-reading').disabled=true;await api('/api/action',{id:runId,action:'retry_reading',payload:{}});await poll();}
  catch(e){$('#run-error').textContent=e.message;}
  finally{$('#retry-reading').disabled=!!current?.busy;}
 };
+function renderStudyReview(run){
+ const box=$('#compact-review'),p=run.compact_plan;box.hidden=!p||run.busy;
+ if(!p){if(box.dataset?.binding){box.replaceChildren();delete box.dataset.binding;}return;}
+ if(box.dataset.binding===p.binding)return;
+ box.dataset.binding=p.binding;
+ const possible=p.methods.filter(m=>!m.missing.length), keys=[...new Set(possible.flatMap(m=>m.conditions))];
+ const items=Object.assign({},...possible.map(m=>m.review_items));
+ const iv=p.spec.iv;
+ const conditionName=k=>{
+  if(iv&&k==='randomization')return '实际处理 '+iv.d+' 的完整分配独立于潜在结果';
+  if(iv&&k==='iv_independence')return '工具 '+iv.z+' 独立于潜在处理和潜在结果';
+  return coverageInfo?.condition_labels?.[k]||k;
+ };
+ const other=Object.keys(p.spec.assumptions).filter(k=>!keys.includes(k));
+ const otherText=other.length?'<details open><summary>当前可审核的方法未使用的条件陈述</summary><ul>'+other.map(k=>'<li>'+esc(conditionName(k))+' · '+esc(p.spec.assumptions[k])+'</li>').join('')+'</ul></details>':'';
+ const check=(k,label)=>`<label><input type="checkbox" data-study-field="${esc(k)}"> ${esc(label)}</label>`;
+ box.innerHTML='<h3>核对研究规格</h3><p>'+esc(possible.map(m=>methodLabel(m.method)).join('、'))+'</p><details open><summary>本次目标与读取的事实</summary><pre>'+esc(JSON.stringify(p.spec,null,2))+'</pre></details><details><summary>核对原文</summary><pre>'+esc(p.sources.map(s=>s.text).join('\n'))+'</pre></details>'+
+ otherText+check('target_and_source_reading','目标、方向、总体信息和条件所指变量与原材料一致')+Object.entries(items).map(([k,v])=>check(k,v)).join('')+keys.map(k=>check(k,conditionName(k)+' · '+p.spec.assumptions[k])).join('')+
+ '<label>核对人<input data-reviewer></label><label>核对依据<input data-evidence></label><button type="button" class="primary">提交已核对的项目</button><p role="status"></p>';
+ box.querySelector('button').onclick=async()=>{
+  const decisions=Object.fromEntries([...box.querySelectorAll('[data-study-field]')].map(x=>[x.dataset.studyField,x.checked?'ACCEPTED':'PENDING']));
+  const reviewer=box.querySelector('[data-reviewer]').value,evidence=box.querySelector('[data-evidence]').value;
+  if(decisions.target_and_source_reading!=='ACCEPTED'||reviewer.trim().length<3||evidence.trim().length<12){box.querySelector('[role=status]').textContent='请确认目标和原文，填写至少3个字符的核对人和至少12个字符的核对依据。';return;}
+  try{await api('/api/action',{id:run.id,action:'compact_confirm',payload:{binding:p.binding,authority:run.synthetic?'SYNTHETIC_TEST':'EXTERNAL_RESEARCH_REVIEW',reviewer,evidence,decisions}});await poll();}
+  catch(e){box.querySelector('[role=status]').textContent=e.message;}
+ };
+}
 function clarificationText(item,result){
  const raw=typeof item==='string'?item:item.display_question||item.question||item.text||'请说明下面这段原文的意思；不清楚时可以直接注明。';
  const copies={"请说明理论识别可以使用的总体观测信息及覆盖范围；有限样本不能代替。": "除了这一次收集的记录，你还有其他可用资料吗？例如以往试验的记录，或研究方案已经给出的平均结果、发生比例。请说明资料来自哪里、包括哪些对象，以及他们接受了什么处理。只有这一次的记录，或暂时不清楚，也请直接说明；系统会检查这些资料能用于哪一步。", "请核对并补充完整历史分配规则及其参数；规则资料不完整不等于当前数学方法未覆盖。": "当时是怎样决定谁接受处理、谁不接受的？如果抽签，请说明每人中签的机会，或各组抽多少人；如果不是抽签，请说明实际选择办法。可以直接上传试验方案。", "请说明原试点是否逐对象独立抽签，以及每个对象的已知概率。": "当时是每个对象分别抽签，还是先规定一共选多少个？如果分别抽签，每个对象中签的机会是多少？例如“每家各自抽签，各有一半机会”；没有记录时请说明。", "请明确比较两端的自身处理、同伴状态及相减方向。": "你想比较哪两种情形？请分别说明本人做什么、相关的人或单位做什么，以及想知道哪一种比另一种增加或减少多少。", "请明确评价全体、指定子集还是单个对象，以及汇总方式。": "你关心全部对象、其中一组，还是某一个对象？如果有多个对象，是看每个对象的结果，还是平均结果？如果取平均，每个对象是否同等重要？", "请明确同伴分组定义；不能仅凭受到同事影响而选择分组规则。": "你想怎样描述相关对象的参与情况？例如参与的人数、参与比例，或是否有人参与。请说明你的分法；还没决定时可以直接注明。", "请核对原文是否明确：处理前固定网络。": "这些联系是在实施处理前就确定的吗？实施处理后，哪些人或单位彼此相连会不会改变？", "请核对原文是否明确：两端结果定义、期间和背景相同。": "两种情形是否比较同一个指标、同一段时间和同样的背景？如果有不同，请说明具体哪里不同。", "本问希望在哪些已指定的条件下评价，还是希望跨背景评价？请说明条件、所指背景及时间；尚未决定可以保留。": "这个问题只看某个地区、时期或条件下的效果，还是把不同情况合在一起看？请说明你关心的范围；还没决定可以直接说。", "本次评价的是处理前研究名单中的全体／事先确定的小组，还是按本轮实际启用、回访或结果筛选出的对象？请说明选择依据；不需要提供提出问题的日期。": "这次想评价哪些对象，是怎样选出来的？是试点前名单中的全部或事先选好的一组，还是试点后按是否使用、是否回访或实际表现选出的？不需要说明你何时提出问题。", "关注的结果是二元状态、次数，还是连续数值？请说明结果的取值含义。": "这个结果记录的是什么？例如是否感染（是/否）、投诉次数，或收入金额。若用数字编码，请说明每个值的含义。", "请核对效应名称、两端条件和相减方向；系统不会交换两端或补齐基准。": "你想知道哪种情形比哪种情形增加或减少多少？请分别写明本人和相关对象在两种情形下做什么。", "请核对要用哪个完整方案减去哪个基准方案，以及是否比较同一结果、单位、期间与研究背景。": "你希望用哪个方案与哪个方案比较？请写明各方案中谁接受处理、谁不接受，以及比较的是不是同一批对象、同一指标、同一时期和同一背景。", "下面这些说明是在描述已有资料与待确认事项，还是希望为本次计算另外增加条件？请说明你的原意。": "这段话是在介绍已有资料，还是你希望本次分析采用的一项假设？如果只是可能采用、还没有决定，或明确不采用，请直接说明。"};
@@ -174,12 +371,40 @@ function clarificationText(item,result){
  return raw;
 }
 function renderClarification(r){
+ const scope=r.result?.scope_worksheet;
+ if(scope&&!r.result.scope_choice){
+  const panel=$('#clarification');panel.hidden=r.busy;
+  $('#clarification-answer').labels?.forEach(l=>l.hidden=true);
+  $('#clarification-answer').hidden=true;$('#send-clarification').hidden=true;
+  const box=$('#clarification-questions');box.innerHTML='<p>'+esc(scope.question)+'</p>';
+  for(const o of scope.options){
+   const b=document.createElement('button');b.type='button';b.textContent=o.label;b.className='secondary';
+   b.onclick=async()=>{if(current?.busy||b.disabled)return;for(const v of box.querySelectorAll('button'))v.disabled=true;
+    try{await api('/api/action',{id:r.id,action:'choose_network_population',payload:{binding:scope.binding,option:o.id}});await poll();}
+    catch(e){$('#clarification-message').textContent=e.message;for(const v of box.querySelectorAll('button'))v.disabled=false;}};
+   box.append(b);
+  }
+  return;
+ }
+ $('#clarification-answer').labels?.forEach(l=>l.hidden=false);
+ $('#clarification-answer').hidden=false;$('#send-clarification').hidden=false;
  const items=(r.user_question?.items||[]).map(x=>clarificationText(x,r.result));
  if(r.automatic_review&&r.review_kind==='notes')items.push(...Object.values(r.review_sheets?.notes?.notes||{}).map(n=>'下面这句话是背景介绍，还是本次要采用的假设？也可以回答不采用或尚未决定：'+n.text));
  if(r.result?.state==='NEEDS_INPUT'&&stopExplanation(r.result).kind!=='reading')items.push(...(r.result.clarification_questions||[]).map(x=>clarificationText(x,r.result)));
  $('#clarification').hidden=r.busy||!items.length;
  const quotes=[...new Set((r.user_question?.items||[]).flatMap(x=>x.source_texts||[]))];
  $('#clarification-questions').innerHTML=(r.user_question?.message?`<p>${esc(r.user_question.message)}</p>`:'')+'<ul>'+[...new Set(items)].map(q=>`<li>${esc(q)}</li>`).join('')+'</ul>'+ (quotes.length?`<div class="clarification-source"><b>需要说明的原文</b>${quotes.map(q=>`<blockquote>${esc(q)}</blockquote>`).join('')}</div>`:'')+'<p class="muted">提交后重新检查。暂时无法补充时，可保留当前结果，之后再继续。</p>';
+ const proof=r.result?.proof;
+ if(items.length && proof?.binder==='source-grounded-contrast/1' && proof.alternative_joint_probabilities?.['逐人独立'] && proof.alternative_joint_probabilities?.['同签']){
+  const choices=document.createElement('div');
+  for(const text of ['各单位独立抽签','所有单位同签同处理','仍不清楚']){
+   const button=document.createElement('button');
+   button.type='button';button.textContent=text;
+   button.onclick=()=>{const input=$('#clarification-answer');input.value=text;input.focus();};
+   choices.append(button);
+  }
+  $('#clarification-questions').append(choices);
+ }
  $('#send-clarification').disabled=r.busy;
 }
 function errorExplanation(error){
@@ -201,7 +426,8 @@ function errorExplanation(error){
 }
 $('#send-clarification').onclick=async()=>{
  const text=$('#clarification-answer').value.trim();
- if(text.length<3){$('#clarification-message').textContent='请先填写补充说明。';return;}
+ const shortReply=['TWO_STAGE_POLICY_BRANCH_MEANS','INCOMPLETE_NETWORK_FOCAL_SUPPORT'].includes(current?.result?.proof?.method)&&current?.result?.clarification_questions?.length;
+ if(text.length<(shortReply?1:3)){$('#clarification-message').textContent='请先填写补充说明。';return;}
  try{
   $('#send-clarification').disabled=true;
   await api('/api/action',{id:runId,action:'clarify',payload:{text}});
@@ -449,7 +675,7 @@ function renderReview(r){
  if(r.plan?.proposed_target){const t=r.plan.proposed_target;html+=`<div class="target-preview"><h4>本次交给识别库的目标</h4><p>${esc(t.outcome||t.kind)}</p><p>评价对象：${esc((t.evaluation_population||t.node_order||[]).join('、'))}</p><p>背景／时期：${esc(t.context||'以原始研究说明为准')}</p><details><summary>核对完整目标与权重</summary><pre>${esc(JSON.stringify(t,null,2))}</pre></details></div>`;}
  for(const [name,sheet] of Object.entries(r.review_sheets||{})){
   const record=records[name]||{};
-  const title=labels[name]||(methodNames[name.split('.')[0]]||name.split('.')[0])+(name.endsWith('.science_review')?' · 科学条件':' · 目标和条件交接');
+  const title=labels[name]||(coverageInfo?.method_labels?.[name.split('.')[0]]||name.split('.')[0])+(name.endsWith('.science_review')?' · 科学条件':' · 目标和条件交接');
   html+=`<details class="review-sheet" open><summary>${esc(title)}</summary>`;
   if(sheet.correspondence)html+=`<pre>${esc(JSON.stringify(sheet.correspondence,null,2))}</pre>`;
   if(sheet.instruction)html+=`<p class="muted">${esc(sheet.instruction)}</p>`;
@@ -708,6 +934,10 @@ function resultConditionsHTML(result){
  '<ul>'+items.map(x=>`<li class="condition-explanation">${conditionDetailHTML(x)}</li>`).join('')+'</ul></details><p class="muted">结论以这些条件成立为前提。证书验证不证明现实中的假设一定成立。</p></section>';
 }
 function resultHTML(result,estimate,options={}){
+ if(result.reason_code==='REVIEWED_COMPACT_METHODS'){
+  const c=result.mathematical_claim,h=result.estimate_handoff,show=v=>esc(typeof v==='string'?v:JSON.stringify(v,null,2));
+  return '<article class="result-card"><h3>'+esc(result.state)+'</h3><p>'+esc(c.target.comparison)+'</p><p>采用的方法 · '+esc(methodLabel(c.method))+'</p><h4>识别公式和取值</h4><pre>'+show(c.functional)+'</pre><p>'+show(c.at||'')+' '+show(c.value??'')+'</p><h4>采用的条件与来源</h4><pre>'+show(result.assumptions)+'</pre><h4>估计交接</h4><pre>'+show(h)+'</pre><details><summary>各方法的原始验证记录</summary><pre>'+show(result.method_results)+'</pre></details></article>';
+ }
  const state=result.state||result.kind,good=['POINT','PARTIAL'].includes(state),claimData=result.mathematical_claim;
  const stop=good?null:stopExplanation(result),title=stop?.title||names[state]||state;
  let html=`<article class="result-card ${good?'':'blocked'}"><div class="result-header"><h3>${esc(title)}</h3><span class="tag">${esc(result.independent_replay?'证书独立重放通过':good?'请核对验证记录':'未生成认证结论')}</span></div>`;
@@ -722,6 +952,15 @@ function resultHTML(result,estimate,options={}){
  const questions=stop?.kind==='reading'||options.questionsInForm?[]:result.clarification_questions||[];if(questions.length)html+='<div class="stop-questions"><b>读取记录中还需核对</b><ul>'+[...new Set(questions.map(q=>clarificationText(q,result)))].map(q=>`<li>${esc(q)}</li>`).join('')+'</ul></div>';
  html+=restrictionDetailsHTML(result);
  html+=resultConditionsHTML(result);
+ const registration=result.estimate_registration;
+ if(registration?.state==='RECEIVED'||registration?.state==='QUEUED'){
+  const action=registration.state==='RECEIVED'?'估计端已收到':'交接已入队，等待估计端接收';
+  const contents=registration.mode==='ESTIMATE_BOUNDS'?'识别下界 '+registration.interval[0]+'、上界 '+registration.interval[1]:
+    registration.query_count+' 条总体查询及其组合公式';
+  html+='<section><h4>估计交接</h4><p>'+esc(action+' · '+contents)+'</p><p class="muted">数据适用性待审核。</p></section>';
+ }else if(registration?.state==='DELIVERY_FAILED'){
+  html+='<section><h4>估计交接</h4><p>识别结果已保存，估计端尚未确认收件。</p><button type="button" data-retry-registration>重试估计交接</button></section>';
+ }
  if(!good)html+='<p class="muted">'+(state==='NEEDS_INPUT'?'不清楚或尚未决定的内容，请注明。':'本次停止不代表已证明不可识别。')+'</p>';
  html+=`<details><summary>${good?'查看公式与验证记录':'查看停止原因与原始记录'}</summary><pre>${esc(JSON.stringify(result,null,2))}</pre></details></article>`;
  return html;

@@ -75,7 +75,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.preview:
             result = intake.model_dump_json(indent=2) if args.format == 'json' else (
                 f'已读取业务描述和 {len(intake.attachments)} 份附件；只生成后台材料包，尚未调用 LLM 或数学识别。\n'
-                + '\n'.join(f'• {a.display_name}：{a.mode}; {a.bytes} bytes; 提取警告：{", ".join(a.warnings) or "无"}' for a in intake.attachments)
+                + '\n'.join(f'- {a.display_name}：{a.mode}; {a.bytes} bytes; 提取警告：{", ".join(a.warnings) or "无"}' for a in intake.attachments)
                 + '\n表格仅汇总列名与行数；有限数据不能自行证明总体 A4。')
         else:
             if args.provider == 'mock':
@@ -95,7 +95,15 @@ def main(argv: list[str] | None = None) -> int:
         if args.output:
             Path(args.output).write_text(result + '\n', encoding='utf-8')
         else:
-            print(result)
+            try:
+                print(result)
+            except UnicodeEncodeError:
+                # Respect redirected stdout's encoding; preserve every JSON string on round trip.
+                if args.format == 'json':
+                    print(json.dumps(json.loads(result), ensure_ascii=True, indent=2))
+                else:
+                    encoding = sys.stdout.encoding or 'utf-8'
+                    print(result.encode(encoding, errors='backslashreplace').decode(encoding))
         return 0
     except (AttachmentError, OSError, ValueError, ProviderError, json.JSONDecodeError) as exc:
         # Avoid leaking private business payload / filenames / model response in errors.

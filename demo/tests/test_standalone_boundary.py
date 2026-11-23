@@ -8,7 +8,7 @@ import sys
 import pytest
 
 from demo.backend.engine import Engine, Run
-from demo.backend.runtime import PROJECT_ROOT
+from demo.backend.runtime import PROJECT_ROOT, application_root
 
 
 def test_no_full_pipeline_or_test_fixture_dependency():
@@ -20,8 +20,8 @@ def test_no_full_pipeline_or_test_fixture_dependency():
             assert not any(m.split('.')[0] in forbidden for m in modules), (path.name, modules)
 
 
-def test_entrypoint_works_outside_repository_without_torch(tmp_path):
-    entry = PROJECT_ROOT/'demo/serve.py'
+@pytest.mark.parametrize('entry',[PROJECT_ROOT/'demo/serve.py', application_root()/'serve.py'])
+def test_entrypoint_works_outside_repository_without_torch(tmp_path,entry):
     code = '''import importlib.abc, sys, runpy
 class RejectPipeline(importlib.abc.MetaPathFinder):
     def find_spec(self, fullname, path=None, target=None):

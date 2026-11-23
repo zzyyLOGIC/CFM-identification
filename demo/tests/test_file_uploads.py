@@ -22,10 +22,10 @@ def payload():
             upload('dictionary.csv','data_dictionary','变量,说明\nscore,空白表示没有回访\n')])
 
 
-def test_preview_retains_identity_coverage_and_sources_without_transmitting_measurements(tmp_path):
-    e=Engine(tmp_path/'runs',max_api_calls=0);v=e.preview_uploads('owner',payload())
+def test_classic_preview_retains_coverage_without_sending_measurements(tmp_path):
+    e=Engine(tmp_path/'runs',max_api_calls=0);v=e.preview_uploads('owner',dict(payload(),reading_mode='classic'))
     assert v['receipt']['ready'] and v['factual_data']==dict(nodes=3,features=1,observed=2,
-        note='只传字段说明与实际记录范围；不由样本推定总体信息，不调用估计。')
+        note='传递字段说明与实际记录范围。')
     case=json.loads(next((tmp_path/'runs').rglob('case.json')).read_text('utf8'))
     sources={s['source_id']:s['text'] for s in case['sources']}
     inventory=json.loads(sources['uploaded_data_inventory'])

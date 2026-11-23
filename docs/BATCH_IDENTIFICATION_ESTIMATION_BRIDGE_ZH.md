@@ -2,7 +2,7 @@
 
 ## 范围与约束
 
-本次仅扩展本仓库 Identification-owned 代码。**没有修改**现有数学 backend、`TaskSpec`、Estimation、Policy 或 PFN 权重。原来的 `identify(task)`、`estimate_effects(task, identified, model)` 完全保留。
+这里的桥接检验既有识别请求与批量证明的目标、设计和支持一致性。个人仓库的运行边界是可重放的识别与查询交接。
 
 ### 1. 已确认新 family 单 arm → 全节点 arm 证明网格
 
@@ -38,25 +38,24 @@ assert batch.estimation_request is None
 
 ```python
 from pfn_pipeline import (
-    identify, simulate_task, bind_legacy_response_batch,
-    replay_legacy_response_batch_bridge, estimate_bound_legacy_response,
+    identify, bind_legacy_response_batch,
+    replay_legacy_response_batch_bridge,
 )
 
-legacy_task = simulate_task(seed=2026)  # 仅合成 demo，真实研究需正式确认协议
+# legacy_task 由调用方按已审核方案提供，是原有 ER300 多数响应评分任务。
 legacy_id = identify(legacy_task)       # 已有 NETWORK_MAJORITY_RESPONSE_POLICY_SCORE
 link = bind_legacy_response_batch(legacy_id)
 replay_legacy_response_batch_bridge(link)
 assert link.batch.coverage_status == "ALL_POINT_IDENTIFIED"
 assert link.batch.shape == (300, 2, 2)
-# 模型必须由 Estimation 项目提供正确的已训练 checkpoint：
-# estimates = estimate_bound_legacy_response(link, model=trained_model)
+request = link.legacy_identification.estimation_request
 ```
 
 Bridge 严格从 **同一个 replay-verified legacy TaskSpec** 中导出新的形式化 seed，逐 arm 与旧响应证书的联合设计 support 对拍，并绑定旧规格的 fingerprint。它**不生产新 EstimationRequest**，只在确认数学一致后复用**原始已验证四臂 response request**。所生成的 `link.batch` 本身仍是 population-only，无估计请求。
 
-运行时调用 `estimate_bound_legacy_response(link, model=...)` 会重新 replay bridge 和旧 handoff，再委托原 `estimate_effects()`；新 D1/D2/D3 或 E2/E3 任务不能通过这条桥自行跳转到旧 PFN。模型未训练、checkpoint 不匹配或事实数据缺失等由原 Estimation 报错。
+个人版的 `estimate_bound_legacy_response` 先重放绑定。对合法的请求，它会明确提示到完整 autoCFM 工程执行拟合。
 
-**演示测试例外：** `build_model()` 返回未训练模型；仅在 smoke test 中显式提供 `allow_untrained=True`，所产数字绝不能当研究估计、已训练 PFN 结果或有效因果效应。
+旧拟合演示、checkpoint 和完整估计流程的接口说明见[原版本](https://github.com/zzyyLOGIC/CFM-identification/tree/cb322b4061fe981a8b5fd6fbd39660209c433911).
 
 ### 3. 为何没有直接把新 batch 变成 PFN 请求？
 
@@ -70,7 +69,6 @@ Bridge 严格从 **同一个 replay-verified legacy TaskSpec** 中导出新的�
 ```bash
 python -B -m unittest discover -s tests -p "test_batch_identification.py" -v
 python -B -m unittest discover -s tests -p "test_*.py" -q
-python -B -m examples.run_batch_identification_and_legacy_bridge
 ```
 
-要在 ER300 进行精确的 1200-arm 批量与独立 replay，可运行示例加 `--er300`。稠密图精确 Fraction 运算需要一定时间，且此步骤无需 checkpoint。
+历史 ER300 批量演示见[旧版脚本](https://github.com/zzyyLOGIC/CFM-identification/tree/cb322b4061fe981a8b5fd6fbd39660209c433911/examples/run_batch_identification_and_legacy_bridge.py)。

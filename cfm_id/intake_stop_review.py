@@ -77,7 +77,8 @@ def _worksheet(s, reading, authority, target_fields=None):
         # work. Permit source review to classify this stop; never release it.
         missing_outcome = (gate.get('target_first') or {}).get('outcomes', {}).get(qid, {})
         outcome_gap_reviewable = (
-            missing_outcome.get('state') == 'MISSING' and bool(missing_outcome.get('refs'))
+            isinstance(missing_outcome, dict) and missing_outcome.get('state') == 'MISSING'
+            and bool(missing_outcome.get('refs'))
             and any(x['field'] == 'outcome' for x in questions))
         def reviewable_action(action):
             return (outcome_gap_reviewable and action['code'] == 'A2_MISSING_OUTCOME'

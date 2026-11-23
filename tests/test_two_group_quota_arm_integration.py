@@ -266,8 +266,7 @@ class TwoGroupQuotaArmIntegrationTests(unittest.TestCase):
         self.assertEqual(Fraction(sum(target_values), len(target_values)), Fraction(21, 3))
 
     def test_shared_er300_network_no_estimation_adapter(self):
-        from pfn_pipeline.simulation import load_graph
-        from pfn_pipeline._internal.paths import DEFAULT_GRAPH
+        from fixed_network_fixture import DEFAULT_GRAPH, load_graph
         adjacency = load_graph(DEFAULT_GRAPH)
         self.assertEqual(adjacency.shape, (300, 300))
         edges = [(i, j) for i in range(300) for j in range(i + 1, 300) if adjacency[i, j]]

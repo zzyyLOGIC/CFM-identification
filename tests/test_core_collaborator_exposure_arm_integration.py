@@ -299,8 +299,7 @@ class CoreCollaboratorProductionTests(unittest.TestCase):
         self.assertEqual(Fraction(answer.result['certificate']['joint_arm_support_probability']),weight[(0,0)])
 
     def test_shared_er300_fixed_graph_without_pfn_adapter(self):
-        from pfn_pipeline.simulation import load_graph
-        from pfn_pipeline._internal.paths import DEFAULT_GRAPH
+        from fixed_network_fixture import DEFAULT_GRAPH, load_graph
         matrix = load_graph(DEFAULT_GRAPH)
         self.assertEqual(matrix.shape,(300,300))
         graph = NetworkExposureSpec(

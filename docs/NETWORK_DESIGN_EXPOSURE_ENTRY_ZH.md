@@ -1,6 +1,6 @@
 # 已有 D1–D6 / E1–E5 的共同业务接入
 
-工作源码仍为 `autoCFM_Research/research/identification/causal_idfm/`。本轮只补业务字段和原生接口之间的连接，不新增定理、不修改数学 Core；GitHub 发布副本未同步。
+本页保留 D1–D6 初次接入时的范围与验收。当前开发位置为 WORK 的 `identification/`。后续研究入口已接 D7/D8、固定权重与分组暴露，有限均值盒也已扩展。原批次数据按下表阅读。[POINT 扩展](TASK1_LIMITATIONS_ZH.md) · [有限均值盒](FINITE_MEAN_BOX_MATH_ZH.md) · [当前能力](CURRENT_SCOPE_ZH.md)
 
 ## 接好了什么
 

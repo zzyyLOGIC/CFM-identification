@@ -518,8 +518,7 @@ def replay_legacy_response_batch_bridge(bridge: LegacyResponseBatchBridge) -> Le
 
 
 def estimate_bound_legacy_response(bridge: LegacyResponseBatchBridge, model=None, **kwargs):
-    """Only actual existing PFN handoff; no synthesized adapter for D1/D2/D3/E2/E3."""
+    """Validate the legacy handoff before referring a fitting request to the full project."""
     replay_legacy_response_batch_bridge(bridge)
-    from .estimation import estimate_effects
-    legacy = bridge.legacy_identification
-    return estimate_effects(legacy.task, legacy, model=model, **kwargs)
+    raise NotImplementedError("Fitting a legacy PFN response requires the full autoCFM project. "
+                              "Use bridge.legacy_identification.estimation_request for the verified identification handoff.")

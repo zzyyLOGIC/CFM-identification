@@ -96,6 +96,20 @@ def test_outcome_review_remains_required(decision):
     assert e['state']!='READY_TO_READ' and not e['backend_called']
 
 
+def test_unknown_outcome_enters_stop_review_without_confirming_a_source_gap():
+    from cfm_id.intake_stop_review import prepare_review
+
+    case,raw=fixture('policy')
+    raw['common']['outcome']='UNKNOWN'
+    raw['queries'][0]['semantics']['outcome']='UNKNOWN'
+    submission=receive(case,raw,profile=new.CONTRACT)
+    review=prepare_review(submission,authority='SYNTHETIC_TEST')
+    item=review['stop_worksheet']['items']['q1']
+    assert any(field['field']=='outcome' for field in item['missing_coordinates'])
+    assert item['material_gap_allowed'] is False
+    assert review['scientific_approval'] is False and review['core_called'] is False
+
+
 @pytest.mark.parametrize('field',['conditioning_context','outcome','decision_constraints'])
 def test_plain_text_claim_reports_field_without_repair_or_core(field):
     case,raw=fixture();raw['queries'][0]['semantics'][field]='原文中的普通字符串，未提供字段状态或引用'

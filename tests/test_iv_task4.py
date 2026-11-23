@@ -122,13 +122,12 @@ def test_replay_checks_witness_target_and_mapping_without_optimizer(monkeypatch)
 
 
 def test_solver_failures_and_small_first_stage_are_not_infeasibility(monkeypatch):
-    from types import SimpleNamespace
     law={(z,d,y):float(d==0 and y==0) for z in (0,1) for d in (0,1) for y in (0,1)}
     law[1,0,0]=1-1e-12;law[1,1,0]=1e-12
     assert identify_late(law,assumptions_accepted=True)['reason_code']=='FIRST_STAGE_NUMERICALLY_AMBIGUOUS'
-    failure=SimpleNamespace(status=4,success=False,message='Numerical failure')
-    monkeypatch.setattr('cfm_id.iv_late_solver.linprog',lambda *a,**k:failure)
-    monkeypatch.setattr('cfm_id.iv_ate_solver.linprog',lambda *a,**k:failure)
+    import networkx as nx
+    def failed_transport(*args,**kwargs):raise nx.NetworkXError('Optimization failed')
+    monkeypatch.setattr(nx,'network_simplex',failed_transport)
     assert identify_late(OBS_POS,assumptions_accepted=True)['status']=='CHECK_BLOCKED'
     assert solve_ate_bounds(OBS_POS)['reason_code']=='ATE_LP_NUMERICAL_FAILURE'
 

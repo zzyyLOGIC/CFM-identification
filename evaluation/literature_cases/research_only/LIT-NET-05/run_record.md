@@ -2,7 +2,7 @@
 
 ## 环境
 
-- 工作副本：`C:/Users/65229/Desktop/qian的任务副本`
+- 工作副本：学生本地开发副本（个人路径不公开）
 - 分支：`task2-literature-cases`
 - 代码版本：`992fdf9598b1b18a16aaa5887490174f6b6e5868`
 - `api_calls = 0`

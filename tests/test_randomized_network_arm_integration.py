@@ -264,8 +264,7 @@ class RandomizedNetworkArmIntegrationTests(unittest.TestCase):
             )
 
     def test_shared_er300_fixed_graph_can_be_reused_without_downstream_adapter(self):
-        from pfn_pipeline.simulation import load_graph
-        from pfn_pipeline._internal.paths import DEFAULT_GRAPH
+        from fixed_network_fixture import DEFAULT_GRAPH, load_graph
         a = load_graph(DEFAULT_GRAPH)
         self.assertEqual(a.shape, (300, 300))
         edges = [(i, j) for i in range(300) for j in range(i + 1, 300) if a[i, j]]

@@ -1,5 +1,5 @@
 // No browser, server or API: execute the real page script with a minimal DOM.
-// Run: node --test tests_integration/test_review_ui.cjs
+// From the identification package: node --test demo/tests/test_review_ui.cjs
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -11,10 +11,10 @@ const clone = x => JSON.parse(JSON.stringify(x));
 function harness(view) {
   const elements = new Map(), requests = [];
   function element(selector) {
-    if (!elements.has(selector)) elements.set(selector, {
+    if (!elements.has(selector)) elements.set(selector, Object.assign(new EventTarget(), {
       hidden:false, disabled:false, open:false, checked:false, value:'', textContent:'', innerHTML:'',
       querySelectorAll:() => [], focus() {}, append() {},
-    });
+    }));
     return elements.get(selector);
   }
   function readRows(html) {
@@ -58,6 +58,76 @@ function harness(view) {
     poll:()=>vm.runInContext('poll()',context),
   };
 }
+
+test('direct verification uses the report contract across revisions, including wrapped answers',()=>{
+  for(const revision of [12,13,14,27]){
+    const view=fixture();
+    view.review_kind=null;
+    view.result={version:'direct-verification/'+revision,decision:'CORRECTED',checks:[],
+      effective_answer:{answer:{status:'POINT',functional:'已核验的两端率之差',value:'2/7'}}};
+    const h=harness(view),html=h.element('#result').innerHTML;
+    assert.match(html,/数学核验已纠正原答/);
+    assert.match(html,/已核验的两端率之差/);
+    assert.match(html,/2\/7/);
+    assert.doesNotMatch(html,/本次检查未通过/);
+    assert.equal(vm.runInContext("isDirectVerification({version:'direct-verification/14'})",h.context),false);
+  }
+});
+
+test('the policy result shows both branches and accepts one explicit reply to the open question',async()=>{
+  const view=fixture();
+  view.review_kind=null;
+  const quote={source_id:'design',quote:'目标档案的两项均值'};
+  view.result={version:'direct-verification/21',decision:'CONDITIONAL_RESULT',checks:[],
+    proof:{method:'TWO_STAGE_POLICY_BRANCH_MEANS',sources:[quote],terms:[
+      {history:'高位',action:'出库',weight:'1/3',mean:'9',contribution:'3',weight_source:quote,source:quote},
+      {history:'低位',action:'留库',weight:'2/3',mean:'3',contribution:'2',weight_source:quote,source:quote}]},
+    effective_answer:{status:'NEEDS_INPUT',value:null,functional:'加权和为 5',reason:'需核对统计口径',estimate_handoff:{mode:'STOP'}},
+    clarification_questions:['这些量是否已经按政策历史标准化？']};
+  view.user_question={items:view.result.clarification_questions};
+  const h=harness(view),html=h.element('#result').innerHTML;
+  assert.match(html,/<td>高位<\/td><td>出库<\/td><td>1\/3<\/td><td>9<\/td><td>3<\/td>/);
+  assert.match(html,/<td>低位<\/td><td>留库<\/td><td>2\/3<\/td><td>3<\/td><td>2<\/td>/);
+  assert.match(html,/政策水平待核实/);
+  h.element('#clarification-answer').value='否';
+  await h.element('#send-clarification').onclick();
+  assert.ok(h.requests.some(x=>x.action==='clarify'&&x.payload?.text==='否'));
+});
+
+test('a within-stratum quota stays attached to the named strata in the disagreement display',()=>{
+  const h=harness(fixture());
+  h.context.alignment={matched:false,fields:{assignment:{state:'DISAGREEMENT',
+    source:{kind:'stratified',groups:[['松亭','云田'],['溪口','西圩']],quotas:[1,1]},
+    solver:{kind:'fixed',quota:'每层恰好启用一站'}}}};
+  const html=vm.runInContext('networkAlignmentHTML(alignment)',h.context);
+  assert.match(html,/第 1 层（松亭、云田）等概率抽 1 个/);
+  assert.match(html,/第 2 层（溪口、西圩）等概率抽 1 个/);
+  assert.match(html,/每层恰好启用一站/);
+  assert.doesNotMatch(html,/全网等概率无放回抽 每层/);
+});
+
+test('a scope conflict identifies both the roster and the named subgroup',()=>{
+  const h=harness(fixture());
+  h.context.alignment={matched:false,source_target_complete:true,fields:{population:{state:'DISAGREEMENT',
+    source:{'东港':'1'},solver:{'东港':'1'},model:{scope:'whole',population:'东港'}}}};
+  const html=vm.runInContext('networkAlignmentHTML(alignment)',h.context);
+  assert.match(html,/范围填写为全体名册，同时填写的评价对象为东港/);
+  assert.match(html,/网页已读取名册和关系表/);
+  assert.doesNotMatch(html,/权重 whole/);
+});
+
+test('the natural-language result displays the probability of each ordered event before any delivery',()=>{
+  const h=harness(fixture());
+  h.context.local={decision:'CONDITIONAL_RESULT',proof:{binder:'uploaded-network-comparison/1',
+    binding_source:'natural-network-materials/1',population:['西港'],ordered_events:['0,1','0,0'],
+    joint_probabilities:{西港:{'0,1':'0','0,0':'3/4'}}},
+    network_manifest:{nodes:['西港','竹港'],edges:[]},
+    effective_answer:{status:'UNDEFINED',functional:'西港左端未定义。',reason:'原比较停估。'}};
+  const html=vm.runInContext('directResultHTML(local)',h.context);
+  assert.match(html,/左端 \(0,1\).*右端 \(0,0\)/);
+  assert.match(html,/<th scope="row">西港<\/th><td>0<\/td><td>3\/4<\/td>/);
+  assert.doesNotMatch(html,/估计端已收到/);
+});
 
 function fixture(kind='query') {
   const dimension={field_role:'PENDING',value_state:'PENDING',source_coverage:'PENDING'};

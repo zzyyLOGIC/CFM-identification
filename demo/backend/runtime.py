@@ -5,6 +5,14 @@ import sys
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
+def application_root():
+    """Locate the receipt adapter in a flat checkout or the nested development tree."""
+    if (PROJECT_ROOT / "estimate_intake.py").is_file():
+        return PROJECT_ROOT
+    if PROJECT_ROOT.name == "identification" and (PROJECT_ROOT.parent / "estimate_intake.py").is_file():
+        return PROJECT_ROOT.parent
+    raise RuntimeError("Identification checkout is missing estimate_intake.py")
+
 def identification_modules():
     if not (PROJECT_ROOT/'cfm_id/project.py').is_file():
         raise RuntimeError('IDENTIFICATION_SOURCE_MISSING')

@@ -1,8 +1,8 @@
 """Source-bound binary-IV research contract with separate reading/science reviews."""
 from typing import Literal
-import hashlib, json, math
+import hashlib, json
 from pydantic import BaseModel, ConfigDict, Field, model_validator
-from .iv_contract import validate_observed, IVInputError
+from .iv_contract import validate_observed, rational
 
 VERSION='binary-iv-research-1'
 ROUTE='BINARY_IV_LATE_ATE'
@@ -22,9 +22,7 @@ class IVCell(StrictRecord):
     probability: str = Field(min_length=1,max_length=40)
     @model_validator(mode='after')
     def probability_is_valid(self):
-        try: value=float(self.probability)
-        except (TypeError,ValueError,OverflowError) as exc: raise ValueError('FINITE_PROBABILITY_STRING_REQUIRED') from exc
-        if not math.isfinite(value) or value<0 or value>1: raise ValueError('PROBABILITY_OUT_OF_RANGE')
+        if not 0 <= rational(self.probability) <= 1: raise ValueError('PROBABILITY_OUT_OF_RANGE')
         return self
 
 class IVProblem(StrictRecord):
@@ -50,7 +48,7 @@ class IVProblem(StrictRecord):
         if self.target=='LATE' and self.monotonicity is not True:
             raise ValueError('LATE_REQUIRES_DECLARED_D1_GE_D0_MONOTONICITY')
         return self
-    def observed(self): return {(c.z,c.d,c.y):float(c.probability) for c in self.cells}
+    def observed(self): return {(c.z,c.d,c.y):rational(c.probability) for c in self.cells}
 
 class IVReadingReview(StrictRecord):
     authority: Literal['EXTERNAL_RESEARCH_REVIEW','SYNTHETIC_TEST']

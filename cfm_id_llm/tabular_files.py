@@ -68,7 +68,10 @@ def workbook(raw, name):
 
 
 def selected_table(raw,name,*,sheet=None,header_row=1):
-    book=workbook(raw,name)
+    return _select(workbook(raw,name), sha256(raw).hexdigest(), sheet, header_row)
+
+
+def _select(book, digest, sheet, header_row):
     if sheet is None:
         if len(book)!=1: raise ValueError('请选择要读取的工作表。')
         sheet=next(iter(book))
@@ -85,7 +88,7 @@ def selected_table(raw,name,*,sheet=None,header_row=1):
         if len(r['values'])>len(header): raise ValueError(f'第{r["row"]}行比表头多出列，不能忽略。')
         data.append(dict(r,values=r['values']+['']*(len(header)-len(r['values']))))
     return dict(headers=header,rows=data,sheet=sheet,header_row=header_row,
-                sha256=sha256(raw).hexdigest(),other_sheets=[s for s in book if s!=sheet],
+                sha256=digest,other_sheets=[s for s in book if s!=sheet],
                 skipped_preamble_rows=[r['row'] for r in rows if r['row']<header_row and any(r['values'])])
 
 
@@ -97,7 +100,7 @@ def preview(raw,name,sheet=None,header_row=1):
     answer=dict(sheets=list(book),sheet=chosen,sha256=sha256(raw).hexdigest(),
                 preview=[dict(row=r['row'],values=r['values']) for r in rows[:6]],headers=[],error=None)
     try:
-        table=selected_table(raw,name,sheet=chosen,header_row=header_row)
+        table=_select(book,answer['sha256'],chosen,header_row)
         answer.update(headers=table['headers'],records=len(table['rows']),other_sheets=table['other_sheets'],skipped_preamble_rows=table['skipped_preamble_rows'])
     except ValueError as exc: answer['error']=str(exc)
     return answer
@@ -105,7 +108,8 @@ def preview(raw,name,sheet=None,header_row=1):
 
 def dictionary_text(raw,name,sheet=None,header_row=1):
     import json
-    t=selected_table(raw,name,sheet=sheet,header_row=header_row)
+    book=workbook(raw,name)
+    t=_select(book,sha256(raw).hexdigest(),sheet,header_row)
     if len(t['rows'])>200: raise ValueError('字段说明表最多200行；逐条观测记录请使用数据导入。')
     # Explicit opt-in: these are user-designated definitions, never observations.
     lines=[f'文件 {name}；工作表 {t["sheet"]}；表头第{header_row}行：'+json.dumps(t['headers'],ensure_ascii=False),
@@ -113,5 +117,5 @@ def dictionary_text(raw,name,sheet=None,header_row=1):
     for r in t['rows']:
         lines.append(f'第{r["row"]}行：'+json.dumps(dict(zip(t['headers'],r['values'])),ensure_ascii=False))
     if t['other_sheets']: lines.append('未选入的工作表：'+json.dumps(t['other_sheets'],ensure_ascii=False))
-    if t['skipped_preamble_rows']: lines.append('表头前文字：'+json.dumps([r for r in workbook(raw,name)[t['sheet']] if r['row']<header_row],ensure_ascii=False))
+    if t['skipped_preamble_rows']: lines.append('表头前文字：'+json.dumps([r for r in book[t['sheet']] if r['row']<header_row],ensure_ascii=False))
     return '\n'.join(lines),t

@@ -319,8 +319,7 @@ class ThreeLevelExposureTests(unittest.TestCase):
         self.assertGreater(cases, 1000)
 
     def test_er300_e2_no_claim_of_estimation(self):
-        from pfn_pipeline.simulation import load_graph
-        from pfn_pipeline._internal.paths import DEFAULT_GRAPH
+        from fixed_network_fixture import DEFAULT_GRAPH, load_graph
         import numpy as np
         adjacency = load_graph(DEFAULT_GRAPH)
         self.assertEqual(adjacency.shape, (300, 300))

@@ -27,7 +27,7 @@ class TableMapping(BaseModel):
     observation_scheme: str = Field(min_length=1)
 
 
-def read_records(path, mapping, network):
+def read_records(path, mapping, network, *, shared_tables=None):
     m=TableMapping.model_validate(mapping)
     if network is None: raise ValueError('表格数据需配套上传对象表和关系表；不会假设对象之间没有联系。')
     if not m.treated_value or not m.untreated_value or m.treated_value==m.untreated_value:
@@ -83,6 +83,12 @@ def read_records(path, mapping, network):
         unused_columns=[h for h in t['headers'] if h not in columns],network_reference=network.token,
         scientific_approval=False,raw_measurements_sent_to_llm=False)
 
+    if shared_tables is not None:
+        from .shared_materials import table_source
+        shared_tables.append(table_source('shared_observations', '逐行观测 · '+path.name+' · '+t['sheet'],
+                                          t['headers'], (r['values'] for r in t['rows'])))
+        manifest.pop('raw_measurements_sent_to_llm')
+        manifest['raw_measurements_in_shared_input'] = True
     inventory=summarize_records(list(network.nodes),m.feature_columns,obs,[r[1] for r in ordered])
     return dict(schema=schema,rows=ordered,observed_indices=obs,manifest=manifest,inventory=inventory)
 

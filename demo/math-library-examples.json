@@ -1,0 +1,4089 @@
+{
+  "reading": {
+    "intake": {
+      "version": "business-intake-1",
+      "intake_id": "23ad5622-bae3-4397-b9ca-93a7cd39a9fc",
+      "revision": 0,
+      "case": {
+        "case_id": "arm",
+        "business_question": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。",
+        "sources": [
+          {
+            "source_id": "proposal",
+            "kind": "OTHER",
+            "text": "这是用于演示的合成研究方案，并非企业真实数据。研究单位的完整顺序为甲站、乙站、丙站。甲站与乙站合作，乙站与丙站合作，没有其他合作边、没有自环，是使用工具前固定的无向网络。本周各站是否使用排班助手记为1或0；1是使用，0是不使用。结果是本周每单平均配送分钟数，连续数值。评价对象在使用工具前已固定。\n本研究采用以下条件：实际观察结果等于该次完整使用名单下的潜在结果；上述合作网络在本周保持固定；所涉及的条件平均结果存在且有限。两端比较使用同一结果定义、本周时期和背景。只要至少一个合作邻站使用，就将同伴状态记为1，否则为0。这只是状态定义，本身不表示两种完整安排的结果相同。\n原试点是每个站独立抽签，以1/2概率使用；全部分配规则已知。研究采用完整抽签名单与所有站在全部可能完整名单下的潜在结果独立这一条件。没有第一阶段名额方案。\n理论识别可用同一研究下每个站的结果与完整使用向量的符号总体联合分布，覆盖全部三个站，不是样本估计；本次不提供总体均值的数值。",
+            "label": null
+          }
+        ],
+        "response_language": "zh"
+      },
+      "request_sha256": "b463386068162227c413f6a1baebad4426152d3af9cf1c88894155bf716134f6",
+      "reading_format": "canonical",
+      "fact_format": "short_refs",
+      "candidate": {
+        "schema_version": "cfm-id-multiquery-v0.10",
+        "shared_draft": {
+          "schema_version": "cfm-id-draft-v0.1",
+          "target": {
+            "kind": "NETWORK_DESIGN_STANDARDIZED_ARM_MEAN",
+            "description": {
+              "value": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。",
+              "basis": "EXPLICIT_TEXT",
+              "evidence": [
+                {
+                  "source_id": "business_question",
+                  "quote": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。"
+                }
+              ]
+            },
+            "alternatives": []
+          },
+          "units_variables": {
+            "analysis_unit": {
+              "value": "配送站",
+              "basis": "EXPLICIT_TEXT",
+              "evidence": [
+                {
+                  "source_id": "business_question",
+                  "quote": "配送站"
+                }
+              ]
+            },
+            "treatment": {
+              "value": "排班助手",
+              "basis": "EXPLICIT_TEXT",
+              "evidence": [
+                {
+                  "source_id": "business_question",
+                  "quote": "排班助手"
+                }
+              ]
+            },
+            "outcome": {
+              "value": "本周每单平均配送分钟数",
+              "basis": "EXPLICIT_TEXT",
+              "evidence": [
+                {
+                  "source_id": "proposal",
+                  "quote": "本周每单平均配送分钟数"
+                }
+              ]
+            },
+            "covariates": [],
+            "temporal_structure": {
+              "value": null,
+              "basis": "UNRESOLVED",
+              "evidence": []
+            }
+          },
+          "structure": {
+            "unit_network": {
+              "value": "这是用于演示的合成研究方案，并非企业真实数据。研究单位的完整顺序为甲站、乙站、丙站。甲站与乙站合作，乙站与丙站合作，没有其他合作边、没有自环，是使用工具前固定的无向网络。本周各站是否使用排班助手记为1或0；1是使用，0是不使用。结果是本周每单平均配送分钟数，连续数值。评价对象在使用工具前已固定。\n本研究采用以下条件：实际观察结果等于该次完整使用名单下的潜在结果；上述合作网络在本周保持固定；所涉及的条件平均结果存在且有限。两端比较使用同一结果定义、本周时期和背景。只要至少一个合作邻站使用，就将同伴状态记为1，否则为0。这只是状态定义，本身不表示两种完整安排的结果相同。\n原试点是每个站独立抽签，以1/2概率使用；全部分配规则已知。研究采用完整抽签名单与所有站在全部可能完整名单下的潜在结果独立这一条件。没有第一阶段名额方案。\n理论识别可用同一研究下每个站的结果与完整使用向量的符号总体联合分布，覆盖全部三个站，不是样本估计；本次不提供总体均值的数值。",
+              "basis": "EXPLICIT_TEXT",
+              "evidence": [
+                {
+                  "source_id": "proposal",
+                  "quote": "这是用于演示的合成研究方案，并非企业真实数据。研究单位的完整顺序为甲站、乙站、丙站。甲站与乙站合作，乙站与丙站合作，没有其他合作边、没有自环，是使用工具前固定的无向网络。本周各站是否使用排班助手记为1或0；1是使用，0是不使用。结果是本周每单平均配送分钟数，连续数值。评价对象在使用工具前已固定。\n本研究采用以下条件：实际观察结果等于该次完整使用名单下的潜在结果；上述合作网络在本周保持固定；所涉及的条件平均结果存在且有限。两端比较使用同一结果定义、本周时期和背景。只要至少一个合作邻站使用，就将同伴状态记为1，否则为0。这只是状态定义，本身不表示两种完整安排的结果相同。\n原试点是每个站独立抽签，以1/2概率使用；全部分配规则已知。研究采用完整抽签名单与所有站在全部可能完整名单下的潜在结果独立这一条件。没有第一阶段名额方案。\n理论识别可用同一研究下每个站的结果与完整使用向量的符号总体联合分布，覆盖全部三个站，不是样本估计；本次不提供总体均值的数值。"
+                }
+              ]
+            },
+            "variable_causal_graph": {
+              "value": null,
+              "basis": "UNRESOLVED",
+              "evidence": []
+            },
+            "exposure_mapping": {
+              "value": null,
+              "basis": "UNRESOLVED",
+              "evidence": []
+            },
+            "network_pretreatment_status": {
+              "value": null,
+              "basis": "UNRESOLVED",
+              "evidence": []
+            }
+          },
+          "information_design": {
+            "assignment_family": "INDEPENDENT_BERNOULLI",
+            "assignment_law": {
+              "value": "这是用于演示的合成研究方案，并非企业真实数据。研究单位的完整顺序为甲站、乙站、丙站。甲站与乙站合作，乙站与丙站合作，没有其他合作边、没有自环，是使用工具前固定的无向网络。本周各站是否使用排班助手记为1或0；1是使用，0是不使用。结果是本周每单平均配送分钟数，连续数值。评价对象在使用工具前已固定。\n本研究采用以下条件：实际观察结果等于该次完整使用名单下的潜在结果；上述合作网络在本周保持固定；所涉及的条件平均结果存在且有限。两端比较使用同一结果定义、本周时期和背景。只要至少一个合作邻站使用，就将同伴状态记为1，否则为0。这只是状态定义，本身不表示两种完整安排的结果相同。\n原试点是每个站独立抽签，以1/2概率使用；全部分配规则已知。研究采用完整抽签名单与所有站在全部可能完整名单下的潜在结果独立这一条件。没有第一阶段名额方案。\n理论识别可用同一研究下每个站的结果与完整使用向量的符号总体联合分布，覆盖全部三个站，不是样本估计；本次不提供总体均值的数值。",
+              "basis": "EXPLICIT_TEXT",
+              "evidence": [
+                {
+                  "source_id": "proposal",
+                  "quote": "这是用于演示的合成研究方案，并非企业真实数据。研究单位的完整顺序为甲站、乙站、丙站。甲站与乙站合作，乙站与丙站合作，没有其他合作边、没有自环，是使用工具前固定的无向网络。本周各站是否使用排班助手记为1或0；1是使用，0是不使用。结果是本周每单平均配送分钟数，连续数值。评价对象在使用工具前已固定。\n本研究采用以下条件：实际观察结果等于该次完整使用名单下的潜在结果；上述合作网络在本周保持固定；所涉及的条件平均结果存在且有限。两端比较使用同一结果定义、本周时期和背景。只要至少一个合作邻站使用，就将同伴状态记为1，否则为0。这只是状态定义，本身不表示两种完整安排的结果相同。\n原试点是每个站独立抽签，以1/2概率使用；全部分配规则已知。研究采用完整抽签名单与所有站在全部可能完整名单下的潜在结果独立这一条件。没有第一阶段名额方案。\n理论识别可用同一研究下每个站的结果与完整使用向量的符号总体联合分布，覆盖全部三个站，不是样本估计；本次不提供总体均值的数值。"
+                }
+              ]
+            },
+            "population_information_level": "UNRESOLVED",
+            "population_observable_operator": {
+              "value": null,
+              "basis": "UNRESOLVED",
+              "evidence": []
+            },
+            "sample_data_description": {
+              "value": null,
+              "basis": "UNRESOLVED",
+              "evidence": []
+            }
+          },
+          "assumptions": [],
+          "validity": {
+            "support_or_positivity": {
+              "value": null,
+              "basis": "UNRESOLVED",
+              "evidence": []
+            },
+            "query_domain": {
+              "value": null,
+              "basis": "UNRESOLVED",
+              "evidence": []
+            },
+            "other_conditions": []
+          },
+          "ambiguities": [],
+          "clarifying_questions": [],
+          "normalization_notes": []
+        },
+        "primary_query_id": "q1",
+        "queries": [
+          {
+            "query_id": "q1",
+            "business_goal": {
+              "value": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。",
+              "basis": "EXPLICIT_TEXT",
+              "evidence": [
+                {
+                  "source_id": "business_question",
+                  "quote": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。"
+                }
+              ]
+            },
+            "target": {
+              "kind": "NETWORK_DESIGN_STANDARDIZED_ARM_MEAN",
+              "description": {
+                "value": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。",
+                "basis": "EXPLICIT_TEXT",
+                "evidence": [
+                  {
+                    "source_id": "business_question",
+                    "quote": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。"
+                  }
+                ]
+              },
+              "alternatives": []
+            },
+            "requested_comparison_or_policy": {
+              "value": null,
+              "basis": "UNRESOLVED",
+              "evidence": []
+            },
+            "clarifying_questions": [],
+            "semantics": {
+              "target_population": {
+                "value": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。",
+                "basis": "EXPLICIT_TEXT",
+                "evidence": [
+                  {
+                    "source_id": "business_question",
+                    "quote": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。"
+                  }
+                ]
+              },
+              "intervention": {
+                "value": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。",
+                "basis": "EXPLICIT_TEXT",
+                "evidence": [
+                  {
+                    "source_id": "business_question",
+                    "quote": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。"
+                  }
+                ]
+              },
+              "comparator": {
+                "value": null,
+                "basis": "UNRESOLVED",
+                "evidence": []
+              },
+              "neighbor_exposure": {
+                "value": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。",
+                "basis": "EXPLICIT_TEXT",
+                "evidence": [
+                  {
+                    "source_id": "business_question",
+                    "quote": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。"
+                  }
+                ]
+              },
+              "aggregation": {
+                "value": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。",
+                "basis": "EXPLICIT_TEXT",
+                "evidence": [
+                  {
+                    "source_id": "business_question",
+                    "quote": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。"
+                  }
+                ]
+              },
+              "time_horizon": {
+                "value": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。",
+                "basis": "EXPLICIT_TEXT",
+                "evidence": [
+                  {
+                    "source_id": "business_question",
+                    "quote": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。"
+                  }
+                ]
+              },
+              "policy_assignment": {
+                "value": null,
+                "basis": "UNRESOLVED",
+                "evidence": []
+              },
+              "standardization_distribution": {
+                "value": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。",
+                "basis": "EXPLICIT_TEXT",
+                "evidence": [
+                  {
+                    "source_id": "business_question",
+                    "quote": "我们管理甲、乙、丙三个社区配送站，站点之间会互相调配骑手。想了解本周甲站使用排班助手、相邻站点都不使用时，甲站每单的平均配送分钟数是多少。只评价甲站，不与其他情况相减；其余安排按原试点抽签规则在上述条件下的概率平均。"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "clarifications": [],
+      "history": [
+        {
+          "action": "RECEIVE_CANDIDATE",
+          "previous_sha256": "a675f85089bc2fff7e2b1c5d95c495f1ef4184a473917b7bdc18f5eac594b8d8"
+        }
+      ]
+    },
+    "query_id": "q1",
+    "query_review": {
+      "version": "business-dispatch-review-1",
+      "binding_sha256": "26f5ff7af46011e2cae4ee8e85c376006087d85f5f16f8ad098d409b147a8197",
+      "reviewer": "Independent synthetic protocol reviewer",
+      "evidence": "Frozen hypothetical target and declared model independently stipulated; no real-world approval.",
+      "authority": "SYNTHETIC_TEST",
+      "decisions": {
+        "business_target_and_population": "ACCEPTED",
+        "research_structure": "ACCEPTED",
+        "source_entailment": "ACCEPTED"
+      }
+    },
+    "candidate": {
+      "version": "network-arm-reading-1",
+      "reference_context": "ca0088ffb25c3",
+      "study": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006"
+        ],
+        "nodes": [
+          "甲站",
+          "乙站",
+          "丙站"
+        ],
+        "edges": [
+          [
+            "甲站",
+            "乙站"
+          ],
+          [
+            "乙站",
+            "丙站"
+          ]
+        ],
+        "graph_kind": "SIMPLE_UNDIRECTED",
+        "edge_list_complete": true,
+        "treatment": "本周使用排班助手：1使用，0不用",
+        "outcome": "本周每单平均配送分钟数",
+        "outcome_kind": "CONTINUOUS",
+        "context": "本周"
+      },
+      "additional_restrictions": [],
+      "unresolved": [],
+      "assignment": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006"
+        ],
+        "kind": "INDEPENDENT_BERNOULLI",
+        "probabilities": {
+          "甲站": "1/2",
+          "乙站": "1/2",
+          "丙站": "1/2"
+        },
+        "fixed_count": null
+      },
+      "first_stage_exclusion": null,
+      "assumptions": {
+        "known_assignment_law": {
+          "source_ids": [
+            "s0001",
+            "s0002",
+            "s0003",
+            "s0004",
+            "s0005",
+            "s0006"
+          ],
+          "value": true
+        },
+        "full_vector_randomization": {
+          "source_ids": [
+            "s0001",
+            "s0002",
+            "s0003",
+            "s0004",
+            "s0005",
+            "s0006"
+          ],
+          "value": true
+        },
+        "consistency": {
+          "source_ids": [
+            "s0001",
+            "s0002",
+            "s0003",
+            "s0004",
+            "s0005",
+            "s0006"
+          ],
+          "value": true
+        },
+        "fixed_pretreatment_network": {
+          "source_ids": [
+            "s0001",
+            "s0002",
+            "s0003",
+            "s0004",
+            "s0005",
+            "s0006"
+          ],
+          "value": true
+        },
+        "finite_conditional_first_moments": {
+          "source_ids": [
+            "s0001",
+            "s0002",
+            "s0003",
+            "s0004",
+            "s0005",
+            "s0006"
+          ],
+          "value": true
+        }
+      },
+      "exposure": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006"
+        ],
+        "kind": "ANY_TREATED_NEIGHBOR",
+        "core_collaborators": null
+      },
+      "target": {
+        "source_ids": [
+          "s0001",
+          "s0002",
+          "s0003",
+          "s0004",
+          "s0005",
+          "s0006"
+        ],
+        "population": [
+          "甲站"
+        ],
+        "first": {
+          "source_ids": [
+            "s0001",
+            "s0002",
+            "s0003",
+            "s0004",
+            "s0005",
+            "s0006"
+          ],
+          "own": 1,
+          "exposure": 0
+        },
+        "averaging": "ORIGINAL_DESIGN_CONDITIONAL",
+        "population_fixed_before_assignment": {
+          "source_ids": [
+            "s0001",
+            "s0002",
+            "s0003",
+            "s0004",
+            "s0005",
+            "s0006"
+          ],
+          "value": true
+        }
+      },
+      "information": [
+        {
+          "source_ids": [
+            "s0001",
+            "s0002",
+            "s0003",
+            "s0004",
+            "s0005",
+            "s0006"
+          ],
+          "operator": "NODE_FULL_LAW",
+          "availability": "SYMBOLIC_POPULATION_OPERATOR",
+          "outcome_nodes": [
+            "甲站",
+            "乙站",
+            "丙站"
+          ],
+          "arm_cells": []
+        }
+      ]
+    },
+    "request_sha256": "6ebb840e91db947dce6cb03322cbac59ce72feb1bcbab56830e6972ad2f8282a"
+  },
+  "population": {
+    "spec": {
+      "causal_semantics": "potential_outcomes",
+      "structure": {
+        "representation_type": "fixed_network_interference",
+        "variables": [
+          "W",
+          "C",
+          "T",
+          "Y"
+        ],
+        "directed_edges": [],
+        "bidirected_edges": [],
+        "source": "study_design",
+        "notes": ""
+      },
+      "network_exposure": {
+        "network_id": "pair",
+        "node_ids": [
+          "u",
+          "v"
+        ],
+        "undirected_edges": [
+          [
+            "u",
+            "v"
+          ]
+        ],
+        "exposure_mapping": "finite_local_exposure_table_v1",
+        "working_mapping": {
+          "mapping_id": "peer",
+          "state_labels": [
+            "no",
+            "yes"
+          ],
+          "context_ids": [
+            "w"
+          ],
+          "state_by_local_assignment": {
+            "w": {
+              "u": {
+                "0": "no",
+                "1": "yes"
+              },
+              "v": {
+                "0": "no",
+                "1": "yes"
+              }
+            }
+          }
+        },
+        "fixed_network": true
+      },
+      "exposure_mapping_claim": "REFERENCE_WITH_UNCERTAINTY",
+      "exposure_uncertainty": {
+        "kind": "finite_exposure_candidate_set_v1",
+        "candidates": [
+          {
+            "mapping_id": "peer",
+            "state_labels": [
+              "no",
+              "yes"
+            ],
+            "context_ids": [
+              "w"
+            ],
+            "state_by_local_assignment": {
+              "w": {
+                "u": {
+                  "0": "no",
+                  "1": "yes"
+                },
+                "v": {
+                  "0": "no",
+                  "1": "yes"
+                }
+              }
+            }
+          },
+          {
+            "mapping_id": "constant",
+            "state_labels": [
+              "only"
+            ],
+            "context_ids": [
+              "w"
+            ],
+            "state_by_local_assignment": {
+              "w": {
+                "u": {
+                  "0": "only",
+                  "1": "only"
+                },
+                "v": {
+                  "0": "only",
+                  "1": "only"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "interference_structure_receipt": {
+        "contract_version": "interference-structure-v2",
+        "provider_id": "example",
+        "source_status": "SYNTHETIC_GROUND_TRUTH",
+        "analysis_status": "SET_VALUED",
+        "semantic_fingerprint": "d47be6b3170bdf9ff8b515f882383a0b7e5b30040354fb38db54fef2f03ee078",
+        "provenance": {},
+        "qualification_evidence": [
+          "synthetic population specification"
+        ]
+      },
+      "reference_exposure_propensity_upper_bound_fact": null,
+      "majority_response_theorem_contract": null,
+      "randomized_network_arm_theorem_contract": null,
+      "network_policy_mixture_theorem_contract": {
+        "contract_version": "network-policy-mixture-theorem-v1",
+        "outcome_semantics": "binary",
+        "population_information_scope": "node_context_binary_outcome_marginals_v1",
+        "cross_block_response_constraints": "none_beyond_declared_local_marginals",
+        "conditional_coupling_semantics": "arbitrary_coupling_allowed",
+        "candidate_structure_scope": "one_global_theta_shared_across_all_nodes_and_contexts"
+      },
+      "network_policy_mixture_assignment_design": {
+        "kind": "iid_bernoulli_binary_v1",
+        "p": "1/2"
+      },
+      "network_policy_mixture_information_contract": {
+        "basis": "NODE_CONTEXT_WORKING_EXPOSURE_BINARY_MEAN_V1",
+        "regime": "experimental",
+        "joint_scope": "node_local_marginals_only",
+        "outcome_representation": "binary_mean_complete",
+        "whole_network_assignment_law_available": false
+      },
+      "network_policy_mixture_population_facts": null,
+      "deterministic_policy_oracle": {
+        "policy_id": "both",
+        "context_ids": [
+          "w"
+        ],
+        "node_ids": [
+          "u",
+          "v"
+        ],
+        "actions_by_context": {
+          "w": [
+            1,
+            1
+          ]
+        }
+      },
+      "variable_domains": {
+        "T": {
+          "kind": "binary",
+          "values": [
+            0,
+            1
+          ],
+          "lower": 0.0,
+          "upper": 1.0
+        },
+        "Y": {
+          "kind": "binary",
+          "values": [
+            0,
+            1
+          ],
+          "lower": 0.0,
+          "upper": 1.0
+        }
+      },
+      "assumptions": [
+        {
+          "name": "random_assignment",
+          "source": "demo_specification",
+          "confirmed": true,
+          "status": "CERTIFIED",
+          "evidence": [
+            "synthetic population specification"
+          ],
+          "details": ""
+        },
+        {
+          "name": "consistency",
+          "source": "demo_specification",
+          "confirmed": true,
+          "status": "CERTIFIED",
+          "evidence": [
+            "synthetic population specification"
+          ],
+          "details": ""
+        }
+      ],
+      "assumption_conflicts": [],
+      "information_signature": {
+        "objects": [
+          {
+            "name": "local mean",
+            "regime": "experimental",
+            "variables": [
+              "W",
+              "C",
+              "T",
+              "Y"
+            ],
+            "description": "",
+            "basis": "NODE_CONTEXT_WORKING_EXPOSURE_BINARY_MEAN_V1",
+            "joint_scope": "node_local_marginals_only",
+            "outcome_representation": "binary_mean_complete",
+            "whole_network_assignment_law_available": false,
+            "randomized_arm_observable": null
+          }
+        ]
+      },
+      "query": {
+        "type": "POLICY_VALUE",
+        "treatment": "T",
+        "outcome": "Y",
+        "expression": "POLICY_VALUE[Y;deterministic_binary_network_policy]",
+        "target_population": "overall_population",
+        "conditioning_variables": [],
+        "reference_exposure_definition": "finite_local_exposure_table_v1",
+        "target_exposure_semantics": null,
+        "exposure_value": null,
+        "target_node_id": null,
+        "own_treatment_value": null,
+        "policy_description": "deterministic_binary_network_policy",
+        "policy_fingerprint": "50719ca87354ecb0c0ddd8dbca28e29b817a2ca7615ad5b35ae6effa42f1b813",
+        "response_target_fingerprint": null,
+        "evidence": [],
+        "confidence": 1.0,
+        "alternatives": [],
+        "resolution": "RESOLVED",
+        "authority": "TRUSTED_FIXTURE",
+        "interpretation_notes": ""
+      },
+      "support_domain": {},
+      "provenance": {}
+    },
+    "population_truth": {
+      "evidence": [
+        "synthetic population specification"
+      ],
+      "context_weights": {
+        "w": "1"
+      },
+      "conditional_means": {
+        "w": {
+          "u": {
+            "0": {
+              "no": "1/2",
+              "yes": "1/2"
+            },
+            "1": {
+              "no": "1/2",
+              "yes": "1/2"
+            }
+          },
+          "v": {
+            "0": {
+              "no": "1/2",
+              "yes": "1/2"
+            },
+            "1": {
+              "no": "1/2",
+              "yes": "1/2"
+            }
+          }
+        }
+      }
+    }
+  },
+  "task": {
+    "task": {
+      "name": "D1-E1 arm mean: node=0, a=0, s=0",
+      "target_id": "randomized-network-arm-0-0-0",
+      "estimand": "NETWORK_RANDOMIZED_ARM_MEAN",
+      "target_semantics": "design_standardized_conditional_arm_mean_not_fixed_assignment",
+      "node_ids": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "adjacency": [
+        [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "assignment_design": {
+        "design_type": "randomized_experiment",
+        "assignment_scheme": "heterogeneous_independent_bernoulli",
+        "propensities": {
+          "0": "2/9",
+          "1": "1/3",
+          "2": "4/9",
+          "3": "5/9",
+          "4": "2/3"
+        }
+      },
+      "exposure_definition": "strict_majority",
+      "outcome_kind": "continuous",
+      "x": null,
+      "treatment": null,
+      "outcome": null,
+      "assumptions": [],
+      "identification_spec": {
+        "causal_semantics": "potential_outcomes",
+        "structure": {
+          "representation_type": "fixed_network_interference",
+          "variables": [
+            "treatment",
+            "majority_exposure",
+            "outcome",
+            "context"
+          ],
+          "directed_edges": [],
+          "bidirected_edges": [],
+          "source": "human_specified",
+          "notes": "Unit-level fixed network; no variable-level causal DAG required."
+        },
+        "network_exposure": {
+          "network_id": "composition-star5",
+          "node_ids": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "undirected_edges": [
+            [
+              "0",
+              "1"
+            ],
+            [
+              "0",
+              "2"
+            ],
+            [
+              "0",
+              "3"
+            ],
+            [
+              "0",
+              "4"
+            ]
+          ],
+          "exposure_mapping": "treated_neighbor_count_1hop",
+          "fixed_network": true
+        },
+        "exposure_mapping_claim": "UNSPECIFIED",
+        "exposure_uncertainty": null,
+        "interference_structure_receipt": {
+          "contract_version": "interference-structure-v2",
+          "provider_id": "declared_fixed_network_grouping_v1",
+          "source_status": "SYNTHETIC_GROUND_TRUTH",
+          "analysis_status": "ACCEPTED_AS_ASSUMPTION",
+          "semantic_fingerprint": "b217ed03aeca65ee0dc5d429502bd63241f37077707be8a8e1788634bd5b06df",
+          "provenance": {
+            "source": "signed population study protocol"
+          },
+          "qualification_evidence": [
+            "explicit verified randomized experiment"
+          ]
+        },
+        "reference_exposure_propensity_upper_bound_fact": null,
+        "majority_response_theorem_contract": null,
+        "randomized_network_arm_theorem_contract": {
+          "version": "randomized-network-arm-mean-theorem-v1",
+          "design": {
+            "kind": "heterogeneous_bernoulli_binary_v1",
+            "propensities": {
+              "0": "2/9",
+              "1": "1/3",
+              "2": "4/9",
+              "3": "5/9",
+              "4": "2/3"
+            }
+          },
+          "grouping": "strict_majority_ties_low",
+          "target": "design_standardized_conditional_arm_mean",
+          "information": "node_conditional_arm_mean_of_experimental_law"
+        },
+        "network_policy_mixture_theorem_contract": null,
+        "network_policy_mixture_assignment_design": null,
+        "network_policy_mixture_information_contract": null,
+        "network_policy_mixture_population_facts": null,
+        "deterministic_policy_oracle": null,
+        "variable_domains": {
+          "treatment": {
+            "kind": "binary",
+            "values": [
+              0,
+              1
+            ],
+            "lower": 0.0,
+            "upper": 1.0
+          },
+          "outcome": {
+            "kind": "continuous",
+            "values": null,
+            "lower": null,
+            "upper": null
+          }
+        },
+        "assumptions": [
+          {
+            "name": "known_assignment_law",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "Known pretreatment, node-specific independent Bernoulli probabilities p_i=P(T_i=1|W), fixed for every node; conditioning on T_i=a does not change the neighbors' assignment law. Source: signed population study protocol"
+          },
+          {
+            "name": "full_vector_randomization",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "The complete assignment vector is randomized independently of the full potential-outcome schedule conditional on W. Source: signed population study protocol"
+          },
+          {
+            "name": "consistency",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "The observed outcome equals Y_i(T) at the realized full assignment; no exposure-sufficiency condition. Source: signed population study protocol"
+          },
+          {
+            "name": "fixed_pretreatment_network",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "The fixed network and strict-majority grouping were defined before treatment. Source: signed population study protocol"
+          },
+          {
+            "name": "finite_conditional_first_moments",
+            "source": "deterministic_derivation",
+            "confirmed": true,
+            "status": "DERIVED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "Relevant potential-outcome absolute first moments are finite conditional on W. Source: signed population study protocol"
+          }
+        ],
+        "assumption_conflicts": [],
+        "information_signature": {
+          "objects": [
+            {
+              "name": "P_exp(Y_i,T_i,S_i|W,G)",
+              "regime": "experimental",
+              "variables": [
+                "treatment",
+                "majority_exposure",
+                "outcome",
+                "context"
+              ],
+              "description": "Explicitly declared complete node/arm POPULATION conditional means; not actual finite-sample measurements or a fitted estimator.",
+              "basis": null,
+              "joint_scope": null,
+              "outcome_representation": null,
+              "whole_network_assignment_law_available": null,
+              "randomized_arm_observable": {
+                "operator": "NODE_ARM_MEANS",
+                "source_id": "official_randomized_arm_task_constructor_v21",
+                "provenance": "signed population study protocol: explicit verified randomized experiment",
+                "admission": "CERTIFIED",
+                "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                "node_order": [
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+                ],
+                "outcome_nodes": [
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+                ],
+                "treatment": "treatment",
+                "outcome": "outcome",
+                "context_symbol": "W",
+                "network_fingerprint": "7c25abbf987964905026b01dd3626200f8df77c1e573eb5f9138e2561a717a02",
+                "assignment_law_fingerprint": "ef409e1e20908426a9bc5dc88cd6c9c9fc77446e8f247a9b6b128a528ef34dc3",
+                "exposure_fingerprint": "3ccd24bcc524222cba8fb68e895510ac03680a155a9c43f1f1f39736f1d6ea21",
+                "arm_coverage": "ALL_NODE_ARMS",
+                "arm_cells": []
+              }
+            }
+          ]
+        },
+        "query": {
+          "type": "NETWORK_RANDOMIZED_ARM_MEAN",
+          "treatment": "treatment",
+          "outcome": "outcome",
+          "expression": "NETWORK_RANDOMIZED_ARM_MEAN[outcome;treatment|node=0;a=0;s=0;design_averaged;target=fc1de541a80482f866fc8431a71f21a6a7d53ea1583a064a3b6eac66a2046922]",
+          "target_population": "fixed_network_conditional_context",
+          "conditioning_variables": [],
+          "reference_exposure_definition": "treated_neighbor_count_1hop",
+          "target_exposure_semantics": "design_averaged_randomized_arm_mean",
+          "exposure_value": 0,
+          "target_node_id": "0",
+          "own_treatment_value": 0,
+          "policy_description": null,
+          "policy_fingerprint": null,
+          "response_target_fingerprint": "fc1de541a80482f866fc8431a71f21a6a7d53ea1583a064a3b6eac66a2046922",
+          "evidence": [
+            "explicit verified randomized experiment"
+          ],
+          "confidence": 1.0,
+          "alternatives": [],
+          "resolution": "RESOLVED",
+          "authority": "TRUSTED_FIXTURE",
+          "interpretation_notes": "Single node/arm design-standardized mean under the original heterogeneous independent Bernoulli law conditioned on own treatment and strict-majority grouping. No exposure sufficiency or fixed-allocation policy welfare is asserted."
+        },
+        "support_domain": {
+          "analysis_unit": [
+            "node"
+          ],
+          "context_symbol": "W",
+          "context_semantics": "full_pretreatment_network_context",
+          "target_context_distribution": "conditional_not_transport"
+        },
+        "provenance": {
+          "mode": "synthetic_source_contract",
+          "source": "signed population study protocol",
+          "population_values": "not_supplied",
+          "finite_sample_status": "not_used_to_confirm_causal_assumptions"
+        }
+      },
+      "target_fingerprint": "fc1de541a80482f866fc8431a71f21a6a7d53ea1583a064a3b6eac66a2046922",
+      "budget": null,
+      "budget_mode": "at_most",
+      "metadata": {
+        "setting": "D1xE1",
+        "source": "signed population study protocol",
+        "evidence": "explicit verified randomized experiment"
+      }
+    }
+  },
+  "batch": {
+    "task": {
+      "name": "D1-E1 arm mean: node=0, a=0, s=0",
+      "target_id": "randomized-network-arm-0-0-0",
+      "estimand": "NETWORK_RANDOMIZED_ARM_MEAN",
+      "target_semantics": "design_standardized_conditional_arm_mean_not_fixed_assignment",
+      "node_ids": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "adjacency": [
+        [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "assignment_design": {
+        "design_type": "randomized_experiment",
+        "assignment_scheme": "heterogeneous_independent_bernoulli",
+        "propensities": {
+          "0": "2/9",
+          "1": "1/3",
+          "2": "4/9",
+          "3": "5/9",
+          "4": "2/3"
+        }
+      },
+      "exposure_definition": "strict_majority",
+      "outcome_kind": "continuous",
+      "x": null,
+      "treatment": null,
+      "outcome": null,
+      "assumptions": [],
+      "identification_spec": {
+        "causal_semantics": "potential_outcomes",
+        "structure": {
+          "representation_type": "fixed_network_interference",
+          "variables": [
+            "treatment",
+            "majority_exposure",
+            "outcome",
+            "context"
+          ],
+          "directed_edges": [],
+          "bidirected_edges": [],
+          "source": "human_specified",
+          "notes": "Unit-level fixed network; no variable-level causal DAG required."
+        },
+        "network_exposure": {
+          "network_id": "composition-star5",
+          "node_ids": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "undirected_edges": [
+            [
+              "0",
+              "1"
+            ],
+            [
+              "0",
+              "2"
+            ],
+            [
+              "0",
+              "3"
+            ],
+            [
+              "0",
+              "4"
+            ]
+          ],
+          "exposure_mapping": "treated_neighbor_count_1hop",
+          "fixed_network": true
+        },
+        "exposure_mapping_claim": "UNSPECIFIED",
+        "exposure_uncertainty": null,
+        "interference_structure_receipt": {
+          "contract_version": "interference-structure-v2",
+          "provider_id": "declared_fixed_network_grouping_v1",
+          "source_status": "SYNTHETIC_GROUND_TRUTH",
+          "analysis_status": "ACCEPTED_AS_ASSUMPTION",
+          "semantic_fingerprint": "b217ed03aeca65ee0dc5d429502bd63241f37077707be8a8e1788634bd5b06df",
+          "provenance": {
+            "source": "signed population study protocol"
+          },
+          "qualification_evidence": [
+            "explicit verified randomized experiment"
+          ]
+        },
+        "reference_exposure_propensity_upper_bound_fact": null,
+        "majority_response_theorem_contract": null,
+        "randomized_network_arm_theorem_contract": {
+          "version": "randomized-network-arm-mean-theorem-v1",
+          "design": {
+            "kind": "heterogeneous_bernoulli_binary_v1",
+            "propensities": {
+              "0": "2/9",
+              "1": "1/3",
+              "2": "4/9",
+              "3": "5/9",
+              "4": "2/3"
+            }
+          },
+          "grouping": "strict_majority_ties_low",
+          "target": "design_standardized_conditional_arm_mean",
+          "information": "node_conditional_arm_mean_of_experimental_law"
+        },
+        "network_policy_mixture_theorem_contract": null,
+        "network_policy_mixture_assignment_design": null,
+        "network_policy_mixture_information_contract": null,
+        "network_policy_mixture_population_facts": null,
+        "deterministic_policy_oracle": null,
+        "variable_domains": {
+          "treatment": {
+            "kind": "binary",
+            "values": [
+              0,
+              1
+            ],
+            "lower": 0.0,
+            "upper": 1.0
+          },
+          "outcome": {
+            "kind": "continuous",
+            "values": null,
+            "lower": null,
+            "upper": null
+          }
+        },
+        "assumptions": [
+          {
+            "name": "known_assignment_law",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "Known pretreatment, node-specific independent Bernoulli probabilities p_i=P(T_i=1|W), fixed for every node; conditioning on T_i=a does not change the neighbors' assignment law. Source: signed population study protocol"
+          },
+          {
+            "name": "full_vector_randomization",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "The complete assignment vector is randomized independently of the full potential-outcome schedule conditional on W. Source: signed population study protocol"
+          },
+          {
+            "name": "consistency",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "The observed outcome equals Y_i(T) at the realized full assignment; no exposure-sufficiency condition. Source: signed population study protocol"
+          },
+          {
+            "name": "fixed_pretreatment_network",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "The fixed network and strict-majority grouping were defined before treatment. Source: signed population study protocol"
+          },
+          {
+            "name": "finite_conditional_first_moments",
+            "source": "deterministic_derivation",
+            "confirmed": true,
+            "status": "DERIVED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "Relevant potential-outcome absolute first moments are finite conditional on W. Source: signed population study protocol"
+          }
+        ],
+        "assumption_conflicts": [],
+        "information_signature": {
+          "objects": [
+            {
+              "name": "P_exp(Y_i,T_i,S_i|W,G)",
+              "regime": "experimental",
+              "variables": [
+                "treatment",
+                "majority_exposure",
+                "outcome",
+                "context"
+              ],
+              "description": "Explicitly declared complete node/arm POPULATION conditional means; not actual finite-sample measurements or a fitted estimator.",
+              "basis": null,
+              "joint_scope": null,
+              "outcome_representation": null,
+              "whole_network_assignment_law_available": null,
+              "randomized_arm_observable": {
+                "operator": "NODE_ARM_MEANS",
+                "source_id": "official_randomized_arm_task_constructor_v21",
+                "provenance": "signed population study protocol: explicit verified randomized experiment",
+                "admission": "CERTIFIED",
+                "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                "node_order": [
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+                ],
+                "outcome_nodes": [
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+                ],
+                "treatment": "treatment",
+                "outcome": "outcome",
+                "context_symbol": "W",
+                "network_fingerprint": "7c25abbf987964905026b01dd3626200f8df77c1e573eb5f9138e2561a717a02",
+                "assignment_law_fingerprint": "ef409e1e20908426a9bc5dc88cd6c9c9fc77446e8f247a9b6b128a528ef34dc3",
+                "exposure_fingerprint": "3ccd24bcc524222cba8fb68e895510ac03680a155a9c43f1f1f39736f1d6ea21",
+                "arm_coverage": "ALL_NODE_ARMS",
+                "arm_cells": []
+              }
+            }
+          ]
+        },
+        "query": {
+          "type": "NETWORK_RANDOMIZED_ARM_MEAN",
+          "treatment": "treatment",
+          "outcome": "outcome",
+          "expression": "NETWORK_RANDOMIZED_ARM_MEAN[outcome;treatment|node=0;a=0;s=0;design_averaged;target=fc1de541a80482f866fc8431a71f21a6a7d53ea1583a064a3b6eac66a2046922]",
+          "target_population": "fixed_network_conditional_context",
+          "conditioning_variables": [],
+          "reference_exposure_definition": "treated_neighbor_count_1hop",
+          "target_exposure_semantics": "design_averaged_randomized_arm_mean",
+          "exposure_value": 0,
+          "target_node_id": "0",
+          "own_treatment_value": 0,
+          "policy_description": null,
+          "policy_fingerprint": null,
+          "response_target_fingerprint": "fc1de541a80482f866fc8431a71f21a6a7d53ea1583a064a3b6eac66a2046922",
+          "evidence": [
+            "explicit verified randomized experiment"
+          ],
+          "confidence": 1.0,
+          "alternatives": [],
+          "resolution": "RESOLVED",
+          "authority": "TRUSTED_FIXTURE",
+          "interpretation_notes": "Single node/arm design-standardized mean under the original heterogeneous independent Bernoulli law conditioned on own treatment and strict-majority grouping. No exposure sufficiency or fixed-allocation policy welfare is asserted."
+        },
+        "support_domain": {
+          "analysis_unit": [
+            "node"
+          ],
+          "context_symbol": "W",
+          "context_semantics": "full_pretreatment_network_context",
+          "target_context_distribution": "conditional_not_transport"
+        },
+        "provenance": {
+          "mode": "synthetic_source_contract",
+          "source": "signed population study protocol",
+          "population_values": "not_supplied",
+          "finite_sample_status": "not_used_to_confirm_causal_assumptions"
+        }
+      },
+      "target_fingerprint": "fc1de541a80482f866fc8431a71f21a6a7d53ea1583a064a3b6eac66a2046922",
+      "budget": null,
+      "budget_mode": "at_most",
+      "metadata": {
+        "setting": "D1xE1",
+        "source": "signed population study protocol",
+        "evidence": "explicit verified randomized experiment"
+      }
+    }
+  },
+  "linear": {
+    "task": {
+      "name": "D1-E1 arm mean: node=0, a=0, s=0",
+      "target_id": "randomized-network-arm-0-0-0",
+      "estimand": "NETWORK_RANDOMIZED_ARM_MEAN",
+      "target_semantics": "design_standardized_conditional_arm_mean_not_fixed_assignment",
+      "node_ids": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "adjacency": [
+        [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "assignment_design": {
+        "design_type": "randomized_experiment",
+        "assignment_scheme": "heterogeneous_independent_bernoulli",
+        "propensities": {
+          "0": "2/9",
+          "1": "1/3",
+          "2": "4/9",
+          "3": "5/9",
+          "4": "2/3"
+        }
+      },
+      "exposure_definition": "strict_majority",
+      "outcome_kind": "continuous",
+      "x": null,
+      "treatment": null,
+      "outcome": null,
+      "assumptions": [],
+      "identification_spec": {
+        "causal_semantics": "potential_outcomes",
+        "structure": {
+          "representation_type": "fixed_network_interference",
+          "variables": [
+            "treatment",
+            "majority_exposure",
+            "outcome",
+            "context"
+          ],
+          "directed_edges": [],
+          "bidirected_edges": [],
+          "source": "human_specified",
+          "notes": "Unit-level fixed network; no variable-level causal DAG required."
+        },
+        "network_exposure": {
+          "network_id": "composition-star5",
+          "node_ids": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "undirected_edges": [
+            [
+              "0",
+              "1"
+            ],
+            [
+              "0",
+              "2"
+            ],
+            [
+              "0",
+              "3"
+            ],
+            [
+              "0",
+              "4"
+            ]
+          ],
+          "exposure_mapping": "treated_neighbor_count_1hop",
+          "fixed_network": true
+        },
+        "exposure_mapping_claim": "UNSPECIFIED",
+        "exposure_uncertainty": null,
+        "interference_structure_receipt": {
+          "contract_version": "interference-structure-v2",
+          "provider_id": "declared_fixed_network_grouping_v1",
+          "source_status": "SYNTHETIC_GROUND_TRUTH",
+          "analysis_status": "ACCEPTED_AS_ASSUMPTION",
+          "semantic_fingerprint": "b217ed03aeca65ee0dc5d429502bd63241f37077707be8a8e1788634bd5b06df",
+          "provenance": {
+            "source": "signed population study protocol"
+          },
+          "qualification_evidence": [
+            "explicit verified randomized experiment"
+          ]
+        },
+        "reference_exposure_propensity_upper_bound_fact": null,
+        "majority_response_theorem_contract": null,
+        "randomized_network_arm_theorem_contract": {
+          "version": "randomized-network-arm-mean-theorem-v1",
+          "design": {
+            "kind": "heterogeneous_bernoulli_binary_v1",
+            "propensities": {
+              "0": "2/9",
+              "1": "1/3",
+              "2": "4/9",
+              "3": "5/9",
+              "4": "2/3"
+            }
+          },
+          "grouping": "strict_majority_ties_low",
+          "target": "design_standardized_conditional_arm_mean",
+          "information": "node_conditional_arm_mean_of_experimental_law"
+        },
+        "network_policy_mixture_theorem_contract": null,
+        "network_policy_mixture_assignment_design": null,
+        "network_policy_mixture_information_contract": null,
+        "network_policy_mixture_population_facts": null,
+        "deterministic_policy_oracle": null,
+        "variable_domains": {
+          "treatment": {
+            "kind": "binary",
+            "values": [
+              0,
+              1
+            ],
+            "lower": 0.0,
+            "upper": 1.0
+          },
+          "outcome": {
+            "kind": "continuous",
+            "values": null,
+            "lower": null,
+            "upper": null
+          }
+        },
+        "assumptions": [
+          {
+            "name": "known_assignment_law",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "Known pretreatment, node-specific independent Bernoulli probabilities p_i=P(T_i=1|W), fixed for every node; conditioning on T_i=a does not change the neighbors' assignment law. Source: signed population study protocol"
+          },
+          {
+            "name": "full_vector_randomization",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "The complete assignment vector is randomized independently of the full potential-outcome schedule conditional on W. Source: signed population study protocol"
+          },
+          {
+            "name": "consistency",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "The observed outcome equals Y_i(T) at the realized full assignment; no exposure-sufficiency condition. Source: signed population study protocol"
+          },
+          {
+            "name": "fixed_pretreatment_network",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "The fixed network and strict-majority grouping were defined before treatment. Source: signed population study protocol"
+          },
+          {
+            "name": "finite_conditional_first_moments",
+            "source": "deterministic_derivation",
+            "confirmed": true,
+            "status": "DERIVED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "Relevant potential-outcome absolute first moments are finite conditional on W. Source: signed population study protocol"
+          }
+        ],
+        "assumption_conflicts": [],
+        "information_signature": {
+          "objects": [
+            {
+              "name": "P_exp(Y_i,T_i,S_i|W,G)",
+              "regime": "experimental",
+              "variables": [
+                "treatment",
+                "majority_exposure",
+                "outcome",
+                "context"
+              ],
+              "description": "Explicitly declared complete node/arm POPULATION conditional means; not actual finite-sample measurements or a fitted estimator.",
+              "basis": null,
+              "joint_scope": null,
+              "outcome_representation": null,
+              "whole_network_assignment_law_available": null,
+              "randomized_arm_observable": {
+                "operator": "NODE_ARM_MEANS",
+                "source_id": "official_randomized_arm_task_constructor_v21",
+                "provenance": "signed population study protocol: explicit verified randomized experiment",
+                "admission": "CERTIFIED",
+                "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                "node_order": [
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+                ],
+                "outcome_nodes": [
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+                ],
+                "treatment": "treatment",
+                "outcome": "outcome",
+                "context_symbol": "W",
+                "network_fingerprint": "7c25abbf987964905026b01dd3626200f8df77c1e573eb5f9138e2561a717a02",
+                "assignment_law_fingerprint": "ef409e1e20908426a9bc5dc88cd6c9c9fc77446e8f247a9b6b128a528ef34dc3",
+                "exposure_fingerprint": "3ccd24bcc524222cba8fb68e895510ac03680a155a9c43f1f1f39736f1d6ea21",
+                "arm_coverage": "ALL_NODE_ARMS",
+                "arm_cells": []
+              }
+            }
+          ]
+        },
+        "query": {
+          "type": "NETWORK_RANDOMIZED_ARM_MEAN",
+          "treatment": "treatment",
+          "outcome": "outcome",
+          "expression": "NETWORK_RANDOMIZED_ARM_MEAN[outcome;treatment|node=0;a=0;s=0;design_averaged;target=fc1de541a80482f866fc8431a71f21a6a7d53ea1583a064a3b6eac66a2046922]",
+          "target_population": "fixed_network_conditional_context",
+          "conditioning_variables": [],
+          "reference_exposure_definition": "treated_neighbor_count_1hop",
+          "target_exposure_semantics": "design_averaged_randomized_arm_mean",
+          "exposure_value": 0,
+          "target_node_id": "0",
+          "own_treatment_value": 0,
+          "policy_description": null,
+          "policy_fingerprint": null,
+          "response_target_fingerprint": "fc1de541a80482f866fc8431a71f21a6a7d53ea1583a064a3b6eac66a2046922",
+          "evidence": [
+            "explicit verified randomized experiment"
+          ],
+          "confidence": 1.0,
+          "alternatives": [],
+          "resolution": "RESOLVED",
+          "authority": "TRUSTED_FIXTURE",
+          "interpretation_notes": "Single node/arm design-standardized mean under the original heterogeneous independent Bernoulli law conditioned on own treatment and strict-majority grouping. No exposure sufficiency or fixed-allocation policy welfare is asserted."
+        },
+        "support_domain": {
+          "analysis_unit": [
+            "node"
+          ],
+          "context_symbol": "W",
+          "context_semantics": "full_pretreatment_network_context",
+          "target_context_distribution": "conditional_not_transport"
+        },
+        "provenance": {
+          "mode": "synthetic_source_contract",
+          "source": "signed population study protocol",
+          "population_values": "not_supplied",
+          "finite_sample_status": "not_used_to_confirm_causal_assumptions"
+        }
+      },
+      "target_fingerprint": "fc1de541a80482f866fc8431a71f21a6a7d53ea1583a064a3b6eac66a2046922",
+      "budget": null,
+      "budget_mode": "at_most",
+      "metadata": {
+        "setting": "D1xE1",
+        "source": "signed population study protocol",
+        "evidence": "explicit verified randomized experiment"
+      }
+    },
+    "a4": {
+      "source_id": "explicit-reviewed:NODE_ARM_MEANS",
+      "operator": "NODE_ARM_MEANS",
+      "provenance": "study-expert-approved A4 population operator",
+      "admission": "ADMITTED",
+      "availability": "SYMBOLIC_POPULATION_OPERATOR",
+      "outcome_nodes": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "node_order": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "arm_cells": [
+        [
+          "0",
+          0,
+          0
+        ],
+        [
+          "0",
+          0,
+          1
+        ],
+        [
+          "0",
+          1,
+          0
+        ],
+        [
+          "0",
+          1,
+          1
+        ],
+        [
+          "1",
+          0,
+          0
+        ],
+        [
+          "1",
+          0,
+          1
+        ],
+        [
+          "1",
+          1,
+          0
+        ],
+        [
+          "1",
+          1,
+          1
+        ],
+        [
+          "2",
+          0,
+          0
+        ],
+        [
+          "2",
+          0,
+          1
+        ],
+        [
+          "2",
+          1,
+          0
+        ],
+        [
+          "2",
+          1,
+          1
+        ],
+        [
+          "3",
+          0,
+          0
+        ],
+        [
+          "3",
+          0,
+          1
+        ],
+        [
+          "3",
+          1,
+          0
+        ],
+        [
+          "3",
+          1,
+          1
+        ],
+        [
+          "4",
+          0,
+          0
+        ],
+        [
+          "4",
+          0,
+          1
+        ],
+        [
+          "4",
+          1,
+          0
+        ],
+        [
+          "4",
+          1,
+          1
+        ]
+      ],
+      "regime": "experimental"
+    },
+    "terms": [
+      {
+        "node_id": "0",
+        "own_treatment": 1,
+        "exposure_state": 0,
+        "coefficient": 1
+      },
+      {
+        "node_id": "0",
+        "own_treatment": 0,
+        "exposure_state": 0,
+        "coefficient": -1
+      }
+    ]
+  },
+  "effects": {
+    "task": {
+      "name": "D1-E1 arm mean: node=0, a=0, s=0",
+      "target_id": "randomized-network-arm-0-0-0",
+      "estimand": "NETWORK_RANDOMIZED_ARM_MEAN",
+      "target_semantics": "design_standardized_conditional_arm_mean_not_fixed_assignment",
+      "node_ids": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "adjacency": [
+        [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "assignment_design": {
+        "design_type": "randomized_experiment",
+        "assignment_scheme": "heterogeneous_independent_bernoulli",
+        "propensities": {
+          "0": "2/9",
+          "1": "1/3",
+          "2": "4/9",
+          "3": "5/9",
+          "4": "2/3"
+        }
+      },
+      "exposure_definition": "strict_majority",
+      "outcome_kind": "continuous",
+      "x": null,
+      "treatment": null,
+      "outcome": null,
+      "assumptions": [],
+      "identification_spec": {
+        "causal_semantics": "potential_outcomes",
+        "structure": {
+          "representation_type": "fixed_network_interference",
+          "variables": [
+            "treatment",
+            "majority_exposure",
+            "outcome",
+            "context"
+          ],
+          "directed_edges": [],
+          "bidirected_edges": [],
+          "source": "human_specified",
+          "notes": "Unit-level fixed network; no variable-level causal DAG required."
+        },
+        "network_exposure": {
+          "network_id": "composition-star5",
+          "node_ids": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "undirected_edges": [
+            [
+              "0",
+              "1"
+            ],
+            [
+              "0",
+              "2"
+            ],
+            [
+              "0",
+              "3"
+            ],
+            [
+              "0",
+              "4"
+            ]
+          ],
+          "exposure_mapping": "treated_neighbor_count_1hop",
+          "fixed_network": true
+        },
+        "exposure_mapping_claim": "UNSPECIFIED",
+        "exposure_uncertainty": null,
+        "interference_structure_receipt": {
+          "contract_version": "interference-structure-v2",
+          "provider_id": "declared_fixed_network_grouping_v1",
+          "source_status": "SYNTHETIC_GROUND_TRUTH",
+          "analysis_status": "ACCEPTED_AS_ASSUMPTION",
+          "semantic_fingerprint": "b217ed03aeca65ee0dc5d429502bd63241f37077707be8a8e1788634bd5b06df",
+          "provenance": {
+            "source": "signed population study protocol"
+          },
+          "qualification_evidence": [
+            "explicit verified randomized experiment"
+          ]
+        },
+        "reference_exposure_propensity_upper_bound_fact": null,
+        "majority_response_theorem_contract": null,
+        "randomized_network_arm_theorem_contract": {
+          "version": "randomized-network-arm-mean-theorem-v1",
+          "design": {
+            "kind": "heterogeneous_bernoulli_binary_v1",
+            "propensities": {
+              "0": "2/9",
+              "1": "1/3",
+              "2": "4/9",
+              "3": "5/9",
+              "4": "2/3"
+            }
+          },
+          "grouping": "strict_majority_ties_low",
+          "target": "design_standardized_conditional_arm_mean",
+          "information": "node_conditional_arm_mean_of_experimental_law"
+        },
+        "network_policy_mixture_theorem_contract": null,
+        "network_policy_mixture_assignment_design": null,
+        "network_policy_mixture_information_contract": null,
+        "network_policy_mixture_population_facts": null,
+        "deterministic_policy_oracle": null,
+        "variable_domains": {
+          "treatment": {
+            "kind": "binary",
+            "values": [
+              0,
+              1
+            ],
+            "lower": 0.0,
+            "upper": 1.0
+          },
+          "outcome": {
+            "kind": "continuous",
+            "values": null,
+            "lower": null,
+            "upper": null
+          }
+        },
+        "assumptions": [
+          {
+            "name": "known_assignment_law",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "Known pretreatment, node-specific independent Bernoulli probabilities p_i=P(T_i=1|W), fixed for every node; conditioning on T_i=a does not change the neighbors' assignment law. Source: signed population study protocol"
+          },
+          {
+            "name": "full_vector_randomization",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "The complete assignment vector is randomized independently of the full potential-outcome schedule conditional on W. Source: signed population study protocol"
+          },
+          {
+            "name": "consistency",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "The observed outcome equals Y_i(T) at the realized full assignment; no exposure-sufficiency condition. Source: signed population study protocol"
+          },
+          {
+            "name": "fixed_pretreatment_network",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "The fixed network and strict-majority grouping were defined before treatment. Source: signed population study protocol"
+          },
+          {
+            "name": "finite_conditional_first_moments",
+            "source": "deterministic_derivation",
+            "confirmed": true,
+            "status": "DERIVED",
+            "evidence": [
+              "explicit verified randomized experiment"
+            ],
+            "details": "Relevant potential-outcome absolute first moments are finite conditional on W. Source: signed population study protocol"
+          }
+        ],
+        "assumption_conflicts": [],
+        "information_signature": {
+          "objects": [
+            {
+              "name": "P_exp(Y_i,T_i,S_i|W,G)",
+              "regime": "experimental",
+              "variables": [
+                "treatment",
+                "majority_exposure",
+                "outcome",
+                "context"
+              ],
+              "description": "Explicitly declared complete node/arm POPULATION conditional means; not actual finite-sample measurements or a fitted estimator.",
+              "basis": null,
+              "joint_scope": null,
+              "outcome_representation": null,
+              "whole_network_assignment_law_available": null,
+              "randomized_arm_observable": {
+                "operator": "NODE_ARM_MEANS",
+                "source_id": "official_randomized_arm_task_constructor_v21",
+                "provenance": "signed population study protocol: explicit verified randomized experiment",
+                "admission": "CERTIFIED",
+                "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                "node_order": [
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+                ],
+                "outcome_nodes": [
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4"
+                ],
+                "treatment": "treatment",
+                "outcome": "outcome",
+                "context_symbol": "W",
+                "network_fingerprint": "7c25abbf987964905026b01dd3626200f8df77c1e573eb5f9138e2561a717a02",
+                "assignment_law_fingerprint": "ef409e1e20908426a9bc5dc88cd6c9c9fc77446e8f247a9b6b128a528ef34dc3",
+                "exposure_fingerprint": "3ccd24bcc524222cba8fb68e895510ac03680a155a9c43f1f1f39736f1d6ea21",
+                "arm_coverage": "ALL_NODE_ARMS",
+                "arm_cells": []
+              }
+            }
+          ]
+        },
+        "query": {
+          "type": "NETWORK_RANDOMIZED_ARM_MEAN",
+          "treatment": "treatment",
+          "outcome": "outcome",
+          "expression": "NETWORK_RANDOMIZED_ARM_MEAN[outcome;treatment|node=0;a=0;s=0;design_averaged;target=fc1de541a80482f866fc8431a71f21a6a7d53ea1583a064a3b6eac66a2046922]",
+          "target_population": "fixed_network_conditional_context",
+          "conditioning_variables": [],
+          "reference_exposure_definition": "treated_neighbor_count_1hop",
+          "target_exposure_semantics": "design_averaged_randomized_arm_mean",
+          "exposure_value": 0,
+          "target_node_id": "0",
+          "own_treatment_value": 0,
+          "policy_description": null,
+          "policy_fingerprint": null,
+          "response_target_fingerprint": "fc1de541a80482f866fc8431a71f21a6a7d53ea1583a064a3b6eac66a2046922",
+          "evidence": [
+            "explicit verified randomized experiment"
+          ],
+          "confidence": 1.0,
+          "alternatives": [],
+          "resolution": "RESOLVED",
+          "authority": "TRUSTED_FIXTURE",
+          "interpretation_notes": "Single node/arm design-standardized mean under the original heterogeneous independent Bernoulli law conditioned on own treatment and strict-majority grouping. No exposure sufficiency or fixed-allocation policy welfare is asserted."
+        },
+        "support_domain": {
+          "analysis_unit": [
+            "node"
+          ],
+          "context_symbol": "W",
+          "context_semantics": "full_pretreatment_network_context",
+          "target_context_distribution": "conditional_not_transport"
+        },
+        "provenance": {
+          "mode": "synthetic_source_contract",
+          "source": "signed population study protocol",
+          "population_values": "not_supplied",
+          "finite_sample_status": "not_used_to_confirm_causal_assumptions"
+        }
+      },
+      "target_fingerprint": "fc1de541a80482f866fc8431a71f21a6a7d53ea1583a064a3b6eac66a2046922",
+      "budget": null,
+      "budget_mode": "at_most",
+      "metadata": {
+        "setting": "D1xE1",
+        "source": "signed population study protocol",
+        "evidence": "explicit verified randomized experiment"
+      }
+    },
+    "a4": {
+      "source_id": "explicit-reviewed:NODE_ARM_MEANS",
+      "operator": "NODE_ARM_MEANS",
+      "provenance": "study-expert-approved A4 population operator",
+      "admission": "ADMITTED",
+      "availability": "SYMBOLIC_POPULATION_OPERATOR",
+      "outcome_nodes": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "node_order": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "arm_cells": [
+        [
+          "0",
+          0,
+          0
+        ],
+        [
+          "0",
+          0,
+          1
+        ],
+        [
+          "0",
+          1,
+          0
+        ],
+        [
+          "0",
+          1,
+          1
+        ],
+        [
+          "1",
+          0,
+          0
+        ],
+        [
+          "1",
+          0,
+          1
+        ],
+        [
+          "1",
+          1,
+          0
+        ],
+        [
+          "1",
+          1,
+          1
+        ],
+        [
+          "2",
+          0,
+          0
+        ],
+        [
+          "2",
+          0,
+          1
+        ],
+        [
+          "2",
+          1,
+          0
+        ],
+        [
+          "2",
+          1,
+          1
+        ],
+        [
+          "3",
+          0,
+          0
+        ],
+        [
+          "3",
+          0,
+          1
+        ],
+        [
+          "3",
+          1,
+          0
+        ],
+        [
+          "3",
+          1,
+          1
+        ],
+        [
+          "4",
+          0,
+          0
+        ],
+        [
+          "4",
+          0,
+          1
+        ],
+        [
+          "4",
+          1,
+          0
+        ],
+        [
+          "4",
+          1,
+          1
+        ]
+      ],
+      "regime": "experimental"
+    },
+    "requests": [
+      {
+        "kind": "DIRECT",
+        "node_weights": [
+          [
+            "0",
+            1
+          ]
+        ],
+        "reference_exposure": 0,
+        "comparison_exposure": 0
+      }
+    ]
+  },
+  "legacy_bridge": {
+    "task": {
+      "name": "three-node response",
+      "target_id": "response",
+      "estimand": "NETWORK_RESPONSE_SURFACE",
+      "target_semantics": "design_averaged_local_stochastic_response_not_fixed_assignment",
+      "node_ids": [
+        "a",
+        "b",
+        "c"
+      ],
+      "adjacency": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ],
+      "assignment_design": {
+        "design_type": "randomized_experiment",
+        "assignment_probability": 0.5
+      },
+      "exposure_definition": "strict_majority",
+      "identification_spec": {
+        "causal_semantics": "potential_outcomes",
+        "structure": {
+          "representation_type": "fixed_network_interference",
+          "variables": [
+            "treatment",
+            "majority_exposure",
+            "outcome",
+            "context"
+          ],
+          "directed_edges": [],
+          "bidirected_edges": [],
+          "source": "human_specified",
+          "notes": "unit-level fixed network; no variable-level causal DAG required for the randomized route"
+        },
+        "network_exposure": {
+          "network_id": "majority-v22-three",
+          "node_ids": [
+            "a",
+            "b",
+            "c"
+          ],
+          "undirected_edges": [
+            [
+              "a",
+              "b"
+            ],
+            [
+              "a",
+              "c"
+            ],
+            [
+              "b",
+              "c"
+            ]
+          ],
+          "exposure_mapping": "treated_neighbor_count_1hop",
+          "fixed_network": true
+        },
+        "exposure_mapping_claim": "UNSPECIFIED",
+        "exposure_uncertainty": null,
+        "interference_structure_receipt": {
+          "contract_version": "interference-structure-v2",
+          "provider_id": "declared_fixed_network_grouping_v1",
+          "source_status": "SYNTHETIC_GROUND_TRUTH",
+          "analysis_status": "ACCEPTED_AS_ASSUMPTION",
+          "semantic_fingerprint": "4622e5158045dce9a4007a4a7c718d864d8265cb1ab315c390c2b6d60d01ae36",
+          "provenance": {
+            "source": "synthetic randomized three-node protocol"
+          },
+          "qualification_evidence": [
+            "explicit synthetic fixture, not real-world proof"
+          ]
+        },
+        "reference_exposure_propensity_upper_bound_fact": null,
+        "majority_response_theorem_contract": {
+          "version": "majority-response-theorem-v1",
+          "design": {
+            "kind": "iid_bernoulli_binary_v1",
+            "p": "1/2"
+          },
+          "context_semantics": "condition_on_full_pretreatment_network_context",
+          "grouping": "strict_majority_ties_low",
+          "target": "design_averaged_local_stochastic_response",
+          "information": "node_conditional_majority_outcome_means"
+        },
+        "randomized_network_arm_theorem_contract": null,
+        "network_policy_mixture_theorem_contract": null,
+        "network_policy_mixture_assignment_design": null,
+        "network_policy_mixture_information_contract": null,
+        "network_policy_mixture_population_facts": null,
+        "deterministic_policy_oracle": null,
+        "variable_domains": {
+          "treatment": {
+            "kind": "binary",
+            "values": [
+              0,
+              1
+            ],
+            "lower": 0.0,
+            "upper": 1.0
+          },
+          "outcome": {
+            "kind": "continuous",
+            "values": null,
+            "lower": null,
+            "upper": null
+          }
+        },
+        "assumptions": [
+          {
+            "name": "known_assignment_law",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit synthetic fixture, not real-world proof"
+            ],
+            "details": "The experiment uses a known iid Bernoulli(p) assignment law for all nodes in the declared fixed network. Source: synthetic randomized three-node protocol"
+          },
+          {
+            "name": "full_vector_randomization",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit synthetic fixture, not real-world proof"
+            ],
+            "details": "Conditional on the full pre-treatment network context W and fixed G, the complete assignment vector is independent of the complete potential-outcome schedule. Source: synthetic randomized three-node protocol"
+          },
+          {
+            "name": "consistency",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit synthetic fixture, not real-world proof"
+            ],
+            "details": "For the realized full assignment vector T, the observed outcome equals the corresponding potential outcome Y_i(T). No exposure-sufficiency restriction is added. Source: synthetic randomized three-node protocol"
+          },
+          {
+            "name": "fixed_pretreatment_network",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit synthetic fixture, not real-world proof"
+            ],
+            "details": "The supplied undirected network and node order are fixed before treatment and are used to define the target grouping S_i(T). Source: synthetic randomized three-node protocol"
+          },
+          {
+            "name": "finite_conditional_first_moments",
+            "source": "deterministic_derivation",
+            "confirmed": true,
+            "status": "DERIVED",
+            "evidence": [
+              "explicit synthetic fixture, not real-world proof"
+            ],
+            "details": "Conditional first absolute moments of all potential outcomes entering the design-standardized target are finite. Source: synthetic randomized three-node protocol"
+          }
+        ],
+        "assumption_conflicts": [],
+        "information_signature": {
+          "objects": [
+            {
+              "name": "P_exp(Y_i,T_i,S_i|W,G)",
+              "regime": "experimental",
+              "variables": [
+                "treatment",
+                "majority_exposure",
+                "outcome",
+                "context"
+              ],
+              "description": "Symbolic POPULATION arm means; not finite-sample estimates.",
+              "basis": null,
+              "joint_scope": null,
+              "outcome_representation": null,
+              "whole_network_assignment_law_available": null,
+              "randomized_arm_observable": {
+                "operator": "NODE_ARM_MEANS",
+                "source_id": "official_majority_response_constructor_v22",
+                "provenance": "synthetic randomized three-node protocol: explicit synthetic fixture, not real-world proof",
+                "admission": "CERTIFIED",
+                "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                "node_order": [
+                  "a",
+                  "b",
+                  "c"
+                ],
+                "outcome_nodes": [
+                  "a",
+                  "b",
+                  "c"
+                ],
+                "treatment": "treatment",
+                "outcome": "outcome",
+                "context_symbol": "W",
+                "network_fingerprint": "3d3d95395f40cacd42f8e3f5f5d6a23fb7701c00bc9e909456b8f63f38e92b99",
+                "assignment_law_fingerprint": "016ebd35d09b2b9365285b050c283d28e5de8be8e438951a58d544f67768c5f1",
+                "exposure_fingerprint": "6b787acde1c49a33d672a5a0456dce06d4aa9cf740a6e57d49eda79f5205555f",
+                "arm_coverage": "ALL_NODE_ARMS",
+                "arm_cells": []
+              }
+            }
+          ]
+        },
+        "query": {
+          "type": "NETWORK_RESPONSE_SURFACE",
+          "treatment": "treatment",
+          "outcome": "outcome",
+          "expression": "NETWORK_RESPONSE_SURFACE[outcome;treatment|design_averaged_majority;target=3dcf4de0deab991b12908fb2ef0589226a395436d64705fc59ee373d62541a52]",
+          "target_population": "fixed_network_conditional_context",
+          "conditioning_variables": [],
+          "reference_exposure_definition": "treated_neighbor_count_1hop",
+          "target_exposure_semantics": "design_averaged_majority_response",
+          "exposure_value": null,
+          "target_node_id": null,
+          "own_treatment_value": null,
+          "policy_description": null,
+          "policy_fingerprint": null,
+          "response_target_fingerprint": "3dcf4de0deab991b12908fb2ef0589226a395436d64705fc59ee373d62541a52",
+          "evidence": [
+            "explicit synthetic fixture, not real-world proof"
+          ],
+          "confidence": 1.0,
+          "alternatives": [],
+          "resolution": "RESOLVED",
+          "authority": "TRUSTED_FIXTURE",
+          "interpretation_notes": "Identify all four design-standardized majority-arm means. The majority label is a target grouping under the assignment design, not an asserted sufficient causal exposure."
+        },
+        "support_domain": {
+          "analysis_unit": [
+            "node"
+          ],
+          "context_symbol": "W",
+          "context_semantics": "full_pretreatment_network_context",
+          "target_context_distribution": "conditional_not_transport"
+        },
+        "provenance": {
+          "mode": "synthetic_source_contract",
+          "source": "synthetic randomized three-node protocol",
+          "population_values": "not_supplied",
+          "finite_sample_status": "not_used_to_confirm_causal_assumptions"
+        }
+      }
+    }
+  },
+  "legacy_compare": {
+    "task": {
+      "name": "D1-E1 arm mean: node=a, a=0, s=0",
+      "target_id": "randomized-network-arm-a-0-0",
+      "estimand": "NETWORK_RANDOMIZED_ARM_MEAN",
+      "target_semantics": "design_standardized_conditional_arm_mean_not_fixed_assignment",
+      "node_ids": [
+        "a",
+        "b",
+        "c"
+      ],
+      "adjacency": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ],
+      "assignment_design": {
+        "design_type": "randomized_experiment",
+        "assignment_scheme": "heterogeneous_independent_bernoulli",
+        "propensities": {
+          "a": "1/2",
+          "b": "1/2",
+          "c": "1/2"
+        }
+      },
+      "exposure_definition": "strict_majority",
+      "outcome_kind": "continuous",
+      "x": null,
+      "treatment": null,
+      "outcome": null,
+      "assumptions": [],
+      "identification_spec": {
+        "causal_semantics": "potential_outcomes",
+        "structure": {
+          "representation_type": "fixed_network_interference",
+          "variables": [
+            "treatment",
+            "majority_exposure",
+            "outcome",
+            "context"
+          ],
+          "directed_edges": [],
+          "bidirected_edges": [],
+          "source": "human_specified",
+          "notes": "Unit-level fixed network; no variable-level causal DAG required."
+        },
+        "network_exposure": {
+          "network_id": "majority-v22-three",
+          "node_ids": [
+            "a",
+            "b",
+            "c"
+          ],
+          "undirected_edges": [
+            [
+              "a",
+              "b"
+            ],
+            [
+              "a",
+              "c"
+            ],
+            [
+              "b",
+              "c"
+            ]
+          ],
+          "exposure_mapping": "treated_neighbor_count_1hop",
+          "fixed_network": true
+        },
+        "exposure_mapping_claim": "UNSPECIFIED",
+        "exposure_uncertainty": null,
+        "interference_structure_receipt": {
+          "contract_version": "interference-structure-v2",
+          "provider_id": "declared_fixed_network_grouping_v1",
+          "source_status": "SYNTHETIC_GROUND_TRUTH",
+          "analysis_status": "ACCEPTED_AS_ASSUMPTION",
+          "semantic_fingerprint": "4622e5158045dce9a4007a4a7c718d864d8265cb1ab315c390c2b6d60d01ae36",
+          "provenance": {
+            "source": "verified_legacy_protocol:fbc7a9bd7feb43e60f15e207c4af18e3d63c0704dff8f219c2963a535fc10eca"
+          },
+          "qualification_evidence": [
+            "Derived from the same replay-verified original response TaskSpec; no new domain assumptions"
+          ]
+        },
+        "reference_exposure_propensity_upper_bound_fact": null,
+        "majority_response_theorem_contract": null,
+        "randomized_network_arm_theorem_contract": {
+          "version": "randomized-network-arm-mean-theorem-v1",
+          "design": {
+            "kind": "heterogeneous_bernoulli_binary_v1",
+            "propensities": {
+              "a": "1/2",
+              "b": "1/2",
+              "c": "1/2"
+            }
+          },
+          "grouping": "strict_majority_ties_low",
+          "target": "design_standardized_conditional_arm_mean",
+          "information": "node_conditional_arm_mean_of_experimental_law"
+        },
+        "network_policy_mixture_theorem_contract": null,
+        "network_policy_mixture_assignment_design": null,
+        "network_policy_mixture_information_contract": null,
+        "network_policy_mixture_population_facts": null,
+        "deterministic_policy_oracle": null,
+        "variable_domains": {
+          "treatment": {
+            "kind": "binary",
+            "values": [
+              0,
+              1
+            ],
+            "lower": 0.0,
+            "upper": 1.0
+          },
+          "outcome": {
+            "kind": "continuous",
+            "values": null,
+            "lower": null,
+            "upper": null
+          }
+        },
+        "assumptions": [
+          {
+            "name": "known_assignment_law",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "Derived from the same replay-verified original response TaskSpec; no new domain assumptions"
+            ],
+            "details": "Known pretreatment, node-specific independent Bernoulli probabilities p_i=P(T_i=1|W), fixed for every node; conditioning on T_i=a does not change the neighbors' assignment law. Source: verified_legacy_protocol:fbc7a9bd7feb43e60f15e207c4af18e3d63c0704dff8f219c2963a535fc10eca"
+          },
+          {
+            "name": "full_vector_randomization",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "Derived from the same replay-verified original response TaskSpec; no new domain assumptions"
+            ],
+            "details": "The complete assignment vector is randomized independently of the full potential-outcome schedule conditional on W. Source: verified_legacy_protocol:fbc7a9bd7feb43e60f15e207c4af18e3d63c0704dff8f219c2963a535fc10eca"
+          },
+          {
+            "name": "consistency",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "Derived from the same replay-verified original response TaskSpec; no new domain assumptions"
+            ],
+            "details": "The observed outcome equals Y_i(T) at the realized full assignment; no exposure-sufficiency condition. Source: verified_legacy_protocol:fbc7a9bd7feb43e60f15e207c4af18e3d63c0704dff8f219c2963a535fc10eca"
+          },
+          {
+            "name": "fixed_pretreatment_network",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "Derived from the same replay-verified original response TaskSpec; no new domain assumptions"
+            ],
+            "details": "The fixed network and strict-majority grouping were defined before treatment. Source: verified_legacy_protocol:fbc7a9bd7feb43e60f15e207c4af18e3d63c0704dff8f219c2963a535fc10eca"
+          },
+          {
+            "name": "finite_conditional_first_moments",
+            "source": "deterministic_derivation",
+            "confirmed": true,
+            "status": "DERIVED",
+            "evidence": [
+              "Derived from the same replay-verified original response TaskSpec; no new domain assumptions"
+            ],
+            "details": "Relevant potential-outcome absolute first moments are finite conditional on W. Source: verified_legacy_protocol:fbc7a9bd7feb43e60f15e207c4af18e3d63c0704dff8f219c2963a535fc10eca"
+          }
+        ],
+        "assumption_conflicts": [],
+        "information_signature": {
+          "objects": [
+            {
+              "name": "P_exp(Y_i,T_i,S_i|W,G)",
+              "regime": "experimental",
+              "variables": [
+                "treatment",
+                "majority_exposure",
+                "outcome",
+                "context"
+              ],
+              "description": "Explicitly declared complete node/arm POPULATION conditional means; not actual finite-sample measurements or a fitted estimator.",
+              "basis": null,
+              "joint_scope": null,
+              "outcome_representation": null,
+              "whole_network_assignment_law_available": null,
+              "randomized_arm_observable": {
+                "operator": "NODE_ARM_MEANS",
+                "source_id": "official_randomized_arm_task_constructor_v21",
+                "provenance": "verified_legacy_protocol:fbc7a9bd7feb43e60f15e207c4af18e3d63c0704dff8f219c2963a535fc10eca: Derived from the same replay-verified original response TaskSpec; no new domain assumptions",
+                "admission": "CERTIFIED",
+                "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                "node_order": [
+                  "a",
+                  "b",
+                  "c"
+                ],
+                "outcome_nodes": [
+                  "a",
+                  "b",
+                  "c"
+                ],
+                "treatment": "treatment",
+                "outcome": "outcome",
+                "context_symbol": "W",
+                "network_fingerprint": "3d3d95395f40cacd42f8e3f5f5d6a23fb7701c00bc9e909456b8f63f38e92b99",
+                "assignment_law_fingerprint": "6362dc7b3f081a6269853a15f792b3074965c4895d7ec726437c55f58225cb46",
+                "exposure_fingerprint": "37a412374b1073e3ef1c6d4f7496566de690795ca276133765c8714bfffadb34",
+                "arm_coverage": "ALL_NODE_ARMS",
+                "arm_cells": []
+              }
+            }
+          ]
+        },
+        "query": {
+          "type": "NETWORK_RANDOMIZED_ARM_MEAN",
+          "treatment": "treatment",
+          "outcome": "outcome",
+          "expression": "NETWORK_RANDOMIZED_ARM_MEAN[outcome;treatment|node=a;a=0;s=0;design_averaged;target=b86aea1ec9e638ea748f2380a634d2ea5730aeab15d8fa01ba1110f5bc29752f]",
+          "target_population": "fixed_network_conditional_context",
+          "conditioning_variables": [],
+          "reference_exposure_definition": "treated_neighbor_count_1hop",
+          "target_exposure_semantics": "design_averaged_randomized_arm_mean",
+          "exposure_value": 0,
+          "target_node_id": "a",
+          "own_treatment_value": 0,
+          "policy_description": null,
+          "policy_fingerprint": null,
+          "response_target_fingerprint": "b86aea1ec9e638ea748f2380a634d2ea5730aeab15d8fa01ba1110f5bc29752f",
+          "evidence": [
+            "Derived from the same replay-verified original response TaskSpec; no new domain assumptions"
+          ],
+          "confidence": 1.0,
+          "alternatives": [],
+          "resolution": "RESOLVED",
+          "authority": "TRUSTED_FIXTURE",
+          "interpretation_notes": "Single node/arm design-standardized mean under the original heterogeneous independent Bernoulli law conditioned on own treatment and strict-majority grouping. No exposure sufficiency or fixed-allocation policy welfare is asserted."
+        },
+        "support_domain": {
+          "analysis_unit": [
+            "node"
+          ],
+          "context_symbol": "W",
+          "context_semantics": "full_pretreatment_network_context",
+          "target_context_distribution": "conditional_not_transport"
+        },
+        "provenance": {
+          "mode": "synthetic_source_contract",
+          "source": "verified_legacy_protocol:fbc7a9bd7feb43e60f15e207c4af18e3d63c0704dff8f219c2963a535fc10eca",
+          "population_values": "not_supplied",
+          "finite_sample_status": "not_used_to_confirm_causal_assumptions"
+        }
+      },
+      "target_fingerprint": "b86aea1ec9e638ea748f2380a634d2ea5730aeab15d8fa01ba1110f5bc29752f",
+      "budget": null,
+      "budget_mode": "at_most",
+      "metadata": {
+        "setting": "D1xE1",
+        "source": "verified_legacy_protocol:fbc7a9bd7feb43e60f15e207c4af18e3d63c0704dff8f219c2963a535fc10eca",
+        "evidence": "Derived from the same replay-verified original response TaskSpec; no new domain assumptions"
+      }
+    },
+    "legacy_task": {
+      "name": "three-node response",
+      "target_id": "response",
+      "estimand": "NETWORK_RESPONSE_SURFACE",
+      "target_semantics": "design_averaged_local_stochastic_response_not_fixed_assignment",
+      "node_ids": [
+        "a",
+        "b",
+        "c"
+      ],
+      "adjacency": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ],
+      "assignment_design": {
+        "design_type": "randomized_experiment",
+        "assignment_probability": 0.5
+      },
+      "exposure_definition": "strict_majority",
+      "identification_spec": {
+        "causal_semantics": "potential_outcomes",
+        "structure": {
+          "representation_type": "fixed_network_interference",
+          "variables": [
+            "treatment",
+            "majority_exposure",
+            "outcome",
+            "context"
+          ],
+          "directed_edges": [],
+          "bidirected_edges": [],
+          "source": "human_specified",
+          "notes": "unit-level fixed network; no variable-level causal DAG required for the randomized route"
+        },
+        "network_exposure": {
+          "network_id": "majority-v22-three",
+          "node_ids": [
+            "a",
+            "b",
+            "c"
+          ],
+          "undirected_edges": [
+            [
+              "a",
+              "b"
+            ],
+            [
+              "a",
+              "c"
+            ],
+            [
+              "b",
+              "c"
+            ]
+          ],
+          "exposure_mapping": "treated_neighbor_count_1hop",
+          "fixed_network": true
+        },
+        "exposure_mapping_claim": "UNSPECIFIED",
+        "exposure_uncertainty": null,
+        "interference_structure_receipt": {
+          "contract_version": "interference-structure-v2",
+          "provider_id": "declared_fixed_network_grouping_v1",
+          "source_status": "SYNTHETIC_GROUND_TRUTH",
+          "analysis_status": "ACCEPTED_AS_ASSUMPTION",
+          "semantic_fingerprint": "4622e5158045dce9a4007a4a7c718d864d8265cb1ab315c390c2b6d60d01ae36",
+          "provenance": {
+            "source": "synthetic randomized three-node protocol"
+          },
+          "qualification_evidence": [
+            "explicit synthetic fixture, not real-world proof"
+          ]
+        },
+        "reference_exposure_propensity_upper_bound_fact": null,
+        "majority_response_theorem_contract": {
+          "version": "majority-response-theorem-v1",
+          "design": {
+            "kind": "iid_bernoulli_binary_v1",
+            "p": "1/2"
+          },
+          "context_semantics": "condition_on_full_pretreatment_network_context",
+          "grouping": "strict_majority_ties_low",
+          "target": "design_averaged_local_stochastic_response",
+          "information": "node_conditional_majority_outcome_means"
+        },
+        "randomized_network_arm_theorem_contract": null,
+        "network_policy_mixture_theorem_contract": null,
+        "network_policy_mixture_assignment_design": null,
+        "network_policy_mixture_information_contract": null,
+        "network_policy_mixture_population_facts": null,
+        "deterministic_policy_oracle": null,
+        "variable_domains": {
+          "treatment": {
+            "kind": "binary",
+            "values": [
+              0,
+              1
+            ],
+            "lower": 0.0,
+            "upper": 1.0
+          },
+          "outcome": {
+            "kind": "continuous",
+            "values": null,
+            "lower": null,
+            "upper": null
+          }
+        },
+        "assumptions": [
+          {
+            "name": "known_assignment_law",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit synthetic fixture, not real-world proof"
+            ],
+            "details": "The experiment uses a known iid Bernoulli(p) assignment law for all nodes in the declared fixed network. Source: synthetic randomized three-node protocol"
+          },
+          {
+            "name": "full_vector_randomization",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit synthetic fixture, not real-world proof"
+            ],
+            "details": "Conditional on the full pre-treatment network context W and fixed G, the complete assignment vector is independent of the complete potential-outcome schedule. Source: synthetic randomized three-node protocol"
+          },
+          {
+            "name": "consistency",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit synthetic fixture, not real-world proof"
+            ],
+            "details": "For the realized full assignment vector T, the observed outcome equals the corresponding potential outcome Y_i(T). No exposure-sufficiency restriction is added. Source: synthetic randomized three-node protocol"
+          },
+          {
+            "name": "fixed_pretreatment_network",
+            "source": "study_protocol",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "explicit synthetic fixture, not real-world proof"
+            ],
+            "details": "The supplied undirected network and node order are fixed before treatment and are used to define the target grouping S_i(T). Source: synthetic randomized three-node protocol"
+          },
+          {
+            "name": "finite_conditional_first_moments",
+            "source": "deterministic_derivation",
+            "confirmed": true,
+            "status": "DERIVED",
+            "evidence": [
+              "explicit synthetic fixture, not real-world proof"
+            ],
+            "details": "Conditional first absolute moments of all potential outcomes entering the design-standardized target are finite. Source: synthetic randomized three-node protocol"
+          }
+        ],
+        "assumption_conflicts": [],
+        "information_signature": {
+          "objects": [
+            {
+              "name": "P_exp(Y_i,T_i,S_i|W,G)",
+              "regime": "experimental",
+              "variables": [
+                "treatment",
+                "majority_exposure",
+                "outcome",
+                "context"
+              ],
+              "description": "Symbolic POPULATION arm means; not finite-sample estimates.",
+              "basis": null,
+              "joint_scope": null,
+              "outcome_representation": null,
+              "whole_network_assignment_law_available": null,
+              "randomized_arm_observable": {
+                "operator": "NODE_ARM_MEANS",
+                "source_id": "official_majority_response_constructor_v22",
+                "provenance": "synthetic randomized three-node protocol: explicit synthetic fixture, not real-world proof",
+                "admission": "CERTIFIED",
+                "availability": "SYMBOLIC_POPULATION_OPERATOR",
+                "node_order": [
+                  "a",
+                  "b",
+                  "c"
+                ],
+                "outcome_nodes": [
+                  "a",
+                  "b",
+                  "c"
+                ],
+                "treatment": "treatment",
+                "outcome": "outcome",
+                "context_symbol": "W",
+                "network_fingerprint": "3d3d95395f40cacd42f8e3f5f5d6a23fb7701c00bc9e909456b8f63f38e92b99",
+                "assignment_law_fingerprint": "016ebd35d09b2b9365285b050c283d28e5de8be8e438951a58d544f67768c5f1",
+                "exposure_fingerprint": "6b787acde1c49a33d672a5a0456dce06d4aa9cf740a6e57d49eda79f5205555f",
+                "arm_coverage": "ALL_NODE_ARMS",
+                "arm_cells": []
+              }
+            }
+          ]
+        },
+        "query": {
+          "type": "NETWORK_RESPONSE_SURFACE",
+          "treatment": "treatment",
+          "outcome": "outcome",
+          "expression": "NETWORK_RESPONSE_SURFACE[outcome;treatment|design_averaged_majority;target=3dcf4de0deab991b12908fb2ef0589226a395436d64705fc59ee373d62541a52]",
+          "target_population": "fixed_network_conditional_context",
+          "conditioning_variables": [],
+          "reference_exposure_definition": "treated_neighbor_count_1hop",
+          "target_exposure_semantics": "design_averaged_majority_response",
+          "exposure_value": null,
+          "target_node_id": null,
+          "own_treatment_value": null,
+          "policy_description": null,
+          "policy_fingerprint": null,
+          "response_target_fingerprint": "3dcf4de0deab991b12908fb2ef0589226a395436d64705fc59ee373d62541a52",
+          "evidence": [
+            "explicit synthetic fixture, not real-world proof"
+          ],
+          "confidence": 1.0,
+          "alternatives": [],
+          "resolution": "RESOLVED",
+          "authority": "TRUSTED_FIXTURE",
+          "interpretation_notes": "Identify all four design-standardized majority-arm means. The majority label is a target grouping under the assignment design, not an asserted sufficient causal exposure."
+        },
+        "support_domain": {
+          "analysis_unit": [
+            "node"
+          ],
+          "context_symbol": "W",
+          "context_semantics": "full_pretreatment_network_context",
+          "target_context_distribution": "conditional_not_transport"
+        },
+        "provenance": {
+          "mode": "synthetic_source_contract",
+          "source": "synthetic randomized three-node protocol",
+          "population_values": "not_supplied",
+          "finite_sample_status": "not_used_to_confirm_causal_assumptions"
+        }
+      }
+    }
+  },
+  "business": {
+    "kind": "observational_effect",
+    "inquiry": {
+      "study": {
+        "network_id": "correlated-observational-5",
+        "node_order": [
+          "n0",
+          "n1",
+          "n2",
+          "n3",
+          "n4"
+        ],
+        "undirected_edges": [
+          [
+            "n0",
+            "n1"
+          ],
+          [
+            "n1",
+            "n2"
+          ],
+          [
+            "n2",
+            "n3"
+          ],
+          [
+            "n3",
+            "n4"
+          ]
+        ],
+        "treatment_variable": "AI",
+        "outcome_variable": "sales",
+        "outcome_kind": "continuous",
+        "context_reference": "W=w0",
+        "observation_regime": "observational",
+        "assignment_design_json": null,
+        "protocol_provenance": "pre-registered synthetic observational example",
+        "network_provenance": "fixed pretreatment graph",
+        "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+      },
+      "source": {
+        "source_id": "correlated-symbolic-population",
+        "provenance": "synthetic symbolic joint population (not sample)",
+        "admission": "ADMITTED",
+        "availability": "SYMBOLIC_POPULATION_OPERATOR",
+        "study_scope_digest": "fce4e4da08250504df3c2a6a158d2664f3e1cc678b82ca6d78a0d9c1499861ca",
+        "protocol_digest": "9b4bb5aeb2ca736b713e262915d3f91fa1cb950d0ca1123afd0be5eaad053aa3",
+        "node_order": [
+          "n0",
+          "n1",
+          "n2",
+          "n3",
+          "n4"
+        ],
+        "outcome": "sales",
+        "context": "W=w0",
+        "signature_fingerprint": "53f809bb2fe26282155c3f590579553337a3f734244cd36795dfcbad68762f8f",
+        "components": [
+          [
+            "1/3",
+            [
+              "1/4",
+              "1/4",
+              "1/4",
+              "1/4",
+              "1/4"
+            ]
+          ],
+          [
+            "2/3",
+            [
+              "3/4",
+              "3/4",
+              "3/4",
+              "3/4",
+              "3/4"
+            ]
+          ]
+        ],
+        "covered_arms": [
+          [
+            "n2",
+            0,
+            0
+          ],
+          [
+            "n2",
+            1,
+            0
+          ]
+        ],
+        "factorization_kind": "OBSERVATIONAL_FINITE_MIXTURE_NODEWISE_BERNOULLI",
+        "operator": "OBSERVATIONAL_NODE_ARM_POPULATION_CONDITIONAL_MEANS"
+      },
+      "assumptions": [
+        {
+          "name": "full_vector_conditional_exchangeability",
+          "source": "demo_specification",
+          "confirmed": true,
+          "status": "CERTIFIED",
+          "evidence": [
+            "hypothetical assumption; not empirically proven"
+          ],
+          "details": ""
+        },
+        {
+          "name": "consistency",
+          "source": "demo_specification",
+          "confirmed": true,
+          "status": "CERTIFIED",
+          "evidence": [
+            "hypothetical assumption; not empirically proven"
+          ],
+          "details": ""
+        },
+        {
+          "name": "fixed_pretreatment_network",
+          "source": "demo_specification",
+          "confirmed": true,
+          "status": "CERTIFIED",
+          "evidence": [
+            "hypothetical assumption; not empirically proven"
+          ],
+          "details": ""
+        },
+        {
+          "name": "finite_conditional_first_moments",
+          "source": "demo_specification",
+          "confirmed": true,
+          "status": "CERTIFIED",
+          "evidence": [
+            "hypothetical assumption; not empirically proven"
+          ],
+          "details": ""
+        }
+      ],
+      "signature": {
+        "study_scope_digest": "fce4e4da08250504df3c2a6a158d2664f3e1cc678b82ca6d78a0d9c1499861ca",
+        "network_fingerprint": "5fb7f40273be9d352448335249c08693707635b1c923749ceda5feede83f93b6",
+        "treatment_variable": "AI",
+        "grouping": "strict_majority_ties_low",
+        "core_collaborators": [],
+        "signature_fingerprint": "53f809bb2fe26282155c3f590579553337a3f734244cd36795dfcbad68762f8f"
+      },
+      "requests": [
+        {
+          "kind": "DIRECT",
+          "node_weights": [
+            [
+              "n2",
+              "1"
+            ]
+          ],
+          "reference_exposure": 0,
+          "comparison_exposure": 0,
+          "spillover_own_treatment": 1,
+          "cohort_authority": null,
+          "cohort_evidence": null
+        }
+      ]
+    }
+  },
+  "r3_pair": {
+    "left": {
+      "kind": "observational_effect",
+      "inquiry": {
+        "study": {
+          "network_id": "correlated-observational-5",
+          "node_order": [
+            "n0",
+            "n1",
+            "n2",
+            "n3",
+            "n4"
+          ],
+          "undirected_edges": [
+            [
+              "n0",
+              "n1"
+            ],
+            [
+              "n1",
+              "n2"
+            ],
+            [
+              "n2",
+              "n3"
+            ],
+            [
+              "n3",
+              "n4"
+            ]
+          ],
+          "treatment_variable": "AI",
+          "outcome_variable": "sales",
+          "outcome_kind": "continuous",
+          "context_reference": "W=w0",
+          "observation_regime": "observational",
+          "assignment_design_json": null,
+          "protocol_provenance": "pre-registered synthetic observational example",
+          "network_provenance": "fixed pretreatment graph",
+          "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+        },
+        "source": {
+          "source_id": "correlated-symbolic-population",
+          "provenance": "synthetic symbolic joint population (not sample)",
+          "admission": "ADMITTED",
+          "availability": "SYMBOLIC_POPULATION_OPERATOR",
+          "study_scope_digest": "fce4e4da08250504df3c2a6a158d2664f3e1cc678b82ca6d78a0d9c1499861ca",
+          "protocol_digest": "9b4bb5aeb2ca736b713e262915d3f91fa1cb950d0ca1123afd0be5eaad053aa3",
+          "node_order": [
+            "n0",
+            "n1",
+            "n2",
+            "n3",
+            "n4"
+          ],
+          "outcome": "sales",
+          "context": "W=w0",
+          "signature_fingerprint": "53f809bb2fe26282155c3f590579553337a3f734244cd36795dfcbad68762f8f",
+          "components": [
+            [
+              "1/3",
+              [
+                "1/4",
+                "1/4",
+                "1/4",
+                "1/4",
+                "1/4"
+              ]
+            ],
+            [
+              "2/3",
+              [
+                "3/4",
+                "3/4",
+                "3/4",
+                "3/4",
+                "3/4"
+              ]
+            ]
+          ],
+          "covered_arms": [
+            [
+              "n2",
+              0,
+              0
+            ],
+            [
+              "n2",
+              1,
+              0
+            ]
+          ],
+          "factorization_kind": "OBSERVATIONAL_FINITE_MIXTURE_NODEWISE_BERNOULLI",
+          "operator": "OBSERVATIONAL_NODE_ARM_POPULATION_CONDITIONAL_MEANS"
+        },
+        "assumptions": [
+          {
+            "name": "full_vector_conditional_exchangeability",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "hypothetical assumption; not empirically proven"
+            ],
+            "details": ""
+          },
+          {
+            "name": "consistency",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "hypothetical assumption; not empirically proven"
+            ],
+            "details": ""
+          },
+          {
+            "name": "fixed_pretreatment_network",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "hypothetical assumption; not empirically proven"
+            ],
+            "details": ""
+          },
+          {
+            "name": "finite_conditional_first_moments",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "hypothetical assumption; not empirically proven"
+            ],
+            "details": ""
+          }
+        ],
+        "signature": {
+          "study_scope_digest": "fce4e4da08250504df3c2a6a158d2664f3e1cc678b82ca6d78a0d9c1499861ca",
+          "network_fingerprint": "5fb7f40273be9d352448335249c08693707635b1c923749ceda5feede83f93b6",
+          "treatment_variable": "AI",
+          "grouping": "strict_majority_ties_low",
+          "core_collaborators": [],
+          "signature_fingerprint": "53f809bb2fe26282155c3f590579553337a3f734244cd36795dfcbad68762f8f"
+        },
+        "requests": [
+          {
+            "kind": "DIRECT",
+            "node_weights": [
+              [
+                "n2",
+                "1"
+              ]
+            ],
+            "reference_exposure": 0,
+            "comparison_exposure": 0,
+            "spillover_own_treatment": 1,
+            "cohort_authority": null,
+            "cohort_evidence": null
+          }
+        ]
+      }
+    },
+    "right": {
+      "kind": "observational_effect",
+      "inquiry": {
+        "study": {
+          "network_id": "correlated-observational-5",
+          "node_order": [
+            "n0",
+            "n1",
+            "n2",
+            "n3",
+            "n4"
+          ],
+          "undirected_edges": [
+            [
+              "n0",
+              "n1"
+            ],
+            [
+              "n1",
+              "n2"
+            ],
+            [
+              "n2",
+              "n3"
+            ],
+            [
+              "n3",
+              "n4"
+            ]
+          ],
+          "treatment_variable": "AI",
+          "outcome_variable": "sales",
+          "outcome_kind": "continuous",
+          "context_reference": "W=w0",
+          "observation_regime": "observational",
+          "assignment_design_json": null,
+          "protocol_provenance": "pre-registered synthetic observational example",
+          "network_provenance": "fixed pretreatment graph",
+          "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED"
+        },
+        "source": {
+          "source_id": "correlated-symbolic-population",
+          "provenance": "synthetic symbolic joint population (not sample)",
+          "admission": "ADMITTED",
+          "availability": "SYMBOLIC_POPULATION_OPERATOR",
+          "study_scope_digest": "fce4e4da08250504df3c2a6a158d2664f3e1cc678b82ca6d78a0d9c1499861ca",
+          "protocol_digest": "9b4bb5aeb2ca736b713e262915d3f91fa1cb950d0ca1123afd0be5eaad053aa3",
+          "node_order": [
+            "n0",
+            "n1",
+            "n2",
+            "n3",
+            "n4"
+          ],
+          "outcome": "sales",
+          "context": "W=w0",
+          "signature_fingerprint": "53f809bb2fe26282155c3f590579553337a3f734244cd36795dfcbad68762f8f",
+          "components": [
+            [
+              "1/3",
+              [
+                "1/4",
+                "1/4",
+                "1/4",
+                "1/4",
+                "1/4"
+              ]
+            ],
+            [
+              "2/3",
+              [
+                "3/4",
+                "3/4",
+                "3/4",
+                "3/4",
+                "3/4"
+              ]
+            ]
+          ],
+          "covered_arms": [
+            [
+              "n2",
+              0,
+              0
+            ],
+            [
+              "n2",
+              1,
+              0
+            ]
+          ],
+          "factorization_kind": "OBSERVATIONAL_FINITE_MIXTURE_NODEWISE_BERNOULLI",
+          "operator": "OBSERVATIONAL_NODE_ARM_POPULATION_CONDITIONAL_MEANS"
+        },
+        "assumptions": [
+          {
+            "name": "full_vector_conditional_exchangeability",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "hypothetical assumption; not empirically proven"
+            ],
+            "details": ""
+          },
+          {
+            "name": "consistency",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "hypothetical assumption; not empirically proven"
+            ],
+            "details": ""
+          },
+          {
+            "name": "fixed_pretreatment_network",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "hypothetical assumption; not empirically proven"
+            ],
+            "details": ""
+          },
+          {
+            "name": "finite_conditional_first_moments",
+            "source": "demo_specification",
+            "confirmed": true,
+            "status": "CERTIFIED",
+            "evidence": [
+              "hypothetical assumption; not empirically proven"
+            ],
+            "details": ""
+          }
+        ],
+        "signature": {
+          "study_scope_digest": "fce4e4da08250504df3c2a6a158d2664f3e1cc678b82ca6d78a0d9c1499861ca",
+          "network_fingerprint": "5fb7f40273be9d352448335249c08693707635b1c923749ceda5feede83f93b6",
+          "treatment_variable": "AI",
+          "grouping": "strict_majority_ties_low",
+          "core_collaborators": [],
+          "signature_fingerprint": "53f809bb2fe26282155c3f590579553337a3f734244cd36795dfcbad68762f8f"
+        },
+        "requests": [
+          {
+            "kind": "DIRECT",
+            "node_weights": [
+              [
+                "n2",
+                "1"
+              ]
+            ],
+            "reference_exposure": 0,
+            "comparison_exposure": 0,
+            "spillover_own_treatment": 1,
+            "cohort_authority": null,
+            "cohort_evidence": null
+          }
+        ]
+      }
+    }
+  },
+  "signature_support": {
+    "study": {
+      "network_id": "pair",
+      "node_order": [
+        "u",
+        "v"
+      ],
+      "undirected_edges": [
+        [
+          "u",
+          "v"
+        ]
+      ],
+      "treatment_variable": "T",
+      "outcome_variable": "Y",
+      "outcome_kind": "binary",
+      "context_reference": "week",
+      "observation_regime": "experimental",
+      "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED",
+      "assignment_design": {
+        "kind": "complete_randomization_binary_v1",
+        "m": 1
+      },
+      "protocol_provenance": "synthetic lottery",
+      "network_provenance": "synthetic roster"
+    },
+    "target": {
+      "assignment": [
+        1,
+        0
+      ],
+      "unit_weights": [
+        "1/2",
+        "1/2"
+      ],
+      "authority": "TRUSTED_FIXTURE"
+    },
+    "signature": {
+      "grouping": "strict_majority_ties_low"
+    }
+  },
+  "quota_support": {
+    "study": {
+      "network_id": "pair",
+      "node_order": [
+        "u",
+        "v"
+      ],
+      "undirected_edges": [
+        [
+          "u",
+          "v"
+        ]
+      ],
+      "treatment_variable": "T",
+      "outcome_variable": "Y",
+      "outcome_kind": "binary",
+      "context_reference": "week",
+      "observation_regime": "experimental",
+      "graph_timing_claim": "DECLARED_PRETREATMENT_FIXED",
+      "assignment_design": {
+        "kind": "complete_randomization_binary_v1",
+        "m": 1
+      },
+      "protocol_provenance": "synthetic lottery",
+      "network_provenance": "synthetic roster"
+    },
+    "target": {
+      "assignment": [
+        1,
+        0
+      ],
+      "unit_weights": [
+        "1/2",
+        "1/2"
+      ],
+      "authority": "TRUSTED_FIXTURE"
+    }
+  },
+  "requirements": {},
+  "DAG_CLASSICAL_BACKDOOR": {
+    "version": "dag-backdoor-1",
+    "model": "RECURSIVE_SCM_EXPLICIT_LATENTS_INDEPENDENT_ERRORS",
+    "variable_domain": "BINARY",
+    "nodes": [
+      "Z",
+      "X",
+      "Y"
+    ],
+    "observed": [
+      "Z",
+      "X",
+      "Y"
+    ],
+    "latent": [],
+    "edges": [
+      [
+        "Z",
+        "X"
+      ],
+      [
+        "Z",
+        "Y"
+      ],
+      [
+        "X",
+        "Y"
+      ]
+    ],
+    "graph_status": "DECLARED",
+    "graph_source": "Independent hypothetical causal diagram",
+    "materials_sha256": "9515dfb2a1175d799d2f99731ba82c3c32cd5d12602afe65cc258d4d900f9196",
+    "context": "Single fixed synthetic study population",
+    "treatment": "X",
+    "outcome": "Y",
+    "adjustment": null,
+    "information": {
+      "source_id": "synthetic_joint_law",
+      "source_sha256": "5c7188255b38011d4f47e9707b6fff9d0c47f25b1314b73a2b6f23f3837273f7",
+      "variables": [
+        "Z",
+        "X",
+        "Y"
+      ],
+      "availability": "SYMBOLIC_POPULATION_LAW",
+      "strictly_positive_joint": true,
+      "provenance": "Hypothetical full positive joint population law, no finite-sample estimates"
+    },
+    "additional_restrictions": []
+  },
+  "DAG_ADJUSTMENT": {
+    "version": "dag-adjustment-1",
+    "model": "RECURSIVE_SCM_EXPLICIT_LATENTS_INDEPENDENT_ERRORS",
+    "variable_domain": "BINARY",
+    "nodes": [
+      "Z",
+      "X",
+      "Y"
+    ],
+    "observed": [
+      "Z",
+      "X",
+      "Y"
+    ],
+    "latent": [],
+    "edges": [
+      [
+        "Z",
+        "X"
+      ],
+      [
+        "Z",
+        "Y"
+      ],
+      [
+        "X",
+        "Y"
+      ]
+    ],
+    "graph_status": "DECLARED",
+    "graph_source": "Independent hypothetical causal diagram",
+    "materials_sha256": "9515dfb2a1175d799d2f99731ba82c3c32cd5d12602afe65cc258d4d900f9196",
+    "context": "Single fixed synthetic study population",
+    "treatment": "X",
+    "outcome": "Y",
+    "adjustment": null,
+    "information": {
+      "source_id": "synthetic_joint_law",
+      "source_sha256": "5c7188255b38011d4f47e9707b6fff9d0c47f25b1314b73a2b6f23f3837273f7",
+      "variables": [
+        "Z",
+        "X",
+        "Y"
+      ],
+      "availability": "SYMBOLIC_POPULATION_LAW",
+      "strictly_positive_joint": true,
+      "provenance": "Hypothetical full positive joint population law, no finite-sample estimates"
+    },
+    "additional_restrictions": []
+  },
+  "MEAN_ORDER_D2_E1": {
+    "version": "mean-order-d2-e1-1",
+    "model_scope": "SIGNATURE_MEANS_NODE_BOUNDS_AND_DECLARED_ORDERS_ONLY",
+    "node_order": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "undirected_edges": [
+      [
+        "A",
+        "B"
+      ],
+      [
+        "A",
+        "C"
+      ],
+      [
+        "A",
+        "D"
+      ],
+      [
+        "B",
+        "C"
+      ],
+      [
+        "B",
+        "D"
+      ],
+      [
+        "C",
+        "D"
+      ]
+    ],
+    "graph_scope": "KNOWN_FIXED_PRETREATMENT_SIMPLE_UNDIRECTED",
+    "design": "D2_UNIFORM_FIXED_QUOTA",
+    "quota": 2,
+    "exposure": "E1_STRICT_MAJORITY_TIES_LOW_ISOLATED_ZERO",
+    "context": "Synthetic fixed study context",
+    "treatment_definition": "AI assistant assigned to this group",
+    "outcome_definition": "Task completed on time",
+    "outcome_kind": "binary",
+    "outcome_unit": "Probability or declared numeric units",
+    "outcome_period": "Same prespecified study day",
+    "order_direction": "NONDECREASING_NUMERIC_OUTCOME_MEAN",
+    "order_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+    "node_orders": [
+      {
+        "node": "A",
+        "mode": "BOTH"
+      },
+      {
+        "node": "B",
+        "mode": "BOTH"
+      },
+      {
+        "node": "C",
+        "mode": "BOTH"
+      },
+      {
+        "node": "D",
+        "mode": "BOTH"
+      }
+    ],
+    "randomization_claim": "WHOLE_ASSIGNMENT_INDEPENDENT_OF_ALL_POTENTIAL_OUTCOMES_GIVEN_CONTEXT",
+    "consistency_claim": "OBSERVED_OUTCOME_EQUALS_ASSIGNED_POTENTIAL_OUTCOME",
+    "moments_claim": "FINITE_FIRST_MOMENTS",
+    "mean_sufficiency_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+    "mean_sufficiency_claim": "NODE_OWN_AND_E1_SIGNATURE_DETERMINES_CONDITIONAL_MEAN",
+    "information_scope": "EXACT_LISTED_SIGNATURE_MEANS_ONLY",
+    "availability": "EXACT_POPULATION_VALUE",
+    "values": [
+      {
+        "node": "A",
+        "own": 0,
+        "exposure": 1,
+        "value": "2/5"
+      },
+      {
+        "node": "A",
+        "own": 1,
+        "exposure": 0,
+        "value": "3/5"
+      },
+      {
+        "node": "B",
+        "own": 0,
+        "exposure": 1,
+        "value": "2/5"
+      },
+      {
+        "node": "B",
+        "own": 1,
+        "exposure": 0,
+        "value": "3/5"
+      },
+      {
+        "node": "C",
+        "own": 0,
+        "exposure": 1,
+        "value": "2/5"
+      },
+      {
+        "node": "C",
+        "own": 1,
+        "exposure": 0,
+        "value": "3/5"
+      },
+      {
+        "node": "D",
+        "own": 0,
+        "exposure": 1,
+        "value": "2/5"
+      },
+      {
+        "node": "D",
+        "own": 1,
+        "exposure": 0,
+        "value": "3/5"
+      }
+    ],
+    "a4_source": "Independent hypothetical population-mean table",
+    "a4_provenance": "Stipulated exact population information, not empirical sample means",
+    "bounds": [
+      {
+        "node": "A",
+        "lower": "0",
+        "upper": "1"
+      },
+      {
+        "node": "B",
+        "lower": "0",
+        "upper": "1"
+      },
+      {
+        "node": "C",
+        "lower": "0",
+        "upper": "1"
+      },
+      {
+        "node": "D",
+        "lower": "0",
+        "upper": "1"
+      }
+    ],
+    "bounds_kind": "CONDITIONAL_MEAN",
+    "bounds_scope": "ALL_BINARY_ASSIGNMENTS_CONDITIONAL_ON_STUDY_CONTEXT",
+    "bounds_provenance": "Independently stipulated scientific mean ranges",
+    "first": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "second": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "weights": [
+      "1/4",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "operation": "FIRST_MINUS_SECOND",
+    "scientific_provenance": "Hypothetical base and order assumptions specified separately; not inferred from randomization"
+  },
+  "DAG_CLASSICAL_FRONTDOOR": {
+    "version": "dag-frontdoor-1",
+    "model": "RECURSIVE_SCM_EXPLICIT_LATENTS_INDEPENDENT_ERRORS",
+    "variable_domain": "BINARY",
+    "nodes": [
+      "U",
+      "X",
+      "M",
+      "Y"
+    ],
+    "observed": [
+      "X",
+      "M",
+      "Y"
+    ],
+    "latent": [
+      "U"
+    ],
+    "edges": [
+      [
+        "U",
+        "X"
+      ],
+      [
+        "U",
+        "Y"
+      ],
+      [
+        "X",
+        "M"
+      ],
+      [
+        "M",
+        "Y"
+      ]
+    ],
+    "graph_status": "DECLARED",
+    "graph_source": "Independent hypothetical causal diagram",
+    "materials_sha256": "e73baa7cf8e9a99e1f94a362ea1bb1e8e13aee18131848f045265787d1df49fc",
+    "context": "Fixed hypothetical population and intervention scope",
+    "treatment": "X",
+    "outcome": "Y",
+    "frontdoor_variable": null,
+    "information": {
+      "source_id": "synthetic_population_joint",
+      "source_sha256": "f67edf90a93e51f7471150adf74d8c81e3615a4cc5672c63939ebb8f5ec84097",
+      "variables": [
+        "X",
+        "M",
+        "Y"
+      ],
+      "availability": "SYMBOLIC_POPULATION_LAW",
+      "strictly_positive_joint": true,
+      "provenance": "Hypothetical complete observed population law; not finite-sample estimates"
+    },
+    "additional_restrictions": []
+  },
+  "BINARY_IV_LATE_ATE": {
+    "version": "binary-iv-research-1",
+    "target": "LATE",
+    "cells": [
+      {
+        "z": 0,
+        "d": 0,
+        "y": 0,
+        "probability": "0.0"
+      },
+      {
+        "z": 0,
+        "d": 0,
+        "y": 1,
+        "probability": "1.0"
+      },
+      {
+        "z": 0,
+        "d": 1,
+        "y": 0,
+        "probability": "0.0"
+      },
+      {
+        "z": 0,
+        "d": 1,
+        "y": 1,
+        "probability": "0.0"
+      },
+      {
+        "z": 1,
+        "d": 0,
+        "y": 0,
+        "probability": "0.0"
+      },
+      {
+        "z": 1,
+        "d": 0,
+        "y": 1,
+        "probability": "0.75"
+      },
+      {
+        "z": 1,
+        "d": 1,
+        "y": 0,
+        "probability": "0.125"
+      },
+      {
+        "z": 1,
+        "d": 1,
+        "y": 1,
+        "probability": "0.125"
+      }
+    ],
+    "monotonicity": true,
+    "instrument": "randomized offer",
+    "treatment": "participation",
+    "outcome": "binary outcome",
+    "population": "Synthetic study population",
+    "context": "Synthetic demonstration only",
+    "source_ids": [
+      "synthetic-table-1"
+    ],
+    "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "assumptions": [
+      "instrument_independence",
+      "exclusion_restriction",
+      "monotonicity_direction",
+      "consistency_and_binary_outcome",
+      "no_interference",
+      "positive_instrument_support"
+    ]
+  },
+  "DAG_GENERAL_ID": {
+    "version": "dag-general-id-1",
+    "model": "RECURSIVE_SEMI_MARKOVIAN_DISCRETE",
+    "nodes": [
+      "Z",
+      "X",
+      "M",
+      "Y"
+    ],
+    "directed": [
+      [
+        "Z",
+        "X"
+      ],
+      [
+        "Z",
+        "Y"
+      ],
+      [
+        "X",
+        "M"
+      ],
+      [
+        "M",
+        "Y"
+      ]
+    ],
+    "bidirected": [
+      [
+        "X",
+        "Y"
+      ]
+    ],
+    "treatment": "X",
+    "outcome": [
+      "Y"
+    ],
+    "graph_status": "RESEARCHER_CONFIRMED",
+    "graph_source": "reference example shipped with the task 05 tests",
+    "materials_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "context": "Mixed graph: back-door fails on X<->Y, front-door fails on Z->Y.",
+    "information": "FULL_JOINT_POPULATION_LAW",
+    "reading_declarations": null,
+    "unresolved": [],
+    "additional_restrictions": []
+  }
+}

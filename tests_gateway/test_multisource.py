@@ -218,6 +218,25 @@ class MultiDocumentTests(unittest.TestCase):
         self.assertEqual(proc.returncode,0,proc.stderr)
         self.assertIn('3 份附件',proc.stdout)
 
+    def test_cli_preview_with_legacy_stdout_encoding(self):
+        with tempfile.TemporaryDirectory() as d:
+            name = '门店📋.txt'
+            path = Path(d) / name
+            path.write_text('处理前记录了门店的研究条件。', encoding='utf-8')
+            for fmt in ('text', 'json'):
+                with self.subTest(fmt=fmt):
+                    cmd = [sys.executable, '-m', 'cfm_id_llm.multisource_intake_cli',
+                           '--question', '这些门店的处理有什么影响？', '--attachment', str(path),
+                           '--preview', '--format', fmt]
+                    proc = subprocess.run(cmd, cwd=ROOT, capture_output=True, encoding='gbk',
+                                          env={**os.environ, 'PYTHONIOENCODING': 'gbk:strict'}, timeout=45)
+                    self.assertEqual(proc.returncode, 0, proc.stderr)
+                    if fmt == 'json':
+                        self.assertEqual(json.loads(proc.stdout)['attachments'][0]['display_name'], name)
+                    else:
+                        self.assertIn('1 份附件', proc.stdout)
+                        self.assertIn('门店', proc.stdout)
+
     def test_cli_mock_full_pipeline_and_json_round_trip(self):
         with tempfile.TemporaryDirectory() as d:
             out=Path(d)/'result.json'

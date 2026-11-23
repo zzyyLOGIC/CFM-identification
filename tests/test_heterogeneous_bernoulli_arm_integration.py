@@ -264,8 +264,7 @@ class HeterogeneousBernoulliArmTests(unittest.TestCase):
 
     def test_network_of_300_is_population_only(self):
         # Use the actual shared fixed ER300 network, not a substitute chain.
-        from pfn_pipeline.simulation import load_graph
-        from pfn_pipeline._internal.paths import DEFAULT_GRAPH
+        from fixed_network_fixture import DEFAULT_GRAPH, load_graph
         graph=load_graph(DEFAULT_GRAPH)
         self.assertEqual(graph.shape,(300,300))
         network=NetworkExposureSpec(

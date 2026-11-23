@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>数学库 · Causal-IDFM</title><link rel="stylesheet" href="/style.css"><script defer src="/math-library.js"></script></head>
+<body><header><a class="brand" href="/">Causal<span>IDFM</span></a><nav><a href="/">业务问题</a> · 数学库</nav></header><main>
+<div class="intro"><h1>数学库</h1><p>业务问题可以沿用原材料进入完整审核。已有数学规格或保存的规范化读题，也可以直接在本地提交。</p></div>
+<section id="from-source" class="panel" hidden><h2>沿用本次研究材料</h2><p id="source-question"></p>
+<label><input id="consent" type="checkbox"> 同意将本题原文和附件重新交给所选模型分阶段读题。</label>
+<button id="copy" class="primary" disabled>开始完整方法审核</button></section>
+<section class="panel"><h2>本地求解</h2><label>选择入口<select id="operation"></select></label><p id="description"></p>
+<details class="optional"><summary>查看本方法的输入合同</summary><pre id="schema"></pre></details>
+<button id="example" type="button" class="secondary">载入本方法的合成示例</button>
+<label>读取本地 JSON 文件<input type="file" accept=".json,application/json" id="file"></label>
+<label>问题规格<textarea id="problem" rows="10" spellcheck="false">{}</textarea></label>
+<label id="synthetic-label" hidden><input id="synthetic" type="checkbox"> 这是合成演示研究</label>
+<button class="primary" id="prepare">检查材料</button>
+<section id="review" hidden><h3>本次规格审核</h3><div id="items"></div>
+<div id="sign"><label>审核人<input id="reviewer"></label><label>采用这些声明的依据<textarea id="evidence" rows="2"></textarea></label></div>
+<label id="native-label" hidden>填写原方法的审核记录。审核人和依据按实填写，合成例的 authority 为 SYNTHETIC_TEST，真实研究为 EXTERNAL_RESEARCH_REVIEW。已采用的条件可填 ACCEPTED，未定项保留 PENDING。<textarea id="native-review" rows="8" spellcheck="false"></textarea></label>
+<button class="primary" id="submit-review">提交审核并运行</button></section>
+<p id="status" role="status"></p><pre id="result"></pre></section>
+<details class="panel"><summary>完整业务审核可匹配的方法</summary><ul id="methods"></ul></details>
+</main></body></html>

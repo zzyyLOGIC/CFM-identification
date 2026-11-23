@@ -1,10 +1,70 @@
 {
-  "schema_version": "classification-provenance-1",
-  "updated_on": "2026-10-31",
+  "schema_version": "classification-provenance-2",
+  "updated_on": "2026-11-18",
   "role": "DOCUMENTATION_NOT_RUNTIME_REGISTRY",
   "path_base": "source repository root",
   "runtime_coverage_authority": "cfm_id.capability_registry.inventory",
+  "full_literature_review_complete": false,
   "axes": [
+    {
+      "id": "estimand",
+      "label": "目标量",
+      "origin": "LITERATURE_SUPPORTED_PROJECT_FIELD",
+      "source_ids": [
+        "aronow_samii2017_interference",
+        "savje_exposure_definitions",
+        "shpitser_pearl2006_id"
+      ],
+      "project_decision": "逐项写明目标人群、干预值或政策、结果、时期、比较方向与汇总权重。",
+      "limits": "某些局部目标依赖原分配律。"
+    },
+    {
+      "id": "assignment_design",
+      "label": "原分配设计",
+      "origin": "LITERATURE_SUPPORTED_PROJECT_FIELD",
+      "source_ids": [
+        "bhadra_schweinberger2026_review",
+        "forastiere_airoldi_mealli2021_network",
+        "aronow_samii2017_interference"
+      ],
+      "project_decision": "区分随机邀请、实际采用、原分配律与拟评价的政策。",
+      "limits": "观察分配律不能独自支持无混杂。"
+    },
+    {
+      "id": "exposure_mapping",
+      "label": "暴露映射",
+      "origin": "LITERATURE_SUPPORTED_PROJECT_FIELD",
+      "source_ids": [
+        "aronow_samii2017_interference",
+        "savje_exposure_definitions"
+      ],
+      "project_decision": "有单位间干扰时，记录从名单和处理前关系到单位暴露的函数。",
+      "limits": "同一标签内反应是否等价需要单独采用科学条件。"
+    },
+    {
+      "id": "population_information",
+      "label": "可用总体信息",
+      "origin": "LITERATURE_SUPPORTED_PROJECT_FIELD",
+      "source_ids": [
+        "shpitser_pearl2006_id",
+        "manski1990_nonparametric_bounds"
+      ],
+      "project_decision": "逐项记录已知的总体、联合律、条件均值、边际或约束及其来源、覆盖坐标与数值精度。",
+      "limits": "样本缺失、没有数值和缺少总体算子须分别定位。"
+    },
+    {
+      "id": "scientific_assumptions",
+      "label": "科学假设",
+      "origin": "LITERATURE_SUPPORTED_PROJECT_FIELD",
+      "source_ids": [
+        "savje_exposure_definitions",
+        "imbens_angrist1994_late",
+        "balke_pearl1997_bounds",
+        "shpitser_pearl2006_id"
+      ],
+      "project_decision": "记录每个前提的陈述、范围、证据与审核决定，允许方法分别使用不同条件。",
+      "limits": "材料没有声明或尚未获批准的条件保持待定。"
+    },
     {
       "id": "study_structure",
       "label": "对象网络与变量因果图",
@@ -17,28 +77,6 @@
       "limits": "不是整个因果研究的互斥、穷尽二分法。"
     },
     {
-      "id": "design_exposure_target",
-      "label": "分配设计、暴露映射、目标分开",
-      "origin": "DIRECT_METHOD_PAPER_SUPPORT",
-      "source_ids": [
-        "aronow_samii2017_interference",
-        "savje_exposure_definitions"
-      ],
-      "project_decision": "维持正交字段。",
-      "limits": "定义暴露不等于结果充分性。"
-    },
-    {
-      "id": "information_regime",
-      "label": "随机化与观测性研究",
-      "origin": "REVIEW_AND_METHOD_SUPPORT",
-      "source_ids": [
-        "bhadra_schweinberger2026_review",
-        "forastiere_airoldi_mealli2021_network"
-      ],
-      "project_decision": "区分实验 q 与观测 p 及其许可。",
-      "limits": "已知 p 不等于已接受交换性。"
-    },
-    {
       "id": "scope",
       "label": "固定/随机潜在结果和网络；固定背景/平均背景",
       "origin": "REVIEW_SUPPORT",
@@ -47,55 +85,62 @@
       ],
       "project_decision": "范围要显式；不为每个图拓扑新建定理。",
       "limits": "当前固定图实现不等于随机图总体推广。"
-    },
+    }
+  ],
+  "ways_to_identify": [
     {
-      "id": "r_routes",
-      "label": "R1a/R1b/R2/R3",
-      "origin": "PROJECT_GROUPING_WITH_LITERATURE_FOUNDATIONS",
+      "id": "methods",
+      "label": "调整、前门、一般图 ID、Wald 依从者效应与二元工具变量界",
+      "origin": "ESTABLISHED_METHODS_NOT_DISJOINT_CLASSES",
       "source_ids": [
-        "aronow_samii2017_interference",
-        "savje_exposure_definitions",
-        "manski2013_social_interactions",
-        "forastiere_airoldi_mealli2021_network"
+        "perkovic_etal2018_adjustment",
+        "pearl_causality_ch3_frontdoor",
+        "imbens_angrist1994_late",
+        "balke_pearl1997_bounds",
+        "shpitser_pearl2006_id"
       ],
-      "project_decision": "保留兼容编号；按目标、信息、假设和支持交叉检查，不强制互斥。",
-      "limits": "没有外部文献认证这四个编号是完整分类；不同 R3 子域仍有不同合同。"
-    },
+      "project_decision": "同一问题可有多个适用方法；IV 额外假设与图识别合同分别表达。",
+      "limits": "一般 ID 不会自动使用单调性等 IV 附加限制。"
+    }
+  ],
+  "implementation_settings": [
     {
       "id": "d_settings",
-      "label": "D1–D6",
+      "label": "D1–D8",
       "origin": "PROJECT_SUPPORTED_SETTING_INVENTORY",
       "source_ids": [
         "bhadra_schweinberger2026_review",
         "hudgens_halloran2008_interference"
       ],
-      "project_decision": "保留设置目录；D3 是 D5 的双组特例。",
-      "limits": "不是六种穷尽且互斥的设计；D6 只是特定有限配额混合。"
+      "project_decision": "保留设置编号。D3/D5 共享组内固定配额的公式。D7 使用显式名单概率或乘积权重，可取均匀分配。D8 按平衡准则条件化基础设计。",
+      "limits": "D7/D8 已接有限均值盒及部分 POINT 研究路线。具体目标、支持和审核类型须分别核对。"
     },
     {
       "id": "e_settings",
-      "label": "E1–E5",
+      "label": "E1–E5、固定权重暴露与分组暴露",
       "origin": "PROJECT_SUPPORTED_SETTING_INVENTORY",
       "source_ids": [
         "aronow_samii2017_interference",
         "savje_exposure_definitions"
       ],
       "project_decision": "作为 g 的具体实现；记录阈值、平票、孤立节点和参考集合。",
-      "limits": "E3 兼含参考集合选择；不能宣称五种就是全部暴露类型。"
-    },
-    {
-      "id": "identification_result",
-      "label": "识别集合、POINT、PARTIAL、sharp 与非点证明",
-      "origin": "STANDARD_MATHEMATICS_PROJECT_OUTPUT_CONTRACT",
-      "source_ids": [
-        "manski1990_nonparametric_bounds",
-        "manski2013_social_interactions",
-        "duarte_etal2024_discrete",
-        "shpitser_pearl2006_id"
-      ],
-      "project_decision": "数学结论与缺项/拒绝/未覆盖状态分别表达。",
-      "limits": "PARTIAL 不是一般区间估计；NOT_POINT 不保证已经给出完整 sharp 区间。"
-    },
+      "limits": "E3 兼含参考集合选择。固定权重和分组暴露已接局部效应，R2 签名与有限均值盒仍限 E1–E5。"
+    }
+  ],
+  "mathematical_results": {
+    "id": "identification_result",
+    "label": "识别集合、POINT、PARTIAL、sharp 与非点证明",
+    "origin": "STANDARD_MATHEMATICS_PROJECT_OUTPUT_CONTRACT",
+    "source_ids": [
+      "manski1990_nonparametric_bounds",
+      "manski2013_social_interactions",
+      "duarte_etal2024_discrete",
+      "shpitser_pearl2006_id"
+    ],
+    "project_decision": "数学结论与缺项/拒绝/未覆盖状态分别表达。",
+    "limits": "PARTIAL 不是一般区间估计；NOT_POINT 不保证已经给出完整 sharp 区间。"
+  },
+  "engineering_process": [
     {
       "id": "a_stages",
       "label": "A0–A6、Problem/Family/Setting/Result",
@@ -109,20 +154,6 @@
       "limits": "没有论文逐字规定这些编号；A4/A5 边界及跨层绑定要由项目合同明确。"
     },
     {
-      "id": "methods",
-      "label": "调整、前门、IV、一般ID",
-      "origin": "ESTABLISHED_METHODS_NOT_DISJOINT_CLASSES",
-      "source_ids": [
-        "perkovic_etal2018_adjustment",
-        "pearl_causality_ch3_frontdoor",
-        "imbens_angrist1994_late",
-        "balke_pearl1997_bounds",
-        "shpitser_pearl2006_id"
-      ],
-      "project_decision": "同一问题可有多个适用方法；IV 额外假设与图识别合同分别表达。",
-      "limits": "一般 ID 不会自动使用单调性等 IV 附加限制。"
-    },
-    {
       "id": "engineering_families",
       "label": "读取家族与状态",
       "origin": "PROJECT_ENGINEERING",
@@ -131,5 +162,29 @@
       "limits": "不冒充学界因果分类，也不把技能/提示词效果当文献已证明。"
     }
   ],
-  "full_literature_review_complete": false
+  "historical_network_contracts": {
+    "id": "r_routes",
+    "label": "与规格匹配的网络识别方法（历史合同索引）",
+    "origin": "PROJECT_GROUPING_WITH_LITERATURE_FOUNDATIONS",
+    "source_ids": [
+      "aronow_samii2017_interference",
+      "savje_exposure_definitions",
+      "manski2013_social_interactions",
+      "forastiere_airoldi_mealli2021_network"
+    ],
+    "project_decision": "方法名称直述目标和识别论证。证书保留原编码供重放，应用可展示同题的多项证明。",
+    "limits": "没有外部文献认证这四个编号是完整分类；不同 R3 子域仍有不同合同。",
+    "lookup": {
+      "R1a": "原设计局部暴露状态均值或对比",
+      "R1b": "完整名单有支持时的政策均值及组合",
+      "R2": "均值充分性下用有支持的暴露标签识别政策均值及差",
+      "R3": [
+        "固定背景下的观察性完整名单政策",
+        "固定背景及条件均值充分性下的观察性标签政策",
+        "按观察分配律平均的网络效应",
+        "共同基线分层调整的网络效应",
+        "节点及邻居协变量调整的网络效应"
+      ]
+    }
+  }
 }

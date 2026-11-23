@@ -15,7 +15,13 @@ def test_public_coverage_accounts_for_each_registered_method_once():
     assert page['finite_partial']['max_nodes'] == MAX_N < MAX_NODES
     assert len(page['finite_partial']['designs']) == 8
     assert len(page['finite_partial']['exposures']) == 5
-    assert any('尚未接入此网页' in note for note in page['notes'])
+    assert any('一次读取入口' in note and '一般图 ID' in note and '二元 IV' in note for note in page['notes'])
+    labels = page['method_labels']
+    assert labels['R1a'] == labels['R1A_COMPOSITION']
+    assert labels['R1b'] == labels['R1B_FULL_ASSIGNMENT']
+    assert labels['R2'] == labels['R2_MEAN_SIGNATURE']
+    assert page['condition_labels']['randomization'] != page['condition_labels']['iv_independence']
+    assert all(labels[key] != key for key in (*registered, 'GENERAL_ID', 'BACKDOOR', 'IV_LATE', 'IV_ATE'))
 
 
 def test_unexplained_new_registration_cannot_silently_disappear(monkeypatch):

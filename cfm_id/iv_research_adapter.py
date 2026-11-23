@@ -26,8 +26,10 @@ class BinaryIVRoute:
             return dict(kind='INCOMPATIBLE',representation='FARKAS_CONSTRAINT_CONTRADICTION',reason_code=certificate.get('reason_code'))
         if certificate.get('estimand')=='LATE_FOR_COMPLIERS':
             return dict(kind='POINT',estimand='LATE_FOR_COMPLIERS',value=certificate['late'],logical_range=[-1.0,1.0])
-        kind='POINT' if certificate['bounds'][1]==certificate['bounds'][0] else 'PARTIAL'
-        return dict(kind=kind,representation='SHARP_ATE_BOUNDS',estimand='ATE',interval=certificate['bounds'],sharp=True)
+        bounds=certificate.get('exact',{}).get('bounds',certificate['bounds'])
+        result=dict(kind='POINT' if bounds[0]==bounds[1] else 'PARTIAL',representation='SHARP_ATE_BOUNDS',estimand='ATE',interval=certificate['bounds'],sharp=True)
+        if 'exact' in certificate:result['exact_interval']=bounds
+        return result
     def verify_claim(self,certificate,claim):
         if certificate.get('status')=='INCOMPATIBLE':
             expected=dict(kind='INCOMPATIBLE',representation='FARKAS_CONSTRAINT_CONTRADICTION',reason_code=certificate.get('reason_code'))
@@ -36,6 +38,5 @@ class BinaryIVRoute:
         else:
             bounds=certificate.get('bounds')
             if type(bounds) is not list or len(bounds)!=2:return False
-            kind='POINT' if bounds[1]==bounds[0] else 'PARTIAL'
-            expected=dict(kind=kind,representation='SHARP_ATE_BOUNDS',estimand='ATE',interval=bounds,sharp=True)
+            expected=self.claim(certificate)
         return claim==expected

@@ -16,7 +16,7 @@ from pfn_pipeline.network_inquiry_shadow import (
     fixed_policy_target_from_context, declare_network_a4_source,
     assess_nonarm_network_inquiry, replay_nonarm_network_inquiry,
 )
-from examples.run_family_route_assessment_shadow import task as legacy_task
+from network_study_fixtures import legacy_task
 
 
 def study(regime='experimental', law=True, W='W:fixed', network_id='policy-toy3',

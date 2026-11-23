@@ -3,16 +3,13 @@ import unittest
 from dataclasses import replace
 from fractions import Fraction
 from itertools import product
-from pathlib import Path
+from math import comb
+import json
 
 import numpy as np
-import torch
 
-from pfn_pipeline import identify, simulate_task
-from pfn_pipeline.simulation import load_graph
-from pfn_pipeline._internal.paths import DEFAULT_GRAPH
-from pfn_pipeline._internal.estimation.causalfm_experiment.training import RunConfig
-from pfn_pipeline._internal.estimation.estimands import arm_probability, conditional_count_weights
+from pfn_pipeline import identify, replay_handoff
+from fixed_network_fixture import DEFAULT_GRAPH, FIXTURES, load_graph, make_score_task
 from pfn_pipeline._internal.identification.majority_response import (
     _count_weights, make_majority_response_spec, MajorityResponseBackend,
     verify_majority_response,
@@ -23,20 +20,17 @@ from pfn_pipeline._internal.identification.schemas import Assumption, NetworkExp
 class IdentificationIntegrationTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        previous_threads = torch.get_num_threads()
-        cls.addClassCleanup(torch.set_num_threads, previous_threads)
-        torch.set_num_threads(1)
-        cls.task = simulate_task(seed=2026, budget=5)
+        cls.task = make_score_task(budget=5)
         cls.result = identify(cls.task)
         graph20 = load_graph(DEFAULT_GRAPH.with_name('fixed_er_N20_p0.5_seed12345.json'))
-        cls.small_task = simulate_task(adjacency=graph20, budget=5)
+        cls.small_task = make_score_task(adjacency=graph20, budget=5)
 
     def test_shared_default_graph_uses_design_standardized_route(self):
         task, result = self.task, self.result
         self.assertEqual(task.n_nodes, 300)
         self.assertEqual(task.adjacency.sum() // 2, 22455)
         self.assertGreater(task.adjacency.sum(axis=1).max(), 128)
-        self.assertEqual(Path(RunConfig().graph_file), DEFAULT_GRAPH)
+        self.assertEqual(task.metadata['graph_sha256'], json.loads(DEFAULT_GRAPH.read_bytes())['adjacency_sha256'])
         self.assertEqual(result.status, "POINT")
         self.assertEqual(result.verification_status, "VERIFIED")
         self.assertEqual(result.diagnostics['workflow_status'], 'COMPLETE')
@@ -104,20 +98,17 @@ class IdentificationIntegrationTest(unittest.TestCase):
         self.assertFalse(spec.confirmed_assumptions())
         self.assertNotEqual(MajorityResponseBackend().solve(spec).status, 'POINT')
 
-    def test_er300_design_weights_match_estimation(self):
+    def test_er300_design_weights_match_independent_binomial_law(self):
         proof = self.result.result['certificate']['response_identification_result']['certificate']
         for degree, table in proof['design_by_degree'].items():
             degree = int(degree)
             probabilities = table['joint_own_treatment_arm_probabilities']
             self.assertEqual(sum(map(Fraction, probabilities.values())), 1)
             for arm in (0, 1):
-                self.assertAlmostEqual(float(Fraction(probabilities[f'0,{arm}'])),
-                                       0.5 * arm_probability(degree, 0.5, arm), places=14)
-                exact = [Fraction(w) for w in table['conditional_count_weights'][str(arm)]]
-                self.assertEqual(sum(exact), 1)
-                np.testing.assert_allclose(np.array(exact, dtype=float),
-                                           conditional_count_weights(degree, 0.5, arm),
-                                           rtol=1e-10, atol=1e-15)
+                counts = [comb(degree, k) if int(k > degree//2) == arm else 0 for k in range(degree + 1)]
+                self.assertEqual(Fraction(probabilities[f'0,{arm}']), Fraction(sum(counts), 2**(degree+1)))
+                self.assertEqual(list(map(Fraction, table['conditional_count_weights'][str(arm)])),
+                                 [Fraction(c, sum(counts)) for c in counts])
 
     def test_exact_replay_matches_enumerated_nonhalf_assignment(self):
         p, degree = Fraction(2, 5), 5
@@ -159,14 +150,30 @@ class IdentificationIntegrationTest(unittest.TestCase):
             self.assertEqual(np.mean(observable), np.mean(standardized))
 
     def test_same_identification_route_accepts_other_saved_er_graph(self):
-        root = Path(__file__).resolve().parents[1]
         for n_nodes, probability in ((20, '0.5'), (1000, '0.02')):
             with self.subTest(n_nodes=n_nodes):
-                graph = load_graph(root / f'pfn_pipeline/_internal/estimation/data/fixed_er_N{n_nodes}_p{probability}_seed12345.json')
-                task = simulate_task(seed=2026, budget=5, adjacency=graph)
+                graph = load_graph(FIXTURES / f'fixed_er_N{n_nodes}_p{probability}_seed12345.json')
+                task = make_score_task(budget=5, adjacency=graph)
                 result = identify(task)
                 self.assertEqual((result.status, result.verification_status), ('POINT', 'VERIFIED'))
                 self.assertEqual(task.n_nodes, n_nodes)
+
+
+    def test_invalid_data_and_tampered_handoff_are_rejected(self):
+        treatment = self.small_task.treatment.astype(float).copy()
+        treatment[0] = .4
+        with self.assertRaises(ValueError):
+            replace(self.small_task, treatment=treatment)
+        result = identify(self.small_task)
+        request = copy.deepcopy(result.estimation_request)
+        request['program']['target_fingerprint'] = 'tampered'
+        with self.assertRaises(ValueError):
+            replay_handoff(replace(result, estimation_request=request))
+
+    def test_missing_identification_spec_stops_delivery(self):
+        result = identify(replace(self.small_task, identification_spec=None, assumptions=()))
+        self.assertEqual(result.status, 'UNSUPPORTED')
+        self.assertIsNone(result.estimation_request)
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ def test_example_practice_reply_enters_case_only_after_user_clarifies(tmp_path, 
     example = next(x for x in engine.examples if x.get('clarification_practice'))
     reply = example['clarification_practice']['answer']
     run = Run(owner='test')
-    engine._start(run, dict(example_id=example['id'],
+    engine._start(run, dict(example_id=example['id'], reading_mode='classic',
         question=example['case']['business_question'],
         source_edits=[dict(source_id=s['source_id'], text=s['text'])
                       for s in example['case']['sources']]))

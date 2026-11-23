@@ -4,7 +4,6 @@ Do not import/train a PFN or regard target-equivalence as an estimator adapter.
 """
 import copy
 from dataclasses import replace
-from pathlib import Path
 import unittest
 
 from pfn_pipeline import (
@@ -13,18 +12,16 @@ from pfn_pipeline import (
     inspect_identification_estimation,
     make_complete_randomization_arm_task,
     make_heterogeneous_bernoulli_arm_task,
-    simulate_task,
 )
 from pfn_pipeline._internal.identification.schemas import NetworkExposureSpec
-from pfn_pipeline.simulation import load_graph
+from fixed_network_fixture import FIXTURES, load_graph, make_score_task
 
 
 class IdentificationEstimationContractTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        root = Path(__file__).resolve().parents[1]
-        g = load_graph(root / 'pfn_pipeline/_internal/estimation/data/fixed_er_N20_p0.5_seed12345.json')
-        cls.legacy_task = simulate_task(adjacency=g, seed=2026, budget=3)
+        g = load_graph(FIXTURES / 'fixed_er_N20_p0.5_seed12345.json')
+        cls.legacy_task = make_score_task(adjacency=g, budget=3)
         cls.legacy_result = identify(cls.legacy_task)
         cls.network = NetworkExposureSpec.model_validate(cls.legacy_task.identification_spec['network_exposure'])
 

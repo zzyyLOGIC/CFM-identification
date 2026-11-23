@@ -11,11 +11,10 @@ requires-python = ">=3.11"
 dependencies = ["pydantic>=2.12,<3", "numpy>=1.24", "scipy>=1.10", "pandas>=2", "networkx>=2.5", "sympy>=1.13"]
 
 [project.optional-dependencies]
-# Whole-repository regression includes legacy PFN/graph compatibility fixtures.
-# Keep their Torch dependency optional; the Identification runtime does not need it.
-test = ["pytest>=8", "jsonschema>=4", "torch>=2"]
+test = ["pytest>=8", "jsonschema>=4"]
 documents = ["pypdf>=5,<7"]
-integration = ["torch>=2", "matplotlib>=3.7", "scikit-learn>=1.3", "filelock>=3.12"]
+# Preserve the optional install name for identification integration checks.
+integration = ["pytest>=8", "jsonschema>=4"]
 
 [project.scripts]
 cfm-id-project = "cfm_id.project:main"

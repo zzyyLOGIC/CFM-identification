@@ -5,6 +5,7 @@ import json
 import mimetypes
 import secrets
 import socket
+import sys
 import threading
 import webbrowser
 from http.cookies import SimpleCookie
@@ -12,7 +13,7 @@ from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 from .engine import Engine, PUBLIC, DEFAULT_MAX_API_CALLS, DEFAULT_LONGCAT_FACT_MAX_TOKENS
-from .runtime import PROJECT_ROOT
+from .runtime import PROJECT_ROOT, application_root
 
 
 class Server(ThreadingHTTPServer):
@@ -57,8 +58,10 @@ def make_server(engine, port=8770):
             if not self.safe_host():return self.send(403,{'error':'LOCALHOST_ONLY'})
             parsed=urlparse(self.path);path=parsed.path
             try:
-                owner=self.identity(create=path=='/')
+                owner=self.identity(create=path in ('/','/math-library'))
                 if path=='/':return self.send(200,(PUBLIC/'index.html').read_bytes(),'text/html; charset=utf-8')
+                if path=='/math-library':return self.send(200,(PUBLIC/'math-library.html').read_bytes(),'text/html; charset=utf-8')
+                if path=='/math-library.js':return self.send(200,(PUBLIC/'math-library.js').read_bytes(),'text/javascript; charset=utf-8')
                 if path in ('/app.js','/input-files.js','/style.css','/favicon.svg'):
                     mime={'/input-files.js':'text/javascript','/app.js':'text/javascript','/style.css':'text/css','/favicon.svg':'image/svg+xml'}[path]
                     return self.send(200,(PUBLIC/path[1:]).read_bytes(),mime+'; charset=utf-8')
@@ -67,6 +70,13 @@ def make_server(engine, port=8770):
                 if not owner:return self.send(401,{'error':'OPEN_HOME_FIRST'})
                 if path=='/api/health':return self.send(200,{**engine.health(owner),'csrf':sessions[owner]})
                 if path=='/api/examples':return self.send(200,engine.examples)
+                if path=='/api/math-library':
+                    from . import math_library
+                    operation=parse_qs(parsed.query).get('operation')
+                    return self.send(200,math_library.schema(operation[0]) if operation else math_library.catalog())
+                if path=='/api/math-example':
+                    examples=json.loads((PUBLIC/'math-library-examples.json').read_text('utf8'))
+                    return self.send(200,examples[parse_qs(parsed.query)['operation'][0]])
                 if path=='/api/example-file':
                     from .example_materials import selected_file
                     query=parse_qs(parsed.query)
@@ -109,6 +119,19 @@ def make_server(engine, port=8770):
                         msg='请填写完整的列对应、变量说明和结果类型。' if isinstance(exc,ValidationError) else str(exc)[:500]
                         return self.send(400,{'error':msg})
                 if self.path=='/api/start':return self.send(202,{'id':engine.start(owner,value)})
+                if self.path=='/api/library-reading':
+                    from .library_reading import start
+                    return self.send(202,{'id':start(engine,owner,value)})
+                if self.path=='/api/math-library':
+                    from .math_library import run
+                    from pydantic import ValidationError
+                    try:
+                        return self.send(200,run(value))
+                    except ValidationError as exc:
+                        missing=['.'.join(map(str,item['loc'])) for item in exc.errors(include_input=False)[:8]]
+                        return self.send(400,{'error':'请核对合同字段 '+', '.join(missing)})
+                    except (ValueError,TypeError,KeyError,ArithmeticError,NotImplementedError,RuntimeError) as exc:
+                        return self.send(400,{'error':getattr(exc,'reason',None) or 'INVALID_OR_UNSUPPORTED_MATH_INPUT'})
                 if self.path=='/api/action':
                     engine.action(owner,value['id'],value['action'],value.get('payload',{}));return self.send(202,{'id':value['id']})
                 return self.send(404,{'error':'NOT_FOUND'})
@@ -119,18 +142,30 @@ def make_server(engine, port=8770):
     return Server(('127.0.0.1',port),Handler)
 
 
-def main(argv=None):
+def integrated_engine(directory, engine_class=Engine, **settings):
+    """Use the same durable, validating receiver for both public launchers."""
+    directory = Path(directory)
+    root = str(application_root())
+    if root not in sys.path:
+        sys.path.insert(0, root)
+    from estimate_intake import EstimateIntake
+    return engine_class(directory / 'runs', estimate_inbox=EstimateIntake(directory / 'estimation_inbox'), **settings)
+
+
+def main(argv=None, *, default_port=8772, open_browser=True, ready_prefix='AUTOCFM_LIVE_READY '):
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--port',type=int,default=8772)
+    parser.add_argument('--port',type=int,default=default_port)
+    parser.add_argument('--data-dir',type=Path,help='Directory containing runs/ and estimation_inbox/')
     parser.add_argument('--no-browser',action='store_true')
     parser.add_argument('--max-api-calls',type=int,default=DEFAULT_MAX_API_CALLS)
     parser.add_argument('--longcat-fact-max-tokens',type=int,default=DEFAULT_LONGCAT_FACT_MAX_TOKENS)
     args=parser.parse_args(argv)
     if not 1<=args.max_api_calls<=1000:parser.error('max-api-calls must be 1..1000')
-    engine=Engine(PROJECT_ROOT/'outputs/web_runs',max_api_calls=args.max_api_calls,longcat_fact_max_tokens=args.longcat_fact_max_tokens)
+    directory = args.data_dir.resolve() if args.data_dir is not None else application_root() / 'web_runs'
+    engine=integrated_engine(directory,max_api_calls=args.max_api_calls,longcat_fact_max_tokens=args.longcat_fact_max_tokens)
     server=make_server(engine,args.port);url=f'http://127.0.0.1:{server.server_port}/'
-    print('AUTOCFM_LIVE_READY '+url,flush=True)
-    if not args.no_browser:threading.Timer(.5,lambda:webbrowser.open(url)).start()
+    print(ready_prefix+url,flush=True)
+    if open_browser and not args.no_browser:threading.Timer(.5,lambda:webbrowser.open(url)).start()
     try:server.serve_forever()
     except KeyboardInterrupt:pass
     finally:engine.credentials.clear();server.server_close()

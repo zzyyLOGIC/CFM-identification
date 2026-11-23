@@ -11,3 +11,6 @@ evaluation/nbib_acceptance/public/** -text whitespace=blank-at-eol,blank-at-eof,
 
 # Offline compatibility replay verifies the raw bytes listed in provenance.json.
 examples/legacy/business_extension/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Keep the original graph JSON byte streams when moving them from historical fixtures.
+tests/fixtures/fixed_er_*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

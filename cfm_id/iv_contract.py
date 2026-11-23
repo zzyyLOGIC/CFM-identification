@@ -1,8 +1,13 @@
-"""Strict observed-data contract for the binary instrumental-variable model."""
-from __future__ import annotations
-from typing import Mapping, Tuple
-import math
-Cell = Tuple[int, int, int]
+"""Exact observed-data contract for the binary instrumental-variable model."""
+from collections.abc import Mapping
+from decimal import Decimal, InvalidOperation
+from fractions import Fraction
+from itertools import product
+from math import isfinite
+
+Cell = tuple[int, int, int]
+CELLS = tuple(product(range(2), repeat=3))
+
 
 class IVInputError(ValueError):
     def __init__(self, code: str, detail: str = ""):
@@ -10,37 +15,44 @@ class IVInputError(ValueError):
         super().__init__(code if not detail else f"{code}: {detail}")
 
 
-def validate_observed(observed: Mapping[Cell, float], tol: float = 1e-8) -> dict[Cell, float]:
-    """Validate all eight conditional cells P(D=d,Y=y | Z=z).
+def rational(value):
+    """A float describes its displayed decimal. Preserve exact decimal and fraction inputs."""
+    if isinstance(value, bool):
+        raise IVInputError("NUMERIC_PROBABILITY_REQUIRED")
+    if isinstance(value, Fraction):
+        return value
+    try:
+        if isinstance(value,str) and "/" in value:
+            if len(value)>4096:
+                raise IVInputError("IV_PRECISION_LIMIT")
+            return Fraction(value)
+        dec=Decimal(str(value))
+    except (InvalidOperation, ValueError, ZeroDivisionError, TypeError) as exc:
+        raise IVInputError("NUMERIC_PROBABILITY_REQUIRED") from exc
+    if not dec.is_finite():
+        raise IVInputError("PROBABILITY_OUT_OF_RANGE")
+    if abs(dec.as_tuple().exponent)>4096 or len(dec.as_tuple().digits)>4096:
+        raise IVInputError("IV_PRECISION_LIMIT")
+    return Fraction(dec)
 
-    This contract does not validate instrument randomization, exclusion, or
-    monotonicity; those are separate scientific declarations and reviews.
-    """
+
+def validate_observed(observed: Mapping, tol: float = 1e-8) -> dict[Cell, Fraction]:
+    """Read the eight exact population probabilities P(D,Y|Z) without rounding or clipping."""
     if not isinstance(observed, Mapping):
         raise IVInputError("OBSERVED_LAW_MAPPING_REQUIRED")
-    if not math.isfinite(tol) or not 0 < tol <= 1e-6:
+    if isinstance(tol,bool) or not isfinite(tol) or not 0<tol<=1e-6:
         raise IVInputError("INVALID_TOLERANCE")
-    expected = {(z, d, y) for z in (0, 1) for d in (0, 1) for y in (0, 1)}
-    try:
-        keys = set(observed)
-    except TypeError as exc:
-        raise IVInputError("INVALID_OBSERVED_CELL_KEYS") from exc
-    if keys != expected:
-        missing, extra = expected - keys, keys - expected
-        raise IVInputError("INCOMPLETE_OR_EXTRA_OBSERVED_CELLS", f"missing={sorted(missing)}, extra={sorted(extra)}")
-    vals = {}
-    for key, value in observed.items():
-        if type(key) is not tuple or len(key) != 3 or any(type(v) is not int or v not in (0, 1) for v in key):
-            raise IVInputError("BINARY_CELL_COORDINATES_REQUIRED", repr(key))
-        if isinstance(value, bool): raise IVInputError("NUMERIC_PROBABILITY_REQUIRED")
-        try: x = float(value)
-        except (TypeError, ValueError, OverflowError) as exc:
-            raise IVInputError("NUMERIC_PROBABILITY_REQUIRED", repr(key)) from exc
-        if not math.isfinite(x) or x < -tol or x > 1 + tol:
+    if set(observed)!=set(CELLS):
+        raise IVInputError("INCOMPLETE_OR_EXTRA_OBSERVED_CELLS")
+    law={}
+    for key,value in observed.items():
+        if type(key) is not tuple or any(type(k) is not int for k in key):
+            raise IVInputError("BINARY_CELL_COORDINATES_REQUIRED")
+        x=rational(value)
+        if not 0<=x<=1:
             raise IVInputError("PROBABILITY_OUT_OF_RANGE", repr(key))
-        vals[key] = min(1.0, max(0.0, x))
-    for z in (0, 1):
-        total = sum(vals[z, d, y] for d in (0, 1) for y in (0, 1))
-        if abs(total - 1.0) > tol:
-            raise IVInputError("CONDITIONAL_LAW_NOT_NORMALIZED", f"Z={z}, sum={total:.12g}")
-    return vals
+        law[key]=x
+    for z in (0,1):
+        if sum(law[z,d,y] for d,y in product(range(2), repeat=2))!=1:
+            raise IVInputError("CONDITIONAL_LAW_NOT_NORMALIZED",f"Z={z}")
+    return law

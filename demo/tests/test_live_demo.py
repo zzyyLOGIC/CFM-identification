@@ -104,12 +104,12 @@ def test_key_not_persisted_and_owner_isolation(tmp_path):
     engine.credential('a','longcat','');assert not engine.health('a')['configured']
 
 
-def test_upload_csv_does_not_send_outcome_rows(tmp_path,monkeypatch):
+def test_classic_upload_csv_does_not_send_outcome_rows(tmp_path,monkeypatch):
     engine=Engine(tmp_path/'runs')
     def stop(*args):raise ValueError('STOP_BEFORE_REAL_MODEL')
     monkeypatch.setattr(engine,'call',stop)
     text='store,outcome\na,987654321\nb,123456789\n'
-    rid=engine.start('a',dict(question='比较门店使用工具与不使用的结果',allow_send=True,files=[
+    rid=engine.start('a',dict(question='比较门店使用工具与不使用的结果',allow_send=True,reading_mode='classic',files=[
         dict(name='sample.csv',role='document',content=base64.b64encode(text.encode()).decode())]))
     run=wait(engine.get('a',rid));sent=json.dumps(run.case)
     assert '987654321' not in sent and '123456789' not in sent

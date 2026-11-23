@@ -6,7 +6,7 @@
 当前职责：文献卡只维护外部依据与阅读范围；mathematical_contracts.json 链接项目数学合同和对应实现，不参与运行。当前可调用能力以 cfm_id.capability_registry.inventory() 为准，路线 JSON 中带日期的研究状态是历史信息。详情见 ../docs/MATH_AND_EVIDENCE_ZH.md。本轮补齐所有已登记路线的导航，不声称已经完成全部文献综述。
 
 从哪里看
-0. CLASSIFICATION_ZH.md 与 classification_map.json：哪些分类来自综述/具体论文，哪些是项目整理；自定义 R/D/E、A0–A6 的依据、重叠及限制。新增能力要求见 ../docs/EXTENSION_MAINTENANCE_ZH.md。
+0. CLASSIFICATION_ZH.md 与 classification_map.json：哪些分类来自综述/具体论文，哪些是项目整理；设计与暴露设置、历史方法合同和审核阶段各自的用途与限制。新增能力要求见 ../docs/EXTENSION_MAINTENANCE_ZH.md。
 1. catalog.json：文献题名、作者、年份、发表载体、文章类型、原文链接、DOI，以及实际阅读级别。每张卡明确“支撑什么”与“不支撑什么”。
 2. routes/bounded_policy_contrast.json：把文献对应到定义或假设，再对应项目推导、实现路径和验收义务。实现与测试路径不等于已验收；实际运行结果见其中的 verification_evidence。
 3. ../docs/BOUNDED_CONTRAST_MATH_ZH.txt：本路线唯一的完整推导入口。文献卡片不重复整篇证明，避免出现两份互相漂移的数学文本。共用单政策模型的原始说明在 ../docs/BOUNDED_POLICY_MATH_ZH.md。

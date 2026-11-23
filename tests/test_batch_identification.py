@@ -2,12 +2,11 @@
 from dataclasses import replace
 from fractions import Fraction
 from itertools import product
-from pathlib import Path
 import unittest
 
 import numpy as np
 
-from pfn_pipeline import identify, simulate_task
+from pfn_pipeline import identify
 from pfn_pipeline._internal.identification.schemas import NetworkExposureSpec
 from pfn_pipeline._internal.identification.randomized_arm_family import AssignmentSpec, ExposureSpec
 from pfn_pipeline.identification import (
@@ -19,14 +18,14 @@ from pfn_pipeline.identification_batch import (
     bind_legacy_response_batch, replay_legacy_response_batch_bridge,
     estimate_bound_legacy_response,
 )
-from pfn_pipeline.simulation import load_graph
+from fixed_network_fixture import FIXTURES, load_graph, make_score_task
 
 
 class BatchIdentificationTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        path = Path(__file__).resolve().parents[1] / 'pfn_pipeline/_internal/estimation/data/fixed_er_N20_p0.5_seed12345.json'
-        cls.legacy = identify(simulate_task(adjacency=load_graph(path), seed=2030, budget=3))
+        path = FIXTURES / 'fixed_er_N20_p0.5_seed12345.json'
+        cls.legacy = identify(make_score_task(adjacency=load_graph(path), budget=3))
         cls.network = NetworkExposureSpec.model_validate(cls.legacy.task.identification_spec['network_exposure'])
 
     def _batch(self, kind='D1', grouping='strict_majority', **overrides):
@@ -201,32 +200,19 @@ class BatchIdentificationTest(unittest.TestCase):
         self.assertEqual(inspect_identification_estimation(link.legacy_identification)['estimation']['status'],
                          'REQUEST_DEFINED_RUNTIME_UNCHECKED')
 
-    def test_bridge_rejects_wrong_p_and_untrained_model_without_opt_in(self):
-        legacy_p=identify(simulate_task(adjacency=load_graph(Path(__file__).resolve().parents[1]/
-                         'pfn_pipeline/_internal/estimation/data/fixed_er_N20_p0.5_seed12345.json'),
-                         treatment_prob=.4,budget=3))
-        with self.assertRaisesRegex(ValueError,'Bernoulli'):
-            bind_legacy_response_batch(legacy_p)
-        link=bind_legacy_response_batch(self.legacy)
-        from pfn_pipeline import build_model
-        model=build_model(device='cpu',seed=42)
-        with self.assertRaisesRegex(ValueError,'untrained'):
-            estimate_bound_legacy_response(link,model=model)
+    def test_bridge_rejects_wrong_assignment_probability(self):
+        graph = load_graph(FIXTURES / 'fixed_er_N20_p0.5_seed12345.json')
+        result = identify(make_score_task(adjacency=graph, treatment_prob=.4, budget=3))
+        with self.assertRaisesRegex(ValueError, 'Bernoulli'):
+            bind_legacy_response_batch(result)
 
-    def test_bridge_explicit_untrained_smoke_can_reach_existing_estimator(self):
-        from pfn_pipeline import build_model
-        import torch
-        old = torch.get_num_threads(); torch.set_num_threads(1)
-        try:
-            link=bind_legacy_response_batch(self.legacy)
-            model=build_model(device='cpu',seed=42)
-            estimate=estimate_bound_legacy_response(link,model=model,allow_untrained=True)
-            self.assertEqual(estimate.kind,'response_surface')
-            self.assertEqual(estimate.center.shape,(20,2,2))
-            self.assertEqual(estimate.provenance['model_status'],'untrained')
-            self.assertEqual(estimate.provenance['finite_sample_guarantee'],'none')
-        finally:
-            torch.set_num_threads(old)
+    def test_fitting_boundary_checks_binding_before_referral(self):
+        link = bind_legacy_response_batch(self.legacy)
+        with self.assertRaisesRegex(NotImplementedError, 'full autoCFM'):
+            estimate_bound_legacy_response(link)
+        with self.assertRaises(ValueError):
+            estimate_bound_legacy_response(replace(link, binding_sha256='0'*64))
+
 
 if __name__ == '__main__':
     unittest.main()

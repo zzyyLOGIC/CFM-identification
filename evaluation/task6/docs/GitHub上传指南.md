@@ -1,6 +1,6 @@
 # 任务6 GitHub上传指南
 
-当前仓库目录：`C:\Users\16209\Documents\GitHub\CFM-identification`。当前本地分支是`task6-llm-evaluation`，remote `fork`指向`yuehan19777/CFM-identification`，`origin`指向`zzyyLOGIC/CFM-identification`。执行前用下面命令复核，若输出不同先停下检查。
+当前仓库目录：`<仓库目录>`。当前本地分支是`task6-llm-evaluation`，remote `fork`指向`yuehan19777/CFM-identification`，`origin`指向`zzyyLOGIC/CFM-identification`。执行前用下面命令复核，若输出不同先停下检查。
 
 ## 1. 需要提交哪些文件
 
@@ -27,7 +27,7 @@
 先确认 Python 为 3.11 及以上，且 Pydantic 满足仓库的 `>=2.12,<3`；可在项目虚拟环境安装仓库依赖后执行测试，例如 `python -m pip install -e .`。本次检查使用 Pydantic 2.14.2。
 
 ```powershell
-cd C:\Users\16209\Documents\GitHub\CFM-identification
+cd <仓库目录>
 git status --short --branch
 git remote -v
 python -m unittest discover -s evaluation/task6/tests -v

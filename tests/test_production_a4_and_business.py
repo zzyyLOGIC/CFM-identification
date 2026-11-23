@@ -21,8 +21,8 @@ from pfn_pipeline.identification_policy_r2 import (
 from pfn_pipeline.network_inquiry_shadow import (
     declare_network_a4_source, fixed_policy_target_from_context,
 )
-from examples.run_nonarm_network_inquiry_shadow import make_study, assumptions
-from examples.run_verified_r2_signature_policy import star_study
+from network_study_fixtures import make_study, assumptions
+from network_study_fixtures import star_study
 
 
 def small_task():
@@ -124,7 +124,7 @@ class V21ProductionA4Tests(unittest.TestCase):
         src=declare_network_a4_source(study,source_id='full',operator='NODE_FULL_LAW',
              provenance='hypothetical protocol',admission='ADMITTED',
              availability='SYMBOLIC_POPULATION_OPERATOR',outcome_nodes=study.node_order)
-        from examples.run_verified_r2_signature_policy import assumptions as r2_assumptions
+        from network_study_fixtures import r2_assumptions
         outcome=identify_network_business_query(FixedPolicyInquiryV21(
             study,target,r2_assumptions(),r1b_sources=(src,)))
         self.assertEqual(outcome.status,'UNSUPPORTED')
@@ -195,7 +195,7 @@ class V21ProductionA4Tests(unittest.TestCase):
              assumption=Assumption(name='mean_signature_sufficiency',source='demo_specification',
                 confirmed=True,status='ADMITTED',evidence=['synthetic world assumes equal mean by g']),
              covered_nodes=study.node_order)
-        from examples.run_verified_r2_signature_policy import assumptions as r2_assumptions
+        from network_study_fixtures import r2_assumptions
         req=FixedPolicyInquiryV21(study,target,r2_assumptions(),(source,),
                       signature,suff,(r2src,))
         good=identify_network_business_query(req)

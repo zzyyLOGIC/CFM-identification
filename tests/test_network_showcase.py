@@ -1,7 +1,7 @@
 """v2.1 standalone showcase: presentation must not silently mix studies."""
 import unittest
 import json
-from examples.run_network_identification_showcase import combine, make_html
+from examples.render_network_showcase import combine, make_html
 
 
 class ShowcaseAssemblyV21Tests(unittest.TestCase):

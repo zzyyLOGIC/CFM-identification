@@ -12,7 +12,7 @@
 
 `literature_support/designs/`中的实施前设计是历史研究材料，`routes/`连接选定文献与项目合同；已经实现的方法以运行登记核对，不能由设计稿日期推断。2026-10-31 已为原来五个 `literature_maps` 为空的条目补充来源/项目推导映射；这只补齐导航，不表示所有原始定理和证明都已复核。每张卡仍保留实际阅读范围及不适用边界。数学推导和原生验证并不因此移入文献目录。
 
-分类来源与项目编号的依据见[分类说明](../literature_support/CLASSIFICATION_ZH.md)；对应11个维度的导航为 `classification_map.json`。新增能力见[扩展规则](EXTENSION_MAINTENANCE_ZH.md)，IV/一般ID的预研来源不能当作已实现能力。
+分类来源与项目编号的依据见[分类说明](../literature_support/CLASSIFICATION_ZH.md)；机器导航 `classification_map.json` 分列研究规格字段、证明方法、历史合同、实现设置、数学结果和审核流程。新增能力见[扩展规则](EXTENSION_MAINTENANCE_ZH.md)，IV/一般ID的预研来源不能当作已实现能力。
 
 ## 数学实现为何暂不整体移动
 

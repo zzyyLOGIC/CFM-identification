@@ -51,8 +51,9 @@ def submit(problem,*,review=None,research_protocol_selected=False):
             if result['status']=='SHARP_BOUNDS':
                 replay=verify_ate_result(p.observed(),result,monotonicity=p.monotonicity)
                 if replay.get('valid') is not True: raise IVUnavailable('CHECK_BLOCKED','INDEPENDENT_ATE_CERTIFICATE_REPLAY_FAILED')
-                out.update(state='PARTIAL' if result['bounds'][0] != result['bounds'][1] else 'POINT',
-                    claim=dict(kind='SHARP_ATE_BOUNDS',estimand='ATE',interval=result['bounds']),
+                bounds=result['exact']['bounds']
+                out.update(state='PARTIAL' if bounds[0] != bounds[1] else 'POINT',
+                    claim=dict(kind='SHARP_ATE_BOUNDS',estimand='ATE',interval=result['bounds'],exact_interval=bounds),
                     certificate=result,certificate_replayed=True,replay=replay)
             elif result['status']=='INCOMPATIBLE':
                 replay=verify_ate_result(p.observed(),result,monotonicity=p.monotonicity)

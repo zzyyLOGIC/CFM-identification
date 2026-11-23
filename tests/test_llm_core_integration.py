@@ -224,7 +224,7 @@ class ActualV29CoreIntegrationTests(unittest.TestCase):
             declare_policy_signature, declare_signature_population_source,
             admit_mean_signature_sufficiency,
         )
-        from examples.run_verified_r2_signature_policy import star_study, assumptions as r2_assumptions
+        from network_study_fixtures import star_study, r2_assumptions
         qtext=("一家销售团队有5名员工，1名销售组长连接其余4名员工，所有合作关系在实验前确定。"
                "每轮实验恰好随机抽取4名员工开放AI工具，持续记录处理状态和销售额。"
                "我们想知道如果今后五个人全部使用AI，团队的平均销售额会怎样。")

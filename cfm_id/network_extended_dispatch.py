@@ -34,6 +34,40 @@ SCIENCE={P:(*BASIC,'full_vector_conditional_exchangeability'),
 READING_DECISIONS=('target_coordinates_direction_and_averaging','evaluation_population_and_timing',
  'network_variables_period_and_fixed_background','all_information_and_restrictions_preserved','source_entailment')
 
+def reviewed_observation_period(entry,decoded,study):
+    """Recover an already reviewed outcome period without inventing a conditioning stratum."""
+    from cfm_id_llm.network_effect_conditioning import has_explicit_context
+    context=entry.get('reviewed_target_context') or {}
+    if (study.context or not study.outcome or not entry.get('source_review_receipt')
+            or entry['reader_id']!=reading.MIX or has_explicit_context(context)):
+        return None
+    slot=(entry.get('reviewed_intent') or {}).get('slots',{}).get('query.time_horizon',{})
+    claim=slot.get('claim')
+    period=context.get('target_period') or {}
+    if (not isinstance(claim,dict) or not isinstance(period,dict) or claim.get('state')!='STATED'
+            or period.get('state')!='STATED' or claim.get('value')!=period.get('value')):
+        return None
+    value=claim.get('value')
+    if not isinstance(value,str) or not value.strip() or value not in study.outcome:
+        return None
+    bundle=entry['bundle']
+    documents=dict(bundle['documents'],business_question=bundle['question'])
+    aliases=decoded['reference_binding']['aliases']
+    links=[]
+    for link in slot['source_links']:
+        doc=documents.get(link['document_id'],'')
+        quote=doc[link['start']:link['end']]
+        if quote!=link['quote'] or value not in quote:
+            continue
+        refs=[aliases[r] for r in link['fact_source_ids'] if r in aliases]
+        links.append(dict(document=link['document_id'],start=link['start'],end=link['end'],refs=refs,quote=quote))
+    if (not any(link['document']=='business_question' for link in links) or not any(
+            link['document']!='business_question' and set(link['refs']).intersection(study.source_ids)
+            and study.outcome in link['quote'] for link in links)):
+        return None
+    return dict(value=value,source_links=links,field='study.context',role='outcome_period',
+                intent_sha256=entry['reviewed_intent']['intent_sha256'])
+
 def target_coordinates(c,family):
     t=c.target;nodes=c.study.nodes
     base=dict(node_order=nodes,population=t.population,unit_weights=[str(Fraction(1,len(t.population))) if n in t.population else '0' for n in nodes],
@@ -54,6 +88,13 @@ def inspect_methods(entry,raw,*,note_review=None):
         contract=contract_for_entry(entry)
         if contract is None or contract.reader_id not in METHODS:raise ValueError('REGISTERED_EXTENDED_READER_REQUIRED')
         decoded=contract.parse_candidate(entry,raw);c=contract.model.model_validate(decoded['facts']);t=c.target
+        period=reviewed_observation_period(entry,decoded,c.study)
+        if period:
+            # Keep the wire candidate and its existing source-review binding unchanged.
+            # The native plan and its new review worksheets cover the resolved coordinates.
+            decoded['facts']['study']['context']=period['value']
+            c=contract.model.model_validate(decoded['facts'])
+            out['study_context_binding']=period
         out.update(decoded,reading_candidate=deepcopy(raw),bundle=deepcopy(entry['bundle']))
         missing=[];blocked=[]
         def require(d,name):
@@ -65,8 +106,10 @@ def inspect_methods(entry,raw,*,note_review=None):
         if not c.study.nodes or c.study.graph_kind=='UNKNOWN' or c.study.edge_list_complete is not True:
             missing.append('请明确完整对象名单与处理前关系网络。')
         if c.study.graph_kind=='OTHER' or c.study.outcome_kind=='OTHER':blocked.append('STUDY_SCOPE_NOT_CONNECTED')
-        if c.study.outcome_kind=='UNKNOWN' or not c.study.source_ids or not all(v and v.strip() for v in (c.study.treatment,c.study.outcome,c.study.context)):
+        if c.study.outcome_kind=='UNKNOWN' or not c.study.source_ids or not all(v and v.strip() for v in (c.study.treatment,c.study.outcome)):
             missing.append('请明确处理编码、结果和时期背景及其来源。')
+        elif not c.study.context or not c.study.context.strip():
+            missing.append('请说明本题结果的评价时期与研究背景，以及相应的原文位置。')
         if not t.population or not t.source_ids:missing.append('请明确评价对象及目标原文。')
         if c.additional_restrictions:blocked.append('ADDITIONAL_RESTRICTIONS_REQUIRE_ADAPTER')
         method=ARM if family==reading.ARM else MIX if family==reading.MIX else AVG.get(t.averaging)

@@ -154,7 +154,7 @@ class NetworkTable:
         return dict(source_id='uploaded_network', kind='OTHER', label='上传的对象名单和关系表', text=text)
 
 
-def load_network(nodes_path, edges_path, declaration):
+def load_network(nodes_path, edges_path, declaration, *, shared_tables=None):
     if not isinstance(declaration, dict) or set(declaration) != {'kind', 'completeness', 'description'}:
         fail('NETWORK_DESCRIPTION_REQUIRED', '请说明关系的含义、记录时期及是否完整。')
     if declaration['kind'] != 'UNDIRECTED':
@@ -181,6 +181,12 @@ def load_network(nodes_path, edges_path, declaration):
         key = frozenset((u, v))
         if key in seen: fail('NETWORK_DUPLICATE_EDGE', f'关系表第 {i} 条记录重复，包括反向重复；请确认是否实际代表多次事件。')
         seen.add(key); edges.append((u, v))
+    if shared_tables is not None:
+        from .shared_materials import table_source
+        shared_tables.extend([
+            table_source('shared_roster', '上传名册 · '+nf['name'], nh, (row for _, row in nr)),
+            table_source('shared_edges', '上传关系表 · '+ef['name'], eh, (row for _, row in er)),
+        ])
     return NetworkTable(nodes, tuple(edges), tuple(i for i, _ in nr), tuple(i for i, _ in er),
                         tuple(nf[k] for k in ('name', 'sha256', 'sheet')),
                         tuple(ef[k] for k in ('name', 'sha256', 'sheet')), desc.strip(), declaration['completeness'],

@@ -22,6 +22,41 @@ def start(case):
     return business_intake.start_configured(case, reading_config())
 
 
+def direct_then_verify(case, call, *, network=None, network_focus=False):
+    """Draft once using the supplied transport, then check the same answer locally."""
+    from cfm_id_llm.schemas import BusinessCase
+    from cfm_id_llm.direct_answer import network_request
+    from .direct_verification import verify
+    if isinstance(case,BusinessCase):
+        case=case.model_dump(mode="json")
+    draft = call(network_request(case, network_focus=network_focus), "direct_draft")
+    return verify(case, draft, network=network, network_focus=network_focus)
+
+
+def read_compact(case, call, *, on_disputes=None):
+    """Read once, then recheck only disputed fields. The caller supplies the model transport."""
+    from cfm_id_llm import compact_study as reader
+    from cfm_id_llm.schemas import BusinessCase
+    from .compact_entry import plan
+    if isinstance(case,BusinessCase):
+        case=case.model_dump(mode="json")
+    raw=call(reader.request(case),"compact_read")
+    issues=reader.inspect(raw,case)
+    if issues:
+        if on_disputes is not None:
+            on_disputes(issues)
+        focused=reader.focus(case,raw,issues)
+        if focused is not None:
+            raw=reader.apply_focus(raw,call(focused,"compact_focus"),issues)
+    return plan(case,raw)
+
+
+def confirm_compact(prepared, review, *, authority):
+    """Apply only the methods admitted by a source-bound independent review."""
+    from .compact_entry import complete
+    return complete(prepared,review,authority=authority)
+
+
 def diagnose_methods(intake, query_id, **options):
     """Read-only method view through the usual reading/source/model gates."""
     from .method_diagnostics import inspect

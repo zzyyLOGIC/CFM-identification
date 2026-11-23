@@ -113,4 +113,4 @@ print(report['estimation'])
 - 不创建第二套公共 `CausalTaskSpec` 或重写九个 theorem contracts；
 - 不将旧 Policy 的代理目标等同于真实确定分配 welfare。
 
-对应代码：`pfn_pipeline/identification_handoff_audit.py`；复现：`python -m examples.audit_identification_estimation_handoff` 和 `python -m unittest discover -s tests -p 'test_identification_estimation_contract.py' -v`。
+现行审计代码为 `pfn_pipeline/identification_handoff_audit.py`。可运行 `python -m pytest tests/test_identification_estimation_contract.py` 复核当前接口。[历史整链演示](https://github.com/zzyyLOGIC/CFM-identification/tree/cb322b4061fe981a8b5fd6fbd39660209c433911/examples/audit_identification_estimation_handoff.py)

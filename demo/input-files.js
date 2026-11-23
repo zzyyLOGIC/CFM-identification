@@ -64,15 +64,15 @@ async function buildUploadInput(){
 }
 function inputSelection(){return {use_example_network:!!(selected?.network_files&&$('#use-example-network')?.checked),example_id:selected?.id||null,...(selected?{source_edits:Array.from(document.querySelectorAll('[data-source]')).filter(e=>e.querySelector('.include-source').checked).map(e=>({source_id:e.dataset.source,text:e.querySelector('.source-edit').value}))}:{})};}
 async function checkUploadInput(input){
- const value=await api('/api/input-preview',{question:$('#question').value.trim()||'本地文件读取预览，尚未提出识别请求。',...input,...inputSelection()});
+ const value=await api('/api/input-preview',{reading_mode:$('#reading-mode').value,question:$('#question').value.trim()||'本地文件读取预览，尚未提出识别请求。',...input,...inputSelection()});
  const r=value.receipt, data=value.factual_data, map=value.table_import;
  $('#upload-receipt').innerHTML=`<p><b>${r.ready?'材料已完成本地读取检查':'请先处理以下文件问题'}</b></p>`+
   r.files.map(f=>`<p>${esc(f.name)}：${f.characters} 字符${f.notes.length?'；'+esc(f.notes.join('；')):''}</p>`).join('')+
-  (data?`<p>数值数据：${data.nodes} 个对象，${data.observed} 条结果，${data.features} 项特征。按对象编号对齐；逐条数值留在本地。</p>`:'')+
+  (data?`<p>数值数据：${data.nodes} 个对象，${data.observed} 条结果，${data.features} 项特征。${esc(data.note)}</p>`:'')+
   (value.network?`<p>关系文件：${value.network.nodes} 个对象，${value.network.edges} 对联系。已读取全部文件行。</p>`:'')+
-  (map?`<p>启用编码 ${esc(map.mapping.treated_value)} → 1；未启用编码 ${esc(map.mapping.untreated_value)} → 0。未选入的列：${esc(map.unused_columns.join('、')||'无')}；其他工作表：${esc(map.other_sheets.join('、')||'无')}。</p>`:'')+
+  (map?`<p>启用编码 ${esc(map.mapping.treated_value)} → 1；未启用编码 ${esc(map.mapping.untreated_value)} → 0。数值映射未采用的列：${esc(map.unused_columns.join('、')||'无')}；其他工作表：${esc(map.other_sheets.join('、')||'无')}。</p>`:'')+
   (r.issues.length?`<ul class="message error">${r.issues.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>`:'')+
-  `<details><summary>查看实际提取的说明文字</summary>${value.sources.map(s=>`<h4>${esc(s.label)}</h4><pre style="white-space:pre-wrap;max-height:320px;overflow:auto">${esc(s.text)}</pre>`).join('')}</details><p class="muted">${esc(r.message)}</p>`;
+  `<details><summary>查看本次识别可读取的完整材料</summary>${value.sources.map(s=>`<h4>${esc(s.label)}</h4><pre style="white-space:pre-wrap;max-height:320px;overflow:auto">${esc(s.text)}</pre>`).join('')}</details><p class="muted">${esc(r.message)}</p>`;
  if(!r.ready)throw Error('部分附件未完整读取，请按读取回执补充文字版、拆分或移除无关部分；尚未调用模型。');
  return value;
 }

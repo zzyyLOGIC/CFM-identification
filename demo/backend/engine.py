@@ -88,6 +88,7 @@ class Run:
     provider: str = 'longcat'
     model_settings: dict = field(default_factory=dict)
     automatic_review: bool = False
+    reading_mode: str = 'classic'
     automatic_rechecks: int = 0
     automatic_audit_repairs: int = 0
     automatic_a0_format_repairs: int = 0
@@ -103,11 +104,13 @@ class Run:
 
 
 class Engine:
-    def __init__(self, storage, *, max_api_calls=DEFAULT_MAX_API_CALLS, provider_factory=make_provider, longcat_fact_max_tokens=DEFAULT_LONGCAT_FACT_MAX_TOKENS):
+    def __init__(self, storage, *, max_api_calls=DEFAULT_MAX_API_CALLS, provider_factory=make_provider, longcat_fact_max_tokens=DEFAULT_LONGCAT_FACT_MAX_TOKENS, estimate_inbox=None):
         if type(longcat_fact_max_tokens) is not int or not 1<=longcat_fact_max_tokens<=262144:raise ValueError('Invalid output token limit')
         self.longcat_fact_max_tokens=longcat_fact_max_tokens
         self.connection_settings={}
         self.storage = Path(storage).resolve(); self.storage.mkdir(parents=True, exist_ok=True)
+        from cfm_id.network_query_exchange import QueryInbox
+        self.estimate_inbox=estimate_inbox if estimate_inbox is not None else QueryInbox(self.storage/"estimate_inbox")
         self.runs = {}; self.credentials = {}; self.calls = 0; self.max_api_calls = max_api_calls
         self.provider_factory = provider_factory; self.lock = threading.RLock()
         self.examples = json.loads((PUBLIC/'examples.json').read_text('utf8'))
@@ -189,9 +192,11 @@ class Engine:
             from . import recovery
             return deepcopy(dict(id=run.id,stage=run.stage,busy=run.busy,error=run.error,
                 created=run.created,events=run.events,queries=run.queries,query_id=run.query_id,
-                case=run.case,attachment_report=run.attachment_report,
+                case=run.case,attachment_report=run.attachment_report,reading_mode=run.reading_mode,
+                compact_plan=run.plan if run.reading_mode=='compact' and not run.result else None,
                 review_kind=run.review_kind,review_sheets=run.review_sheets,review_templates=run.review_templates,
                 plan=run.plan,result=run.result,estimate=run.estimate,
+                estimate_receipt=run.artifacts.get('estimate_intake_receipt'),
                 synthetic=run.synthetic,provider=run.provider,review_summary=summarize(run),
                 recheck_preview=recovery.public(recovery.prepare(run)),
                 automatic_review=run.automatic_review,user_question=run.user_question,
@@ -222,18 +227,20 @@ class Engine:
         threading.Thread(target=work,daemon=True).start()
 
     def start(self, owner, payload):
+        mode=payload.get('reading_mode','direct_verify')
+        if mode not in ('direct_verify','network_direct_verify','network_local_review','classic','compact'):raise ValueError('INVALID_READING_MODE')
         if payload.get('use_example_data'):raise ValueError('ESTIMATION_NOT_IN_IDENTIFICATION_DEMO')
-        if payload.get('allow_send') is not True:raise ValueError('EXTERNAL_DOCUMENT_SHARING_CONSENT_REQUIRED')
+        if mode!='network_local_review' and payload.get('allow_send') is not True:raise ValueError('EXTERNAL_DOCUMENT_SHARING_CONSENT_REQUIRED')
         question=payload.get('question','')
         if not isinstance(question,str) or not 3<=len(question.strip())<=25000:raise ValueError('BUSINESS_QUESTION_REQUIRED')
-        run=Run(owner=owner,synthetic=payload.get('synthetic') is True,
+        run=Run(owner=owner,reading_mode=mode,synthetic=payload.get('synthetic') is True,
                 automatic_review=payload.get('automatic_review') is True)
         with self.lock:
             if any(other.owner==owner and other.busy for other in self.runs.values()):
                 raise ValueError('RUN_ALREADY_BUSY')
             if len(self.runs)>=100:raise ValueError('LOCAL_RUN_LIMIT_RESTART_SERVER')
             credential=self.credentials.get(owner)
-            selected=payload.get('provider')
+            selected=None if mode=='network_local_review' else payload.get('provider')
             if selected is not None:
                 if selected not in PROVIDERS:raise ValueError('UNKNOWN_PROVIDER')
                 if credential is None or time.time()-credential[2]>8*3600:raise ValueError('API_KEY_REQUIRED')
@@ -252,13 +259,16 @@ class Engine:
             factual_data=run.attachment_report.get('factual_data'),
             table_import=run.artifacts.get('table_import_manifest'),
             network=run.attachment_report.get('network'),
-            sources=[s for s in run.case['sources'] if s['source_id'].startswith('att_')])
+            sources=run.case['sources'])
 
     def _start(self, run, payload, *, preview_only=False):
         self.event(run,'PREPARING','正在读取问题和附件')
         uploads=payload.get('files',[])
         if not isinstance(uploads,list) or len(uploads)>MAX_ATTACHMENTS:raise ValueError('AT_MOST_TEN_UPLOADS')
         folder=self.storage/run.id/'uploads';folder.mkdir(parents=True,exist_ok=True)
+        from cfm_id_llm.shared_materials import DIRECT_MODES, append_sources, document_tables
+        from hashlib import sha256
+        shared_tables = [] if payload.get('reading_mode','direct_verify') in DIRECT_MODES else None
         requests=[]; total=0; network_paths={}; table_path=None
         for i,item in enumerate(uploads):
             name=item.get('name','')
@@ -281,6 +291,13 @@ class Engine:
             else:raise ValueError('IDENTIFICATION_DOCUMENT_UPLOAD_ONLY')
         report=create_intake(case_id=run.id,business_question=payload['question'].strip(),attachments=requests)
         case=report.case.model_dump(mode='json');run.attachment_report=report.model_dump(mode='json',exclude={'case'})
+        if shared_tables is not None:
+            for req, source, attachment in zip(requests, case['sources'], run.attachment_report['attachments']):
+                if req.purpose != 'DATA_DICTIONARY' and attachment['mode'] == 'SCHEMA_ONLY':
+                    text = document_tables(req.path)
+                    source['text'] = text
+                    attachment.update(mode='FULL_TABLE', extracted_chars=len(text),
+                                      extracted_sha256=sha256(text.encode('utf8')).hexdigest(), warnings=[])
         example_id=payload.get('example_id'); network_declaration=payload.get('network')
         if example_id:
             example=next((x for x in self.examples if x['id']==example_id),None)
@@ -311,11 +328,11 @@ class Engine:
         if network_paths:
             if set(network_paths)!={'network_nodes','network_edges'}:raise ValueError('请同时上传对象表和关系表。')
             from cfm_id_llm.network_files import load_network
-            run.network=load_network(network_paths['network_nodes'],network_paths['network_edges'],network_declaration)
+            run.network=load_network(network_paths['network_nodes'],network_paths['network_edges'],network_declaration,shared_tables=shared_tables)
         elif payload.get('network') is not None:raise ValueError('填写网络说明时，请同时上传对象表和关系表。')
         if table_path:
             from cfm_id_llm.record_files import read_records
-            records=read_records(table_path,payload.get('table_mapping'),run.network)
+            records=read_records(table_path,payload.get('table_mapping'),run.network,shared_tables=shared_tables)
             self.save(run,'table_import_manifest',records['manifest'])
             self.save(run,'factual_data_inventory',records['inventory'])
             for sid,label,value in (
@@ -325,13 +342,15 @@ class Engine:
                 case['sources'].append(dict(source_id=sid,kind='OTHER',label=label,text=json.dumps(value,ensure_ascii=False)))
             run.attachment_report['factual_data']=dict(nodes=len(records['schema']['node_ids']),
                 features=len(records['schema']['feature_names']),observed=len(records['observed_indices']),
-                note='只传字段说明与实际记录范围；不由样本推定总体信息，不调用估计。')
+                note=('所选数据表的全部列及逐行记录供直答与本地核验共同读取。' if shared_tables is not None else '传递字段说明与实际记录范围。'))
         elif payload.get('table_mapping') is not None:raise ValueError('有列映射但没有表格数据，请重新选择文件。')
         if run.network:
             if any(x['source_id']=='uploaded_network' for x in case['sources']):raise ValueError('NETWORK_SOURCE_ID_COLLISION')
             case['sources'].append(run.network.source());self.save(run,'network_file_manifest',run.network.manifest())
             run.attachment_report['network']=dict(reference=run.network.token,nodes=len(run.network.nodes),
                 edges=len(run.network.edges),completeness=run.network.completeness)
+        if shared_tables is not None:
+            append_sources(case, shared_tables)
         from cfm_id_llm.upload_receipt import receipt
         run.attachment_report['receipt']=receipt(run.attachment_report)
         run.case=case;self.save(run,'case',case)
@@ -342,7 +361,128 @@ class Engine:
                 clarification_questions=run.attachment_report['receipt']['issues'])
             self.event(run,'STOPPED','部分附件读取失败，请检查文件后重新提交。尚未调用模型。')
             return
-        self._read_case(run)
+        run.reading_mode=payload.get('reading_mode','direct_verify')
+        if run.reading_mode in ('direct_verify','network_direct_verify','network_local_review'):
+            self._direct_verify(run)
+        elif run.reading_mode=='compact':
+            self._compact_read(run)
+        else:
+            self._read_case(run)
+
+    def _direct_verify(self,run,previous_draft=None):
+        if run.reading_mode == 'network_local_review' or previous_draft is not None:
+            from cfm_id.direct_verification import verify
+            self.event(run,'READING','正在本机核验原材料与总体查询')
+            report=verify(run.case,previous_draft or {},network=run.network,network_focus=True)
+        else:
+            self.event(run,'READING','模型正在按原题起草完整识别答案')
+            from cfm_id_llm.providers.base import ProviderError
+            focused=run.reading_mode=='network_direct_verify'
+            try:
+                report=project.direct_then_verify(run.case,lambda request,stage:self.call(run,request,stage),
+                                                  network=run.network,network_focus=focused)
+            except ProviderError as exc:
+                if exc.code!='MALFORMED_RESPONSE' or run.network is None:
+                    raise
+                from cfm_id.direct_verification import verify
+                report=verify(run.case,{},network=run.network,network_focus=focused)
+                from cfm_id.network_natural_sources import VERSION as natural_materials
+                if (report.get('proof') or {}).get('binding_source') not in ('uploaded-materials/1',natural_materials):
+                    raise
+                self.save(run,'unparsed_model_answer',dict(code=exc.code,local_result_from='uploaded_materials'))
+        self._finish_direct_verification(run,report)
+
+    def _finish_direct_verification(self,run,report):
+        from cfm_id import direct_policy_exchange
+        if not report.get('estimation_handoff_allowed'):
+            self._revoke_network_delivery(run)
+        proof=report.get('proof') or {}
+        answer = report.get('effective_answer') or {}
+        stopped_on_assumption = (proof.get('method') == 'ORIGINAL_EVENT_ASSUMPTIONS_UNCONFIRMED'
+                                 and answer.get('status') == 'NEEDS_INPUT'
+                                 and (answer.get('estimate_handoff') or {}).get('mode') == 'STOP')
+        native_policy=proof.get('binder')==direct_policy_exchange.VERSION
+        if native_policy or proof.get('binder')=='uploaded-network-comparison/1':
+            packet=dict(version='identification-handoff/1',target=answer['target'],status=answer['status'],
+                value=answer['value'],assumptions=answer['assumptions'],estimate_handoff=answer['estimate_handoff'],
+                source_proof=proof,scientific_approval=report['scientific_approval'],production_admission=False,
+                estimation_handoff_allowed=report['estimation_handoff_allowed'])
+            if report['estimation_handoff_allowed']:
+                if native_policy:
+                    packet=direct_policy_exchange.packet(run.case,report)
+                else:
+                    from cfm_id.network_query_exchange import ALIGNED_PACKET
+                    if not (report.get('network_alignment') or {}).get('matched'):
+                        raise ValueError('NETWORK_SOURCE_ALIGNMENT_REQUIRED')
+                    packet.update(version=ALIGNED_PACKET,source_case=run.case,source_draft=report['draft'],
+                                  network_focus=bool(report.get('network_focus')),network_alignment=report['network_alignment'])
+                    if report.get('scope_choice'):
+                        packet['scope_choice']=deepcopy(report['scope_choice'])
+                    packet.update(review=report['review_record'],condition_review=report['condition_review'],release_scope=run.authority,
+                                  network_manifest=report['network_manifest'])
+                try:
+                    receipt=self.estimate_inbox.receive(run.id,packet)
+                    self.save(run,'identification_handoff',packet)
+                    self.save(run,'estimate_intake_receipt',receipt)
+                except Exception:
+                    self.estimate_inbox.revoke(run.id)
+                    self.save(run,'identification_handoff',dict(version='identification-handoff/1',status='RECHECK_REQUIRED',
+                        estimate_handoff=dict(mode='STOP',queries=[]),estimation_handoff_allowed=False,scientific_approval=False))
+                    self.save(run,'estimate_intake_receipt',dict(run_id=run.id,state='DELIVERY_FAILED'))
+                    raise
+            else:
+                self.save(run,'identification_handoff',packet)
+        elif (proof.get('method') in ('ORIGINAL_EVENT_MEANS','TWO_BINARY_POLICY_MARGINS','NAMED_FULL_PLAN_LEVEL',
+                                      'OBSERVED_NODEWISE_STANDARDIZATION','OBSERVED_PEER_CONDITION_GAP','OBSERVED_REPORTED_STRATA',
+                                      'FIXED_QUOTA_WHOLE_POLICY','LABELED_OBSERVATIONAL_ARMS','ANNOUNCED_TWO_STAGE_QUOTA',
+                                      'POPULATION_WEIGHTED_SAVINGS') or stopped_on_assumption):
+            self.save(run,'identification_handoff',dict(version='identification-handoff/1',target=answer['target'],
+                status=answer['status'],value=answer['value'],assumptions=answer['assumptions'],
+                estimate_handoff=answer['estimate_handoff'],source_proof=proof,
+                scientific_approval=False,estimation_handoff_allowed=False))
+        elif 'identification_handoff' in run.artifacts:
+            self.save(run,'identification_handoff',dict(version='identification-handoff/1',status='RECHECK_REQUIRED',
+                estimate_handoff={'mode':'STOP'},scientific_approval=False,estimation_handoff_allowed=False))
+        self.save(run,'direct_verification',report)
+        run.result=report
+        questions=report.get('clarification_questions',[])
+        run.user_question=None
+        if report.get('condition_review') and not report['estimation_handoff_allowed']:
+            self.event(run,'REVIEW_REQUIRED','请逐项核对原文所列科学前提，以便登记估计交接')
+        elif report.get('estimation_handoff_allowed'):
+            accepted=run.artifacts.get('estimate_intake_receipt',{}).get('consumer')=='autocfm_estimation_query_intake'
+            self.event(run,'RESULT','估计端已收到本次确认的查询或上下界' if accepted else '本次确认的估计交接已登记')
+        elif questions:
+            run.user_question=dict(kind='NEEDS_CLARIFICATION',items=questions,message='请补充以下研究材料。')
+            self.event(run,'REVIEW_REQUIRED','研究材料有具体缺口，补充后可重新核验同一问题')
+        else:
+            self.event(run,'RESULT','模型原答与程序核验结果已保存')
+
+    def _compact_read(self,run):
+        from cfm_id.project import read_compact
+        self.event(run,'READING','读取研究目标、总体信息和有来源的科学条件')
+        prepared=read_compact(run.case,lambda request,stage:self.call(run,request,stage),
+            on_disputes=lambda issues:self.save(run,'compact_disputed_fields',issues))
+        self.save(run,'compact_plan',prepared)
+        if prepared['state']=='REVIEW_REQUIRED':
+            run.plan=prepared
+            self.event(run,'REVIEW_REQUIRED','请核对引用、研究目标及各方法需要的科学条件')
+        else:
+            run.result=prepared
+            self.save(run,'identification',prepared)
+            self.event(run,'STOPPED','本次方法匹配的结果已保存')
+
+    def _compact_finish(self,run,review):
+        from cfm_id.project import confirm_compact
+        if run.result is not None or not run.plan:raise ValueError('NO_PENDING_COMPACT_PLAN')
+        approved=confirm_compact(run.plan,review,authority=run.authority)
+        self.save(run,'compact_review',review)
+        if approved['state']=='REVIEW_REQUIRED':
+            self.event(run,'REVIEW_REQUIRED','存在尚未批准的项目，仍待核对')
+            return
+        run.result=approved
+        self.save(run,'identification',approved)
+        self.event(run,'RESULT','研究规格、方法结果及估计交接已保存')
 
     def _read_case(self,run, *, target_feedback=None):
         if run.automatic_review and self._check_material_counts(run):return
@@ -444,7 +584,8 @@ class Engine:
         run.review_templates={name:pending(sheet,run.authority) for name,sheet in sheets.items()}
         self.event(run,'REVIEW_REQUIRED',{'query':'核对模型读到的问题与原文','source':'核对事实和实际引用',
             'notes':'处理模型提出的缺项或备注','information':'核对总体信息的来源范围',
-            'science':'确认识别目标与本研究采用的科学条件','dag_source':'后台核对因果图、变量与原文来源','changes':'核对复查回答的全部变化'}[kind])
+            'science':'确认识别目标与本研究采用的科学条件','dag_source':'后台核对因果图、变量与原文来源','changes':'核对复查回答的全部变化',
+            'saved_target':'按原始材料核对已导入读题的目标及范围'}[kind])
 
     def _select(self,run,qid):
         if qid not in [q['query_id'] for q in run.queries]:raise ValueError('UNKNOWN_QUERY')
@@ -458,9 +599,45 @@ class Engine:
         if action=='select':self.launch(run,self._select,payload['query_id'])
         elif action=='review':self.launch(run,self._review,payload)
         elif action=='estimate':raise ValueError('ESTIMATION_NOT_IN_IDENTIFICATION_DEMO')
+        elif action=='retry_estimate_registration' and run.reading_mode=='classic':
+            if (run.result or {}).get('estimate_registration',{}).get('state')!='DELIVERY_FAILED':
+                raise ValueError('NO_FAILED_CLASSIC_DELIVERY')
+            self.launch(run,self._register_classic_result)
+        elif action=='compact_confirm' and run.reading_mode=='compact':
+            self.launch(run,self._compact_finish,deepcopy(payload))
+        elif action=='choose_network_population':
+            with run.lock:
+                sheet=(run.result or {}).get('scope_worksheet')
+                if (run.busy or not sheet or not isinstance(payload,dict) or set(payload)!={'binding','option'}
+                        or payload['binding']!=sheet['binding'] or payload['option'] not in {o['id'] for o in sheet['options']}):
+                    raise ValueError('INVALID_OR_STALE_POPULATION_CHOICE')
+                if run.result.get('scope_choice')!=payload or run.error:
+                    self.launch(run,self._choose_network_population,deepcopy(payload))
+        elif action=='review_network_conditions':
+            from cfm_id.uploaded_network_contrast import check_review
+            with run.lock:
+                if run.busy:
+                    raise ValueError('RUN_ALREADY_BUSY')
+                sheet=(run.result or {}).get('condition_review')
+                if not sheet or not isinstance(payload,dict) or set(payload)!={'binding','decisions'}:
+                    raise ValueError('NETWORK_REVIEW_NOT_AVAILABLE')
+                record=dict(binding=payload['binding'],authority=run.authority,decisions=deepcopy(payload['decisions']))
+                check_review(sheet,record)
+                if run.result.get('review_record')==record and not run.error:
+                    return
+                self.launch(run,self._review_network,record)
+        elif action=='request_point':
+            if (run.stage!='RESULT' or not ((run.result or {}).get('proof') or {}).get('point_optional')
+                    or (run.result or {}).get('clarification_questions')):
+                raise ValueError('POINT_REFINEMENT_NOT_AVAILABLE')
+            self.launch(run,self._clarify,'我需要单一点值。')
         elif action=='clarify':
             text=payload.get('text','')
-            if not isinstance(text,str) or not 3<=len(text.strip())<=8000:raise ValueError('CLARIFICATION_TEXT_REQUIRED')
+            from cfm_id.network_material_questions import DEGREE
+            from cfm_id.sequential_policy_value import METHOD as two_stage_policy
+            result=run.result or {}
+            short_reply=result.get('clarification_questions') and (result.get('proof') or {}).get('method') in (DEGREE,two_stage_policy)
+            if not isinstance(text,str) or not (1 if short_reply else 3)<=len(text.strip())<=8000:raise ValueError('CLARIFICATION_TEXT_REQUIRED')
             self.launch(run,self._clarify,text.strip())
         elif action=='retry_reading':
             if not run.automatic_review or not run.error or run.review_kind not in ('query','source','changes'):
@@ -474,15 +651,51 @@ class Engine:
                 self.launch(run,self._recheck,entry,feedback)
         else:raise ValueError('UNKNOWN_ACTION')
 
+    def _revoke_network_delivery(self,run):
+        if run.artifacts.get('estimate_intake_receipt',{}).get('state') in ('RECEIVED','QUEUED','DELIVERY_FAILED'):
+            self.estimate_inbox.revoke(run.id)
+            self.save(run,'estimate_intake_receipt',dict(run_id=run.id,state='SUPERSEDED'))
+            if run.result and 'estimate_registration' in run.result:
+                run.result['estimate_registration']=deepcopy(run.artifacts['estimate_intake_receipt'])
+                self.save(run,'identification',run.result)
+            self.save(run,'identification_handoff',dict(version='identification-handoff/1',status='RECHECK_REQUIRED',
+                estimate_handoff=dict(mode='STOP',queries=[]),estimation_handoff_allowed=False,scientific_approval=False))
+
+    def _review_network(self,run,record):
+        from cfm_id.direct_verification import verify
+        try:
+            report=verify(run.case,run.result['draft'],network=run.network,
+                          network_focus=run.reading_mode=='network_direct_verify',science_review=record,
+                          scope_choice=run.result.get('scope_choice'))
+        except (ValueError, KeyError, TypeError):
+            self._revoke_network_delivery(run)
+            raise
+        self._revoke_network_delivery(run)
+        self._finish_direct_verification(run,report)
+
+    def _choose_network_population(self,run,choice):
+        from cfm_id.direct_verification import verify
+        self._revoke_network_delivery(run)
+        report=verify(run.case,run.result['draft'],network=run.network,network_focus=run.reading_mode=='network_direct_verify',scope_choice=choice)
+        self._finish_direct_verification(run,report)
+
     def _retry_reading(self,run):
         self.event(run,'PREPARING','正在重新核对原材料')
 
     def _clarify(self,run,text):
+        self._revoke_network_delivery(run)
+        previous=run.result or {}
         number=1+sum(k.startswith('input_revision_') for k in run.artifacts)
         self.save(run,f'input_revision_{number}',dict(case=run.case,intake=plain(run.intake),
             submission=run.submission,reviews=run.reviews,plan=run.plan,result=run.result))
         run.case=deepcopy(run.case)
-        run.case['sources'].append(dict(source_id=f'user_reply_{uuid4().hex[:8]}',kind='OTHER',label='用户补充说明',text=text))
+        from cfm_id.network_material_questions import DEGREE
+        from cfm_id.sequential_policy_value import METHOD as policy_value
+        label='用户补充说明'
+        prompts=previous.get('clarification_questions') or []
+        if (previous.get('proof') or {}).get('method') in (policy_value,DEGREE) and len(prompts)==1:
+            label=prompts[0]
+        run.case['sources'].append(dict(source_id=f'user_reply_{uuid4().hex[:8]}',kind='OTHER',label=label,text=text))
         self.save(run,'case',run.case)
         run.intake=None;run.entry=None;run.submission=None;run.query_review=None;run.query_id=None
         run.queries=[];run.reviews={};run.plan=None;run.result=None;run.estimate=None
@@ -490,9 +703,42 @@ class Engine:
         run.automatic_rechecks=0;run.automatic_audit_repairs=0;run.automatic_a0_format_repairs=0;run.automatic_fact_format_repairs=0
         run.automatic_focused_stages.clear()
         self.event(run,'PREPARING','已保存补充说明，正在重新检查')
-        self._read_case(run)
+        if run.reading_mode in ('direct_verify','network_direct_verify','network_local_review'):
+            reuse=None
+            if (previous.get('proof') or {}).get('method') in ('POPULATION_WEIGHTED_SAVINGS', DEGREE, policy_value):
+                from cfm_id.direct_verification import verify
+                report=verify(run.case,previous['draft'],network=run.network,network_focus=run.reading_mode=='network_direct_verify')
+                self._finish_direct_verification(run,report)
+                return
+            if (run.reading_mode in ('direct_verify','network_direct_verify')
+                    and (previous.get('proof') or {}).get('method')=='ANNOUNCED_TWO_STAGE_QUOTA'):
+                from cfm_id.direct_verification import verify
+                report=verify(run.case,previous.get('draft') or {},network=run.network,
+                              network_focus=run.reading_mode=='network_direct_verify')
+                self._finish_direct_verification(run,report)
+                return
+            if run.reading_mode=='network_direct_verify' and (previous.get('proof') or {}).get('method')=='TWO_BINARY_POLICY_MARGINS':
+                from cfm_id.network_query_binding import source_result
+                if source_result(run.case):
+                    reuse=previous.get('draft')
+            elif (run.reading_mode in ('direct_verify','network_direct_verify')
+                  and (previous.get('proof') or {}).get('binder')=='source-grounded-contrast/1'
+                  and previous['proof'].get('alternative_joint_probabilities')):
+                from cfm_id.direct_verification import verify
+                # Preserve the original answer only when the complete amended record
+                # produces a new source-grounded proof, including every reply.
+                draft=previous.get('draft') or {}
+                report=verify(run.case,draft,network=run.network,network_focus=run.reading_mode=='network_direct_verify')
+                if (report.get('proof') or {}).get('design_reply_sources'):
+                    self.event(run,'READING','已按用户补充的抽签说明重新核验原问题')
+                    self._finish_direct_verification(run,report)
+                    return
+            self._direct_verify(run,reuse)
+        elif run.reading_mode=='compact':self._compact_read(run)
+        else:self._read_case(run)
 
     def _recheck(self,run,entry,feedback):
+        self._revoke_network_delivery(run)
         number=len(entry['reading_revision']['steps'])
         self.save(run,f'facts_before_recheck_{number}',run.submission)
         self.save(run,f'feedback_recheck_{number}',feedback)
@@ -562,6 +808,7 @@ class Engine:
         return raw
 
     def _continue_automatically(self,run):
+        if run.reading_mode in ('direct_verify','network_direct_verify','compact'):return
         from . import automatic_review as audit
         from . import recovery
         from . import note_review
@@ -714,7 +961,10 @@ class Engine:
             if capabilities.identity(r)!=capabilities.identity(sheet) or r.get('authority')!=run.authority:
                 raise ValueError('STALE_OR_WRONG_AUTHORITY_REVIEW')
         kind=run.review_kind;self.save(run,kind+'_review',records)
-        if kind=='query':
+        if kind=='saved_target':
+            from .library_reading import review_target
+            review_target(self,run,records['query'])
+        elif kind=='query':
             result=business_field_review.submit(run.intake,run.query_id,records['query'],authority=run.authority)
             if result['state']!='READY_TO_READ':
                 self.save(run,'query_gate_result',result)
@@ -777,10 +1027,60 @@ class Engine:
             if run.result.get('independent_replay') is True and confirmed_summary.get('contract')==capabilities.CONTRACT:
                 run.result['web_review_summary']=confirmed_summary
             self.save(run,'identification',run.result);run.review_kind=None;run.review_sheets={};run.review_templates={}
+            self._register_classic_result(run)
             self.event(run,'RESULT','识别计算已结束，请查看结果。')
         else:raise ValueError('IDENTIFICATION_REVIEW_ONLY')
 
+    def _register_classic_result(self,run):
+        from . import classic_delivery
+        from cfm_id.classic_query_exchange import UnsupportedRegistration
+        from cfm_id_llm.compact_study import digest
+        try:
+            packet=classic_delivery.prepare(run)
+            if packet is None:return
+            self.save(run,'identification_handoff',packet)
+            receipt=self.estimate_inbox.receive(run.id,packet)
+            handoff=packet['estimate_handoff']
+            if (receipt.get('binding')!=packet['binding'] or receipt.get('run_id')!=run.id
+                    or receipt.get('query_id')!=run.query_id or receipt.get('release_scope')!=run.authority
+                    or receipt.get('query_sha256')!=digest(handoff) or receipt.get('mode')!=handoff['mode']
+                    or receipt.get('query_count')!=len(handoff['queries'])
+                    or receipt.get('state') not in ('RECEIVED','QUEUED')):
+                raise ValueError('CLASSIC_ESTIMATE_RECEIPT_MISMATCH')
+        except UnsupportedRegistration:
+            return
+        except Exception as exc:
+            self.estimate_inbox.revoke(run.id)
+            receipt=dict(run_id=run.id,state='DELIVERY_FAILED',error=type(exc).__name__,estimator_executed=False)
+        self.save(run,'estimate_intake_receipt',receipt)
+        run.result['estimate_registration']=deepcopy(receipt)
+        self.save(run,'identification',run.result)
+
+    def _classic_uploaded_comparison(self,run):
+        if (not run.network or run.reading_mode!='classic' or len(run.queries)!=1
+                or (run.entry or {}).get('reader_id')!='NETWORK_RANDOMIZED_EFFECT_FACTS'):
+            return False
+        entry=run.entry
+        submission=run.submission or {}
+        if (entry.get('query_id')!=run.query_id or not entry.get('query_review')
+                or submission.get('query_review')!=entry['query_review']
+                or submission.get('request_sha256')!=entry['request_sha256']):
+            return False
+        from cfm_id.direct_verification import verify
+        report=verify(run.case,{},network=run.network)
+        proof=report.get('proof') or {}
+        if proof.get('binding_source')!='uploaded-materials/1':return False
+        a,b=(e.split(',') for e in proof['ordered_events'])
+        kind=('SPILLOVER_EFFECT' if a[0]==b[0] else 'DIRECT_EFFECT' if a[1]==b[1] else 'LOCAL_TOTAL_EFFECT')
+        if kind!=run.entry['selected_query']['target']['kind']:return False
+        self.save(run,'classic_file_binding',dict(query_id=run.query_id,source=proof['binding_source'],
+            network_reference=proof['network_reference'],request_sha256=run.entry['request_sha256']))
+        run.review_kind=None;run.review_sheets={};run.review_templates={}
+        self._finish_direct_verification(run,report)
+        return True
+
     def _plan(self,run):
+        if self._classic_uploaded_comparison(run):return
         run.result=None
         run.plan=project.inspect_methods(run.intake,run.query_id,**run.submission);self.save(run,'plan',run.plan)
         # A table may also cite definitions in another document. Ask for the

@@ -1,5 +1,7 @@
 # Randomized-Network POINT family — （D2×E1 + D3×E1）
 
+本页记录早期配额识别方法。现行个人版交付识别和交接，文中的拟合、模拟与策略快照在[历史版本](https://github.com/zzyyLOGIC/CFM-identification/tree/cb322b4061fe981a8b5fd6fbd39660209c433911)。
+
 本文件记录**已进入正式 Identification 引擎**的两种设计。原 `RANDOMIZED_ARM_FIXED_QUOTA_ZH.md` 保留为 v0.3 的 D2 历史说明；v0.4 不修改旧 ER300 iid Bernoulli 的 four-arm PFN demo。
 
 ## 1. 同一目标、同一定理

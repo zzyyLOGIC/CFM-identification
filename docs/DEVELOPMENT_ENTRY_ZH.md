@@ -4,7 +4,7 @@
 
 ## 源码位置
 
-本页路径相对 Identification 包根：团队仓库中为 `identification/`，个人仓库中就是仓库根。工作源码的包内 `demo/` 是纯 ID 网页，仅发布到个人仓库；团队仓库外层 `autocfm/live_demo/` 与 `demo/` 负责全链路网页，不重复发布包内网页。日常仍在原工作源码维护，验收后同步两份发布副本。
+本页路径相对识别包根目录。开发工作区是 `iCFM-identification`，包内源码和网页位于 `identification/`。个人发布副本在仓库根直接放置同一包。
 
 历史验收文档中的目录名描述当时的实验位置，不是当前安装路径；运行产物和本地 API 记录不随源码发布。
 
@@ -16,7 +16,7 @@
 | 审核与连接 | 已审核的业务意图、A4 信息、A5 条件 → 原生数学问题 | `cfm_id/` 的业务模块；不因 LLM 声称成立就批准 |
 | 数学与验证 | 原生合同 → 识别式、界或反例及证书 | 原生 solver / verify；结论只在其合同范围内成立 |
 
-公共起点为 `cfm_id.project.start(case)`，固定加载 `cfm_id/configuration/reading.json`。当前主方案为目标优先的 `target-first-skill-1`，旧A0只维护兼容和必要正确性修复。底层仍复用 `business_intake` → `business_dispatch` → `business_case`。读错走显式复查，真实缺项走补问，覆盖缺口不冒充非识别证明。
+网页默认由 `demo/backend/engine.py` 发起一次完整读题，再以 `cfm_id.direct_verification` 核对，估计端独立复核查询包。经典分阶段路线的编程入口为 `cfm_id.project.start(case)`，使用 `cfm_id/configuration/reading.json`。
 
 ## 所有顶层目录
 
@@ -74,4 +74,4 @@
 
 ## Task 1（网络拓展 / POINT 拓展）
 
-四项新功能（① 不等概率固定名额 D7、② 按平衡规则重随机化 D8、③ 固定权重暴露、④ 分组暴露）与四类目标（`local_direct_mean` / `peer_spillover_mean` / `policy_mean` / `policy_contrast`）的数学实现、组合查找表、证明与业务案例，见 [Task 1 数学合同](TASK1_POINT_EXTENSION_MATH_ZH.md) 与 [缺项限制表](TASK1_LIMITATIONS_ZH.md)。实际完成状态（已完成/部分完成/未完成）逐项列于缺项限制表；加权/分组暴露已完成正式流程接入（单臂/批量/组合证书 + 效应派单 + 扩展 R1A 路由，D1–D8），政策均值/两政策差值 R1B 与 R2（签名充分性）均已完成新设计接入。未完成项：N>8 解析支持、PFN 估计、R2 的 W/G 签名、D4–D6 上 W/G 的独立分配质量（部分完成）、默认优先 R2，见该表 U1–U6。
+任务 1 扩展了不等概率固定名额 D7、重随机化平衡 D8、固定权重与分组暴露。局部直接、同伴效应及正式单臂／批量／组合研究入口支持相应暴露。R1b 和 R2 的政策均值与差值接入新设计，R2 的均值签名仍限 E1–E5。D4–D6 上 W/G 的分配质量现已独立复算。新设计超过八个节点的解析支持、PFN 估计和默认路线策略分别列于 U1–U6。[数学合同](TASK1_POINT_EXTENSION_MATH_ZH.md) · [逐项状态与验收](TASK1_LIMITATIONS_ZH.md)
