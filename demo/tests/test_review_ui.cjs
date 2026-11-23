@@ -59,6 +59,48 @@ function harness(view) {
   };
 }
 
+async function openHome(hash='',duringLoad=()=>{}) {
+  const page=harness(fixture()), calls=[];
+  const catalog=JSON.parse(fs.readFileSync(path.join(__dirname,'../examples.json'),'utf8')).reverse();
+  for (const field of ['#network-nodes','#network-edges']) page.element(field).files=[];
+  page.context.location={hash};
+  page.context.fetch=async(url,options)=>{
+    calls.push([options.method,url]);
+    if(url==='/api/examples') duringLoad(page);
+    const value=url==='/api/examples'?catalog:url.startsWith('/api/run?')?fixture():{};
+    return {ok:true,json:async()=>value};
+  };
+  await vm.runInContext('init()',page.context);
+  return {page,calls,store:catalog.find(x=>x.id==='n100')};
+}
+
+test('opening the homepage loads the 100-store question and its network files, without starting an analysis',async()=>{
+  const {page,calls,store}=await openHome();
+  assert.deepEqual(calls,[['GET','/api/health'],['GET','/api/examples']]);
+  assert.equal(vm.runInContext('selected.id',page.context),'n100');
+  assert.equal(page.element('#question').value,store.case.business_question);
+  assert.equal(page.element('#examples').innerHTML.match(/<h3>(.*?)<\/h3>/)[1],store.title);
+  assert.match(page.element('#example-sources').innerHTML,/id="use-example-network" checked/);
+  for(const f of store.network_files.files) assert.ok(page.element('#example-sources').innerHTML.includes('role='+f.role));
+  assert.equal(page.element('#network-completeness').value,store.network_files.declaration.completeness);
+  assert.equal(page.element('#allow-send').checked,false);
+  page.element('#clear-input').onclick();
+  assert.equal(page.element('#question').value,'');
+  assert.equal(vm.runInContext('inputSelection().example_id',page.context),null);
+});
+
+test('a saved run, a new blank question or an edit during loading takes priority over the default example',async()=>{
+  const id='a'.repeat(32);
+  const saved=await openHome('#run='+id);
+  assert.equal(vm.runInContext('selected',saved.page.context),null);
+  assert.ok(saved.calls.some(([,u])=>u==='/api/run?id='+id));
+  const blank=await openHome('',p=>p.element('#clear-input').dispatchEvent(new Event('click')));
+  assert.equal(vm.runInContext('selected',blank.page.context),null);
+  const edited=await openHome('',p=>{p.element('#question').value='自己的研究问题';});
+  assert.equal(edited.page.element('#question').value,'自己的研究问题');
+  assert.equal(vm.runInContext('selected',edited.page.context),null);
+});
+
 test('direct verification uses the report contract across revisions, including wrapped answers',()=>{
   for(const revision of [12,13,14,27]){
     const view=fixture();

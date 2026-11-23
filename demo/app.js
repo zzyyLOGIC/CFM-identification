@@ -75,6 +75,7 @@ function renderExamples(){
  const extra=examples.map((x,i)=>({x,i})).filter(({x})=>x.featured===false);
  $('#examples').innerHTML=main.map(({x,i})=>card(x,i)).join('')+(extra.length?`<details style="grid-column:1/-1"><summary>基础例子与缺条件追问（${extra.length} 项）</summary><p class="muted">缺条件例子用于演示追问，预期不会直接给出识别公式。历史记录不保证本次模型读取成功。</p>${extra.map(({x,i})=>card(x,i)).join('')}</details>`:'');
  $('#examples').onclick=e=>{if(e.target.dataset.load!==undefined)loadExample(examples[+e.target.dataset.load]);if(e.target.dataset.view!==undefined)showExample(examples[+e.target.dataset.view]);};
+ return main[0]?.x;
 }
 function exampleMaterialsHTML(x){
  const files=x.network_files;
@@ -93,7 +94,25 @@ function exampleMaterialsHTML(x){
  }).join('');
  return fileHTML+'<p class="muted">下面是这道示例的配套说明，可按实际情况修改。分析前提需要另行确认。</p>'+groups+x.case.sources.filter(s=>!shown.has(s.source_id)).map(sourceHTML).join('');
 }
-function loadExample(x){selected=x;$('#question').value=x.case.business_question;$('#synthetic').checked=true;$('#selected-example').hidden=false;$('#selected-example').innerHTML=`<div class="selected">已载入「${esc(x.title)}」及配套研究材料。可以修改问题，系统将重新读取。</div>`;$('#example-practice').hidden=!x.clarification_practice;$('#example-practice').innerHTML=clarificationPracticeHTML(x);$('#example-documents').hidden=false;$('#example-sources').innerHTML=exampleMaterialsHTML(x);if(x.network_files&&!$('#network-nodes').files.length&&!$('#network-edges').files.length){const d=x.network_files.declaration;$('#network-kind').value=d.kind;$('#network-completeness').value=d.completeness;$('#network-description').value=d.description;}message('已载入示例。点击“开始分析”后调用模型。');$('#question').focus();}
+function loadExample(x,{focusInput=true}={}){
+ selected=x;
+ $('#question').value=x.case.business_question;
+ $('#synthetic').checked=true;
+ $('#selected-example').hidden=false;
+ $('#selected-example').innerHTML=`<div class="selected">已载入「${esc(x.title)}」及配套研究材料。可以修改问题，系统将重新读取。</div>`;
+ $('#example-practice').hidden=!x.clarification_practice;
+ $('#example-practice').innerHTML=clarificationPracticeHTML(x);
+ $('#example-documents').hidden=false;
+ $('#example-sources').innerHTML=exampleMaterialsHTML(x);
+ if(x.network_files&&!$('#network-nodes').files.length&&!$('#network-edges').files.length){
+  const d=x.network_files.declaration;
+  $('#network-kind').value=d.kind;
+  $('#network-completeness').value=d.completeness;
+  $('#network-description').value=d.description;
+ }
+ message('已载入示例。点击“开始分析”后调用模型。');
+ if(focusInput)$('#question').focus();
+}
 function clearInput(){selected=null;$('#question').value='';$('#documents').value='';$('#network-nodes').value='';$('#network-edges').value='';$('#network-description').value='';$('#network-kind').value='';$('#network-completeness').value='UNKNOWN';resetTableInputs();$('#file-list').innerHTML='';$('#selected-example').hidden=true;$('#example-documents').hidden=true;$('#example-practice').hidden=true;$('#example-practice').innerHTML='';$('#synthetic').checked=false;message('');}
 $('#question').oninput=()=>{
  if(!selected)return;
@@ -1032,5 +1051,30 @@ function finiteClarification(raw){
  if(/\b(assignment|scientific_statements|bounded_model|mean_sufficiency|study|target)\.[a-z_]+|\b[A-Z][A-Z_]{5,}\b/.test(raw))return '有一项读取内容尚未明确，具体字段保留在原始记录中。请先核对材料是否已经说明；系统不会自动补齐。';
  return null;
 }
-async function init(){try{await health();examples=await api('/api/examples');renderExamples();const match=location.hash.match(/^#run=([a-f0-9]{32})$/);if(match){runId=match[1];$('#workspace').hidden=false;poll();}}catch(e){$('#connection').textContent='本地服务未连接';message('请在仓库根目录运行 python demo/serve.py。'+e.message,true);}}
+async function init(){
+ const composer=$('.composer'),newQuestion=$('#clear-input');
+ let untouched=true;
+ const keepInput=()=>{untouched=false;};
+ composer.addEventListener('input',keepInput);
+ newQuestion.addEventListener('click',keepInput);
+ try{
+  await health();
+  examples=await api('/api/examples');
+  const defaultExample=renderExamples();
+  const match=location.hash.match(/^#run=([a-f0-9]{32})$/);
+  if(match){
+   runId=match[1];
+   $('#workspace').hidden=false;
+   poll();
+  }else if(defaultExample&&untouched&&!$('#question').value){
+   loadExample(defaultExample,{focusInput:false});
+  }
+ }catch(e){
+  $('#connection').textContent='本地服务未连接';
+  message('请在仓库根目录运行 python demo/serve.py。'+e.message,true);
+ }finally{
+  composer.removeEventListener('input',keepInput);
+  newQuestion.removeEventListener('click',keepInput);
+ }
+}
 init();
