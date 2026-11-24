@@ -61,7 +61,12 @@ def test_fact_local_enum_guidance_preserves_wire_and_single_table_boundary():
     x=json.loads(ar['user']);y=json.loads(zr['user']);sx=x.pop('output_schema');sy=y.pop('output_schema')
     assert x==y and no_descriptions(sx)==no_descriptions(sy) and a.parse is z.parse and a.model is z.model
     assert '不能翻译或改写' in sy['$defs']['BoundedModel']['properties']['bounds_scope']['description']
-    assert '不删证据' in sy['$defs']['Information']['description']
+    # Supporting definitions can accompany one original table, but references
+    # and separate scientific restrictions must still survive source review.
+    information = sy['$defs']['Information']['description']
+    for requirement in ('同一份原始表', '配套文档可说明', '保留全部必要引用',
+                        '按既有来源角色合同审核', '额外等式或约束时仍分别完整保留'):
+        assert requirement in information
     assert '处理编码' in sy['properties']['target']['description']
 
 def test_new_options_are_explicit_and_do_not_change_defaults():
