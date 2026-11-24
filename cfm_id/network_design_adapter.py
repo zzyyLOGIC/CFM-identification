@@ -4,18 +4,10 @@ No design inference, theorem implementation, support calculation or automatic
 scientific admission. Call constructors only after the dispatch reviews pass.
 """
 from cfm_id_llm import network_design_reading as fields
+from .research_spec_catalog import BUSINESS_NATIVE_DESIGNS, DESIGN_PROTOCOLS
 
 
-NATIVE_DESIGNS = {
-    'INDEPENDENT_BERNOULLI': 'heterogeneous_bernoulli_binary_v1',
-    'UNIFORM_FIXED_QUOTA': 'complete_randomization_binary_v1',
-    'TWO_GROUP_FIXED_QUOTA': 'two_group_fixed_quota_binary_v1',
-    'CLUSTER_BERNOULLI': 'cluster_bernoulli_binary_v2_4',
-    'MULTI_GROUP_FIXED_QUOTA': 'multi_group_fixed_quota_binary_v2_5',
-    'TWO_STAGE_QUOTA_MIXTURE': 'two_stage_quota_mixture_binary_v2_7',
-    'UNEQUAL_PROBABILITY_FIXED_QUOTA': 'unequal_probability_fixed_quota_binary_v1',
-    'RERANDOMIZED_BALANCED': 'rerandomized_balanced_binary_v1',
-}
+NATIVE_DESIGNS = dict(BUSINESS_NATIVE_DESIGNS)
 
 
 def design_payload(assignment, *, nodes=None):
@@ -135,32 +127,37 @@ def task1_design(assignment, network):
     raise ValueError('TASK1_DESIGN_KIND_REQUIRED')
 
 
-def make_arm(c, network, *, source, evidence, authority='SYNTHETIC_TEST'):
+def make_arm(c, network, *, source, evidence, authority='SYNTHETIC_TEST', local_question=None):
     if authority not in ('SYNTHETIC_TEST', 'EXTERNAL_RESEARCH_REVIEW'):
         raise ValueError('EXPLICIT_RESEARCH_AUTHORITY_REQUIRED')
     synthetic = authority == 'SYNTHETIC_TEST'
+    if local_question is None:
+        # Existing single-arm research entry; no second arm is manufactured.
+        node, own, exposure = c.target.population[0], c.target.first.own, c.target.first.exposure
+        outcome_kind = 'continuous' if c.study.outcome_kind=='COUNT' else c.study.outcome_kind.lower()
+    else:
+        from .research_spec_local import LocalQuestion
+        if not isinstance(local_question, LocalQuestion) or tuple(network.node_ids) != local_question.study.node_order:
+            raise ValueError('LOCAL_STUDY_NETWORK_COORDINATES_REQUIRED')
+        node = local_question.evaluation.population[0]
+        own, exposure = local_question.first.coordinates()
+        kind = local_question.study.outcome_domain
+        if kind is None:
+            raise ValueError('LOCAL_NATIVE_OUTCOME_DOMAIN_REQUIRED')
+        outcome_kind = 'continuous' if kind == 'count' else kind
     from pfn_pipeline import identification as native
-    makers = {
-        'INDEPENDENT_BERNOULLI': native.make_heterogeneous_bernoulli_arm_task,
-        'UNIFORM_FIXED_QUOTA': native.make_complete_randomization_arm_task,
-        'TWO_GROUP_FIXED_QUOTA': native.make_two_group_quota_arm_task,
-        'CLUSTER_BERNOULLI': native.make_cluster_bernoulli_arm_task,
-        'MULTI_GROUP_FIXED_QUOTA': native.make_multi_group_quota_arm_task,
-        'TWO_STAGE_QUOTA_MIXTURE': native.make_two_stage_quota_arm_task,
-        'UNEQUAL_PROBABILITY_FIXED_QUOTA': native.make_unequal_probability_fixed_quota_arm_task,
-        'RERANDOMIZED_BALANCED': native.make_rerandomized_balanced_arm_task,
-    }
+    makers = {p.business_kind:getattr(native,p.constructor) for p in DESIGN_PROTOCOLS}
     signature = exposure_payload(c.exposure)
     grouping = signature.pop('grouping')
     exposure_definition = 'strict_majority' if grouping == 'strict_majority_ties_low' else grouping
     if c.assignment.kind in ('UNEQUAL_PROBABILITY_FIXED_QUOTA', 'RERANDOMIZED_BALANCED'):
         design = task1_design(c.assignment, network)
         return makers[c.assignment.kind](network, design=design, **signature,
-            node_id=c.target.population[0], own_treatment_value=c.target.first.own,
-            exposure_value=c.target.first.exposure, exposure_definition=exposure_definition,
+            node_id=node, own_treatment_value=own,
+            exposure_value=exposure, exposure_definition=exposure_definition,
             source=source, evidence=evidence, admitted=True, synthetic=synthetic,
             query_authority='TRUSTED_FIXTURE' if synthetic else 'HUMAN_CONFIRMED',
-            outcome_kind='continuous' if c.study.outcome_kind=='COUNT' else c.study.outcome_kind.lower())
+            outcome_kind=outcome_kind)
     design = design_payload(c.assignment); design.pop('kind')
     if c.assignment.kind == 'TWO_STAGE_QUOTA_MIXTURE':
         if c.first_stage_exclusion is None or c.first_stage_exclusion.status not in ('ADOPTED','PROPOSED'):
@@ -168,9 +165,9 @@ def make_arm(c, network, *, source, evidence, authority='SYNTHETIC_TEST'):
         # The caller has independently checked the D6-specific science decision.
         design['profile_exclusion_admitted'] = True
     return makers[c.assignment.kind](network, **design, **signature,
-        node_id=c.target.population[0], own_treatment_value=c.target.first.own,
-        exposure_value=c.target.first.exposure,
+        node_id=node, own_treatment_value=own,
+        exposure_value=exposure,
         exposure_definition=exposure_definition,
         source=source, evidence=evidence, admitted=True, synthetic=synthetic,
         query_authority='TRUSTED_FIXTURE' if synthetic else 'HUMAN_CONFIRMED',
-        outcome_kind='continuous' if c.study.outcome_kind=='COUNT' else c.study.outcome_kind.lower())
+        outcome_kind=outcome_kind)

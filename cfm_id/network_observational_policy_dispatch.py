@@ -4,12 +4,13 @@ No observational probability becomes a randomized design or a causal license.
 """
 from copy import deepcopy
 from fractions import Fraction
-import json
 from .business_dispatch import (sha, worksheet, checked_review, DispatchError,
                                 empty_result, PLAN_DECISIONS)
 from .network_policy_dispatch import native_reviews_from_json
 from cfm_id_bridge.scientific_binding import sha as native_sha, canonical_data
 from cfm_id_llm import network_observational_policy_reading as reading
+from . import research_spec_observational_adapters as observed_attributes
+from . import research_spec_policy_adapters as policy_attributes
 
 FAMILY = 'NETWORK_OBSERVATIONAL_POLICY_FACTS'
 METHOD = 'R3_FULL_ASSIGNMENT'
@@ -27,13 +28,8 @@ READING_DECISIONS = ('target_policy_population_and_weights', 'network_and_variab
 
 
 def target_coordinates(c):
-    # Both the study's outcome period/context and fixed W belong to the target.
-    context = json.dumps(dict(business_context=c.study.context, fixed_pretreatment_W=c.conditioning.definition),
-                         sort_keys=True, ensure_ascii=False)
-    return dict(kind='FIXED_FULL_ASSIGNMENT_POLICY_MEAN', node_order=c.study.nodes,
-        assignment=[c.target.assignment[n] for n in c.study.nodes],
-        unit_weights=[str(Fraction(1,len(c.target.population))) if n in c.target.population else '0' for n in c.study.nodes],
-        treatment=c.study.treatment, outcome=c.study.outcome, context=context)
+    question=observed_attributes.from_policy_reading(c)
+    return observed_attributes.policy_native_question(question).coordinates()
 
 
 def inspect_methods(entry, raw, *, note_review=None):
@@ -156,22 +152,21 @@ def inspect_methods(entry, raw, *, note_review=None):
 
 
 def _compile(plan, row, records):
-    from pfn_pipeline.network_inquiry_shadow import declare_network_study, fixed_policy_target_from_context
     from pfn_pipeline.identification_observational_r3 import declare_observational_population_v23
     from pfn_pipeline.identification_business import ObservationalPolicyInquiryV23
     from pfn_pipeline._internal.identification.schemas import Assumption
     from cfm_id_llm.network_observational_signature_reading import ObservationalSignatureReading, VERSION
     model = ObservationalSignatureReading if plan['facts']['version']==VERSION else reading.ObservationalPolicyReading
     c=model.model_validate(plan['facts']);target=plan['proposed_target']
+    question=observed_attributes.policy_native_question(observed_attributes.from_policy_reading(c))
+    question.require_coordinates(target)
     review=records['science_review']
     def provenance(ids):return 'Reviewed original source locators: '+','.join(ids)
-    study=declare_network_study(network_id='network_'+sha(dict(nodes=c.study.nodes,edges=sorted(sorted(e) for e in c.study.edges),context=target['context'])),
-        node_order=tuple(c.study.nodes),undirected_edges=tuple(tuple(e) for e in c.study.edges),
-        treatment_variable=c.study.treatment,outcome_variable=c.study.outcome,outcome_kind=c.study.outcome_kind.lower(),
-        context_reference=target['context'],observation_regime='observational',assignment_design=None,
+    study=policy_attributes.native_study(question,network_id='network_'+sha(dict(nodes=c.study.nodes,edges=sorted(sorted(e) for e in c.study.edges),context=target['context'])),
+        edges=c.study.edges,observation_regime='observational',assignment_design=None,
         protocol_provenance=provenance(c.regime.source_ids+c.conditioning.source_ids),
         network_provenance=provenance(c.study.source_ids),graph_timing_claim='DECLARED_PRETREATMENT_FIXED')
-    native_target=fixed_policy_target_from_context(study,tuple(target['assignment']),unit_weights=tuple(target['unit_weights']),authority='TRUSTED_FIXTURE')
+    native_target=policy_attributes.native_target(question,study,side='first',authority='TRUSTED_FIXTURE')
     source=c.information[row['source_index']]
     ids=list(dict.fromkeys(source.source_ids+[s for x in source.assignment_masses for s in x.source_ids]+
                           [s for name in A4_DECLARATIONS for s in getattr(source,name).source_ids]))

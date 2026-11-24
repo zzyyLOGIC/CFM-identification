@@ -34,8 +34,11 @@ def inspect_reading(entry, decoded):
 
 def compile_reviewed(plan, row, records, authority):
     from . import network_policy_dispatch as policy
+    from . import research_spec_policy_adapters as policy_attributes
     from cfm_id_llm.network_policy_reading import NetworkPolicyReading
     from cfm_id_bridge.scientific_binding import canonical_data
+    question = policy_attributes.from_endpoint_plans(plan['endpoint_plans'])
+    question.require_coordinates(plan['proposed_target'])
     # Compile both endpoints through the same reviewed native target/A4/A5
     # constructors as the existing contrast. Do not create mean-box evidence.
     compiled = {s: policy._compile(dict(plan['endpoint_plans'][s], plan_sha256=plan['plan_sha256']),

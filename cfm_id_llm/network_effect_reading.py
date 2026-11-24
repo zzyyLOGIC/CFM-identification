@@ -193,14 +193,5 @@ def parse(bundle, raw, *, binding):
             for node in t.population or []:
                 components.validate_exposure_coordinate(c.exposure, node, arm.exposure, edges)
     for source in c.information:
-        information_rules.require(source)
-        if not set(source.outcome_nodes)<=set(nodes) or len(set(source.outcome_nodes))!=len(source.outcome_nodes):
-            raise ValueError('INVALID_A4_NODE_SCOPE')
-        cells=[(v.node,v.own,v.exposure) for v in source.arm_cells]
-        if (len(set(cells))!=len(cells)
-                or any(n not in source.outcome_nodes or a not in (0,1)
-                       or (type(e) is int and e<0) for n,a,e in cells)):
-            raise ValueError('INVALID_A4_ARM_CELLS')
-        for cell in source.arm_cells:
-            components.validate_exposure_coordinate(c.exposure, cell.node, cell.exposure, edges)
+        information_rules.require_scope(source, nodes=nodes, exposure=c.exposure, edges=edges)
     return dict(facts=c.model_dump(mode='json'), reference_binding=refs)

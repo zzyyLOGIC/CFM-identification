@@ -10,6 +10,7 @@ from .business_dispatch import sha,worksheet,checked_review,DispatchError,empty_
 from .network_policy_dispatch import native_reviews_from_json,BASE_CONDITIONS
 from .network_effect_dispatch import _native_payload
 from . import network_design_adapter as design
+from . import research_spec_observational_adapters as observed_attributes
 from cfm_id_llm import network_extended_reading as reading
 
 ARM='R1A_RANDOMIZED_ARM';MIX='R1B_FINITE_POLICY'
@@ -68,15 +69,19 @@ def reviewed_observation_period(entry,decoded,study):
     return dict(value=value,source_links=links,field='study.context',role='outcome_period',
                 intent_sha256=entry['reviewed_intent']['intent_sha256'])
 
-def target_coordinates(c,family):
+def target_coordinates(c,family,*,source_index=0):
+    if family==reading.OBS:
+        q=observed_attributes.from_effect_reading(c,c.information[source_index])
+        return observed_attributes.effect_coordinates(q,exposure_kind=c.exposure.kind)
     t=c.target;nodes=c.study.nodes
     base=dict(node_order=nodes,population=t.population,unit_weights=[str(Fraction(1,len(t.population))) if n in t.population else '0' for n in nodes],
         treatment=c.study.treatment,outcome=c.study.outcome,context=c.study.context)
     if family==reading.MIX:
         return dict(base,kind='FINITE_POLICY_MEAN',policies=[dict(assignment=[x.assignment[n] for n in nodes],weight=x.weight) for x in t.components])
-    base.update(first=[t.first.own,t.first.exposure],exposure=c.exposure.kind,averaging=t.averaging)
-    if family==reading.ARM:return dict(base,kind='SINGLE_ARM_MEAN')
-    return dict(base,kind=t.kind,second=[t.second.own,t.second.exposure],fixed_context=c.conditioning.definition)
+    if family==reading.ARM:
+        return dict(base,kind='SINGLE_ARM_MEAN',first=[t.first.own,t.first.exposure],
+                    exposure=c.exposure.kind,averaging=t.averaging)
+    raise ValueError('REGISTERED_EXTENDED_READER_REQUIRED')
 
 def inspect_methods(entry,raw,*,note_review=None):
     family=entry['reader_id']
@@ -103,6 +108,11 @@ def inspect_methods(entry,raw,*,note_review=None):
                                else '请明确本次分析是否采用这一条件：'+SCIENCE_NAMES.get(name,name)+'。')
             elif d.value is False:blocked.append('DECLARED_MODEL_EXCLUDES:'+name)
             elif not d.source_ids:missing.append('请补充声明的原文来源：'+name)
+        def require_information(d,question):
+            # Availability/completeness is not a causal premise. Preserve the
+            # supplied false/unknown value and ask for the missing information.
+            if d.value is not True:missing.append(question)
+            elif not d.source_ids:missing.append('请补充这项信息声明的原文来源。')
         if not c.study.nodes or c.study.graph_kind=='UNKNOWN' or c.study.edge_list_complete is not True:
             missing.append('请明确完整对象名单与处理前关系网络。')
         if c.study.graph_kind=='OTHER' or c.study.outcome_kind=='OTHER':blocked.append('STUDY_SCOPE_NOT_CONNECTED')
@@ -115,11 +125,17 @@ def inspect_methods(entry,raw,*,note_review=None):
         method=ARM if family==reading.ARM else MIX if family==reading.MIX else AVG.get(t.averaging)
         if family!=reading.OBS:
             gaps,excluded=design.component_gaps(c,local_effect=family==reading.ARM)
+            if 'CONFLICTING_FIRST_STAGE_EXCLUSION' in excluded:
+                return dict(out,state='READING_RECHECK_REQUIRED',reason_code='CONFLICTING_FIRST_STAGE_EXCLUSION')
             missing+=['请补充设计或暴露字段：'+x for x in gaps];blocked+=excluded
             if c.assignment.kind=='OTHER':blocked.append('ASSIGNMENT_NOT_CONNECTED')
             if not c.assignment.source_ids:missing.append('请提供历史分配规则的来源。')
             science=tuple(BASE_CONDITIONS)+design.extra_science(c)
-            for name in BASE_CONDITIONS:require(getattr(c.assumptions,name),name)
+            for name in BASE_CONDITIONS:
+                if name=='known_assignment_law':
+                    question=design.assignment_availability_question(c.assumptions.known_assignment_law)
+                    if question:missing.append(question)
+                else:require(getattr(c.assumptions,name),name)
         else:
             if method is None:
                 if t.averaging=='UNKNOWN':missing.append('请说明其余安排按实际采用规律平均，还是对处理前协变量调整后再平均。')
@@ -170,37 +186,43 @@ def inspect_methods(entry,raw,*,note_review=None):
         else:
             if t.aggregation=='UNKNOWN':missing.append('请明确政策结果的平均方式。')
             elif t.aggregation!='EQUAL_MEAN':blocked.append('POLICY_AGGREGATION_NOT_CONNECTED')
-            require(t.policy_distribution_complete,'未来政策的有限概率分布完整')
+            require_information(t.policy_distribution_complete,'请列全未来政策的候选方案和各自概率，并说明这是否是全部方案。')
             if not t.components:missing.append('请列出未来政策的全部完整方案与选择概率。')
             for x in t.components:
                 if set(x.assignment)!=set(c.study.nodes) or x.weight is None or not x.source_ids:missing.append('请补齐每份方案的完整名单、概率和来源。')
                 if any(v not in (0,1) for v in x.assignment.values()):raise ValueError('BINARY_POLICY_REQUIRED')
             if t.components and all(x.weight is not None for x in t.components):
-                if sum(Fraction(x.weight) for x in t.components)!=1:raise ValueError('POLICY_WEIGHTS_DO_NOT_SUM_TO_ONE')
+                if t.policy_distribution_complete.value is True and sum(Fraction(x.weight) for x in t.components)!=1:raise ValueError('POLICY_WEIGHTS_DO_NOT_SUM_TO_ONE')
                 if len({tuple(sorted(x.assignment.items())) for x in t.components})!=len(t.components):raise ValueError('DUPLICATE_POLICY_ATOM')
-        available=[]
+        available=[];information_scope_gap=False
         for i,s in enumerate(c.information):
             if s.availability=='FINITE_SAMPLE':continue
             if s.availability=='UNKNOWN' or s.operator=='UNKNOWN':missing.append('请明确信息类型、总体或样本属性及覆盖范围。');continue
             if s.operator=='OTHER' or s.availability!='SYMBOLIC_POPULATION_OPERATOR':blocked.append('INFORMATION_OPERATOR_NOT_CONNECTED');continue
             if not s.source_ids or not s.outcome_nodes:missing.append('请提供总体信息的来源和对象覆盖范围。');continue
+            if s.operator=='FULL_JOINT_LAW' and set(s.outcome_nodes)!=set(c.study.nodes):
+                return dict(out,state='READING_RECHECK_REQUIRED',reason_code='FULL_JOINT_LAW_REQUIRES_FULL_OUTCOME_SCOPE',
+                    clarification_questions=['读取结果把资料记为全体结果的联合分布，但覆盖名单只有一部分。请按原材料核对信息类型与覆盖名单，不能自动补齐。'])
             if not set(t.population or [])<=set(s.outcome_nodes):continue
             if family==reading.ARM:
                 required={(t.population[0],t.first.own,t.first.exposure)} if t.population else set()
                 if s.operator=='NODE_ARM_MEANS' and not required<={(a.node,a.own,a.exposure) for a in s.arm_cells}:continue
-                if s.operator=='FULL_JOINT_LAW' and set(s.outcome_nodes)!=set(c.study.nodes):raise ValueError('FULL_JOINT_LAW_REQUIRES_ALL_NODES')
             elif family==reading.MIX:
                 if s.operator not in ('FULL_JOINT_LAW','NODE_FULL_LAW','ASSIGNMENT_NODE_MEANS'):blocked.append('FINITE_POLICY_REQUIRES_ASSIGNMENT_LEVEL_INFORMATION');continue
                 if s.operator=='ASSIGNMENT_NODE_MEANS' and all(set(x.assignment)==set(c.study.nodes) for x in t.components):
                     if not {tuple(x.assignment[n] for n in c.study.nodes) for x in t.components}<={tuple(x) for x in s.assignment_cells}:continue
             else:
-                allowed={P:('FINITE_ASSIGNMENT_LAW','FACTORIZED_ARM_LAW','MIXTURE_ARM_LAW'),B:('STRATIFIED_ARM_LAW',),X:('NODEWISE_ARM_LAW','NODEWISE_MIXTURE_ARM_LAW',)}
-                if method and s.operator not in allowed[method]:blocked.append('TARGET_AVERAGING_AND_POPULATION_OPERATOR_MISMATCH');continue
-                require(s.complete_law_and_mean_scope,'总体分布及条件均值覆盖声明')
-                require(s.same_study_and_context,'总体信息与本次研究和背景一致')
+                if method and s.operator not in observed_attributes.population_operators(t.averaging):blocked.append('TARGET_AVERAGING_AND_POPULATION_OPERATOR_MISMATCH');continue
+                require_information(s.complete_law_and_mean_scope,'请说明总体分布和结果均值实际覆盖哪些情况；如果目前只提供了一部分，请补充缺少的范围。')
+                require_information(s.same_study_and_context,'请核对这份总体信息是否针对本次研究对象和背景；其他研究或其他背景的资料不能直接代入。')
+                if s.complete_law_and_mean_scope.value is not True or s.same_study_and_context.value is not True:
+                    # A declared partial table need not sum to one. It remains
+                    # unavailable; do not normalize it or send it to the solver.
+                    information_scope_gap=True
+                    continue
                 _information_shape(s,c.study.nodes)
             available.append(i)
-        if not available:missing.append('需要覆盖本目标的总体信息；有限记录不能替代，未给定的格子不能补造。')
+        if not available and not information_scope_gap:missing.append('需要覆盖本目标的总体信息；有限记录不能替代，未给定的格子不能补造。')
         if len(available)>1:blocked.append('MULTIPLE_POPULATION_SOURCES_REQUIRE_JOINT_ADAPTER')
         if blocked:return dict(out,state='ADAPTER_NOT_CONNECTED',reason_code=blocked[0],unsupported_reasons=blocked,clarification_questions=missing)
         if missing:return dict(out,state='NEEDS_INPUT',reason_code='EXTENDED_NETWORK_FACTS_INCOMPLETE',clarification_questions=list(dict.fromkeys(missing)))
@@ -208,7 +230,7 @@ def inspect_methods(entry,raw,*,note_review=None):
         notes=inspect_notes(entry,raw,[x.model_dump() for x in c.unresolved],contract.documents(entry['bundle']),note_review)
         if notes['worksheet'] is not None:out.update(note_review_worksheet=notes['worksheet'],note_review_receipt=notes['receipt'],reading_notes=decoded['facts']['unresolved'],reading_recheck_notes=notes['reading_recheck_notes'])
         if notes['state'] not in ('NO_NOTES','NOTES_RELEASED_FOR_CHECKS'):return dict(out,state=notes['state'],reason_code=notes['reason_code'],clarification_questions=notes['clarification_questions'])
-        target=target_coordinates(c,family)
+        target=target_coordinates(c,family,source_index=available[0])
         decisions=READING_DECISIONS
         if entry.get('reviewed_target_context'):
             out['target_conditioning_review']=contract.target_context.review_item(entry['reviewed_target_context'],dict(study=c.study.model_dump(),target=t.model_dump()))
@@ -284,7 +306,7 @@ def _native_inputs(plan,row,pair):
     from pfn_pipeline.network_inquiry_shadow import declare_network_study,fixed_policy_target_from_context,declare_network_a4_source
     from pfn_pipeline.identification_policy_r2 import declare_policy_signature
     c=reading.MODELS[plan['fact_family']].model_validate(plan['facts']);s=c.information[row['source_index']];t=c.target
-    if target_coordinates(c,plan['fact_family'])!=plan['proposed_target']:raise ValueError('TARGET_PLAN_MISMATCH')
+    if target_coordinates(c,plan['fact_family'],source_index=row['source_index'])!=plan['proposed_target']:raise ValueError('TARGET_PLAN_MISMATCH')
     review=pair['science_review'];evidence=review.evidence+'; review='+review.binding_sha256
     provenance=lambda ids:'Reviewed original source locators: '+','.join(ids)+'; '+evidence
     def condition(name):return Assumption(name=name,source='demo_specification',confirmed=True,status='ADMITTED',evidence=[provenance(getattr(c.assumptions,name).source_ids),review.reviewer])
@@ -293,13 +315,20 @@ def _native_inputs(plan,row,pair):
         return core.ArmInquiryV21(design.make_arm(c,net,source=provenance(s.source_ids),evidence=evidence))
     isobs=plan['fact_family']==reading.OBS
     context=plan['proposed_target']['context']
-    if isobs:context+='; fixed pretreatment W: '+c.conditioning.definition
-    study=declare_network_study(network_id='network_'+sha(dict(nodes=c.study.nodes,edges=sorted(sorted(e) for e in c.study.edges),context=context)),
-        node_order=tuple(c.study.nodes),undirected_edges=tuple(tuple(e) for e in c.study.edges),
-        treatment_variable=c.study.treatment,outcome_variable=c.study.outcome,outcome_kind='continuous' if c.study.outcome_kind=='COUNT' else c.study.outcome_kind.lower(),
-        context_reference=context,observation_regime='observational' if isobs else 'experimental',
-        assignment_design=None if isobs else design.design_payload(c.assignment, nodes=tuple(c.study.nodes)),
-        protocol_provenance=provenance(c.regime.source_ids if isobs else c.assignment.source_ids),network_provenance=provenance(c.study.source_ids),graph_timing_claim='DECLARED_PRETREATMENT_FIXED')
+    if isobs:
+        question=observed_attributes.from_effect_reading(c,s)
+        observed_attributes.require_effect_coordinates(question,plan['proposed_target'],exposure_kind=c.exposure.kind)
+        context=question.study.context_reference+'; fixed pretreatment W: '+question.fixed_background.definition
+        study=observed_attributes.effect_native_study(question,
+            network_id='network_'+sha(dict(nodes=list(question.study.node_order),edges=sorted(sorted(e) for e in c.study.edges),context=context)),
+            edges=c.study.edges,protocol_provenance=provenance(c.regime.source_ids),
+            network_provenance=provenance(c.study.source_ids),graph_timing_claim='DECLARED_PRETREATMENT_FIXED')
+    else:
+        study=declare_network_study(network_id='network_'+sha(dict(nodes=c.study.nodes,edges=sorted(sorted(e) for e in c.study.edges),context=context)),
+            node_order=tuple(c.study.nodes),undirected_edges=tuple(tuple(e) for e in c.study.edges),
+            treatment_variable=c.study.treatment,outcome_variable=c.study.outcome,outcome_kind='continuous' if c.study.outcome_kind=='COUNT' else c.study.outcome_kind.lower(),
+            context_reference=context,observation_regime='experimental',assignment_design=design.design_payload(c.assignment, nodes=tuple(c.study.nodes)),
+            protocol_provenance=provenance(c.assignment.source_ids),network_provenance=provenance(c.study.source_ids),graph_timing_claim='DECLARED_PRETREATMENT_FIXED')
     kwargs=dict(source_id='source_'+sha(s.model_dump()),provenance=provenance(s.source_ids),admission='ADMITTED',availability=s.availability)
     if not isobs:
         assumptions=tuple(condition(n) for n in BASE_CONDITIONS)
@@ -310,10 +339,7 @@ def _native_inputs(plan,row,pair):
             fixed_policy_target_from_context(study,tuple(x.assignment[n] for n in c.study.nodes),unit_weights=tuple(plan['proposed_target']['unit_weights']),authority='TRUSTED_FIXTURE'),
             assumptions,(a4,)) for x in t.components)
     signature=declare_policy_signature(study,**design.exposure_payload(c.exposure))
-    from pfn_pipeline.identification_composition import EffectQueryV18
-    request=EffectQueryV18({'DIRECT_EFFECT':'DIRECT','SPILLOVER_EFFECT':'SPILLOVER','LOCAL_TOTAL_EFFECT':'TOTAL'}[t.kind],
-        tuple((n,'1') for n in t.population),t.second.exposure,t.first.exposure,spillover_own_treatment=t.first.own,
-        cohort_authority='TRUSTED_FIXTURE',cohort_evidence=provenance(t.population_fixed_before_treatment.source_ids))
+    request=observed_attributes.native_effect_request(question,cohort_evidence=provenance(t.population_fixed_before_treatment.source_ids))
     method=row['method'];assumptions=tuple(condition(n) for n in (SCIENCE[P] if method==P else BASIC))
     if method==P:
         arms=tuple((a.node,a.own,a.exposure) for a in getattr(s,'covered_cells',()))
@@ -330,7 +356,7 @@ def _native_inputs(plan,row,pair):
     covered=tuple(n for n in c.study.nodes if n in set(c.assumptions.potential_outcome_exposure_sufficiency.covered_nodes)&set(getattr(c.assumptions,SCIENCE[method][-1]).covered_nodes))
     if method==B:
         from pfn_pipeline.identification_observational_exposure_adjustment import declare_stratified_observational_arm_population_v27p2 as declare,admit_exposure_adjustment_a5_v27p2 as admit
-        a4=declare(study,signature,**kwargs,adjustment_variable=s.adjustment_variable,strata=tuple((x.label,x.mass,x.probabilities) for x in s.strata),covered_cells=tuple((x.stratum,x.node,x.own,x.exposure) for x in s.covered_cells))
+        a4=declare(study,signature,**kwargs,adjustment_variable=question.averaging.variable,strata=tuple((x.label,x.mass,x.probabilities) for x in s.strata),covered_cells=tuple((x.stratum,x.node,x.own,x.exposure) for x in s.covered_cells))
         license=admit(study,signature,covered_nodes=covered,potential_outcome_exposure_sufficiency=condition('potential_outcome_exposure_sufficiency'),exposure_level_conditional_exchangeability=condition('exposure_level_conditional_exchangeability'))
         return core.ObservationalExposureAdjustedEffectsInquiryV27P2(study,a4,assumptions,signature,license,(request,))
     from pfn_pipeline.identification_observational_nodewise_adjustment import declare_nodewise_local_arm_population_v28 as declare,admit_nodewise_adjustment_a5_v28 as admit
@@ -338,8 +364,8 @@ def _native_inputs(plan,row,pair):
     if s.operator=='NODEWISE_MIXTURE_ARM_LAW':
         from pfn_pipeline.identification_observational_nodewise_mixture_a4 import declare_nodewise_correlated_arm_population_v28p2 as declare
         profiles=tuple((x.label,x.mass,x.features,tuple((v.weight,v.probabilities) for v in x.mixture_components)) for x in s.profiles)
-    a4=declare(study,signature,**kwargs,feature_name=s.adjustment_variable,profiles=profiles,covered_cells=tuple((x.node,x.own_feature,x.neighbor_feature_count,x.own,x.exposure) for x in s.covered_cells))
-    license=admit(study,signature,feature_name=s.adjustment_variable,covered_nodes=covered,potential_outcome_exposure_sufficiency=condition('potential_outcome_exposure_sufficiency'),local_covariate_exposure_mean_exchangeability=condition('local_covariate_exposure_mean_exchangeability'))
+    a4=declare(study,signature,**kwargs,feature_name=question.averaging.variable,profiles=profiles,covered_cells=tuple((x.node,x.own_feature,x.neighbor_feature_count,x.own,x.exposure) for x in s.covered_cells))
+    license=admit(study,signature,feature_name=question.averaging.variable,covered_nodes=covered,potential_outcome_exposure_sufficiency=condition('potential_outcome_exposure_sufficiency'),local_covariate_exposure_mean_exchangeability=condition('local_covariate_exposure_mean_exchangeability'))
     return core.ObservationalNodewiseAdjustedEffectsInquiryV28(study,a4,assumptions,signature,license,(request,))
 
 def _execute_plan(plan,*,plan_review=None,native_reviews=None,research_protocol_selected=False):

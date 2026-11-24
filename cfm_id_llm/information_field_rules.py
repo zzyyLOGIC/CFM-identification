@@ -45,6 +45,18 @@ def require(source, code):
         raise ValueError(code)
 
 
+def require_assignment_scope(source, nodes):
+    """Same assignment-cell ownership in fixed and finite-policy readers."""
+    if source.operator == 'ASSIGNMENT_NODE_MEANS':
+        if any(len(z) != len(nodes) or any(v not in (0, 1) for v in z)
+               for z in source.assignment_cells):
+            raise ValueError('INVALID_ASSIGNMENT_CELLS')
+    require(source, 'ASSIGNMENT_CELLS_WITH_OTHER_OPERATOR')
+    cells = [tuple(z) for z in source.assignment_cells]
+    if len(set(cells)) != len(cells):
+        raise ValueError('DUPLICATE_INFORMATION_CELL')
+
+
 def diagnose(information):
     return [rule.diagnostic(i) for i, source in enumerate(information)
             for rule in RULES if rule.violated(source)][:50]

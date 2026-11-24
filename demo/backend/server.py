@@ -126,6 +126,9 @@ def make_server(engine, port=8770):
                     from .math_library import run
                     from pydantic import ValidationError
                     try:
+                        if 'source_run' in value:
+                            from .study_math import submit
+                            return self.send(200,submit(engine,owner,value))
                         return self.send(200,run(value))
                     except ValidationError as exc:
                         missing=['.'.join(map(str,item['loc'])) for item in exc.errors(include_input=False)[:8]]

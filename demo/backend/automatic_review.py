@@ -165,6 +165,14 @@ def request(run):
             payload['definition_usage']='field_definitions来自本次读取合同，不是业务证据。固定条件字段的名称已经表达条件含义，其记录按Schema只填采用态度和来源，不需重复条件全文；仍必须核对原文是否支持这个条件及其采用态度，不能因有定义而推断采用。'
             paths=['','/additional_restrictions','/information','/scientific_statements']
             payload['field_contract']=contract.public_constraints(run.entry,paths)
+            # Output preferences belong to the preserved research question,
+            # not to population data or scientific restrictions. Review their
+            # semantic effect without demanding a second textual copy.
+            payload['output_request_ownership']=dict(
+                owner='case.business_question_and_sources',
+                business_question=run.case['business_question'],
+                rule='公式或数值、表格或文字等输出要求保留在研究问题和原材料中，不要求在事实data_description重复抄写。只求公式时，须核对候选确实保留原文支持的总体算子、变量及覆盖范围，没有虚构数值；不能仅因未重复“只求公式”判为事实遗漏。',
+                boundary='不把科学限制当作输出偏好：时期、评价名单、比较方向、信息覆盖、采用态度和额外约束仍须在各自事实字段完整记录并审核。未知算子不得因只求公式而变为已提供。')
             if contract.reader_id=='NETWORK_RANDOMIZED_EFFECT_FACTS':
                 from cfm_id.network_effect_dispatch import METHOD, ASSUMPTION_REQUIREMENTS
                 from cfm_id_llm.assumption_choices import CONDITIONS

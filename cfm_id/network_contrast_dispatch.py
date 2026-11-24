@@ -9,6 +9,7 @@ from .business_dispatch import (sha, worksheet, checked_review, DispatchError,
 from . import network_policy_dispatch as policy
 from . import network_bounded_dispatch as bounded
 from . import network_mean_order_dispatch as mean_order
+from . import research_spec_policy_adapters as policy_attributes
 from .bounded_policy_contract import BoundedPolicyUnavailable
 from cfm_id_llm import network_contrast_reading as reading
 from cfm_id_bridge.scientific_binding import sha as native_sha, canonical_data
@@ -97,10 +98,7 @@ def inspect_methods(entry, raw, *, note_review=None, information_evidence_review
             stopped = min(stops, key=lambda p: rank.get(p['state'], 5))
             return dict(out, state=stopped['state'], reason_code=stopped.get('reason_code'),
                 clarification_questions=list(dict.fromkeys(q for p in stops for q in p['clarification_questions'])))
-        targets = {s: plans[s]['proposed_target'] for s in SIDES}
-        for field in ('node_order', 'unit_weights', 'treatment', 'outcome', 'context'):
-            if targets['first'][field] != targets['second'][field]:
-                raise ValueError('COMMON_CONTRAST_COORDINATES_REQUIRED')
+        question = policy_attributes.from_endpoint_plans(plans)
         finite_method = mean_order.METHOD if order_context is not None else next(
             (m for m in bounded.METHODS if all(any(r['method']==m for r in plans[s]['methods']) for s in SIDES)),bounded.METHOD)
         bounded_pair = all(any(r['method'] == finite_method for r in plans[s]['methods']) for s in SIDES)
@@ -109,9 +107,7 @@ def inspect_methods(entry, raw, *, note_review=None, information_evidence_review
         if not base_methods:
             return dict(out, state='ADAPTER_NOT_CONNECTED', reason_code='CONTRAST_ENDPOINT_METHOD_COMBINATION_NOT_CONNECTED',
                 scope_note='Both endpoints need the same connected method and common model; mixed endpoint proofs or interval fallback are not inferred.')
-        proposed = dict(kind='FIXED_FULL_ASSIGNMENT_POLICY_CONTRAST',
-            **{k: targets['first'][k] for k in ('node_order','unit_weights','treatment','outcome','context')},
-            first=targets['first']['assignment'], second=targets['second']['assignment'], operation='first_minus_second')
+        proposed = question.coordinates()
         for base_method in base_methods:
             rows = {s: next(r for r in plans[s]['methods'] if r['method']==base_method) for s in SIDES}
             first,second = (rows[s] for s in SIDES)
@@ -146,6 +142,8 @@ native_reviews_from_json = policy.native_reviews_from_json
 
 def _compile_pair(plan, row, records, authority):
     from pfn_pipeline.identification_business import FixedPolicyInquiryV21
+    question = policy_attributes.from_endpoint_plans(plan['endpoint_plans'])
+    question.require_coordinates(plan['proposed_target'])
     inquiries, information = {}, {}
     for side in SIDES:
         endpoint = dict(plan['endpoint_plans'][side], plan_sha256=plan['plan_sha256'])

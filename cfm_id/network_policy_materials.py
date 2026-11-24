@@ -3,7 +3,7 @@ import re
 from fractions import Fraction
 
 from .network_grounded_contrast import source_lines
-from .network_protocol_terms import NUM, integer, uniform_quota
+from .network_protocol_terms import NUM, integer, treated_neighbor_majority, uniform_quota
 from .uploaded_network_contrast import PREMISES, NEG_SCI
 
 RATE = r'(?:\d+/\d+|\d*\.\d+%?|\d+%?)'
@@ -107,6 +107,8 @@ def bounded_level(q,docs,nodes):
     box,_=single(docs,r'(?:每个|各).{0,14}每种安排.{0,10}均值介于0与1(?:之间)?[，,].{0,22}没有.{0,18}额外约束')
     binary,_=single(docs,r'(?:取|为)(?:值)?0或1')
     if not all((treatment,graph,rule,suff,only,box,binary)):
+        return None
+    if not treated_neighbor_majority(rule['quote'], treatment[1] + treatment[2]):
         return None
     edges=[]
     for token in re.split(r'[、，,]',g[1]):

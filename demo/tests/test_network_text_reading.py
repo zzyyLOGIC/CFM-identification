@@ -89,6 +89,27 @@ def test_legacy_no_fields_and_nonnetwork():
     assert "network_reading" not in v6 and replay(CASE,RAW,v6)
 
 
+def test_explicit_network_selects_fact_contract_without_keyword_or_approval(monkeypatch):
+    """The file input controls routing, not incidental business nouns."""
+    import cfm_id.direct_verification as verification
+    c={"business_question":"甲站本周开了助手后的平均用时？","sources":[]}
+    calls=[]; received=[]; manifest=object()
+    raw={"status":"NEEDS_INPUT"}
+    def verify_case(case,draft,**options):
+        received.append((case,draft,options))
+        return {"scientific_approval":False,"estimation_handoff_allowed":False}
+    monkeypatch.setattr(verification,"verify",verify_case)
+    def send(req,stage):
+        calls.append((req,stage));return raw
+    r=project.direct_then_verify(c,send,network=manifest)
+    assert len(calls)==1 and "network_facts" in calls[0][0]["system_prompt"]
+    assert received==[(c,raw,{"network":manifest,"network_focus":False})]
+    assert not r["scientific_approval"] and not r["estimation_handoff_allowed"]
+    calls.clear()
+    project.direct_then_verify(c,send)
+    assert calls[0][0]==request(c)
+
+
 def test_wrapped_fact_sheet_and_notation_do_not_change_signed_source_draft():
     d=proposal()
     wrapped={"answer":d}

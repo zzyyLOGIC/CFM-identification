@@ -128,10 +128,14 @@ def allocation(rows, nodes):
     totals = re.findall(r"(?:从|在)(?:全(?:部|体))?(" + NUM + r")(?:个点|个单位|个对象|个节点|人|站|家)",text)
     if any(integer(n) != len(nodes) for n in totals):
         return None, evidence
-    independent = re.search(r"(?:相互|彼此|各自)独立|独立(?:抽签|分配|投币|随机)",text)
+    from .network_protocol_terms import independent_draw, common_probability
+    independent = independent_draw(text)
     fixed = uniform_quota(lines,nodes)
     if independent and not re.search(r"无放回|名额|抽取|抽出",text):
         vectors = []
+        common = common_probability(text,nodes)
+        if common is not None:
+            vectors.append(common)
         for line in lines:
             vector = re.search(r"(?:按|依照)(?:名册|名单)顺序[^，,]{0,12}(?:概率|机会)(?:分别|依次)(?:为|是)(.+)$",line)
             if vector:

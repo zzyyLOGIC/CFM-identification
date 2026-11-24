@@ -44,7 +44,7 @@ async function buildUploadInput(){
  const docs=Array.from($('#documents').files), nodes=Array.from($('#network-nodes').files), edges=Array.from($('#network-edges').files);
  const d=Array.from($('#dictionary-file').files),t=Array.from($('#table-file').files);
  const all=[...docs,...nodes,...edges,...d,...t];
- if(all.length>10||docs.length+d.length>8)throw Error('最多10份文件，其中普通材料与字段说明合计最多8份。');
+ if(all.length>10)throw Error('本次上传的研究材料、名册、关系表及数据文件合计最多10份。');
  if(all.reduce((n,f)=>n+f.size,0)>20*1024*1024||all.some(f=>f.size>8*1024*1024))throw Error('单文件最多8MB，总计20MB。');
  const files=await Promise.all([...docs.map(f=>upload(f,'document')),...nodes.map(f=>upload(f,'network_nodes')),...edges.map(f=>upload(f,'network_edges')),...t.map(f=>upload(f,'table_data'))]);
  for(const f of d)files.push({...await upload(f,'data_dictionary'),sheet:$('#dictionary-sheet').value||null,header_row:Number($('#dictionary-header').value)});
@@ -60,7 +60,9 @@ async function buildUploadInput(){
    treated_value:$('#map-on').value,untreated_value:$('#map-off').value,missing_outcome_values:['',...$('#map-missing').value.split(',').map(x=>x.trim()).filter(Boolean)],
    treatment:$('#map-treatment-text').value,outcome:$('#map-outcome-text').value,context:$('#map-context').value,outcome_kind:$('#map-kind').value,observation_scheme:$('#map-observation').value};
  }
- return {files,...(network?{network}:{}),...(table_mapping?{table_mapping}:{})};
+ // The preview and the consent text describe full rows in every reading mode.
+ // Older API clients can still request metadata only with share_table_rows:false.
+ return {files,share_table_rows:true,...(network?{network}:{}),...(table_mapping?{table_mapping}:{})};
 }
 function inputSelection(){return {use_example_network:!!(selected?.network_files&&$('#use-example-network')?.checked),example_id:selected?.id||null,...(selected?{source_edits:Array.from(document.querySelectorAll('[data-source]')).filter(e=>e.querySelector('.include-source').checked).map(e=>({source_id:e.dataset.source,text:e.querySelector('.source-edit').value}))}:{})};}
 async function checkUploadInput(input){

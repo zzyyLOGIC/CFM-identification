@@ -8,6 +8,36 @@ from . import dag_frontdoor_contract as front, dag_frontdoor_solver, dag_frontdo
 from . import dag_id_contract, dag_id_solver, dag_id_verify
 
 
+SECTION_NAMES={'variables':'variables','变量':'variables','变量说明':'variables','graph':'graph','relations':'graph',
+               '因果图':'graph','边表':'graph','model':'model','模型声明':'model','科学假设':'model',
+               'information':'information','总体信息':'information','context':'context','研究背景':'context'}
+
+
+def complete_sections(sources):
+    """Consume every original section. Duplicates, preambles and extra material require review."""
+    parts={}
+    for s in sources:
+        chunks=re.split(r'(?m)^##[ \t]+([^\r\n]+?)\s*$',s['text'])
+        if len(chunks)>1:
+            if chunks[0].strip():
+                return {}
+            items=zip(chunks[1::2],chunks[2::2])
+        else:
+            name=re.sub(r'(?:\.md|\.txt)+$','',s.get('label') or s['source_id'])
+            items=[(name,s['text'])]
+        for key,value in items:
+            name=SECTION_NAMES.get(key.strip())
+            if not name or name in parts or not value.strip():
+                return {}
+            parts[name]=value.strip()
+    if 'context' in parts and 'graph' in parts:
+        period=parts.pop('context')
+        if not re.fullmatch(r'(?:研究背景|研究对象和时期|研究对象与时期)[：:][^。；;\n]+。?',period):
+            return {}
+        parts['graph']+='\n'+re.sub(r'^(?:研究对象和时期|研究对象与时期)[：:]','研究背景：',period)
+    return parts
+
+
 def sections(sources):
     parts = {}
     for source in sources:
@@ -52,7 +82,7 @@ def roles(q, observed):
     return None
 
 
-def parse_edges(text, nodes, *, bound_names=False, qualified_text=""):
+def parse_edges(text, nodes, *, bound_names=False, qualified_text="", arrows=False):
     names = {n: [n] for n in nodes}
     if qualified_text:
         for node in nodes:
@@ -75,6 +105,12 @@ def parse_edges(text, nodes, *, bound_names=False, qualified_text=""):
                 return None
         if not clause or re.fullmatch(r"没有其他直接边|没有[\w-]+到[\w-]+的直接边|研究背景[：:][^。]+", clause):
             continue
+        if arrows and re.search(r'→|->',clause):
+            pair=re.fullmatch(r'([\w-]+?)\s*(?:→|->)\s*([\w-]+)',clause)
+            if not pair or not set(pair.groups())<=set(nodes):
+                return None
+            edges.append(list(pair.groups()))
+            continue
         if bound_names:
             pairs = [(a,b) for a in nodes for b in nodes
                      if any(clause == a+verb+b for verb in ("直接影响","还直接影响","直接影响到","还直接影响到"))]
@@ -91,7 +127,7 @@ def parse_edges(text, nodes, *, bound_names=False, qualified_text=""):
 
 def verified(case, *, revision=3):
     q, sources = case["business_question"], case["sources"]
-    parts = sections(sources)
+    parts = complete_sections(sources) if revision>=8 else sections(sources)
     if not {"variables", "graph", "model", "information"} <= parts.keys():
         return None
     obs, lat = variables(parts["variables"])
@@ -109,7 +145,7 @@ def verified(case, *, revision=3):
     # Other attachments may add restrictions or updates. Only indexed sections and a plain
     # dictionary are understood. Extra study facts require another reading.
     recognized = {v for n, v in parts.items() if n in ("variables", "graph", "model", "information")}
-    for s in sources:
+    for s in ([] if revision>=8 else sources):
         t = s["text"].strip()
         if t in recognized or t.startswith("## variables") or s.get("label", "").startswith("data_dictionary.md") or s["source_id"].startswith("user_reply_"):
             continue
@@ -130,10 +166,15 @@ def verified(case, *, revision=3):
             model += "\n" + updates[0]
         else:
             return None
-    complete = bool(re.search(r"全部直接因果关系|直接因果边完整", model)) and bool(re.search(r"全部共同原因|所有共同原因均已", model))
-    independent = "噪声相互独立" in model
-    modular = bool(re.search(r"其他(?:结构)?机制(?:保持)?不变", model))
-    law = bool(re.search(r"完整(?:符号)?(?:联合总体分布|总体联合分布)", info)) and bool(re.search(r"严格大于零|严格为正", info))
+    from .source_declarations import dag_declarations
+    declarations, restrictions = dag_declarations(model, info)
+    if re.search(r'额外假|另(?:外|行)(?:假定|假设|要求)|同时要求|还要求|还假定', q):
+        restrictions.append(q)
+    adopted = lambda name: declarations[name]['state'] == 'ADOPTED'
+    complete = adopted('complete_edges') and adopted('complete_latents')
+    independent = adopted('independent_errors')
+    modular = adopted('modularity')
+    law = adopted('population_law') and adopted('positive_joint')
     target_desc = dict(quantity="level", scope="whole", population=context, intervention=f"do({x}=x), x∈{{0,1}}", reference=None, outcome=y, time=context)
     assumptions = [dict(kind="other", subject="DAG", statement=model, quote=model),
                    dict(kind="other", subject="P", statement=info, quote=info)]
@@ -144,14 +185,23 @@ def verified(case, *, revision=3):
         ans = dict(target=target_desc, status=status, functional=expression, value=None, assumptions=assumptions,
                    estimate_handoff=dict(hand, mode=mode, operator=expression if mode == "ESTIMATE_POINT" else "STOP"), reason=message)
         return dict(answer=ans, proof=certificate, checks=checks, questions=ask or [])
+    if restrictions:
+        message = '材料中还有以下模型说明，当前图方法不能将它们略去后作结论：' + '；'.join(restrictions)
+        checks.append(dict(code='DAG_ADDITIONAL_RESTRICTIONS', state='UNCHECKED', detail=message, evidence=restrictions))
+        return result('NOT_COVERED', message,
+                      dict(method='DAG_INPUT', source_sha256=sha(sources), declarations=declarations,
+                           additional_restrictions=restrictions),
+                      '已保留这些说明。当前入口尚不能核准含这些说明的完整模型，没有生成点识别或不可识别证明。')
     if not complete or not independent or not modular or not law:
-        missing = [s for ok, s in [(complete, "全部直接边和可能遗漏的共同原因，尤其是干预到结局的直接路径"),
-                                    (independent, "结构方程剩余误差的独立性"), (modular, "设定处理时其他机制不变"),
-                                    (law, "可用的观测总体联合分布及其正支持")] if not ok]
-        question = "请说明" + "、".join(missing) + "，并提供相应的模型或信息声明。"
+        missing = [v for v in declarations.values() if v['state'] != 'ADOPTED']
+        question = '请说明：' + '；'.join(v['question'] for v in missing) + '。不知道或不采用可以直接注明。'
         checks.append(dict(code="DAG_DECLARATION", state="UNCHECKED", detail=question))
-        return result("NEEDS_INPUT", question, dict(method="DAG_INPUT", source_sha256=sha(sources)), "现有声明不足以确定该干预分布。", ask=[question])
-    edges = parse_edges(graph, obs + lat, bound_names=revision >= 4, qualified_text=q if revision >= 6 else "")
+        denied = all(v['state']=='NOT_ADOPTED' for v in missing)
+        return result('NOT_COVERED' if denied else "NEEDS_INPUT", question,
+                      dict(method="DAG_INPUT", source_sha256=sha(sources), declarations=declarations),
+                      '材料明确不满足当前图方法的条件，未生成数学结论。' if denied else "现有声明不足以确定该干预分布。",
+                      ask=[] if denied else [question])
+    edges = parse_edges(graph, obs + lat, bound_names=revision >= 4, qualified_text=q if revision >= 6 else "",arrows=revision>=8)
     if edges is None or "无环" not in model or re.search(r"不能确认|尚未|未知|拒绝|不完整|不独立", model):
         return None
     common = dict(model="RECURSIVE_SCM_EXPLICIT_LATENTS_INDEPENDENT_ERRORS", variable_domain="BINARY",
@@ -159,6 +209,27 @@ def verified(case, *, revision=3):
                   materials_sha256=sha(sources), context=context, treatment=x, outcome=y, additional_restrictions=[],
                   information=dict(source_id="observed_joint", source_sha256=sha(info), variables=obs,
                                    availability="SYMBOLIC_POPULATION_LAW", strictly_positive_joint=True, provenance=info))
+    if revision>=8 and re.search(r'指定.{0,8}(?:控制变量|调整集)|不要改用其他控制变量',q):
+        from . import dag_adjustment_contract as adj, dag_adjustment_solver as solver, dag_adjustment_verify as verifier
+        named=re.findall(r'指定(?:的)?(?:控制变量|调整集)[为是：:]?[“「]([^”」]+)[”」]',q)
+        z=re.split('[、,，]',named[0]) if len(named)==1 else []
+        if not z or len(set(z))!=len(z) or not set(z)<=set(obs)-{x,y}:
+            return result('NEEDS_INPUT','请指明要审核的已观测调整变量。',dict(method='DAG_INPUT',source_sha256=sha(sources)),
+                          '指定调整集尚未绑定到变量清单。',ask=['请指明要审核的已观测调整变量。'])
+        problem=adj.AdjustmentProblem(**common,version=adj.VERSION,adjustment=z)
+        try:
+            cert=solver.solve(problem)
+        except solver.CriterionFailure as exc:
+            ok,_,_=verifier.original_graph_check(problem.nodes,problem.edges,x,y,set(z))
+            if ok:
+                raise ValueError('ADJUSTMENT_DIAGNOSTICS_DISAGREE')
+            return result('NOT_COVERED','指定调整集未通过图准则。',dict(method='DAG_INPUT',source_sha256=sha(sources),
+                          specified_adjustment=z,diagnostic=exc.diagnostic),'此次只审查指定的调整方案。')
+        if not verifier.replay(cert,problem=problem):
+            raise ValueError('ADJUSTMENT_REPLAY_FAILED')
+        return result('POINT',f"Σ_z P({y}=y | {x}=x,z)P(z)，z=({','.join(z)})",
+                      dict(method='DAG_ADJUSTMENT',source_sha256=sha(sources),certificate=cert),
+                      '指定调整集通过图准则，已独立重放标准化公式。')
     fp = front.FrontdoorProblem(**common, version=front.VERSION, frontdoor_variable=None)
     front.validate(fp)
     candidates = {}

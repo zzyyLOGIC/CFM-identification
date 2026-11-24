@@ -47,6 +47,25 @@ def require(source):
             raise ValueError(rule.error_code)
 
 
+def require_scope(source, *, nodes, exposure, edges):
+    """Shared source scope for single-arm and contrast readers.
+
+    A full-law label cannot consume a stray arm table. Validate every supplied
+    cell, including cells outside the requested target; never trim or repair it.
+    """
+    from .network_design_reading import validate_exposure_coordinate
+    require(source)
+    if not set(source.outcome_nodes) <= set(nodes) or len(set(source.outcome_nodes)) != len(source.outcome_nodes):
+        raise ValueError('INVALID_A4_NODE_SCOPE')
+    cells = [(v.node, v.own, v.exposure) for v in source.arm_cells]
+    if (len(set(cells)) != len(cells)
+            or any(n not in source.outcome_nodes or a not in (0, 1)
+                   or (type(e) is int and e < 0) for n, a, e in cells)):
+        raise ValueError('INVALID_A4_ARM_CELLS')
+    for cell in source.arm_cells:
+        validate_exposure_coordinate(exposure, cell.node, cell.exposure, edges)
+
+
 def diagnose(information):
     return [rule.diagnostic(i) for i, source in enumerate(information)
             for rule in RULES if rule.violated(source)][:50]

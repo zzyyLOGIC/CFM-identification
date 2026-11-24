@@ -105,8 +105,9 @@ test('direct verification uses the report contract across revisions, including w
   for(const revision of [12,13,14,27]){
     const view=fixture();
     view.review_kind=null;
+    const verified={answer:{status:'POINT',functional:'已核验的两端率之差',value:'2/7'}};
     view.result={version:'direct-verification/'+revision,decision:'CORRECTED',checks:[],
-      effective_answer:{answer:{status:'POINT',functional:'已核验的两端率之差',value:'2/7'}}};
+      proof:{method:'ORIGINAL_EVENT_MEANS'},conditional_answer:verified,effective_answer:verified};
     const h=harness(view),html=h.element('#result').innerHTML;
     assert.match(html,/数学核验已纠正原答/);
     assert.match(html,/已核验的两端率之差/);
@@ -114,6 +115,36 @@ test('direct verification uses the report contract across revisions, including w
     assert.doesNotMatch(html,/本次检查未通过/);
     assert.equal(vm.runInContext("isDirectVerification({version:'direct-verification/14'})",h.context),false);
   }
+});
+
+test('an unproved status does not certify the model answer',()=>{
+  const page=harness(fixture());
+  for(const decision of ['RETAINED','CORRECTED','CONDITIONAL_RESULT']){
+    page.context.report={decision,draft:{functional:'模型原文<1>'},checks:[],
+      effective_answer:{status:'POINT',functional:'供审查的公式'}};
+    const html=vm.runInContext('directResultHTML(report)',page.context);
+    assert.match(html,/供审查的公式/);
+    assert.match(html,/查看模型原答（供对照）/);
+    assert.match(html,/模型原文&lt;1&gt;/);
+    assert.doesNotMatch(html,/数学核验已纠正|完整声明下的数学结果|条件化数学结果与重放证据/);
+  }
+});
+
+test('policy bounds, original answer and receipt refer to distinct evidence',()=>{
+  const page=harness(fixture());
+  page.context.report={proof:{binder:'source-policy-registration/1'},draft:{status:'POINT',value:'原模型值'},
+    conditional_answer:{target:{population:['甲'],outcome:'完成率'},functional:'区间计算',reason:'均值界',
+      assumptions:[],source_facts:[],estimate_handoff:{mode:'ESTIMATE_BOUNDS',lower:'1/4',upper:'1/2'}},
+    condition_review:{binding:'review-a'},estimation_handoff_allowed:true};
+  page.context.receipt={state:'RECEIVED',consumer:'autocfm_estimation_query_intake',binding:'other-review'};
+  const render=()=>vm.runInContext('directResultHTML(report,receipt)',page.context);
+  const html=render(), [verified,draft]=html.split('<details class="model-draft">');
+  assert.match(verified,/数学库按所列前提复算/);
+  assert.match(verified,/下界 1\/4、上界 1\/2/);
+  assert.doesNotMatch(verified,/原模型值|估计端已收到/);
+  assert.match(draft,/原模型值/);
+  page.context.receipt.binding='review-a';
+  assert.match(render(),/估计端已收到下界 1\/4、上界 1\/2/);
 });
 
 test('the policy result shows both branches and accepts one explicit reply to the open question',async()=>{

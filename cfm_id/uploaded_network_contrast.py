@@ -143,6 +143,7 @@ def group_from_source(q, lines, nodes, proposed, *, source_only=False):
 
 def actual_law(assignment, texts, nodes):
     text="。".join(texts)
+    from .network_protocol_terms import independent_draw, common_probability
     if re.search(r"不(?:再|是)?独立抽签|不是独立分配|并非独立|无法确认.{0,14}(?:独立|无放回)|是否独立.{0,12}(?:未知|不清楚)|改为.{0,12}(?:抽取|抽签|名额)",text):
         return None
     law=reading.assignment(text,nodes)
@@ -156,7 +157,7 @@ def actual_law(assignment, texts, nodes):
     if kind=="fixed" and isinstance(law,reading.native.types.CompleteRandomizationDesignV1):
         if type(assignment.get("quota")) is int and assignment["quota"]==law.m:
             return dict(kind="fixed",quota=law.m)
-    if kind!="independent" or not re.search(r"独立(?:抽签|分配|随机|投币)|(?:各自|彼此|相互)独立",text):
+    if kind!="independent" or not independent_draw(text):
         return None
     if re.search(r"共用.{0,6}(?:签|硬币)|固定(?:名额|选取)|恰好(?:抽取|选出)|无放回|抽签后.{0,15}(?:自行选择|可拒绝)|(?:只|仅)(?:随机|抽取)邀请",text):
         return None
@@ -173,7 +174,9 @@ def actual_law(assignment, texts, nodes):
     elif len(rates)==1:
         ps=dict.fromkeys(nodes,str(rates.pop()))
     else:
-        return None
+        ps=common_probability(text,nodes)
+        if ps is None:
+            return None
     if assignment is None:
         return dict(kind="independent",p=ps)
     proposed=assignment.get("probabilities")
@@ -191,6 +194,8 @@ def treatment_name(question_row,design_rows,corpus):
     stated=re.findall(r"(?:处理变量|分配变量)(?:是|为|：)([^。；，,\n]{1,28})",corpus)
     by_chance=[m[1] for s in design_rows for m in re.finditer(
         r"(?:概率|机会)(?:直接)?("+ACTION+r"[\w]{0,14}?)(?=[。！，；,\s]|$)",s)]
+    by_chance += [m[1] for s in design_rows for m in re.finditer(
+        r'(?:^|[，,])('+ACTION+r'[\w]{0,14}?)的(?:概率|机会)(?:均|都)(?:为|是)',s)]
     names=set(stated or by_chance)
     if len(names)!=1:
         return None

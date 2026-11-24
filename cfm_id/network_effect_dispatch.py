@@ -13,6 +13,7 @@ from cfm_id_llm import network_effect_reading as reading
 from cfm_id_llm import network_effect_conditioning as conditioning
 from cfm_id_bridge.scientific_binding import canonical_data
 from . import network_design_adapter as design_adapter
+from . import research_spec_local_adapters as local_attributes
 from cfm_id_llm import network_design_reading as design_fields
 from cfm_id_llm import assumption_choices
 
@@ -43,28 +44,7 @@ def canonical_model(plan):
 
 
 def target_coordinates(c):
-    t = c.target
-    result=dict(kind=t.kind, node_order=c.study.nodes, evaluation_population=t.population,
-        unit_weights=[str(Fraction(1,len(t.population))) if n in t.population else '0' for n in c.study.nodes],
-        first=[t.first.own,t.first.exposure], second=[t.second.own,t.second.exposure],
-        operation=t.operation, remaining_assignment=t.remaining_assignment,
-        assignment=dict(kind=c.assignment.kind, **{k:getattr(c.assignment,k) for k in design_fields.ASSIGNMENT_FIELDS
-            if getattr(c.assignment,k) is not None}), exposure=c.exposure.kind,
-        treatment=c.study.treatment,outcome=c.study.outcome,context=c.study.context,
-        native_symbol_mapping=dict(treatment='treatment',outcome='outcome',context='W'))
-    if c.exposure.core_collaborators is not None:
-        result['core_collaborators']=deepcopy(c.exposure.core_collaborators)
-    if c.exposure.weights is not None:
-        result['exposure_weights']=deepcopy(c.exposure.weights)
-    if c.exposure.mode is not None:
-        result['exposure_mode']=c.exposure.mode
-    if c.exposure.groups is not None:
-        result['exposure_groups']=deepcopy(c.exposure.groups)
-    if c.study.outcome_kind=='COUNT':
-        result['outcome_domain_embedding']=dict(business_kind='COUNT',native_kind='continuous',
-            scope='LOCAL_POINT_MEAN_ONLY',distributional_continuity_assumed=False,
-            sharp_bound_or_nonidentification_transfer=False)
-    return result
+    return local_attributes.reading_coordinates(c, local_attributes.from_reading(c))
 
 
 def inspect_methods(entry, raw, *, note_review=None):
@@ -230,37 +210,24 @@ def _native_payload(value):
 
 
 def _compile(plan, row, records):
-    from pfn_pipeline.identification_composition import EffectQueryV18
     from pfn_pipeline.identification_a4_shadow import declare_a4_source
     from pfn_pipeline._internal.identification.schemas import NetworkExposureSpec
     c=canonical_model(plan).model_validate(plan['facts']);t=c.target;s=c.information[row['source_index']]
-    coords=target_coordinates(c)
-    if coords!=plan['proposed_target']: raise ValueError('EFFECT_TARGET_PLAN_MISMATCH')
+    question=local_attributes.from_reading(c)
+    local_attributes.require_reading_coordinates(c,question,plan['proposed_target'])
     net=NetworkExposureSpec(network_id='effect_'+sha(dict(study=c.study.model_dump(),context=c.study.context)),
-        node_ids=c.study.nodes,undirected_edges=c.study.edges)
+        node_ids=list(question.study.node_order),undirected_edges=c.study.edges)
     evidence=records['science_review'].evidence+'; review='+sha(records['science_review'].model_dump(mode='json'))
     authority=records['science_review'].authority
     task=design_adapter.make_arm(c,net,
         source='Reviewed original source locators: '+','.join(s.source_ids), evidence=evidence,
-        authority=authority)
+        authority=authority, local_question=question)
     source=declare_a4_source(task,source_id='reviewed_effect_source_'+str(row['source_index']),operator=s.operator,
         provenance='Reviewed original source locators: '+','.join(s.source_ids),admission='ADMITTED',
         availability=s.availability,regime='experimental',outcome_nodes=tuple(s.outcome_nodes),node_order=tuple(c.study.nodes),
         arm_cells=tuple((v.node,v.own,v.exposure) for v in s.arm_cells))
-    if t.kind in ('DIRECT_EFFECT','LOCAL_TOTAL_EFFECT') and t.first.own==0:
-        # Named DIRECT/TOTAL recipes put own treatment 1 in the first arm.
-        # Compile the reviewed opposite target into its existing linear API;
-        # never swap the business endpoints or negate a displayed formula.
-        from pfn_pipeline.identification_composition import ArmLinearTerm
-        weight=Fraction(1,len(t.population))
-        request=tuple(ArmLinearTerm(n,arm.own,arm.exposure,sign*weight)
-            for n in t.population for arm,sign in ((t.first,1),(t.second,-1)))
-    else:
-        request=EffectQueryV18({'DIRECT_EFFECT':'DIRECT','SPILLOVER_EFFECT':'SPILLOVER',
-                               'LOCAL_TOTAL_EFFECT':'TOTAL'}[t.kind],
-            tuple((n,'1') for n in t.population),t.second.exposure,t.first.exposure,spillover_own_treatment=t.first.own,
-            cohort_authority=('TRUSTED_FIXTURE' if authority=='SYNTHETIC_TEST' else 'HUMAN_CONFIRMED_PRETREATMENT'),
-            cohort_evidence='Reviewed fixed evaluation population: '+','.join(t.population_fixed_before_assignment.source_ids))
+    request=local_attributes.native_request(question,authority=authority,
+        cohort_evidence='Reviewed fixed evaluation population: '+','.join(t.population_fixed_before_assignment.source_ids))
     return task,source,request
 
 

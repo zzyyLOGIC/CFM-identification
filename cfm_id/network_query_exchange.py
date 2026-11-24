@@ -7,10 +7,10 @@ from uuid import uuid4
 from cfm_id_llm.compact_study import digest
 
 PREVIOUS_ALIGNED_PACKET = "aligned-network-handoff/1"
-ALIGNED_PACKET = "aligned-network-handoff/5"
+ALIGNED_PACKET = "aligned-network-handoff/6"
 PACKET_REVISIONS = {PREVIOUS_ALIGNED_PACKET:"direct-verification/17", "aligned-network-handoff/2":"direct-verification/18",
                     "aligned-network-handoff/3":"direct-verification/19","aligned-network-handoff/4":"direct-verification/20",
-                    ALIGNED_PACKET:"direct-verification/22"}
+                    "aligned-network-handoff/5":"direct-verification/22",ALIGNED_PACKET:"direct-verification/24"}
 
 
 def atomic_json(path,value):
@@ -102,7 +102,7 @@ class QueryInbox:
 
     def receive(self,run_id,packet):
         from . import classic_query_exchange, direct_policy_exchange
-        if packet.get('version')==direct_policy_exchange.VERSION:
+        if packet.get('version') in direct_policy_exchange.VERSIONS:
             receipt=direct_policy_exchange.check_packet(run_id,packet)
             receipt.update(state='QUEUED',consumer='identification_query_queue')
             atomic_json(self.path_for(run_id),dict(receipt=receipt,packet=packet))

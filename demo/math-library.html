@@ -6,11 +6,15 @@
 <section id="from-source" class="panel" hidden><h2>沿用本次研究材料</h2><p id="source-question"></p>
 <label><input id="consent" type="checkbox"> 同意将本题原文和附件重新交给所选模型分阶段读题。</label>
 <button id="copy" class="primary" disabled>开始完整方法审核</button></section>
+<section id="original-math" class="panel" hidden><h2>核对这份研究的数学规格</h2><p id="original-question"></p>
+<details><summary>查看本次原问和所有上传材料</summary><pre id="original-materials"></pre></details>
+<label><input id="source-confirmed" type="checkbox"> 我已按原文核对目标、比较方向、权重，以及规格是否包含材料中的全部约束。</label></section>
 <section class="panel"><h2>本地求解</h2><label>选择入口<select id="operation"></select></label><p id="description"></p>
 <details class="optional"><summary>查看本方法的输入合同</summary><pre id="schema"></pre></details>
 <button id="example" type="button" class="secondary">载入本方法的合成示例</button>
 <label>读取本地 JSON 文件<input type="file" accept=".json,application/json" id="file"></label>
 <label>问题规格<textarea id="problem" rows="10" spellcheck="false">{}</textarea></label>
+<details id="export-request" class="optional"><summary>将规格用于业务首页</summary><label>本次业务原问<input id="export-question"></label><button type="button" id="export-file" class="secondary">保存可随原问上传的 JSON</button></details>
 <label id="synthetic-label" hidden><input id="synthetic" type="checkbox"> 这是合成演示研究</label>
 <button class="primary" id="prepare">检查材料</button>
 <section id="review" hidden><h3>本次规格审核</h3><div id="items"></div>

@@ -1,7 +1,7 @@
 'use strict';
 const get=id=>document.getElementById(id);
 const pretty=v=>JSON.stringify(v,null,2);
-let csrf='',catalog={},worksheet=null,generation=0;
+let csrf='',catalog={},worksheet=null,generation=0,sourceRun=null;
 async function request(path,body){
  const response=await fetch(path,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':csrf},body:JSON.stringify(body)});
  const data=await response.json();
@@ -50,6 +50,11 @@ function show(data){
 }
 async function send(review){
  const op=get('operation').value,problem=JSON.parse(get('problem').value);
+ if(sourceRun){
+  if(!get('source-confirmed').checked)throw Error('请先核对原问和全部材料。');
+  show(await request('/api/math-library',{source_run:sourceRun.id,source_binding:sourceRun.uploaded_math.binding,
+   source_confirmed:true,review}));return;
+ }
  if(op==='reading'){
   const result=await request('/api/library-reading',{intake:problem.intake,query_id:problem.query_id,candidate:problem.candidate,
     request_sha256:problem.request_sha256,query_review:problem.query_review,synthetic:get('synthetic').checked});
@@ -70,6 +75,15 @@ get('submit-review').onclick=async()=>{
  }catch(e){message(e);}
 };
 get('problem').oninput=clearReview;
+get('export-file').onclick=()=>{
+ try{
+  const question=get('export-question').value.trim(),operation=get('operation').value;
+  if(!question||operation==='reading')throw Error('请填写业务原问并选择数学方法。');
+  const problem=JSON.parse(get('problem').value),doc={format:'causal-id.math-request/1',question,operation,problem};
+  const url=URL.createObjectURL(new Blob([pretty(doc)],{type:'application/json'})),link=document.createElement('a');
+  link.href=url;link.download='math-request.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ }catch(e){message(e);}
+};
 get('file').onchange=async()=>{const f=get('file').files[0];if(f){get('problem').value=await f.text();get('synthetic').checked=false;clearReview();}};
 get('operation').onchange=()=>select().catch(message);
 get('example').onclick=async()=>{
@@ -86,6 +100,19 @@ async function initialize(){
  group('正式研究合同',Object.entries(catalog.research));
  for(const name of Object.values(catalog.classic)){const li=document.createElement('li');li.textContent=name;get('methods').append(li);}
  get('operation').value='requirements';await select();
+ const bound=location.hash.match(/^#study=([a-f0-9]{32})$/);
+ if(bound){
+  const run=await request('/api/run?id='+encodeURIComponent(bound[1])),item=run.uploaded_math;
+  if(!item||item.error)throw Error(item?.error||'本次未找到与原问绑定的数学规格。');
+  sourceRun=run;get('operation').value=item.operation;await select();get('operation').disabled=true;
+  get('example').hidden=true;get('file').disabled=true;get('export-request').hidden=true;
+  get('problem').value=pretty(item.problem);get('problem').readOnly=true;get('original-question').textContent=run.case.business_question;
+  get('original-materials').textContent=run.case.sources.map(s=>s.label+'\n'+s.text).join('\n\n');
+  get('original-math').hidden=false;get('prepare').disabled=true;
+  get('source-confirmed').onchange=()=>{clearReview();get('prepare').disabled=!get('source-confirmed').checked;};
+  if(run.uploaded_math_review?.source_binding===item.binding)show(run.uploaded_math_review.result);
+  return;
+ }
  const match=location.hash.match(/^#source=([a-f0-9]{32})$/);
  if(!match)return;
  const run=await request('/api/run?id='+encodeURIComponent(match[1]));get('source-question').textContent=run.case.business_question;get('from-source').hidden=false;

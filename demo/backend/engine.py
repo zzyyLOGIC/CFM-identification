@@ -190,12 +190,14 @@ class Engine:
         run=self.get(owner,run_id)
         with run.lock:
             from . import recovery
+            from .study_math import offered
             return deepcopy(dict(id=run.id,stage=run.stage,busy=run.busy,error=run.error,
                 created=run.created,events=run.events,queries=run.queries,query_id=run.query_id,
                 case=run.case,attachment_report=run.attachment_report,reading_mode=run.reading_mode,
                 compact_plan=run.plan if run.reading_mode=='compact' and not run.result else None,
                 review_kind=run.review_kind,review_sheets=run.review_sheets,review_templates=run.review_templates,
                 plan=run.plan,result=run.result,estimate=run.estimate,
+                uploaded_math=offered(run.case),uploaded_math_review=run.artifacts.get('uploaded_math_review'),
                 estimate_receipt=run.artifacts.get('estimate_intake_receipt'),
                 synthetic=run.synthetic,provider=run.provider,review_summary=summarize(run),
                 recheck_preview=recovery.public(recovery.prepare(run)),
@@ -268,7 +270,9 @@ class Engine:
         folder=self.storage/run.id/'uploads';folder.mkdir(parents=True,exist_ok=True)
         from cfm_id_llm.shared_materials import DIRECT_MODES, append_sources, document_tables
         from hashlib import sha256
-        shared_tables = [] if payload.get('reading_mode','direct_verify') in DIRECT_MODES else None
+        share_rows = payload.get('share_table_rows', payload.get('reading_mode','direct_verify') in DIRECT_MODES)
+        if type(share_rows) is not bool:raise ValueError('INVALID_TABLE_SHARING_SELECTION')
+        shared_tables = [] if share_rows else None
         requests=[]; total=0; network_paths={}; table_path=None
         for i,item in enumerate(uploads):
             name=item.get('name','')
@@ -342,7 +346,7 @@ class Engine:
                 case['sources'].append(dict(source_id=sid,kind='OTHER',label=label,text=json.dumps(value,ensure_ascii=False)))
             run.attachment_report['factual_data']=dict(nodes=len(records['schema']['node_ids']),
                 features=len(records['schema']['feature_names']),observed=len(records['observed_indices']),
-                note=('所选数据表的全部列及逐行记录供直答与本地核验共同读取。' if shared_tables is not None else '传递字段说明与实际记录范围。'))
+                note=('所选数据表的全部列及逐行记录供读取与审核共同使用。' if shared_tables is not None else '传递字段说明与实际记录范围。'))
         elif payload.get('table_mapping') is not None:raise ValueError('有列映射但没有表格数据，请重新选择文件。')
         if run.network:
             if any(x['source_id']=='uploaded_network' for x in case['sources']):raise ValueError('NETWORK_SOURCE_ID_COLLISION')
@@ -401,7 +405,7 @@ class Engine:
         stopped_on_assumption = (proof.get('method') == 'ORIGINAL_EVENT_ASSUMPTIONS_UNCONFIRMED'
                                  and answer.get('status') == 'NEEDS_INPUT'
                                  and (answer.get('estimate_handoff') or {}).get('mode') == 'STOP')
-        native_policy=proof.get('binder')==direct_policy_exchange.VERSION
+        native_policy=proof.get('binder') in direct_policy_exchange.VERSIONS
         if native_policy or proof.get('binder')=='uploaded-network-comparison/1':
             packet=dict(version='identification-handoff/1',target=answer['target'],status=answer['status'],
                 value=answer['value'],assumptions=answer['assumptions'],estimate_handoff=answer['estimate_handoff'],
@@ -446,8 +450,17 @@ class Engine:
         self.save(run,'direct_verification',report)
         run.result=report
         questions=report.get('clarification_questions',[])
+        if not questions:
+            from .direct_questions import explicit_questions
+            questions=explicit_questions(report)
+            if questions:
+                self.save(run,'direct_model_questions',dict(origin='model_explicit_request',
+                    items=questions,scientific_approval=False,input_sha256=report.get('input_sha256'),
+                    draft_sha256=report.get('draft_sha256')))
         run.user_question=None
-        if report.get('condition_review') and not report['estimation_handoff_allowed']:
+        if report.get('review_scope')=='SYNTHETIC_TEST_ONLY' and not run.synthetic and report.get('review_record'):
+            self.event(run,'RESULT','已记录研究者的判断。本路线提供条件结果，真实研究的估计交接待单独审核')
+        elif report.get('condition_review') and not report['estimation_handoff_allowed']:
             self.event(run,'REVIEW_REQUIRED','请逐项核对原文所列科学前提，以便登记估计交接')
         elif report.get('estimation_handoff_allowed'):
             accepted=run.artifacts.get('estimate_intake_receipt',{}).get('consumer')=='autocfm_estimation_query_intake'
@@ -457,6 +470,23 @@ class Engine:
             self.event(run,'REVIEW_REQUIRED','研究材料有具体缺口，补充后可重新核验同一问题')
         else:
             self.event(run,'RESULT','模型原答与程序核验结果已保存')
+            # A retained model answer is not a certificate. Continue through
+            # the existing semantic and scientific reviews, using exactly the
+            # same sources. Never import the draft as evidence or approval.
+            if (run.reading_mode == 'direct_verify' and run.automatic_review
+                    and report.get('decision') == 'RETAINED' and not report.get('proof')
+                    and not report.get('scientific_approval')
+                    and not report.get('estimation_handoff_allowed')
+                    and not report.get('condition_review') and not report.get('review_record')
+                    and not any(c.get('state') == 'CONFLICT' for c in report.get('checks', []))):
+                self.save(run,'reading_continuation',dict(from_mode='direct_verify',to_mode='classic',
+                    reason='NO_CERTIFIED_DIRECT_RESULT',original_report='direct_verification',
+                    input_sha256=report.get('input_sha256'),draft_sha256=report.get('draft_sha256'),
+                    scientific_approval=False))
+                run.reading_mode='classic'
+                run.result=None
+                self.event(run,'READING','原答已保存，正在按同一份材料继续审核并调用识别库')
+                self._read_case(run)
 
     def _compact_read(self,run):
         from cfm_id.project import read_compact
@@ -849,6 +879,25 @@ class Engine:
                     self.event(run,'STOPPED','系统对因果关系或材料的解释仍有分歧，尚未进入识别；无需为模型错误补条件。');return
                 run.user_question=dict(kind='NEEDS_CLARIFICATION',items=answer['issues'],message='请补充以下信息。')
                 self.event(run,'REVIEW_REQUIRED','请说明原材料中尚未确定的内容');return
+            if run.review_kind=='information':
+                from . import information_review
+                self.event(run,'REVIEWING_READING','正在核对均值表与配套说明，保留全部引用')
+                request=information_review.request(run)
+                number=1+sum(k.startswith('information_audit_') and k.endswith('_request') for k in run.artifacts)
+                stage=f'information_audit_{number}'
+                answer=information_review.check(run,self._call_audit(run,request,stage))
+                self.save(run,stage+'_validated',answer)
+                if answer['matches_source'] is True:
+                    run.stage='REVIEW_REQUIRED'
+                    self._review(run,dict(kind='information',records={'information':answer['record']}))
+                    continue
+                if answer['matches_source'] is False:
+                    run.error=dict(code='READING_INFORMATION_REVIEW_DISAGREEMENT',message=answer['comparison'])
+                    self.event(run,'STOPPED','均值表与说明尚未通过来源核对，未进入识别。')
+                else:
+                    run.user_question=dict(kind='NEEDS_CLARIFICATION',items=[answer['question']],message='请补充以下信息。')
+                    self.event(run,'REVIEW_REQUIRED','均值表与配套说明有不明确的地方，请补充说明')
+                return
             if run.review_kind=='notes':
                 self.event(run,'REVIEWING_READING','正在检查尚未明确的说明')
                 request,fields,sources=note_review.request(run)

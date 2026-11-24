@@ -1,10 +1,13 @@
 """Apply existing randomized-network routes to a reviewed target and exact outcome means."""
 from fractions import Fraction as F
 from pfn_pipeline import identification_policy_r1b as r1b, identification_policy_r2 as r2
-from pfn_pipeline.network_inquiry_shadow import declare_network_study, fixed_policy_target_from_context, declare_network_a4_source
+from pfn_pipeline.network_inquiry_shadow import declare_network_a4_source
 from pfn_pipeline._internal.identification.schemas import Assumption
 from cfm_id_llm.compact_study import digest
 from .compact_review import method_name, LOCAL_CONTRAST, FULL_POLICY, EXPOSURE_POLICY
+from . import research_spec_policy_adapters as policy_attributes
+from . import research_spec_local_adapters as local_attributes
+from .research_spec_coordinates import native_study
 
 GROUP={"majority":"strict_majority_ties_low","count":"exact_treated_neighbor_count","any":"any_treated_neighbor"}
 
@@ -16,11 +19,15 @@ def solve(s,method,review):
     n=s.network;t=s.target;nodes=tuple(n.nodes);weights=list(map(F,n.weights))
     design=(dict(kind="complete_randomization_binary_v1",m=n.quota) if n.design=="fixed_quota" else
             dict(kind="heterogeneous_bernoulli_binary_v1",propensities=n.probabilities))
-    st=declare_network_study(network_id="network_"+digest([nodes,n.edges]),node_order=nodes,
-        undirected_edges=tuple(map(tuple,n.edges)),treatment_variable=t.treatment,outcome_variable=t.outcome,
-        outcome_kind="continuous" if n.outcome_kind=="count" else n.outcome_kind,context_reference=t.context,
+    shared_study=dict(network_id="network_"+digest([nodes,n.edges]),
         observation_regime="experimental",assignment_design=design,protocol_provenance=n.quote,
         network_provenance=n.quote,graph_timing_claim="DECLARED_PRETREATMENT_FIXED")
+    if route==LOCAL_CONTRAST:
+        question=local_attributes.from_compact(s)
+    else:
+        question=policy_attributes.from_compact(s)
+    st=native_study(question.study,edges=n.edges,**shared_study)
+    weights=list(map(F,question.evaluation.unit_weights))
     synthetic=review["authority"]=="SYNTHETIC_TEST"
     def condition(name,evidence):
         return Assumption(name=name,source="demo_specification" if synthetic else "human_confirmation",confirmed=True,
@@ -35,7 +42,7 @@ def solve(s,method,review):
         if route==LOCAL_CONTRAST:
             sig=r2.declare_policy_signature(st,grouping=GROUP[n.exposure])
             exp=r2.ExposureSpec(sig.grouping,None);design=st.design();net=st.network()
-            arm1,arm0=map(tuple,n.arms)
+            arm1,arm0=question.first.coordinates(),question.second.coordinates()
             if arm1 not in local or arm0 not in local:return dict(method=method,state="NOT_APPLICABLE",reason="缺少某一局部臂的总体条件均值")
             masses=[]
             for i,node in enumerate(nodes):
@@ -51,12 +58,13 @@ def solve(s,method,review):
             separate=[sum(w*x for w,x in zip(weights,local[arm])) for arm in (arm1,arm0)]
             if separate[0]-separate[1]!=val:raise ValueError("NUMERIC_SUBSTITUTION_MISMATCH")
             cert=dict(method=method,scope="local mean contrast; dual support checks and exact substitution",
-                      support=masses,weights=n.weights,arms=n.arms,means=n.local,arm_means=list(map(str,separate)))
+                      support=masses,weights=list(question.evaluation.unit_weights),
+                      arms=[list(arm1),list(arm0)],means=n.local,arm_means=list(map(str,separate)))
             functional=f"Σ_i w_i (E_q[Y_i|own,g={arm1}]−E_q[Y_i|own,g={arm0}])"
             return dict(method=method,state="POINT",functional=functional,value=str(val),certificate=cert,
                         variables=variables+["邻接关系及局部暴露"],operators=[functional,"在原分配设计的两个局部臂内分层，按目标单位权重平均"])
-        tgt=fixed_policy_target_from_context(st,tuple(n.policy),unit_weights=tuple(n.weights),
-                                             authority="TRUSTED_FIXTURE" if synthetic else "HUMAN_CONFIRMED")
+        tgt=policy_attributes.native_target(question,st,side='first',
+            authority="TRUSTED_FIXTURE" if synthetic else "HUMAN_CONFIRMED")
         common=dict(source_id="reviewed_outcome_means",outcome_nodes=nodes,admission="ADMITTED",
                     availability="EXACT_POPULATION_VALUE",provenance=n.quote+" / "+review["evidence"])
         if route==FULL_POLICY:

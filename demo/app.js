@@ -163,7 +163,9 @@ function renderNetworkConditions(run){
   $('#network-condition-items').innerHTML=sheet.items.map(item=>`<label><b>${esc(item.label)}</b><span>${esc(item.quote)}</span><select required name="${esc(item.code)}"><option value="">请选择</option><option value="ADOPTED">本次采用</option><option value="UNSURE">暂不确定</option><option value="DECLINED">本次不采用</option></select></label>`).join('');
   for(const [key,value] of Object.entries(run.result.review_record?.decisions||{}))form.elements.namedItem(key).value=value;
  }
- if(run.result.review_record)$('#network-condition-message').textContent='已保存本次判断。所列前提均采用后可向估计端交接。';
+ if(run.result.review_scope==='SYNTHETIC_TEST_ONLY'&&!run.synthetic){
+  $('#network-condition-message').textContent='此方法当前只登记合成示例的审核结果。真实研究可以查看条件计算和证据。';
+ }else if(run.result.review_record)$('#network-condition-message').textContent='已保存本次判断。所列前提均采用后可向估计端交接。';
 }
 $('#network-condition-form').onsubmit=async event=>{
  event.preventDefault();
@@ -219,10 +221,16 @@ function networkAlignmentHTML(alignment){
  return '<section class="network-alignment"><h4>'+heading+'</h4><p>'+note+'</p><ul>'+items+'</ul></section>';
 }
 function directResultHTML(report,receipt){
- return directAnswerHTML(report,receipt)+networkAlignmentHTML(report.network_alignment);
+ const raw=report.draft;
+ const draft=raw&&Object.keys(raw).length
+  ? '<details class="model-draft"><summary>查看模型原答（供对照）</summary><pre>'+esc(JSON.stringify(raw,null,2))+'</pre></details>'
+  : '';
+ return directAnswerHTML(report,receipt)+networkAlignmentHTML(report.network_alignment)+draft;
 }
 function directAnswerHTML(report,receipt){
  const method=report.proof?.method;
+ const binding=report.condition_review?.binding;
+ const received=!!(binding&&report.estimation_handoff_allowed&&receipt?.binding===binding&&receipt.state==='RECEIVED'&&receipt.consumer==='autocfm_estimation_query_intake');
  if(['TWO_STAGE_POLICY_BRANCH_MEANS','INCOMPLETE_NETWORK_FOCAL_SUPPORT','RANDOM_INVITATION_RECEIPT_NOT_IDENTIFIED'].includes(method)){
   const a=report.effective_answer,p=report.proof,h=a.estimate_handoff;
   let title,details='';
@@ -239,8 +247,7 @@ function directAnswerHTML(report,receipt){
   const refs=[...new Set(spans.map(s=>s.source_id+' · '+s.quote))].map(x=>'<blockquote>'+esc(x)+'</blockquote>').join('');
   const formula=a.functional===a.reason?'':'<p>'+esc(a.functional)+'</p>';
   return '<section><h3>'+esc(title)+'</h3>'+details+formula+'<p>'+esc(a.reason)+'</p>'+
-   '<details><summary>目标、原文和估计交接</summary>'+refs+'<pre>'+esc(JSON.stringify({target:a.target,estimate_handoff:h},null,2))+'</pre></details>'+
-   '<details><summary>查看模型原答</summary><pre>'+esc(JSON.stringify(report.draft,null,2))+'</pre></details></section>';
+   '<details><summary>目标、原文和估计交接</summary>'+refs+'<pre>'+esc(JSON.stringify({target:a.target,estimate_handoff:h},null,2))+'</pre></details></section>';
  }
  if(report.proof?.method==='POPULATION_WEIGHTED_SAVINGS'){
   const a=report.effective_answer;
@@ -248,23 +255,24 @@ function directAnswerHTML(report,receipt){
    report.proof.sources.map(s=>'<blockquote>'+esc(s.quote)+'</blockquote>').join('')+'</details></section>';
  }
  if(report.scope_worksheet&&!report.scope_choice)return '<p>请先选定本次评价范围，再核验支持概率。</p>';
- if(report.proof?.binder==='source-policy-registration/1'){
+ if(['source-policy-registration/1','source-policy-registration/2'].includes(report.proof?.binder)){
   const a=report.conditional_answer,h=a.estimate_handoff;
-  const received=report.estimation_handoff_allowed&&receipt?.binding===report.condition_review?.binding&&receipt?.state==='RECEIVED'&&receipt.consumer==='autocfm_estimation_query_intake';
   const bounds=h.mode==='ESTIMATE_BOUNDS';
-  const description=bounds?`下界 ${h.lower}、上界 ${h.upper}`:`${h.queries.length} 条加权的完整名单条件均值查询`;
+  const description=bounds?`下界 ${h.lower}、上界 ${h.upper}`:h.value!=null?`已知总体值 ${h.value}`:`${h.queries.length} 条加权的完整名单条件均值查询`;
   const notAdopted=Object.values(report.review_record?.decisions||{}).some(v=>v!=='ADOPTED');
-  const state=received?'估计端已收到':report.estimation_handoff_allowed?'交接已登记':notAdopted?'本次前提尚未全部采用，暂缓交接':'确认前提后可交接';
+  const state=received?'估计端已收到':report.estimation_handoff_allowed?'前提已确认，等候估计端回执。待交接内容为':notAdopted?'本次前提尚未全部采用，暂缓交接':'确认前提后可交接';
   const sources=[...a.assumptions,...a.source_facts].map(s=>`<li>${esc(s.statement||s.label)}<blockquote>${esc(s.source||s.source_id)} · ${esc(s.quote)}</blockquote></li>`).join('');
-  return `<section><h3>${bounds?'全体政策水平的锐界':'完整名单政策的加权均值'}</h3><p>${esc(a.target.population.join('、'))}，${esc(a.target.outcome)}。</p><p>${esc(a.functional)}</p><p>${esc(a.reason)}</p><p>${esc(state)}${esc(description)}。</p><details><summary>科学前提与材料依据</summary><ul>${sources}</ul></details><details><summary>查看估计查询与权重或界的计算依据</summary><pre>${esc(JSON.stringify(h,null,2))}</pre></details></section>`;
+  const title=h.mode==='STOP'?'原材料中的约束不相容':a.target.kind==='FIXED_POLICY_CONTRAST'?'两政策之差的条件识别结果':bounds?'数学库按所列前提复算的全体政策均值锐界':'数学库按所列前提复算的政策均值';
+  const pendingResearch=report.review_scope==='SYNTHETIC_TEST_ONLY'&&!report.estimation_handoff_allowed;
+  const delivery=h.mode==='STOP'?'请核对不相容的原材料。':pendingResearch?'合成示例逐项采用前提后可登记'+esc(description)+'。真实研究的估计交接待单独审核。':esc(state)+esc(description)+'。';
+  return `<section><h3>${title}</h3><p>${esc(a.target.population.join('、'))}，${esc(a.target.outcome)}。</p><p>${esc(a.functional)}</p><p>${esc(a.reason)}</p><p>${delivery}</p><details><summary>科学前提与材料依据</summary><ul>${sources}</ul></details><details><summary>查看估计查询与权重或界的计算依据</summary><pre>${esc(JSON.stringify(h,null,2))}</pre></details></section>`;
  }
  if(report.proof?.binder==='uploaded-network-comparison/1'){
   const a=report.effective_answer,proof=report.proof, n=proof.population.length;
   const titles={PREMISES_REQUIRED:'原比较有识别公式，等待确认前提',CORRECTED:'已按原设计纠正识别结论',CONDITIONAL_RESULT:'网络比较的核验结果'};
   const registered=report.estimation_handoff_allowed;
-  const received=receipt?.state==='RECEIVED'&&receipt.consumer==='autocfm_estimation_query_intake';
   const summary=a.status==='UNDEFINED'?a.functional:`对 ${n} 个评价对象，将 (${proof.ordered_events[0]}) 的条件均值减去 (${proof.ordered_events[1]}) 的条件均值后等权平均。`;
-  const details=registered?`${received?'估计端已收到':'交接已登记'} ${a.estimate_handoff.queries.length} 条逐单位均值查询。`:a.reason;
+  const details=registered?`${received?'估计端已收到':'前提已确认，等候估计端回执。待交接'} ${a.estimate_handoff.queries.length} 条逐单位均值查询。`:a.reason;
   const natural=proof.binding_source==='natural-network-materials/1';
   const fromFiles=natural||proof.binding_source==='uploaded-materials/1';
   const manifest=report.network_manifest;
@@ -275,21 +283,32 @@ function directAnswerHTML(report,receipt){
    const rows=proof.population.map(unit=>`<tr><th scope="row">${esc(unit)}</th><td>${esc(proof.joint_probabilities[unit][left])}</td><td>${esc(proof.joint_probabilities[unit][right])}</td></tr>`).join('');
    probabilities=`<details${n<=8?' open':''}><summary>逐对象的联合概率</summary><table><thead><tr><th>评价对象</th><th>左端 (${esc(left)})</th><th>右端 (${esc(right)})</th></tr></thead><tbody>${rows}</tbody></table></details>`;
   }
-  const hasDraft=report.draft&&Object.keys(report.draft).length>0;
   const diagnostic={target:a.target,support:proof.joint_probabilities,formula:report.conditional_answer?.functional,
    assumptions:report.condition_review?.items||a.assumptions,estimate_handoff:report.conditional_answer?.estimate_handoff};
-  if(hasDraft)diagnostic.draft=report.draft;
   if(natural)diagnostic.source_evidence=report.network_alignment?.fields;
-  return `<section><h3>${esc(titles[report.decision])}</h3><p>${esc(summary)}</p>${source}${probabilities}<p>${esc(details)}</p><details><summary>${hasDraft?'查看联合概率、公式与模型原答':'查看联合概率与公式'}</summary><pre>${esc(JSON.stringify(diagnostic,null,2))}</pre></details></section>`;
+  return `<section><h3>${esc(titles[report.decision])}</h3><p>${esc(summary)}</p>${source}${probabilities}<p>${esc(details)}</p><details><summary>查看联合概率与公式</summary><pre>${esc(JSON.stringify(diagnostic,null,2))}</pre></details></section>`;
+ }
+ if(report.proof?.method==='DAG_INPUT'||report.checks?.some(c=>c.code==='BOUNDED_MATERIALS')){
+  const a=report.effective_answer||{};
+  const title=report.clarification_questions?.length?'需要补充研究信息':'当前方法尚不能核验这份完整材料';
+  return `<section><h3>${esc(title)}</h3><p>${esc(a.functional||a.reason)}</p><p>没有生成识别证明，也没有向估计端发送结果。模型原答仅供参考。</p><details><summary>查看材料核对依据</summary><pre>${esc(JSON.stringify(report.checks,null,2))}</pre></details></section>`;
  }
  const titles={UNCHECKED:'当前材料需进一步核验',CONDITIONAL_RESULT:'完整声明下的数学结果',RETAINED:'保留模型草案',CORRECTED:'数学核验已纠正原答',WITHHELD:'原答已拦下，需核对'};
+ const hasMath=!!(report.conditional_answer&&report.proof&&Object.keys(report.proof).length);
+ const displaysMath=hasMath&&['CORRECTED','CONDITIONAL_RESULT'].includes(report.decision);
+ if(!hasMath&&['CORRECTED','CONDITIONAL_RESULT'].includes(report.decision))titles[report.decision]='程序已核对部分内容，识别结论待核验';
  if(report.clarification_questions?.length)titles[report.decision]='需要补充研究信息';
  const show=value=>esc(typeof value==='string'?value:JSON.stringify(value,null,2));
- const a=report.effective_answer?.answer??report.effective_answer;
+ const displayed=displaysMath?report.conditional_answer:report.effective_answer;
+ const a=displayed?.answer??displayed;
  const sourceStates={CITED:'引文存在，取值待核对',UNVERIFIED:'缺少可核对的引文',SOURCE_ONLY:'按原文重算',AGREES:'与按原文重算的取值一致',CORRECTED_FROM_SOURCE:'已按原文纠正摘录'};
  const fields=Array.isArray(a?.answers)?a.answers.map((p,i)=>[p.question_part||('子问题 '+(i+1)),p]):a?[['研究目标',a.target],['识别结论',a.status],['识别公式或依据',a.functional],['数值',a.value],['科学假设',a.assumptions],['估计交接建议',a.estimate_handoff],['推导',a.reason]]:[];
  const evidence=report.checks.map(c=>`<li><b>${esc(({CHECKED:'已检查',CONFLICT:'有冲突',UNCHECKED:'待核对'})[c.state]||c.state)}</b> ${esc(c.detail)}</li>`).join('');
- return `<section><h3>${esc(titles[report.decision])}</h3><p>以下为研究草案。正式估计仍需研究者确认条件。</p>${fields.filter(([,v])=>v!==null&&v!==undefined).map(([label,v])=>`<h4>${esc(label)}</h4><pre>${show(v)}</pre>`).join('')} ${boundContrastHTML(report)}${report.network_reading?'<details><summary>网络事实与原文依据</summary>'+Object.entries(report.network_reading.fields).map(([k,v])=>'<h4>'+esc(({network:'处理前网络',exposure:'暴露映射',assignment:'分配规则',contrast:'比较两端'})[k])+'</h4><p>'+esc(sourceStates[v.state]||v.state)+'</p>'+(v.proposed!=null?'<pre>'+show(v.proposed)+'</pre>':'')+(v.source_value!=null?'<p>原文核验取值</p><pre>'+show(v.source_value)+'</pre>':'')+(v.evidence?.length?'<p>模型所引原文</p>':v.source_candidates?.length?'<p>程序定位的相关原文</p>':'')+((v.evidence?.length?v.evidence:v.source_candidates)||[]).map(e=>'<blockquote><strong>'+esc(e.source_id)+'</strong> '+esc(e.quote)+'</blockquote>').join('')).join('')+'</details>':''}<h4>程序核对记录</h4><ul>${evidence}</ul><details><summary>模型原答</summary><pre>${show(report.draft)}</pre></details>${report.proof?`<details><summary>条件化数学结果与重放证据</summary><pre>${show(report.conditional_answer)}</pre><pre>${show(report.proof)}</pre></details>`:''}</section>`;
+ const provenance=displaysMath?'以下结果由数学库按所列条件得到。':a?'以下为研究草案，各项的核验情况见程序记录。':'';
+ const fieldHTML=fields.filter(([,v])=>v!==null&&v!==undefined).map(([label,v])=>`<h4>${esc(label)}</h4><pre>${show(v)}</pre>`).join('');
+ const reading=report.network_reading?'<details><summary>网络事实与原文依据</summary>'+Object.entries(report.network_reading.fields).map(([k,v])=>'<h4>'+esc(({network:'处理前网络',exposure:'暴露映射',assignment:'分配规则',contrast:'比较两端'})[k])+'</h4><p>'+esc(sourceStates[v.state]||v.state)+'</p>'+(v.proposed!=null?'<pre>'+show(v.proposed)+'</pre>':'')+(v.source_value!=null?'<p>原文核验取值</p><pre>'+show(v.source_value)+'</pre>':'')+(v.evidence?.length?'<p>模型所引原文</p>':v.source_candidates?.length?'<p>程序定位的相关原文</p>':'')+((v.evidence?.length?v.evidence:v.source_candidates)||[]).map(e=>'<blockquote><strong>'+esc(e.source_id)+'</strong> '+esc(e.quote)+'</blockquote>').join('')).join('')+'</details>':'';
+ const proof=hasMath?`<details><summary>条件化数学结果与重放证据</summary><pre>${show(report.conditional_answer)}</pre><pre>${show(report.proof)}</pre></details>`:'';
+ return `<section><h3>${esc(titles[report.decision])}</h3>${provenance?'<p>'+provenance+'</p>':''}${fieldHTML}${boundContrastHTML(report)}${reading}<h4>程序核对记录</h4><ul>${evidence}</ul>${proof}</section>`;
 }
 function renderRun(r){
  $('#steps').hidden=!!r.automatic_review;
@@ -322,8 +341,33 @@ function renderRun(r){
  $('#events').innerHTML=r.events.map(e=>`<li>${new Date(e.time*1000).toLocaleTimeString()} · ${esc(e.message)}</li>`).join('');
  $('#downloads').innerHTML=`<details class="optional"><summary>下载输入与结果</summary><div class="download-links">${r.downloads.map(n=>`<a href="/api/download?id=${encodeURIComponent(r.id)}&name=${encodeURIComponent(n)}">${esc(n)}.json ↓</a>`).join('')}</div></details>`;
  if(!r.busy&&r.result&&['direct_verify','network_direct_verify','network_local_review'].includes(r.reading_mode)){
+  const box=$('#downloads'),extra=r.uploaded_math;
+  if(extra){
+   const el=document.createElement(extra.error?'p':'a');
+   if(extra.error){el.textContent=extra.error;}else{
+    el.href='/math-library#study='+encodeURIComponent(r.id);
+    el.textContent='按本次原问核对上传的数学规格，并在本地运行';
+   }
+   box.prepend(el);
+   if(r.uploaded_math_review?.source_binding===extra.binding){
+    const details=document.createElement('details'),summary=document.createElement('summary'),pre=document.createElement('pre');
+    summary.textContent='上传规格的独立审核结果';pre.textContent=JSON.stringify(r.uploaded_math_review.result,null,2);
+    details.append(summary,pre);box.append(details);
+   }
+  }
   const link=document.createElement('a');link.href='/math-library#source='+encodeURIComponent(r.id);
-  link.textContent='用同一份原文和上传材料进入完整识别库';$('#downloads').append(link);
+  link.textContent='用同一份原文和上传材料进入完整识别库';box.append(link);
+  if(['RETAINED','UNCHECKED','WITHHELD'].includes(r.result.decision)&&!r.result.proof&&!r.user_question){
+   const label=document.createElement('label'),consent=document.createElement('input'),button=document.createElement('button');
+   consent.type='checkbox';label.append(consent,document.createTextNode(' 同意将同一份原问和附件再次交给所选模型分阶段读取。'));
+   button.type='button';button.className='secondary';button.disabled=true;button.textContent='继续逐项审核可用方法';
+   consent.onchange=()=>button.disabled=!consent.checked;
+   button.onclick=async()=>{button.disabled=true;try{
+    const response=await api('/api/library-reading',{source_run:r.id,allow_send:consent.checked});
+    location.href='/#run='+encodeURIComponent(response.id);location.reload();
+   }catch(error){$('#run-error').hidden=false;$('#run-error').textContent=error.message;button.disabled=!consent.checked;}};
+   box.append(label,button);
+  }
  }
 }
 $('#result').addEventListener('click',async event=>{
@@ -345,7 +389,7 @@ $('#retry-reading').onclick=async()=>{
  finally{$('#retry-reading').disabled=!!current?.busy;}
 };
 function renderStudyReview(run){
- const box=$('#compact-review'),p=run.compact_plan;box.hidden=!p||run.busy;
+ const box=$('#compact-plan'),p=run.compact_plan;box.hidden=!p||run.busy;
  if(!p){if(box.dataset?.binding){box.replaceChildren();delete box.dataset.binding;}return;}
  if(box.dataset.binding===p.binding)return;
  box.dataset.binding=p.binding;

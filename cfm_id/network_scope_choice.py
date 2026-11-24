@@ -45,9 +45,9 @@ def worksheet(case,draft,network,result):
     return sheet
 
 
-def verify(case,draft,network,focus,review,choice,*,allow_index_ranges=False):
+def verify(case,draft,network,focus,review,choice,*,allow_index_ranges=False,multisource=True):
     from . import direct_verification as direct, network_source_alignment, uploaded_network_contrast
-    base=direct.verify(case,draft,version="direct-verification/19",network=network,network_focus=focus,_index_ranges=allow_index_ranges)
+    base=direct.verify(case,draft,version="direct-verification/19",network=network,network_focus=focus,_index_ranges=allow_index_ranges,_multisource=multisource)
     sheet=worksheet(case,draft,network,base) if network is not None else None
     if choice is None:
         if sheet:
@@ -56,7 +56,7 @@ def verify(case,draft,network,focus,review,choice,*,allow_index_ranges=False):
             base.update(scope_worksheet=sheet,clarification_questions=[sheet["question"]])
         elif review is not None:
             base=direct.verify(case,draft,version="direct-verification/19",network=network,network_focus=focus,
-                               science_review=review,_index_ranges=allow_index_ranges)
+                               science_review=review,_index_ranges=allow_index_ranges,_multisource=multisource)
         return base
     if (not sheet or not isinstance(choice,dict) or set(choice)!={"binding","option"}
             or choice["binding"]!=sheet["binding"] or choice["option"] not in ("named","whole")):

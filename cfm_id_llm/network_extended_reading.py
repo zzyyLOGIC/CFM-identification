@@ -262,6 +262,12 @@ def parse(bundle, raw, *, binding, family):
     for s in c.information:
         if len(set(s.outcome_nodes))!=len(s.outcome_nodes) or not set(s.outcome_nodes)<=set(nodes):raise ValueError('INVALID_INFORMATION_ROSTER')
         if (s.operator=='FINITE_SAMPLE')!=(s.availability=='FINITE_SAMPLE'):raise ValueError('SAMPLE_POPULATION_PAIR_MISMATCH')
+        if family==ARM:
+            from .effect_information_rules import require_scope
+            require_scope(s,nodes=nodes,exposure=c.exposure,edges=c.study.edges)
+        elif family==MIX:
+            from .information_field_rules import require_assignment_scope
+            require_assignment_scope(s,nodes)
     return dict(facts=c.model_dump(),reference_binding=dict(context=refs['context'],context_sha256=refs['context_sha256'],aliases={k:r['source_id'] for k,r in refs['aliases'].items()}))
 
 def contracts():

@@ -300,7 +300,18 @@ def _read_xlsx(raw: bytes, filename: str, warnings: list[str]) -> str:
 def _extract(raw: bytes, path: Path, warnings: list[str]) -> tuple[str, str]:
     suffix = path.suffix.lower()
     if suffix in {'.txt', '.md', '.json'}:
-        return _clip(_decode(raw), warnings), 'TEXT_EXCERPT'
+        text = _decode(raw)
+        if suffix=='.json' and 'causal-id.math-request/1' in text and len(text)<=30000:
+            import json
+            try:
+                value=json.loads(text)
+            except (ValueError,RecursionError):
+                value=None
+            if isinstance(value,dict) and value.get('format')=='causal-id.math-request/1':
+                # The exact JSON also goes to the direct reader, within the
+                # existing SourceDocument and combined-document size limits.
+                return text, 'TEXT_EXCERPT'
+        return _clip(text, warnings), 'TEXT_EXCERPT'
     if suffix == '.pdf':
         extracted = _read_pdf(raw, warnings)
         return extracted, ('NO_EXTRACTABLE_TEXT' if 'SCANNED_OR_IMAGE_ONLY_PDF_NO_OCR' in warnings else 'TEXT_EXCERPT')

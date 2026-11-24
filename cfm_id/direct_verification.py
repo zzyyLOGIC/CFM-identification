@@ -69,7 +69,7 @@ def role_conflicts(answer,sources,declared):
         elif not found:unknown.append("未从所引原句独立确认随机分配的主语。")
     return conflicts,unknown
 
-def verify_one(case,draft,*,question,allow_exact):
+def verify_one(case,draft,*,question,allow_exact,source_iv=None):
     from cfm_id_llm.schemas import BusinessCase
     if isinstance(case,BusinessCase):case=case.model_dump(mode="json")
     original=deepcopy(draft);answer=draft if isinstance(draft,dict) else {}
@@ -106,7 +106,8 @@ def verify_one(case,draft,*,question,allow_exact):
         record("LEVEL_WITH_COMPARATOR","CONFLICT" if claims_difference else "UNCHECKED","水平题填写了对照说明，请核对是否参与了相减。")
     record("QUESTION_COVERAGE","CHECKED" if target_seen else "UNCHECKED",
            "只检查原题可独立定位的目标维度。其余语义需要研究者核对。")
-    prepared,why=iv.read_declaration(case) if allow_exact else (None,"MULTIPLE_TARGETS_REQUIRE_SEPARATE_MODEL_BINDING")
+    prepared,why=(source_iv,"DECLARED") if source_iv is not None else (
+        iv.read_declaration(case) if allow_exact else (None,"MULTIPLE_TARGETS_REQUIRE_SEPARATE_MODEL_BINDING"))
     declared=prepared[0] if prepared else None
     issues,unknown=role_conflicts(answer,[s["text"] for s in case["sources"]]+[case["business_question"]],declared)
     for message in dict.fromkeys(issues):record("RANDOMIZATION_SUBJECT","CONFLICT",message)
@@ -228,22 +229,104 @@ def retained_question(report):
         report['clarification_questions']=requests
 
 
-def verify(case, draft, *, version="direct-verification/22", network=None, network_focus=False, science_review=None,scope_choice=None, _index_ranges=False):
+def verify(case,draft,*,version="direct-verification/24",**options):
+    from .network_protocol_terms import reading_revision
+    if reading_revision.get() is not None:
+        return _verify(case,draft,version=version,**options)
+    if not isinstance(version,str) or not re.fullmatch(r'direct-verification/\d{1,2}',version):
+        raise ValueError('UNKNOWN_VERIFICATION_VERSION')
+    token=reading_revision.set(int(version.rsplit('/',1)[1]))
+    try:
+        return _verify(case,draft,version=version,**options)
+    finally:
+        reading_revision.reset(token)
+
+
+def _verify(case, draft, *, version, network=None, network_focus=False, science_review=None,scope_choice=None, _index_ranges=False, _multisource=True):
     """Use the proven functional for the exact declared target, and preserve the original draft."""
-    if version in ("direct-verification/20", "direct-verification/21", "direct-verification/22"):
+    if version == "direct-verification/24":
+        from . import direct_policy_exchange, policy_bounds_sources
+        data=case if isinstance(case,dict) else case.model_dump(mode="json")
+        evidence=None
+        if not scope_choice and len(answer_items(draft))==1 and any(
+                '总体' in s['text'] and '均值' in s['text'] for s in data['sources']):
+            evidence=direct_policy_exchange.derive_bounds(data,network=network)
+        if evidence:
+            report=_review_draft(data,draft)
+            if network_focus:
+                report['network_focus']=True
+            if network is not None:
+                report['network_manifest']=network.manifest() if hasattr(network,'manifest') else deepcopy(network)
+            differences=policy_bounds_sources.different_reading(data,draft,evidence.get('materials',{}))
+            if differences:
+                report.update(decision='RETAINED',proof=None,conditional_answer=None,effective_answer=deepcopy(draft),
+                              estimation_handoff_allowed=False,scientific_approval=False,clarification_questions=[])
+                report['checks'].append(dict(code='POLICY_SOURCE_DISAGREEMENT',state='UNCHECKED',
+                    detail='模型与原材料尚未核准的项目为'+'、'.join(differences)+'。保留原答供审查。'))
+            else:
+                direct_policy_exchange.apply(data,draft,report,science_review,evidence=evidence,binder=direct_policy_exchange.BOUNDS_VERSION_2)
+            if science_review is not None and report.get('review_record')!=science_review:
+                raise ValueError('NETWORK_REVIEW_NOT_AVAILABLE')
+        else:
+            report=verify(data,draft,version="direct-verification/23",network=network,network_focus=network_focus,
+                          science_review=science_review,scope_choice=scope_choice)
+            if network is None and not science_review and not scope_choice and len(answer_items(draft))==1:
+                from . import direct_dag
+                q=data['business_question']
+                documents=data['sources']
+                graph_study=any('有向无环' in s['text'] for s in documents)
+                new_syntax=any(re.search(r'→|->|(?m:^##[ \t]+(?:变量|因果图|边表|总体信息))',s['text']) or
+                    (s.get('label') or '').split('.')[0] in direct_dag.SECTION_NAMES.keys()-{'variables','graph','model','information'}
+                    for s in documents)
+                if graph_study and (new_syntax or re.search(r'指定.{0,8}(?:控制变量|调整集)|不要改用其他控制变量',q)):
+                    try:
+                        dag=direct_dag.verified(data,revision=8)
+                    except (ValueError,TypeError,KeyError):
+                        dag=None
+                    report=_review_draft(data,draft)
+                    if network_focus:
+                        report['network_focus']=True
+                    if dag and dag.get('answer'):
+                        a=dag['answer']; proof=dag['proof']
+                        report.update(decision='WITHHELD' if proof['method']=='DAG_INPUT' else 'CONDITIONAL_RESULT',
+                                      proof=proof,conditional_answer=a,clarification_questions=dag['questions'])
+                        if proof['method']!='ID_HEDGE' or action(answer_items(draft)[0])!='ESTIMATE_BOUNDS':
+                            report['effective_answer']=deepcopy(a)
+                        report['checks'].extend(dag['checks'])
+                    else:
+                        report.update(proof=None,decision='RETAINED',conditional_answer=None,effective_answer=deepcopy(draft))
+                        report['checks'].append(dict(code='DAG_SOURCE_SCOPE',state='UNCHECKED',detail='图、变量、指定调整集或额外说明尚未完整绑定，原答保留供核对。'))
+                elif not report.get('proof') and any('工具变量' in s['text'] for s in documents):
+                    from .iv_table_sources import read as read_iv_table
+                    parsed=read_iv_table(data)
+                    if parsed and 'prepared' in parsed:
+                        report=verify_one(data,answer_items(draft)[0],question=q,allow_exact=True,source_iv=parsed['prepared'])
+                        report.update(draft=deepcopy(draft),draft_sha256=digest(draft))
+                        if network_focus:
+                            report['network_focus']=True
+                        if report['proof']:
+                            report['proof']['source_spans']=parsed['spans']
+                            if report['decision']=='RETAINED':
+                                report.update(decision='CONDITIONAL_RESULT',effective_answer=deepcopy(report['conditional_answer']))
+                    elif parsed:
+                        report['checks'].append(dict(code='IV_TABLE_SOURCE',state='UNCHECKED',detail='请核对'+parsed['issue']+'。'))
+        report['version']=version
+        return report
+    if version in ("direct-verification/20", "direct-verification/21", "direct-verification/22", "direct-verification/23"):
         from . import network_scope_choice, stratified_savings
         data=case if isinstance(case,dict) else case.model_dump(mode="json")
         report=network_scope_choice.verify(data,draft,network,network_focus,science_review,scope_choice,
-                                          allow_index_ranges=version=="direct-verification/22")
+                                          allow_index_ranges=version in ("direct-verification/22", "direct-verification/23"),
+                                          multisource=version=="direct-verification/23")
         if network is None and not report.get("proof") and not science_review and len(answer_items(draft))<=1:
             try:
                 stratified_savings.apply(data,draft,report)
             except (ValueError, ArithmeticError):
                 pass
-        if version in ("direct-verification/21","direct-verification/22") and not science_review and not scope_choice:
+        if version in ("direct-verification/21","direct-verification/22","direct-verification/23") and not science_review and not scope_choice:
             from . import network_material_questions
             network_material_questions.apply(data,draft,network,report)
-            if version=="direct-verification/22":
+            if version in ("direct-verification/22","direct-verification/23"):
                 network_material_questions.explicit_assignment_question(data,report)
         report["version"]=version
         return report
@@ -260,7 +343,7 @@ def verify(case, draft, *, version="direct-verification/22", network=None, netwo
                 retained_question(report)
             else:
                 report = verify(data, draft, version="direct-verification/16", network=network,
-                                network_focus=network_focus, science_review=science_review)
+                                network_focus=network_focus, science_review=science_review,_multisource=_multisource)
         except ValueError as error:
             if network is None or science_review is not None or str(error) != "NETWORK_SOURCE_BINDING_MISMATCH":
                 raise
@@ -284,7 +367,7 @@ def verify(case, draft, *, version="direct-verification/22", network=None, netwo
             uploaded_network_contrast.apply(data,draft,network,report,science_review,source_first=True,extended=True)
         else:
             report=verify(data,draft,version="direct-verification/15",network_focus=network_focus)
-            direct_policy_exchange.apply(data,draft,report,science_review)
+            direct_policy_exchange.apply(data,draft,report,science_review,multisource=_multisource)
             if science_review is not None and report.get('review_record')!=science_review:
                 raise ValueError('NETWORK_REVIEW_NOT_AVAILABLE')
         retained_question(report)
@@ -468,13 +551,14 @@ def verify(case, draft, *, version="direct-verification/22", network=None, netwo
                         report["checks"].append(dict(code="BOUND_SHARPNESS",state="UNCHECKED",
                             detail="图证据支持非点识别。原答提出的界和可达性仍需核验。"))
                         break
-                report.update(decision="CORRECTED" if conflict else "CONDITIONAL_RESULT",
+                input_only = evidence["proof"].get("method") == "DAG_INPUT"
+                report.update(decision="WITHHELD" if input_only else "CORRECTED" if conflict else "CONDITIONAL_RESULT",
                     conditional_answer=answer, effective_answer=deepcopy(answer), proof=evidence["proof"])
                 if latest and "parts" in report:
                     report["draft_parts"] = report.pop("parts")
                 report["checks"].extend(evidence["checks"])
                 mark_conflict = conflict if latest else not fits
-                if mark_conflict:
+                if mark_conflict and not input_only:
                     report["checks"].append(dict(code="SOLVER_CONCLUSION", state="CONFLICT",
                         detail="识别状态或估计动作与按原材料得到的结论不一致。" if latest else "子问题数、识别状态或估计动作与按原材料得到的结论不一致。"))
                 report["clarification_questions"] = evidence["questions"]
@@ -494,9 +578,9 @@ def replay(case, draft, report):
         return False
     try:
         options = dict(version=report.get("version"),network=report.get("network_manifest"),network_focus=report.get("network_focus",False))
-        if report.get("version") in ("direct-verification/12","direct-verification/13","direct-verification/14","direct-verification/15","direct-verification/16","direct-verification/17","direct-verification/18","direct-verification/19","direct-verification/20","direct-verification/21","direct-verification/22"):
+        if report.get("version") in ("direct-verification/12","direct-verification/13","direct-verification/14","direct-verification/15","direct-verification/16","direct-verification/17","direct-verification/18","direct-verification/19","direct-verification/20","direct-verification/21","direct-verification/22","direct-verification/23","direct-verification/24"):
             options["science_review"]=report.get("review_record")
-        if report.get("version") in ("direct-verification/20","direct-verification/21","direct-verification/22"):
+        if report.get("version") in ("direct-verification/20","direct-verification/21","direct-verification/22","direct-verification/23","direct-verification/24"):
             options["scope_choice"]=report.get("scope_choice")
         rebuilt = verify(case, draft, **options)
         return digest(rebuilt) == digest(report)

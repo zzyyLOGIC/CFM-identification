@@ -315,19 +315,18 @@ def parse(bundle, raw, *, binding):
     for source in c.information:
         if not set(source.outcome_nodes)<=set(nodes) or len(set(source.outcome_nodes))!=len(source.outcome_nodes):
             raise ValueError('INVALID_INFORMATION_NODE_SCOPE')
-        if source.operator=='ASSIGNMENT_NODE_MEANS':
-            if source.signature_cells or any(len(z)!=len(nodes) or any(v not in (0,1) for v in z) for z in source.assignment_cells):
-                raise ValueError('INVALID_ASSIGNMENT_CELLS')
-        require_information_rule(source, 'ASSIGNMENT_CELLS_WITH_OTHER_OPERATOR')
+        if source.operator=='ASSIGNMENT_NODE_MEANS' and source.signature_cells:
+            raise ValueError('INVALID_ASSIGNMENT_CELLS')
+        from .information_field_rules import require_assignment_scope
+        require_assignment_scope(source, nodes)
         if source.operator=='NODE_SIGNATURE_MEANS':
             if any(x.node not in source.outcome_nodes or x.own not in (0,1) or x.exposure < 0 for x in source.signature_cells):
                 raise ValueError('INVALID_SIGNATURE_CELLS')
             for cell in source.signature_cells:
                 validate_exposure_coordinate(c.exposure, cell.node, cell.exposure, edges)
         require_information_rule(source, 'SIGNATURE_CELLS_WITH_OTHER_OPERATOR')
-        cells = [tuple(z) for z in source.assignment_cells]
         signatures = [(x.node,x.own,x.exposure) for x in source.signature_cells]
-        if len(set(cells))!=len(cells) or len(set(signatures))!=len(signatures):
+        if len(set(signatures))!=len(signatures):
             raise ValueError('DUPLICATE_INFORMATION_CELL')
         require_information_rule(source, 'EXACT_VALUE_WITH_NONEXACT_INFORMATION')
     if c.bounded_model is not None:

@@ -4,33 +4,17 @@ Only declared values are checked. Missing parameters stay missing; this module
 does not estimate a design, complete groups or select a target from prose.
 """
 from fractions import Fraction
+from cfm_id.research_spec_catalog import BUSINESS_DESIGN_FIELDS, BUSINESS_EXPOSURE_GROUPS
 
 
-DESIGN_FIELDS = {
-    'INDEPENDENT_BERNOULLI': ('probabilities',),
-    'UNIFORM_FIXED_QUOTA': ('fixed_count',),
-    'TWO_GROUP_FIXED_QUOTA': ('groups', 'treated_quotas'),
-    'CLUSTER_BERNOULLI': ('clusters', 'cluster_probabilities'),
-    'MULTI_GROUP_FIXED_QUOTA': ('groups', 'treated_quotas'),
-    'TWO_STAGE_QUOTA_MIXTURE': ('groups', 'quota_profiles', 'profile_probabilities'),
-    'UNEQUAL_PROBABILITY_FIXED_QUOTA': ('fixed_count', 'treated_sets', 'set_probabilities', 'unit_weights'),
-    'RERANDOMIZED_BALANCED': ('fixed_count', 'treated_sets', 'set_probabilities', 'unit_weights', 'balance_covariates', 'balance_tolerance'),
-}
+DESIGN_FIELDS = dict(BUSINESS_DESIGN_FIELDS)
 ASSIGNMENT_FIELDS = tuple(dict.fromkeys(k for fields in DESIGN_FIELDS.values() for k in fields))
 PROBABILITIES_DESCRIPTION = (
     '仅INDEPENDENT_BERNOULLI使用：各对象独立抽签的启用概率，约分分数字符串。'
     '该设计的明确概率规则应完整读取；缺少规则保持null。'
     '固定名额、分组、簇或两阶段设计使用各自专门参数，本字段必须为null；'
     '不能把这些设计可推导的边际启用概率填到此处，也不能因此判定材料缺少概率。')
-EXPOSURE_GROUPS = {
-    'STRICT_MAJORITY_TIES_LOW': 'strict_majority_ties_low',
-    'THREE_LEVEL_TREATED_NEIGHBOR_FRACTION': 'three_level_treated_neighbor_fraction',
-    'PRETREATMENT_CORE_COLLABORATOR_MAJORITY': 'pretreatment_core_collaborator_majority',
-    'EXACT_TREATED_NEIGHBOR_COUNT': 'exact_treated_neighbor_count',
-    'ANY_TREATED_NEIGHBOR': 'any_treated_neighbor',
-    'WEIGHTED_EXPOSURE': 'weighted_exposure',
-    'GROUPED_EXPOSURE': 'grouped_exposure',
-}
+EXPOSURE_GROUPS = dict(BUSINESS_EXPOSURE_GROUPS)
 D6_CONDITION = 'first_stage_profile_no_direct_outcome_effect'
 CORE_EXPOSURE = 'PRETREATMENT_CORE_COLLABORATOR_MAJORITY'
 

@@ -4,7 +4,6 @@ The LLM declares facts only. Typed scientific admissions are constructed only
 after separate, exact, independently supplied reviews. No partial-ID fallback.
 """
 from copy import deepcopy
-from fractions import Fraction
 from dataclasses import asdict
 from .business_dispatch import (sha, worksheet, checked_review, DispatchReview,
     DispatchError, empty_result, PLAN_DECISIONS)
@@ -12,6 +11,7 @@ from cfm_id_llm.network_policy_reading import NetworkPolicyReading
 from cfm_id_llm.network_fact_protocols import network_fact_protocol
 from cfm_id_bridge.scientific_binding import sha as native_sha, canonical_data
 from . import network_design_adapter as design_adapter
+from . import research_spec_policy_adapters as policy_attributes
 from cfm_id_llm import network_design_reading as design_fields
 
 R1B = 'R1B_FULL_ASSIGNMENT'
@@ -28,11 +28,7 @@ R2_SIGNATURE_KINDS = frozenset(design_fields.EXPOSURE_GROUPS) - {'WEIGHTED_EXPOS
 
 
 def target_coordinates(c):
-    n=c.study.nodes
-    return dict(kind='FIXED_FULL_ASSIGNMENT_POLICY_MEAN',node_order=n,
-        assignment=[c.target.assignment[x] for x in n],
-        unit_weights=[str(Fraction(1,len(c.target.population))) if x in c.target.population else '0' for x in n],
-        treatment=c.study.treatment,outcome=c.study.outcome,context=c.study.context)
+    return policy_attributes.from_reading(c).coordinates()
 
 
 def inspect_methods(entry, raw, *, note_review=None, information_evidence_review=None, _mean_order_context=None):
@@ -218,24 +214,21 @@ def native_reviews_from_json(plan, records):
 def _compile(plan, row, records, authority):
     """Only called after every independent review passes; not a parser default."""
     from pfn_pipeline._internal.identification.schemas import Assumption
-    from pfn_pipeline.network_inquiry_shadow import (declare_network_study,
-        fixed_policy_target_from_context,declare_network_a4_source)
+    from pfn_pipeline.network_inquiry_shadow import declare_network_a4_source
     from pfn_pipeline.identification_policy_r2 import (declare_policy_signature,
         admit_mean_signature_sufficiency,declare_signature_population_source)
     c = NetworkPolicyReading.model_validate(plan['facts'])
+    question = policy_attributes.from_reading(c)
+    question.require_coordinates(plan['proposed_target'])
     provenance = lambda ids: 'Reviewed original source locators: '+','.join(ids)
     design = design_adapter.design_payload(c.assignment, nodes=tuple(c.study.nodes))
     # Target identity must not change merely because q, A4 or A5 changes.
     graph_identity=dict(nodes=c.study.nodes,edges=sorted(sorted(e) for e in c.study.edges),context=c.study.context)
-    st = declare_network_study(network_id='network_'+sha(graph_identity),
-        node_order=tuple(c.study.nodes),undirected_edges=tuple(tuple(e) for e in c.study.edges),
-        treatment_variable=c.study.treatment,outcome_variable=c.study.outcome,
-        outcome_kind='continuous' if c.study.outcome_kind=='COUNT' else c.study.outcome_kind.lower(),context_reference=c.study.context,
+    st = policy_attributes.native_study(question, network_id='network_'+sha(graph_identity), edges=c.study.edges,
         observation_regime='experimental',assignment_design=design,
         protocol_provenance=provenance(c.assignment.source_ids),network_provenance=provenance(c.study.source_ids),
         graph_timing_claim='DECLARED_PRETREATMENT_FIXED')
-    coords = plan['proposed_target']
-    target = fixed_policy_target_from_context(st,tuple(coords['assignment']),unit_weights=tuple(coords['unit_weights']),
+    target = policy_attributes.native_target(question, st, side='first',
         authority='TRUSTED_FIXTURE' if authority=='SYNTHETIC_TEST' else 'HUMAN_CONFIRMED')
     review = records['science_review']
     def condition(name, ids):

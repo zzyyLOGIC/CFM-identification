@@ -10,7 +10,8 @@ def start(engine,owner,value):
         parent=engine.get(owner,value['source_run'])
         if value.get('allow_send') is not True or parent.busy or not parent.case:
             raise ValueError('CLASSIC_READING_REQUIRES_CONSENT_AND_COMPLETE_INPUT')
-        run=Run(owner=owner,synthetic=parent.synthetic,provider=parent.provider,model_settings=deepcopy(parent.model_settings))
+        run=Run(owner=owner,synthetic=parent.synthetic,provider=parent.provider,model_settings=deepcopy(parent.model_settings),
+                automatic_review=parent.automatic_review)
         run.case=dict(deepcopy(parent.case),case_id=run.id)
         run.network=parent.network
         run.attachment_report=deepcopy(parent.attachment_report)

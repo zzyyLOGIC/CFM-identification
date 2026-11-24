@@ -29,7 +29,10 @@ def direct_then_verify(case, call, *, network=None, network_focus=False):
     from .direct_verification import verify
     if isinstance(case,BusinessCase):
         case=case.model_dump(mode="json")
-    draft = call(network_request(case, network_focus=network_focus), "direct_draft")
+    # An explicitly imported network is stronger routing evidence than wording
+    # heuristics (e.g. "合作站" need not contain the keyword "邻居"). This only
+    # chooses the existing response contract; it grants no scientific license.
+    draft = call(network_request(case, network_focus=network_focus or network is not None), "direct_draft")
     return verify(case, draft, network=network, network_focus=network_focus)
 
 

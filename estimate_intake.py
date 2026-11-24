@@ -8,9 +8,9 @@ from estimand_contract import Estimand
 
 class EstimateIntake(QueryInbox):
     def receive(self,run_id,packet):
-        if packet.get('version')==direct_policy_exchange.VERSION:
+        if packet.get('version') in direct_policy_exchange.VERSIONS:
             receipt=direct_policy_exchange.check_packet(run_id,packet)
-            receipt.update(consumer='autocfm_estimation_query_intake',typed_estimand=False,registration_version=direct_policy_exchange.VERSION)
+            receipt.update(consumer='autocfm_estimation_query_intake',typed_estimand=False,registration_version=packet['version'])
             atomic_json(self.path_for(run_id),dict(receipt=receipt,packet=packet,estimand=None))
             return receipt
         if packet.get('version')==classic_query_exchange.VERSION:

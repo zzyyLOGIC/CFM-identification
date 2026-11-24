@@ -131,7 +131,8 @@ def assignment(rows, nodes, arm_text, *, source_case=None):
             return {"protocol": name}, relevant(evidence, pattern)
     if re.search(UNCERTAIN_LAW, text):
         return None, evidence
-    independent = bool(re.search(r"独立(?:抽签|分配|随机|投币)|(?:彼此|各自|相互)独立", text))
+    from .network_protocol_terms import independent_draw
+    independent = independent_draw(text)
     fixed = uniform_quota(lines, nodes)
     if fixed is not None and not independent:
         sizes = re.findall(r"(?:全(?:部|体)|从|在)(" + NUM + r")(?:个单位|个站|人|家|站|台|区)", text)
@@ -546,6 +547,11 @@ def enforce(case, network, draft, report, review, *, source_scope=False,scope_re
     from .network_reading import network_case
     proof = report.get("proof") or {}
     answer = report.get("conditional_answer") or report.get("effective_answer") or {}
+    # Preserve a source-bound refusal. This exception cannot register a query or
+    # certify a model answer; it only keeps the concrete missing/unsupported reason.
+    if (not report.get('estimation_handoff_allowed') and report.get('decision') == 'WITHHELD'
+            and any(c.get('code') == 'BOUNDED_MATERIALS' for c in report.get('checks', []))):
+        return
     if (report.get("decision") == "RETAINED" and not proof and not report.get("estimation_handoff_allowed") and not report.get("condition_review")
             and same_answer(draft, report.get("effective_answer"))):
         return
@@ -556,7 +562,7 @@ def enforce(case, network, draft, report, review, *, source_scope=False,scope_re
         declared, _ = direct_iv_evidence.read_declaration(case)
         if declared or not network_case(case) or (not substantive(draft) and not report.get("estimation_handoff_allowed")):
             return
-        if proof.get("method") in {"FRONTDOOR", "BACKDOOR", "ID_HEDGE", "GENERAL_ID"}:
+        if proof.get("method") in {"FRONTDOOR", "BACKDOOR", "ID_HEDGE", "GENERAL_ID", "DAG_INPUT"}:
             return
         try:
             if proof and text_replay(case, proof, answer):

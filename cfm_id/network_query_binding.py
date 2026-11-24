@@ -5,6 +5,7 @@ from fractions import Fraction
 from . import network_event_handoff, network_policy_handoff
 from .network_estimate_handoff import probability
 from .direct_network import sha
+from . import research_spec_local_adapters as local_attributes
 
 NUMBER = r"[-−+]?(?:\d+/\d+|\d*\.\d+|\d+)%?"
 NAME = r"[\u3400-\u9fffA-Za-z]{1,8}"
@@ -194,7 +195,12 @@ def solve_reviewed(facts, *, point_required=False):
         if facts["network"].get("basis")!="whole" or facts["exposure"].get("kind")!="whole_assignment":
             return None
         return network_policy_handoff.solve(facts,point_required=point_required)
-    return network_event_handoff.solve(facts)
+    try:
+        question=local_attributes.from_event_facts(facts)
+        inputs=local_attributes.event_inputs(facts,question)
+    except (ValueError,TypeError,KeyError,ArithmeticError):
+        return None
+    return network_event_handoff.solve(inputs)
 
 
 def unavailable_required_query(case, answer):
