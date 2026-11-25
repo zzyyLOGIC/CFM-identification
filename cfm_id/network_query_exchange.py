@@ -101,7 +101,12 @@ class QueryInbox:
         return self.root/(run_id+".json")
 
     def receive(self,run_id,packet):
-        from . import classic_query_exchange, direct_policy_exchange
+        from . import classic_query_exchange, direct_policy_exchange, joint_query_exchange
+        if packet.get('version')==joint_query_exchange.VERSION:
+            receipt=joint_query_exchange.check_packet(run_id,packet)
+            receipt.update(state='QUEUED',consumer='identification_query_queue')
+            atomic_json(self.path_for(run_id),dict(receipt=receipt,packet=packet))
+            return receipt
         if packet.get('version') in direct_policy_exchange.VERSIONS:
             receipt=direct_policy_exchange.check_packet(run_id,packet)
             receipt.update(state='QUEUED',consumer='identification_query_queue')

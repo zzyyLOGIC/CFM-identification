@@ -52,7 +52,7 @@ def test_existing_source_number_does_not_prove_coverage_and_rejection_stops_math
     raw['study']['source_ids']=[k for k in raw['study']['source_ids'] if refs['aliases'][k]['doc_id']!='context']
     p=dispatch.inspect_methods(s,'q1',**o)
     assert p['state']=='REVIEW_REQUIRED'  # Semantic truth cannot be inferred from an ID.
-    a=approval_records(p);a['native_reviews']['R1A_COMPOSITION']['reading_review'].decisions['source_entailment']='REJECTED'
+    a=approval_records(p);a['native_reviews']['network.randomized.local_contrast']['reading_review'].decisions['source_entailment']='REJECTED'
     before=deepcopy(raw)
     monkeypatch.setattr(effects,'_compile',lambda *a,**kw:pytest.fail('No math after source rejection'))
     r=dispatch.execute(s,'q1',**o,**a)

@@ -1,7 +1,8 @@
-"""Reviewed fixed-W policy -> unchanged finite R3 solver and replay.
+"""Reviewed fixed-W policy -> unchanged observational policy solver and replay.
 
 No observational probability becomes a randomized design or a causal license.
 """
+from .method_compat import canonical_id, native_id
 from copy import deepcopy
 from fractions import Fraction
 from .business_dispatch import (sha, worksheet, checked_review, DispatchError,
@@ -11,10 +12,11 @@ from cfm_id_bridge.scientific_binding import sha as native_sha, canonical_data
 from cfm_id_llm import network_observational_policy_reading as reading
 from . import research_spec_observational_adapters as observed_attributes
 from . import research_spec_policy_adapters as policy_attributes
+from . import observational_methods, native_outcome_execution
 
 FAMILY = 'NETWORK_OBSERVATIONAL_POLICY_FACTS'
-METHOD = 'R3_FULL_ASSIGNMENT'
-SIGNATURE_METHOD = 'R3_MEAN_SIGNATURE'
+METHOD = observational_methods.FULL_POLICY
+SIGNATURE_METHOD = observational_methods.SIGNATURE_POLICY
 METHODS = (METHOD, SIGNATURE_METHOD)
 SIGNATURE_READING_DECISIONS = ('exposure_and_conditional_mean_sufficiency_scope',)
 SIGNATURE_SCIENCE_DECISIONS = ('conditional_mean_sufficiency_all_assignments_and_weighted_nodes',)
@@ -101,7 +103,7 @@ def inspect_methods(entry, raw, *, note_review=None):
         if len(populations)>1:unsupported.append('MULTIPLE_POPULATION_MODELS_NOT_COMBINED')
         method = METHOD
         # Route preparation only: presence in a complete positive-mass table.
-        # Native R3 still proves support after independent scientific review.
+        # The native observational method still proves support after independent scientific review.
         # Historical readings never acquire a signature license implicitly.
         if not missing and not unsupported and hasattr(c, 'mean_sufficiency'):
             source = c.information[populations[0]]
@@ -160,6 +162,7 @@ def _compile(plan, row, records):
     c=model.model_validate(plan['facts']);target=plan['proposed_target']
     question=observed_attributes.policy_native_question(observed_attributes.from_policy_reading(c))
     question.require_coordinates(target)
+    observational_methods.resolve(row['method'], question.operation)
     review=records['science_review']
     def provenance(ids):return 'Reviewed original source locators: '+','.join(ids)
     study=policy_attributes.native_study(question,network_id='network_'+sha(dict(nodes=c.study.nodes,edges=sorted(sorted(e) for e in c.study.edges),context=target['context'])),
@@ -204,23 +207,30 @@ def _execute_plan(plan, *, plan_review=None, native_reviews=None, research_proto
             records[key]=checked_review(records[key],row[field])
             if records[key].authority!=review.authority:raise DispatchError('CHECK_BLOCKED','OBSERVATIONAL_REVIEW_AUTHORITY_MISMATCH')
         if review.authority!='SYNTHETIC_TEST':return dict(out,state='ADAPTER_NOT_CONNECTED',reason_code='OBSERVATIONAL_SYNTHETIC_REVIEW_SCOPE_ONLY')
-        inquiry=_compile(plan,row,records);original=native_sha(inquiry)
+        inquiry=_compile(plan,row,records)
         from pfn_pipeline import identification_business as core
         from pfn_pipeline.identification_observational_r3 import VerifiedObservationalPolicyV23
+        binding=observational_methods.resolve(method,observational_methods.MEAN)
         out['backend_called']=True
-        result=core.identify_network_business_query(inquiry)
-        if native_sha(inquiry)!=original:raise DispatchError('CHECK_BLOCKED','OBSERVATIONAL_NATIVE_INPUT_MUTATED')
+        try:
+            result,original=native_outcome_execution.identify(binding,inquiry,fingerprint=native_sha)
+        except native_outcome_execution.NativeInputMutation:
+            raise DispatchError('CHECK_BLOCKED','OBSERVATIONAL_NATIVE_INPUT_MUTATED')
         out['attempts'].append(dict(method=method,state=result.status,reason_code=result.reason_code))
         if result.status!='POINT':
             return dict(out,state='NEEDS_INPUT' if result.status=='NEEDS_INPUT' else 'UNSUPPORTED',reason_code=result.reason_code,
                 nonidentification_proved=False,partial_fallback_performed=False)
         r=result.result
-        if type(result) is not core.VerifiedBusinessOutcomeV21 or type(r) is not VerifiedObservationalPolicyV23 or result.route!=method:
+        if type(result) is not core.VerifiedBusinessOutcomeV21 or type(r) is not VerifiedObservationalPolicyV23 or result.route!=native_id(method):
             raise DispatchError('CHECK_BLOCKED','OBSERVATIONAL_VERIFIED_FULL_POLICY_REQUIRED')
         actual=native_sha([r.study,r.target,r.source,r.assumptions,r.signature,r.sufficiency])
         expected=native_sha([inquiry.study,inquiry.target,inquiry.source,inquiry.assumptions,inquiry.signature,inquiry.sufficiency])
-        before=native_sha(result)
-        if actual!=expected or core.replay_verified_business_outcome(result) is not True or native_sha(result)!=before or native_sha(inquiry)!=original:
+        if actual!=expected:
+            raise DispatchError('CHECK_BLOCKED','OBSERVATIONAL_RESULT_INPUT_OR_REPLAY_MISMATCH')
+        try:
+            native_outcome_execution.replay_outcome(binding,result,inquiry=inquiry,
+                input_digest=original,fingerprint=native_sha)
+        except native_outcome_execution.NativeReplayMismatch:
             raise DispatchError('CHECK_BLOCKED','OBSERVATIONAL_RESULT_INPUT_OR_REPLAY_MISMATCH')
         claim=dict(kind='POINT',representation='FIXED_POLICY_OBSERVED_FUNCTIONAL',target=deepcopy(plan['proposed_target']),
             target_fingerprint=r.target_fingerprint,expression=r.identified_functional,numeric_value=None)

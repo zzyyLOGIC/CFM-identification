@@ -1,5 +1,6 @@
 """Presentation only: summarize current evidence without granting any review."""
 from .note_review import released_for_plan
+from cfm_id.method_compat import canonical_id
 
 
 def value(item):
@@ -17,11 +18,12 @@ def supported_facts(facts):
 
 
 def supported_method(facts, method):
-    return ((facts.get('version') == 'network-randomized-effect-reading-1' and method == 'R1A_COMPOSITION') or
+    method = canonical_id(method)
+    return ((facts.get('version') == 'network-randomized-effect-reading-1' and method == 'network.randomized.local_contrast') or
         (facts.get('version') == 'network-source-selections-1' and
-         facts.get('target',{}).get('kind') == 'FIXED_POLICY_MEAN' and method == 'R1B_FULL_ASSIGNMENT') or
+         facts.get('target',{}).get('kind') == 'FIXED_POLICY_MEAN' and method == 'network.randomized.full_policy_mean') or
         (facts.get('version') == 'network-policy-contrast-reading-1' and
-         facts.get('target',{}).get('kind') == 'FIXED_POLICY_MEAN_DIFFERENCE' and method == 'R1B_ENDPOINT_DIFFERENCE'))
+         facts.get('target',{}).get('kind') == 'FIXED_POLICY_MEAN_DIFFERENCE' and method == 'network.randomized.full_policy_contrast'))
 
 
 def policy_text(policy):

@@ -2,6 +2,11 @@
 const get=id=>document.getElementById(id);
 const pretty=v=>JSON.stringify(v,null,2);
 let csrf='',catalog={},worksheet=null,generation=0,sourceRun=null;
+const simpleReviewLabels={
+ DAG_JOINT_ID:{target_and_variable_roles:'这次要同时设定哪些变量、看哪个结果，已核对清楚。',complete_causal_graph_and_latents:'图中已列出全部直接关系和未观测共同原因。',recursive_scm_and_perfect_intervention:'采用无环因果模型；同时设定所列变量，其余机制保持不变。',population_law_and_strict_positivity:'有完整总体联合分布，且符合本方法的正概率要求。'},
+ FINITE_MEAN_JOINT:{target_and_coordinates:'目标差值、每个均值对应的情形和权重，已核对清楚。',population_information_and_bounds:'已知数值确为总体信息，所列均值范围有依据。',complete_finite_mean_model:'本题采用这个有限均值模型，没有遗漏其他限制。',adopted_constraints_and_sources:'等式、不等式的来源及采用状态已逐项核对。'}
+};
+simpleReviewLabels.SYMBOLIC_MEAN_JOINT={...simpleReviewLabels.FINITE_MEAN_JOINT,population_information_and_bounds:'总体参数的含义、范围和来源已核对；没有将样本均值当成精确总体信息。'};
 async function request(path,body){
  const response=await fetch(path,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':csrf},body:JSON.stringify(body)});
  const data=await response.json();
@@ -9,7 +14,51 @@ async function request(path,body){
  return data;
 }
 function message(error){get('status').textContent=error.message;}
-function clearReview(){worksheet=null;get('review').hidden=true;get('items').replaceChildren();get('result').textContent='';get('status').textContent='';}
+function clearReview(){worksheet=null;get('review').hidden=true;get('review-authority-label').hidden=true;get('items').replaceChildren();get('result').textContent='';get('status').textContent='';get('result-summary').replaceChildren();get('result-summary').hidden=true;}
+function resultSummary(data){
+ const c=data.certificate,box=get('result-summary');if(!c||!data.independent_replay)return;
+ box.hidden=false;
+ const line=text=>{const p=document.createElement('p');p.textContent=text;box.append(p);};
+ const math=tex=>{const p=document.createElement('div');p.innerHTML=ModelMath.render('\\['+tex+'\\]');box.append(p);};
+ const fraction=x=>{if(!/^-?\d+(?:\/\d+)?$/.test(x))throw Error('Invalid rational');const [a,b]=x.split('/');return b?'\\frac{'+a+'}{'+b+'}':a;};
+ try{
+  if(c.version==='symbolic-mean-joint-1'){box.innerHTML=SymbolicBounds.html(c);return;}
+  if(c.version==='finite-mean-joint-1'){
+   const p=JSON.parse(get('problem').value);line(p.target_description);
+   if(c.status==='INCOMPATIBLE'){line('采用的条件互相冲突，没有满足全部条件的均值模型；未生成识别区间。');return;}
+   math('\\theta '+(c.status==='POINT'?'='+fraction(c.lower):'\\in ['+fraction(c.lower)+','+fraction(c.upper)+']'));
+   line('θ 是本次规格的目标值。上述范围在本次明确列出的有限均值模型内可达到，证书已独立核验。');
+   return;
+  }
+  if(c.version!=='dag-joint-id-1')return;
+  const names=new Map(c.graph.nodes.map((n,i)=>[n,'x_{'+(i+1)+'}'])),defs=[],memo=new Map();
+  const list=xs=>xs.map(x=>{if(!names.has(x))throw Error('Unbound variable');return names.get(x);}).join(',');
+  function expr(e,depth=0){
+   if(depth>50)throw Error('Formula depth');
+   if(e.operation==='OBSERVED_JOINT')return 'P('+list(c.graph.nodes)+')';
+   if(e.operation==='SUM')return e.over.length?'\\sum_{'+list(e.over)+'}\\left('+expr(e.operand,depth+1)+'\\right)':expr(e.operand,depth+1);
+   if(e.operation==='MARGINAL'){
+    const over=e.scope.filter(x=>!e.keep.includes(x));
+    return over.length?'\\sum_{'+list(over)+'}\\left('+expr(e.of,depth+1)+'\\right)':expr(e.of,depth+1);
+   }
+   if(e.operation==='PRODUCT')return e.operands.length===1?expr(e.operands[0],depth+1):e.operands.map(x=>'\\left('+expr(x,depth+1)+'\\right)').join('\\,')||'1';
+   if(e.operation==='CONDITIONAL'){
+    let law='P';
+    if(e.of.operation!=='OBSERVED_JOINT'){
+     const key=JSON.stringify(e.of);
+     if(!memo.has(key)){const body=expr(e.of,depth+1),name='Q_{'+(memo.size+1)+'}';memo.set(key,name);defs.push(name+'='+body);}
+     law=memo.get(key);
+    }
+    return law+'('+list(e.outcome)+(e.given.length?'\\mid '+list(e.given):'')+')';
+   }
+   throw Error('Unrendered operation');
+  }
+  const formula='P('+list(c.target.outcome)+'\\mid \\operatorname{do}('+list(c.target.treatments)+'))='+expr(c.functional);
+  math(formula);for(const d of defs)math(d);
+  line(c.graph.nodes.map((n,i)=>'X'+(i+1)+'：'+n).join('；'));
+  line('小写表示变量取值；P 为所声明的总体联合分布。Q（若出现）是推导得到的中间分布，Q(y|x) 表示对它取条件分布。公式来自本次证书，已独立核验。');
+ }catch{line('公式结构较复杂，请展开原始结果查看完整表达式。');}
+}
 function group(label,entries){
  const parent=document.createElement('optgroup');parent.label=label;
  for(const [id,name] of entries){const option=document.createElement('option');option.value=id;option.textContent=name;parent.append(option);}
@@ -27,9 +76,18 @@ async function select(){
 }
 function show(data){
  clearReview();get('result').textContent=pretty(data);get('status').textContent=data.state||'已完成';
+ if(data.entry_diagnostics){const d=data.entry_diagnostics;get('status').textContent=[data.state,d.method.label,d.method.preparation_basis,...d.missing_or_stopping].filter(Boolean).join(' · ');}
+ resultSummary(data);
  if(data.state!=='REVIEW_REQUIRED'||!data.worksheet)return;
  worksheet=data.worksheet;get('review').hidden=false;
- const local=Boolean(worksheet.items);get('native-label').hidden=local;get('sign').hidden=!local;
+ const op=get('operation').value,simple=Boolean(simpleReviewLabels[op]);
+ const local=Boolean(worksheet.items);get('native-label').hidden=local||simple;get('sign').hidden=!(local||simple);
+ if(simple){
+  get('review-authority-label').hidden=false;
+  get('review-authority').value=sourceRun?(sourceRun.synthetic?'SYNTHETIC_TEST':'EXTERNAL_RESEARCH_REVIEW'):'';
+  for(const key of worksheet.decisions){const label=document.createElement('label'),field=document.createElement('input');field.type='checkbox';field.dataset.key=key;label.append(field,document.createTextNode(' '+simpleReviewLabels[op][key]));get('items').append(label);}
+  return;
+ }
  if(local){
   for(const [key,text] of Object.entries(worksheet.items)){
    const label=document.createElement('label'),field=document.createElement('input');
@@ -67,7 +125,12 @@ get('submit-review').onclick=async()=>{
  try{
   if(!worksheet)return;
   let record;
-  if(worksheet.items){
+  if(simpleReviewLabels[get('operation').value]){
+   const decisions={};for(const input of get('items').querySelectorAll('input'))decisions[input.dataset.key]=input.checked?'ACCEPTED':'PENDING';
+   if(!get('review-authority').value)throw Error('请选择这是合成演示还是实际研究。');
+   record={version:JSON.parse(get('problem').value).version,problem_sha256:worksheet.problem_sha256,authority:get('review-authority').value,
+     reviewer:get('reviewer').value,evidence:get('evidence').value,decisions};
+  }else if(worksheet.items){
    const decisions={};for(const input of get('items').querySelectorAll('input'))decisions[input.dataset.key]=input.checked?'ACCEPTED':'PENDING';
    record={binding:worksheet.binding,decisions,reviewer:get('reviewer').value,evidence:get('evidence').value};
   }else{record=JSON.parse(get('native-review').value);}

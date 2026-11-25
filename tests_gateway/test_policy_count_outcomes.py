@@ -12,7 +12,7 @@ from examples.network_contrast_dispatch_reference import setup as contrast_setup
 
 
 @pytest.mark.parametrize('design,sufficiency,method',[
-    ('D1',False,'R1B_FULL_ASSIGNMENT'), ('D2',True,'R2_MEAN_SIGNATURE')])
+    ('D1',False,'network.randomized.full_policy_mean'), ('D2',True,'network.randomized.signature_policy_mean')])
 def test_count_policy_mean_uses_existing_point_proof(design,sufficiency,method):
     s,e,o,_=mean_setup(design=design,sufficiency=sufficiency)
     o['candidate']['study'].update(outcome_kind='COUNT',outcome='本周任务延误次数')

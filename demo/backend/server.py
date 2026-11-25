@@ -62,8 +62,8 @@ def make_server(engine, port=8770):
                 if path=='/':return self.send(200,(PUBLIC/'index.html').read_bytes(),'text/html; charset=utf-8')
                 if path=='/math-library':return self.send(200,(PUBLIC/'math-library.html').read_bytes(),'text/html; charset=utf-8')
                 if path=='/math-library.js':return self.send(200,(PUBLIC/'math-library.js').read_bytes(),'text/javascript; charset=utf-8')
-                if path in ('/app.js','/input-files.js','/style.css','/favicon.svg'):
-                    mime={'/input-files.js':'text/javascript','/app.js':'text/javascript','/style.css':'text/css','/favicon.svg':'image/svg+xml'}[path]
+                if path in ('/app.js','/input-files.js','/model-math.js','/symbolic-bounds.js','/vendor/katex/katex.min.js','/style.css','/favicon.svg'):
+                    mime={'/input-files.js':'text/javascript','/app.js':'text/javascript','/model-math.js':'text/javascript','/symbolic-bounds.js':'text/javascript','/vendor/katex/katex.min.js':'text/javascript','/style.css':'text/css','/favicon.svg':'image/svg+xml'}[path]
                     return self.send(200,(PUBLIC/path[1:]).read_bytes(),mime+'; charset=utf-8')
                 if path in ('/templates/network_nodes.csv','/templates/network_edges.csv'):
                     return self.send(200,(PUBLIC/path[1:]).read_bytes(),'text/csv; charset=utf-8')

@@ -1,5 +1,9 @@
 # 已有能力登记与实际入口
 
+统一维护表见 [方法条件、入口与验证方式](METHOD_CONDITIONS_AND_VERIFICATION_ZH.md)，由 `cfm_id.method_catalog` 引用本登记及原生条件目录生成。它区分科学条件、信息要求、可计算检查和实现限制；同实现重算与独立检查分开说明，不另设科学准入规则。
+
+固定政策均值和两政策之差的函数绑定统一来自 `cfm_id.policy_methods`；单局部均值和随机化局部效应来自 `cfm_id.local_methods`；观察性政策和局部效应来自 `cfm_id.observational_methods`；有限政策混合来自 `cfm_id.finite_policy_methods`；经典后门、指定调整集与经典前门来自 `cfm_id.dag_methods`。对应执行适配器也读取这些定义，避免登记与调用分别维护。`method_catalog` 仍只负责说明，不能作为审核或执行授权。八种读取协议不是八类互斥定理；当前整理范围见[识别执行层](EXECUTION_ARCHITECTURE_ZH.md)。
+
 `NETWORK_OBSERVATIONAL_POLICY_FACTS` 绑定已有 `R3_FULL_ASSIGNMENT` 和 `R3_MEAN_SIGNATURE`。后者使用显式签名读取配置及单独的充分性审核；旧直接调用默认保持兼容；网页按家族显式选用签名合同，不能由“默认”推断其实际配置。相同固定政策目标按已审核的 `assignment_family=OBSERVATIONAL` 选择观察性事实家族，不是新目标类别，也不自动批准交换性。详见 [R3 合同与边界](R3_POLICY_ENTRY_CONTRACT_ZH.md)。
 
 此前：`NETWORK_POLICY_CONTRAST_FACTS` 新增 `R2_ENDPOINT_DIFFERENCE` 方法绑定，仍使用原比较事实合同及两端原生 R2 证书。数学能力没有新增一种 R；该方法只是已有能力的业务组合。详情见 [接入验收](R2_CONTRAST_INTEGRATION_ZH.md)。数学材料索引在 `literature_support`，只作导航，不能成为第二个运行能力表。
@@ -35,7 +39,9 @@ R1a/R1b/R2/R3 供历史规格、合同和已签证书查找。读者可从[研�
 
 共同业务入口的有限均值盒 PARTIAL 覆盖 D1–D8/E1–E5，D1–D6最多12节点、D7/D8最多8节点；需要明确的数值或符号总体均值、科学界限、全安排均值充分性及信息／约束完整性声明。符号路径输出参数域内经重放的公式，不填造总体数值；均值顺序仍限 D2/E1 数值合同。sharp 相对于审核后的模型，详见 [有限均值模型](FINITE_MEAN_BOX_MATH_ZH.md)。仅因一个 POINT 方法失败，不会自动改成 PARTIAL。方法计划可以包含多个尚未检验支持条件的方法，登记或进入计划均不等于识别成功。
 
-2026-11-13 新增 D2/E4 类型化研究入口：`BOUNDED_POLICY_MEAN_D2_E4` 与 `BOUNDED_POLICY_CONTRAST_D2_E4`。使用 `CountMeanInformation` 及单独的审核类型，复用原政策/差值提交链；独立生成和重放精确人数证书。登记在 `separate_native_entries`，`common_business_routes` 为空，尚未进入网页或自由文本自动分派。不要向旧 E1 会话传入 E4 信息。数学合同、示例与命令见 [D2/E4 有限均值模型](BOUNDED_COUNT_MATH_ZH.md)。
+`BOUNDED_POLICY_MEAN_D2_E4` 与 `BOUNDED_POLICY_CONTRAST_D2_E4` 最初作为专用研究入口加入，目前已分别接到共同政策均值和政策差读取；实际登记中的 `common_business_routes` 已包含它们。仍使用 `CountMeanInformation` 及单独审核类型，不能向旧 E1 会话传入 E4 信息。具体网页是否可执行仍由原材料绑定、科学审核及原生适用域决定，不能仅凭已登记就放行。数学合同、示例与命令见 [D2/E4 有限均值模型](BOUNDED_COUNT_MATH_ZH.md)。
+
+普通随机 ATE、单组 ATE 和二元 Manski 另由默认网页的 `population_ate_entry` 接入，列在 `inventory().homepage_adapters`。它不是第九种网络事实家族，不改变 `reader_for('UNIT_NETWORK', 'ATE')` 的原行为，也不增加五个研究适配器或九个会话的数量。该入口限定所声明完整人群的无条件 1−0；来源核对、科学确认和原生验证保留，当前不自动交接估计。见 [ATE／Manski 交接边界](LEGACY_ATE_CONDITIONS_ZH.md)。
 
 R1a 的直接效应支持两个比较方向。正向沿用原生具名效应合同，反向调用线性目标生产与重放函数。[局部效应入口](NETWORK_EFFECT_DISPATCH_ZH.md) · [原批设计／暴露验收](NETWORK_DESIGN_EXPOSURE_ENTRY_ZH.md) · [后续扩展](TASK1_LIMITATIONS_ZH.md)
 

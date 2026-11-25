@@ -4,6 +4,8 @@ import math
 import json
 
 from .schemas import (
+    Assumption,
+    AssumptionStatus,
     DifferenceFunctional,
     IdentificationResult,
     IdentificationSpec,
@@ -114,7 +116,87 @@ class IdentificationVerifier:
             return "I1 interference-structure receipt fingerprint does not match the formal network/exposure semantics."
         return None
 
+    def _legacy_ate_conditions_error(self, spec, result, *, sharp_regime=None):
+        """Independent admission replay; never call the producer's gate/helper."""
+        if (result.query != spec.query or spec.query.type != "ATE"
+                or spec.query.resolution != "RESOLVED"
+                or spec.query.authority not in TRUSTED_QUERY_AUTHORITIES
+                or query_semantics_implementation_gaps(spec.query)):
+            return "LEGACY_ATE_TARGET_NOT_AUTHORIZED_OR_MISMATCHED"
+        if spec.assumption_conflicts:
+            return "LEGACY_ATE_ASSUMPTION_CONFLICT"
+        states = {}
+        moments = "finite_conditional_first_moments"
+        for record in spec.assumptions:
+            try:
+                valid = Assumption.model_validate(record.model_dump(mode="json"))
+            except (TypeError, ValueError):
+                return "LEGACY_ATE_INVALID_ASSUMPTION_RECORD"
+            if valid != record:
+                return "LEGACY_ATE_INVALID_ASSUMPTION_RECORD"
+            state = ("ACCEPTED" if record.confirmed else record.status, record.confirmed)
+            if (record.status == AssumptionStatus.CONTRADICTED
+                    or record.name in states and states[record.name] != state):
+                return "LEGACY_ATE_ASSUMPTION_CONFLICT"
+            states[record.name] = state
+        if sharp_regime is not None:
+            permitted = {"consistency", "no_interference", moments}
+            if sharp_regime == "experimental":
+                permitted.add("random_assignment")
+            if any(a.name not in permitted and a.status != AssumptionStatus.NOT_ADMITTED
+                   for a in spec.assumptions):
+                return "LEGACY_ATE_UNSUPPORTED_EXTRA_ASSUMPTION"
+            if any(k not in {"assignment_probability", "analysis_unit"} for k in spec.support_domain):
+                return "LEGACY_ATE_UNSUPPORTED_SUPPORT_RESTRICTION"
+            graph = spec.structure
+            if (graph.representation_type not in {"design_based_potential_outcomes", "unspecified"}
+                    or graph.directed_edges or graph.bidirected_edges or spec.network_exposure is not None):
+                return "LEGACY_ATE_UNSUPPORTED_STRUCTURAL_RESTRICTION"
+            variables = {spec.query.treatment, spec.query.outcome}
+            for item in spec.information_signature.objects:
+                if (item.regime != sharp_regime or set(item.variables) != variables
+                        or any(getattr(item, name) is not None for name in (
+                            "basis", "joint_scope", "outcome_representation",
+                            "whole_network_assignment_law_available", "randomized_arm_observable"))):
+                    return "LEGACY_ATE_UNSUPPORTED_EXTRA_INFORMATION"
+            for v in variables:
+                d = spec.domain(v)
+                if d is None:
+                    return "LEGACY_ATE_OUTCOME_DOMAIN_REQUIRED"
+                if d.kind == "binary":
+                    if (set(d.values or []) != {0, 1}
+                            or d.lower is not None and not d.lower <= 0
+                            or d.upper is not None and not d.upper >= 1):
+                        return "LEGACY_ATE_NARROWED_BINARY_DOMAIN"
+                elif v == spec.query.outcome and (d.kind != "continuous" or d.values is not None):
+                    return "LEGACY_ATE_UNSUPPORTED_OUTCOME_SUPPORT"
+        d = spec.domain(spec.query.outcome)
+        if (d is None or any(x is not None and math.isnan(float(x)) for x in (d.lower, d.upper))
+                or d.lower == math.inf or d.upper == -math.inf
+                or d.lower is not None and d.upper is not None and d.lower > d.upper):
+            return "LEGACY_ATE_FINITE_MEANS_REQUIRED"
+        numeric_finite = d.kind == "binary" and set(d.values or []) == {0, 1}
+        if d.kind == "categorical":
+            numeric_finite = bool(d.values) and all(type(x) in (int, float) and math.isfinite(x) for x in d.values)
+        if d.kind == "continuous":
+            numeric_finite = d.finite_numeric_bounds() is not None
+        explicit = d.kind == "continuous" and any(
+            a.name == moments and a.confirmed and any(e.strip() for e in a.evidence)
+            for a in spec.assumptions)
+        if not numeric_finite and not explicit:
+            return "LEGACY_ATE_FINITE_MEANS_REQUIRED"
+        basis = ("FINITE_NUMERIC_OUTCOME_DOMAIN" if numeric_finite
+                 else "REVIEWED_FINITE_CONDITIONAL_FIRST_MOMENTS")
+        if result.validity_domain.get("mean_existence_basis", basis) != basis:
+            return "LEGACY_ATE_MEAN_EXISTENCE_BASIS_MISMATCH"
+        if not numeric_finite and moments not in result.assumptions_used:
+            return "LEGACY_ATE_MOMENT_PREMISE_NOT_RECORDED"
+        return None
+
     def _verify_randomized_point(self, spec: IdentificationSpec, result: IdentificationResult) -> IdentificationResult:
+        error = self._legacy_ate_conditions_error(spec, result)
+        if error is not None:
+            return self._reject(result, error)
         if result.certificate.get("rule_id") != "RANDOMIZED_ATE_V3":
             return self._reject(result, "Unknown or missing randomized-ATE proof rule id.")
 
@@ -485,6 +567,9 @@ class IdentificationVerifier:
         return self._reject(result, "LEGACY_EXPOSURE_RATIO_BRIDGE_UNPROVEN: archived Gamma certificates are not accepted as causal identification evidence.")
 
     def _verify_manski_partial(self, spec: IdentificationSpec, result: IdentificationResult) -> IdentificationResult:
+        error = self._legacy_ate_conditions_error(spec, result, sharp_regime="observational")
+        if error is not None:
+            return self._reject(result, error)
         if result.certificate.get("rule_id") != "MANSKI_BINARY_ATE_V2":
             return self._reject(result, "Unknown or missing binary-Manski proof rule id.")
 
@@ -534,6 +619,9 @@ class IdentificationVerifier:
         return result
 
     def _verify_one_arm_partial(self, spec: IdentificationSpec, result: IdentificationResult) -> IdentificationResult:
+        error = self._legacy_ate_conditions_error(spec, result, sharp_regime="experimental")
+        if error is not None:
+            return self._reject(result, error)
         if result.certificate.get("rule_id") != "ONE_ARM_ATE_BOUNDS_V2":
             return self._reject(result, "Unknown one-arm ATE bounds certificate.")
         t, y = spec.query.treatment, spec.query.outcome
@@ -576,6 +664,9 @@ class IdentificationVerifier:
         return result
 
     def _verify_one_arm_no_restriction_no_useful(self, spec: IdentificationSpec, result: IdentificationResult) -> IdentificationResult:
+        error = self._legacy_ate_conditions_error(spec, result, sharp_regime="experimental")
+        if error is not None:
+            return self._reject(result, error)
         if result.certificate.get("rule_id") != "ONE_ARM_NO_OUTCOME_RESTRICTION_V2":
             return self._reject(result, "Unknown one-arm unrestricted ATE certificate.")
         t, y = spec.query.treatment, spec.query.outcome

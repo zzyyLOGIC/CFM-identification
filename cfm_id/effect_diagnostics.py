@@ -4,6 +4,7 @@ The native staged executor and its named/linear proofs remain unchanged. Checks
 here match saved record identities and ordered coordinates, not scientific truth.
 """
 from copy import deepcopy
+from .method_compat import native_id
 from fractions import Fraction
 from . import network_effect_dispatch as effects
 from .business_dispatch import sha
@@ -65,7 +66,7 @@ def check_answer(plan, answer, attempt):
             proof = native; request = proof['recipe']['supplied_terms']; kind = 'CUSTOM_LINEAR'
         else:
             if (native['query_type'] != 'EFFECT_BUNDLE' or native['status'] != 'POINT'
-                    or native['route'] != effects.METHOD):
+                    or native['route'] != native_id(effects.METHOD)):
                 raise ValueError('named effect envelope')
             bundle = native['result']
             if (len(bundle['results']) != 1 or len(bundle['requests']) != 1
@@ -115,7 +116,7 @@ def decorate(item, plan, answer, result=None):
     item['calculation_contract'] = 'DESIGN_CONDITIONAL_LOCAL_ARM_COMPOSITION'
     item['target_kind'] = target.get('kind')
     item['anchor_is_complete_effect'] = False
-    item['target_semantics_note'] = 'R1a原设计条件平均；不将局部效应替换为固定政策差值或均值充分性目标。'
+    item['target_semantics_note'] = '原设计条件平均；不将局部效应替换为固定政策差值或均值充分性目标。'
     if answer:
         item['certificate']['calculation_reported'] = (('REVERSED_TOTAL_NATIVE_LINEAR_COMPOSITION'
             if target['kind']=='LOCAL_TOTAL_EFFECT' else 'REVERSED_DIRECT_NATIVE_LINEAR_COMPOSITION')

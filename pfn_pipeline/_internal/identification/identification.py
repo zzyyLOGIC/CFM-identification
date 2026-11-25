@@ -8,6 +8,9 @@ from .query_gate import (
     evaluate_query_before_identification,
     query_semantics_implementation_gaps,
 )
+from .legacy_ate_contract import (
+    MOMENTS, assumption_error, moment_basis, sharp_model_error,
+)
 from .schemas import (
     ConditionalMean,
     DifferenceFunctional,
@@ -49,6 +52,29 @@ def _is_binary(spec: IdentificationSpec, variable: str) -> bool:
 def _assignment_probability(spec: IdentificationSpec) -> float | None:
     p = spec.support_domain.get("assignment_probability")
     return None if p is None else float(p)
+
+
+def _legacy_ate_admission(spec, backend, *, sharp_regime=None):
+    """Return an abstention before constructing a formula or sharp witness."""
+    error = assumption_error(spec)
+    if error is None and sharp_regime is not None:
+        error = sharp_model_error(spec, regime=sharp_regime)
+    if error is None and moment_basis(spec) is None:
+        error = "LEGACY_ATE_FINITE_MEANS_REQUIRED"
+    if error is None:
+        return None
+    return IdentificationResult(
+        status=IdentificationStatus.UNSUPPORTED, query=spec.query, backend=backend,
+        guarantee="none", reason_code=error.split(":", 1)[0],
+        message=(error + ". This legacy rule cannot certify the supplied model. "
+                 "Keep unresolved or additional conditions; do not infer non-identification."),
+        trace=[TraceStep(step="legacy_ate_conditions", outcome="FAIL", detail=error)],
+    )
+
+
+def _legacy_ate_required(spec, names):
+    return list(names) + ([MOMENTS] if moment_basis(spec) ==
+                          "REVIEWED_FINITE_CONDITIONAL_FIRST_MOMENTS" else [])
 
 
 def _is_executable_ate_query(spec: IdentificationSpec) -> bool:
@@ -210,6 +236,9 @@ class RandomizedATEBackend:
         )
 
     def solve(self, spec: IdentificationSpec) -> IdentificationResult:
+        blocked = _legacy_ate_admission(spec, self.name)
+        if blocked is not None:
+            return blocked
         t, y = spec.query.treatment, spec.query.outcome
         p = _assignment_probability(spec)
         confirmed = spec.confirmed_assumptions()
@@ -221,7 +250,7 @@ class RandomizedATEBackend:
             )
         ]
 
-        required = ["random_assignment", "consistency", "positivity", "no_interference"]
+        required = _legacy_ate_required(spec, ["random_assignment", "consistency", "positivity", "no_interference"])
         missing = [name for name in required if name not in confirmed]
         if missing or p is None or not (0.0 < p < 1.0):
             trace.append(
@@ -280,6 +309,7 @@ class RandomizedATEBackend:
             assumptions_used=required,
             validity_domain={
                 "assignment_probability": p,
+                "mean_existence_basis": moment_basis(spec),
                 "analysis_unit": spec.support_domain.get("analysis_unit", []),
                 "regime": "randomized_experiment",
             },
@@ -328,6 +358,9 @@ class OneArmATESupportBackend:
         )
 
     def solve(self, spec: IdentificationSpec) -> IdentificationResult:
+        blocked = _legacy_ate_admission(spec, self.name, sharp_regime="experimental")
+        if blocked is not None:
+            return blocked
         t, y = spec.query.treatment, spec.query.outcome
         p = _assignment_probability(spec)
         assert p in {0.0, 1.0}
@@ -340,7 +373,7 @@ class OneArmATESupportBackend:
                 detail=f"Only treatment arm {observed_arm} has support under the declared design.",
             )
         ]
-        required = ["random_assignment", "consistency", "no_interference"]
+        required = _legacy_ate_required(spec, ["random_assignment", "consistency", "no_interference"])
         missing = [name for name in required if name not in confirmed]
         if missing:
             return IdentificationResult(
@@ -379,6 +412,7 @@ class OneArmATESupportBackend:
                 assumptions_used=required,
                 validity_domain={
                     "observed_treatment_arm": observed_arm,
+                    "mean_existence_basis": moment_basis(spec),
                     "assignment_probability": p,
                     "regime": "one_arm_experimental",
                 },
@@ -435,6 +469,7 @@ class OneArmATESupportBackend:
             assumptions_used=required,
             validity_domain={
                 "observed_treatment_arm": observed_arm,
+                "mean_existence_basis": moment_basis(spec),
                 "outcome_lower": lower_y,
                 "outcome_upper": upper_y,
                 "regime": "one_arm_experimental",
@@ -474,6 +509,9 @@ class BinaryManskiATEBackend:
         )
 
     def solve(self, spec: IdentificationSpec) -> IdentificationResult:
+        blocked = _legacy_ate_admission(spec, self.name, sharp_regime="observational")
+        if blocked is not None:
+            return blocked
         t, y = spec.query.treatment, spec.query.outcome
         confirmed = spec.confirmed_assumptions()
         trace = [

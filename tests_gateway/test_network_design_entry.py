@@ -112,8 +112,8 @@ def test_complete_grid_effect_spillover_policy_and_contrast_with_replay(design,e
             for a in terms:
                 assert Fraction(a['joint_support'])==arm_probability(raw,a['node_id'],a['own_treatment'],a['exposure_state'])
         else:
-            expected_methods=({'R1B_FULL_ASSIGNMENT','R2_MEAN_SIGNATURE'} if family=='policy' else
-                              {'R1B_ENDPOINT_DIFFERENCE','R2_ENDPOINT_DIFFERENCE'})
+            expected_methods=({'network.randomized.full_policy_mean','network.randomized.signature_policy_mean'} if family=='policy' else
+                              {'network.randomized.full_policy_contrast','network.randomized.signature_policy_contrast'})
             assert {a['method'] for a in r['answers']}==expected_methods
             assert all(a['independent_replay'] for a in r['answers'])
 

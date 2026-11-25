@@ -49,7 +49,9 @@
 | `project`、`configuration/reading.json` | 唯一推荐起点与配置 |
 | `business_intake`、`business_field_review`、`business_dispatch`、`business_case` | 业务读取生命周期、审核、逐问及整题执行 |
 | `cfm_id_llm/reviewed_intent_handoff`（读取包内） | 已审核意图到网络事实读取的交接、两种来源目录的原文位置映射和一致性审核要求；不把自然语言自动变成数学坐标 |
-| `capability_registry` | 当前数学能力与可调用入口的唯一运行登记 |
+| `capability_registry` | 当前数学能力与可调用入口的共同登记；具体方法函数从下列方法合同取得 |
+| `policy_methods`、`local_methods`、`observational_methods`、`finite_policy_methods`、`dag_methods` | 已有方法的目标操作、原生合同和求解／验证函数绑定；登记与实际执行共用，不产生科学许可 |
+| `policy_execution`、`local_execution`、`native_outcome_execution` | 复用调用及输入／证据不变性检查；保留联合求界、反向线性等不同证明；图／IV／均值顺序继续使用 `research_route_workflow` |
 | `method_requirements`、`method_diagnostics`及`contrast_diagnostics`/`effect_diagnostics`/`observational_diagnostics` | 从原生工作表、审核、执行记录生成[方法诊断](METHOD_DIAGNOSTICS_ZH.md)；已接政策均值、有向差值、局部直接/同伴效应、R3观察性固定背景政策，专用模块只适配证据形状，不新增数学能力或审核许可 |
 | `network_*_dispatch`、`dag_method_dispatch` | 业务适配器；将审核后的事实交给已有数学合同，不能把这些文件当 solver |
 | `network_design_adapter` | 已审 D1–D6/E1–E5 参数到现有原生构造器的共同转换；Task 1 另接 D7 不等概率固定名额 / D8 重随机化平衡（`task1_design` + `make_arm` 路由）；不推断设计、不计算支持、不自动批准条件 |
@@ -67,6 +69,8 @@
 ## 扩展从哪里下手
 
 **新业务题**改 `evaluation` / `examples`；**读取字段**改 `cfm_id_llm` 及审核合同；**已有能力接入**改业务适配器和两个登记；**新定理**先补文献、数学合同、独立验证，再接业务。不要复制整条流程。
+
+六项输入属性和方法执行职责分开维护。八种共同读取的方法绑定已集中；普通 ATE、Manski、IV、一般图 ID 等保留专用目标与证明，不需要强制改成网络政策对象。当前结构与维护位置见[执行架构](EXECUTION_ARCHITECTURE_ZH.md)。
 
 完整要求见[扩展维护规则](EXTENSION_MAINTENANCE_ZH.md)、[读取配套](FACT_READING_REGISTRY_ZH.md)、[数学与证据](MATH_AND_EVIDENCE_ZH.md)。已知未完成项单独记录在[限制清单](KNOWN_LIMITATIONS_ZH.md)，不隐藏在目录说明中。
 

@@ -46,7 +46,7 @@ def prepare(run):
                   materials=materials,query_view=deepcopy(answer.get('query_view')),case_sha256=digest(run.case))
     if 'endpoint_sha256' in answer['certificate']:
         evidence['endpoints']=deepcopy(answer['native_evidence']['endpoints'])
-    if method in ('R3_MEAN_SIGNATURE','R3_P_STANDARDIZED_EFFECTS'):
+    if method in ('network.observational.signature_policy_mean','network.observational.observed_law_contrast'):
         native=answer['native_evidence']
         native=native.get('result',native)
         if 'assignment_masses' in native['source']:

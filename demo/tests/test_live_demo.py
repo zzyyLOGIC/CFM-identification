@@ -155,7 +155,16 @@ def test_http_csrf_and_static_isolation(tmp_path):
     connection=http.client.HTTPConnection('127.0.0.1',server.server_port)
     try:
         connection.request('GET','/');response=connection.getresponse();cookie=response.headers['Set-Cookie'].split(';')[0]
-        assert response.status==200;response.read()
+        assert response.status==200;homepage=response.read()
+        assert b'/vendor/katex/katex.min.js' in homepage and b'/model-math.js' in homepage
+        assert b'/symbolic-bounds.js' in homepage
+        for asset in ('/model-math.js','/symbolic-bounds.js','/vendor/katex/katex.min.js'):
+            connection.request('GET',asset);response=connection.getresponse()
+            assert response.status==200 and 'text/javascript' in response.headers['Content-Type']
+            assert "script-src 'self'" in response.headers['Content-Security-Policy']
+            assert len(response.read())>1000
+        connection.request('GET','/vendor/katex/../backend/engine.py',headers={'Cookie':cookie})
+        response=connection.getresponse();assert response.status==404;response.read()
         connection.request('GET','/api/health',headers={'Cookie':cookie});response=connection.getresponse()
         health=json.loads(response.read());assert health['reading_config']['a0_response_contract']=='target-first-skill-1'
         connection.request('POST','/api/credentials','{}',headers={'Cookie':cookie,'Content-Type':'application/json'})

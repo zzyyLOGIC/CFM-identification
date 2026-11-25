@@ -13,8 +13,8 @@
         "R1A_COMPOSITION"
       ],
       "business_method_ids": [
-        "R1A_RANDOMIZED_ARM",
-        "R1A_COMPOSITION"
+        "network.randomized.local_mean",
+        "network.randomized.local_contrast"
       ],
       "mathematical_documents": [
         "docs/ABSTRACTION_RANDOMIZED_ARM_ZH.md",
@@ -45,9 +45,9 @@
         "R1B_FINITE_POLICY"
       ],
       "business_method_ids": [
-        "R1B_FULL_ASSIGNMENT",
-        "R1B_FINITE_POLICY",
-        "R1B_ENDPOINT_DIFFERENCE"
+        "network.randomized.full_policy_mean",
+        "network.randomized.finite_policy_mean",
+        "network.randomized.full_policy_contrast"
       ],
       "mathematical_documents": [
         "docs/R1B_VERIFIED_FULL_ASSIGNMENT_POLICY_ZH.md",
@@ -67,8 +67,8 @@
         "R2_MEAN_SIGNATURE"
       ],
       "business_method_ids": [
-        "R2_MEAN_SIGNATURE",
-        "R2_ENDPOINT_DIFFERENCE"
+        "network.randomized.signature_policy_mean",
+        "network.randomized.signature_policy_contrast"
       ],
       "mathematical_documents": [
         "docs/R2_VERIFIED_MEAN_SIGNATURE_POLICY_ZH.md",
@@ -89,8 +89,8 @@
         "R3_MEAN_SIGNATURE"
       ],
       "business_method_ids": [
-        "R3_FULL_ASSIGNMENT",
-        "R3_MEAN_SIGNATURE"
+        "network.observational.full_policy_mean",
+        "network.observational.signature_policy_mean"
       ],
       "mathematical_documents": [
         "docs/R3_OBSERVATIONAL_FINITE_POLICY_AND_SIGNATURE_DIAGNOSTICS_ZH.md",
@@ -111,7 +111,7 @@
         "R3_P_STANDARDIZED_EFFECTS"
       ],
       "business_method_ids": [
-        "R3_P_STANDARDIZED_EFFECTS"
+        "network.observational.observed_law_contrast"
       ],
       "mathematical_documents": [
         "docs/NETWORK_R3_OBSERVATIONAL_STANDARDIZED_EFFECTS_ZH.md",
@@ -132,8 +132,8 @@
         "R3_NODEWISE_EXPOSURE_ADJUSTED_EFFECTS"
       ],
       "business_method_ids": [
-        "R3_EXPOSURE_ADJUSTED_EFFECTS",
-        "R3_NODEWISE_EXPOSURE_ADJUSTED_EFFECTS"
+        "network.observational.shared_stratum_contrast",
+        "network.observational.local_covariate_contrast"
       ],
       "mathematical_documents": [
         "docs/R3_EXPOSURE_ADJUSTED_G_FORMULA_POSTRELEASE_P2_ZH.md",

@@ -96,10 +96,9 @@ def prepare(entry,raw,c,out,*,_mean_order_context=None):
                     '请明确科学界限及其含义，并单独说明总体信息和模型限制是否完整。')
     if b.bounds_kind=='OTHER' or b.bounds_scope=='OTHER':
         return stop('ADAPTER_NOT_CONNECTED','BOUNDS_KIND_OR_SCOPE_NOT_CONNECTED')
-    method = (COUNT_METHOD if c.exposure.kind=='EXACT_TREATED_NEIGHBOR_COUNT' else METHOD
-              if c.exposure.kind=='STRICT_MAJORITY_TIES_LOW' else FINITE_METHOD)
-    if c.assignment.kind!='UNIFORM_FIXED_QUOTA':method=FINITE_METHOD
-    if symbolic:method=FINITE_METHOD
+    from .method_preparation import bounded_mean_implementation
+    method = bounded_mean_implementation(assignment_kind=c.assignment.kind,
+        exposure_kind=c.exposure.kind, symbolic=symbolic)
     if symbolic and _mean_order_context is not None:
         return stop('ADAPTER_NOT_CONNECTED','SYMBOLIC_MEAN_ORDER_NOT_CONNECTED')
     model_decisions = MODEL_DECISIONS
@@ -147,10 +146,10 @@ def prepare(entry,raw,c,out,*,_mean_order_context=None):
 
 
 def compile_reviewed(plan,row,records,authority):
-    from .network_policy_dispatch import _compile,R2
+    from .network_policy_dispatch import _compile,SIGNATURE_POLICY
     from cfm_id_llm.network_policy_reading import NetworkPolicyReading
     from pfn_pipeline.identification_business import FixedPolicyInquiryV21
-    st,target,sources,assumptions,sig,suff=_compile(plan,dict(row,method=R2),records,authority)
+    st,target,sources,assumptions,sig,suff=_compile(plan,dict(row,method=SIGNATURE_POLICY),records,authority)
     c=NetworkPolicyReading.model_validate(plan['facts']);b=c.bounded_model
     information=[c.information[i] for i in row['source_indices']]
     symbolic=all(s.availability=='SYMBOLIC_POPULATION_OPERATOR' for s in information)
@@ -196,28 +195,14 @@ def execute_reviewed(plan,row,records,review,out):
     # Keep the existing bounded entry's hypothetical-research admission boundary.
     if review.authority!='SYNTHETIC_TEST':
         return dict(out,state='ADAPTER_NOT_CONNECTED',reason_code='BOUNDED_SYNTHETIC_REVIEW_SCOPE_ONLY')
-    from . import bounded_policy_solver as producer,bounded_policy_verify as verifier
+    from .policy_execution import bounded_solution, PolicyEvidenceMismatch
+    from .policy_methods import MEAN
     try:
         inquiry,info=compile_reviewed(plan,row,records,review.authority)
-        validate,solve,replay,digest=validate_model,producer.solve,verifier.replay,input_digest
-        if row['method']==COUNT_METHOD:
-            from .bounded_count_contract import validate_model as validate,input_digest as count_digest
-            from .bounded_count_solver import solve_policy as solve
-            from .bounded_count_verify import replay_policy as replay
-            digest=lambda q,i:count_digest(q,i,'policy')
-        if row['method']==FINITE_METHOD:
-            from .bounded_finite_contract import validate_model as validate,input_digest as finite_digest
-            from .bounded_finite_solver import solve_policy as solve
-            from .bounded_finite_verify import replay_policy as replay
-            digest=lambda q,i:finite_digest(q,i,'policy')
-        validate(inquiry,info)
-        original=digest(inquiry,info)
-        out['backend_called']=True
-        certificate=solve(inquiry,info)
-        cert_digest=sha(certificate)
-        if (digest(inquiry,info)!=original or
-            replay(certificate,inquiry=inquiry,information=info) is not True or
-            digest(inquiry,info)!=original or sha(certificate)!=cert_digest):
+        try:
+            certificate,original=bounded_solution(row['method'],MEAN,inquiry,info,
+                before_compute=lambda: out.update(backend_called=True))
+        except PolicyEvidenceMismatch:
             raise DispatchError('CHECK_BLOCKED','BOUNDED_INPUT_OR_REPLAY_MISMATCH')
         status=certificate['status']
         from .bounded_mean_formula import mathematical_claim

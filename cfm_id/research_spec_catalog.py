@@ -207,12 +207,9 @@ ASSUMPTION_ROLES = MappingProxyType({
     'integrability': ('well_defined_expression',),
 })
 
-METHOD_NAVIGATION = MappingProxyType({
-    'R1a': '原设计内局部状态的条件平均',
-    'R1b': '完整名单政策的条件均值',
-    'R2': '均值充分性下的政策签名均值',
-    'R3': '观察性网络方法家族；具体目标与条件另记',
-})
+from .method_definitions import definitions as method_definitions
+
+METHOD_NAVIGATION = MappingProxyType({d['id']: d['name'] for d in method_definitions()})
 
 
 def validate_catalog():

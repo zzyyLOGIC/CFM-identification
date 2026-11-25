@@ -1,24 +1,25 @@
-"""Reviewed D1-D6/E1-E5 local effects -> existing R1a composition and replay.
+"""Reviewed D1-D6/E1-E5 local effects -> existing local-mean composition and replay.
 
 The target averages complete assignments under q conditional on each local
 arm. It is neither a fixed-policy effect nor a sufficiency-licensed exposure
 intervention. Native mathematics and the explicit synthetic review stay intact.
 """
+from .method_compat import canonical_id, native_id
 from copy import deepcopy
-from dataclasses import fields, is_dataclass
 from fractions import Fraction
 from .business_dispatch import (sha, worksheet, checked_review, DispatchReview,
     DispatchError, empty_result, PLAN_DECISIONS)
 from cfm_id_llm import network_effect_reading as reading
 from cfm_id_llm import network_effect_conditioning as conditioning
-from cfm_id_bridge.scientific_binding import canonical_data
+from .native_evidence import payload as _native_payload
+from . import local_methods, local_execution
 from . import network_design_adapter as design_adapter
 from . import research_spec_local_adapters as local_attributes
 from cfm_id_llm import network_design_reading as design_fields
 from cfm_id_llm import assumption_choices
 
 FAMILY = 'NETWORK_RANDOMIZED_EFFECT_FACTS'
-METHOD = 'R1A_COMPOSITION'
+METHOD = 'network.randomized.local_contrast'
 TARGET_KINDS = ('DIRECT_EFFECT', 'SPILLOVER_EFFECT', 'LOCAL_TOTAL_EFFECT')
 READING_DECISIONS = ('local_states_and_first_minus_second_direction',
     'evaluation_population_fixed_before_assignment_and_weights',
@@ -26,7 +27,7 @@ READING_DECISIONS = ('local_states_and_first_minus_second_direction',
     'native_symbols_match_business_variables_and_context', 'all_information_and_restrictions_preserved', 'source_entailment')
 SCIENCE_DECISIONS = ('known_assignment_law', 'full_vector_randomization', 'consistency',
     'fixed_pretreatment_network', 'finite_conditional_first_moments', 'a4_operator_scope_and_provenance')
-# R1a averages the remaining assignments under the original conditional design;
+# The local target averages the remaining assignments under the original conditional design;
 # it does not use exposure mean sufficiency. Keep this adapter contract public.
 ASSUMPTION_REQUIREMENTS = frozenset(SCIENCE_DECISIONS)
 SCIENCE_LABELS = {
@@ -193,27 +194,12 @@ def native_reviews_from_json(plan, records):
         for k,v in pair.items()}}
 
 
-def _native_payload(value):
-    # Only trusted in-memory native objects; never import classes from saved data.
-    import numpy as np
-    import math
-    # TaskSpec has finite numeric metadata. This serializes native evidence;
-    # causal weights and design probabilities retain their exact native types.
-    if type(value) is float:
-        if not math.isfinite(value): raise ValueError('NONFINITE_NATIVE_SNAPSHOT')
-        return value
-    if isinstance(value,np.ndarray): return value.tolist()
-    if is_dataclass(value) and not isinstance(value,type): return {f.name:_native_payload(getattr(value,f.name)) for f in fields(value)}
-    if isinstance(value,dict): return {k:_native_payload(v) for k,v in value.items()}
-    if isinstance(value,(tuple,list)): return [_native_payload(v) for v in value]
-    return canonical_data(value)
-
-
 def _compile(plan, row, records):
     from pfn_pipeline.identification_a4_shadow import declare_a4_source
     from pfn_pipeline._internal.identification.schemas import NetworkExposureSpec
     c=canonical_model(plan).model_validate(plan['facts']);t=c.target;s=c.information[row['source_index']]
     question=local_attributes.from_reading(c)
+    local_methods.resolve(row['method'], question.operation)
     local_attributes.require_reading_coordinates(c,question,plan['proposed_target'])
     net=NetworkExposureSpec(network_id='effect_'+sha(dict(study=c.study.model_dump(),context=c.study.context)),
         node_ids=list(question.study.node_order),undirected_edges=c.study.edges)
@@ -234,6 +220,7 @@ def _compile(plan, row, records):
 def _execute_reverse_linear(plan,out,batch,source,terms,original):
     """Bind the reviewed target to unchanged native linear proof and replay APIs."""
     from pfn_pipeline import identification_composition as native
+    method=local_methods.resolve(plan['methods'][0]['method'], local_methods.DIFFERENCE)
     c=canonical_model(plan).model_validate(plan['facts']);t=c.target
     matching_exposure=(t.first.exposure==t.second.exposure if t.kind=='DIRECT_EFFECT'
                        else t.kind=='LOCAL_TOTAL_EFFECT' and t.first.exposure!=t.second.exposure)
@@ -247,7 +234,7 @@ def _execute_reverse_linear(plan,out,batch,source,terms,original):
         raise ValueError('EFFECT_LINEAR_INPUT_TARGET_MISMATCH')
     before=sha(_native_payload([batch,source,terms]))
     try:
-        proof=native.identify_verified_linear_target(batch,source,terms)
+        proof=method.linear(batch,source,terms)
     except native.CompositionUnavailable as exc:
         if sha(_native_payload([batch,source,terms]))!=before:
             raise ValueError('EFFECT_NATIVE_INPUT_MUTATED') from exc
@@ -262,7 +249,7 @@ def _execute_reverse_linear(plan,out,batch,source,terms,original):
         {term.coordinates:term.coefficient for term in proof.terms}!=expected):
         raise ValueError('EFFECT_RETURNED_INPUT_MISMATCH')
     before_replay=sha(_native_payload(proof))
-    replay=native.replay_verified_composition(proof)
+    replay=method.replay_linear(proof)
     if (type(replay) is not native.VerifiedCompositionV18 or
         sha(_native_payload(proof))!=before_replay or sha(_native_payload(replay))!=before_replay):
         raise ValueError('EFFECT_INDEPENDENT_REPLAY_FAILED')
@@ -315,31 +302,26 @@ def _execute_plan(plan, *, plan_review=None, native_reviews=None, research_proto
         task,source,request=_compile(plan,row,pair)
         original=sha(_native_payload([task,source,request]))
         from pfn_pipeline import identification_business as core
-        from pfn_pipeline.identification_batch import identify_randomized_network_batch
         out['backend_called']=True
-        anchor=core.identify_network_business_query(core.ArmInquiryV21(task))
+        anchor,_=local_execution.identify(row['method'],local_methods.DIFFERENCE,core.ArmInquiryV21(task))
         if sha(_native_payload([task,source,request]))!=original: raise ValueError('EFFECT_NATIVE_INPUT_MUTATED')
         out['attempts'].append(dict(stage='ANCHOR',state=anchor.status,reason_code=anchor.reason_code))
         if anchor.status!='POINT':
             return dict(out,state=anchor.status,reason_code=anchor.reason_code,partial_fallback_performed=False)
-        batch=identify_randomized_network_batch(task)
-        if sha(_native_payload(batch.template))!=sha(_native_payload(task)): raise ValueError('EFFECT_BATCH_INPUT_MISMATCH')
+        batch=local_execution.arm_batch(row['method'],task)
         if plan['proposed_target']['kind'] in ('DIRECT_EFFECT','LOCAL_TOTAL_EFFECT') and plan['proposed_target']['first'][0]==0:
             return _execute_reverse_linear(plan,out,batch,source,request,original)
         inquiry=core.EffectsInquiryV21(batch,source,(request,))
-        before=sha(_native_payload(inquiry))
-        result=core.identify_network_business_query(inquiry)
-        if sha(_native_payload(inquiry))!=before: raise ValueError('EFFECT_NATIVE_INPUT_MUTATED')
+        result,before=local_execution.identify(row['method'],local_methods.DIFFERENCE,inquiry)
         out['attempts'].append(dict(stage='COMPOSITION',state=result.status,reason_code=result.reason_code))
         if result.status!='POINT': return dict(out,state=result.status,reason_code=result.reason_code,partial_fallback_performed=False)
         proof=result.result
-        if (result.route!=METHOD or result.query_type!='EFFECT_BUNDLE' or
+        if (result.route!=native_id(METHOD) or result.query_type!='EFFECT_BUNDLE' or
                 sha(_native_payload([proof.source_batch,proof.a4_source,proof.requests]))!=
                 sha(_native_payload([inquiry.batch,inquiry.a4_source,inquiry.requests]))):
             raise ValueError('EFFECT_RETURNED_INPUT_MISMATCH')
-        before_replay=sha(_native_payload(result))
-        if core.replay_verified_business_outcome(result) is not True or sha(_native_payload(result))!=before_replay:
-            raise ValueError('EFFECT_INDEPENDENT_REPLAY_FAILED')
+        local_execution.replay_outcome(row['method'],local_methods.DIFFERENCE,result,
+            inquiry=inquiry,input_digest=before)
         if len(proof.results)!=1 or proof.verification_status!='VERIFIED': raise ValueError('EXACT_VERIFIED_EFFECT_REQUIRED')
         effect=proof.results[0]
         claim=dict(kind='POINT',representation='DESIGN_STANDARDIZED_EFFECT_OBSERVED_FUNCTIONAL',

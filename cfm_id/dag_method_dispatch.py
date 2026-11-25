@@ -7,10 +7,11 @@ from copy import deepcopy
 import re
 from cfm_id_llm.dag_frontdoor_reading import parse
 from . import dag_business as native
+from . import dag_methods
 from .business_dispatch import (sha, worksheet, checked_review, empty_result,
                                 DispatchError, PLAN_DECISIONS)
 
-METHODS = (native.CLASSICAL_ROUTE, native.ADJUSTMENT_ROUTE, native.FRONTDOOR_ROUTE)
+METHODS = dag_methods.METHOD_IDS
 
 
 def _legacy_binary_view(entry, target):
@@ -70,18 +71,13 @@ def inspect_methods(entry, candidate):
         if choice == 'SPECIFIED' and c.adjustment is not None:
             return dict(out, state='ADAPTER_NOT_CONNECTED', reason_code='COMBINED_FRONTDOOR_AND_ADJUSTMENT_REQUEST')
         # These rules preserve explicit user restrictions; none asserts a theorem.
+        from .method_preparation import dag_roles
         permitted = []
-        for method in METHODS:
-            reason = None
-            if method != native.FRONTDOOR_ROUTE and choice == 'SPECIFIED':
-                reason = 'EXPLICIT_FRONTDOOR_ROLE_MUST_BE_RESPECTED'
-            if method == native.FRONTDOOR_ROUTE:
-                if choice == 'FORBIDDEN': reason = 'FRONTDOOR_USE_FORBIDDEN'
-                elif c.adjustment is not None: reason = 'EXPLICIT_ADJUSTMENT_REQUEST_MUST_BE_RESPECTED'
-            if reason:
-                out['exclusions'].append(dict(method=method, reason_code=reason))
+        for selection in dag_roles(frontdoor_status=choice, specified_adjustment=c.adjustment is not None):
+            if selection.reason_code:
+                out['exclusions'].append(dict(method=selection.method, reason_code=selection.reason_code))
             else:
-                permitted.append(method)
+                permitted.append(selection.method)
         for method in permitted:
             wire = deepcopy(native_candidate)
             projection = 'UNCHANGED_COMMON_READING'
@@ -231,8 +227,8 @@ def _execute_plan(plan, *, plan_review=None, native_reviews=None, research_proto
                     raise DispatchError('CHECK_BLOCKED', 'METHOD_SUCCESS_WITHOUT_VERIFIED_EVIDENCE')
                 # Native submission already replays. Repeat publication verification
                 # against this exact plan object to reject altered returned claims.
-                problem_type, _, _, adapter_type, _ = native.route_contract(method)
-                adapter = adapter_type(); p = problem_type.model_validate(row['proposed_problem'])
+                binding = dag_methods.resolve(method)
+                adapter = binding.adapter_type(); p = binding.problem_type.model_validate(row['proposed_problem'])
                 cert = deepcopy(result['certificate']); claim = deepcopy(result['mathematical_claim'])
                 cert_hash, problem_hash, claim_hash = sha(cert), sha(p.model_dump()), sha(claim)
                 if adapter.verify_claim(cert, claim) is not True or adapter.replay(p, cert) is not True:

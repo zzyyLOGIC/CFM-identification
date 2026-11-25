@@ -43,6 +43,8 @@ function harness(view) {
       return {ok:true,json:async()=>({...clone(view),busy:true})};
     },
   });
+  context.katex=require('../vendor/katex/katex.min.js');
+  vm.runInContext(fs.readFileSync(path.join(__dirname,'../model-math.js'),'utf8'),context);
   vm.runInContext(app.replace(/init\(\);\s*$/, ''), context);
   vm.runInContext(fs.readFileSync(path.join(__dirname,'../input-files.js'),'utf8'),context);
   const terms=JSON.parse(fs.readFileSync(path.join(__dirname,'../condition_terms.json'),'utf8'));
@@ -138,13 +140,80 @@ test('policy bounds, original answer and receipt refer to distinct evidence',()=
     condition_review:{binding:'review-a'},estimation_handoff_allowed:true};
   page.context.receipt={state:'RECEIVED',consumer:'autocfm_estimation_query_intake',binding:'other-review'};
   const render=()=>vm.runInContext('directResultHTML(report,receipt)',page.context);
-  const html=render(), [verified,draft]=html.split('<details class="model-draft">');
+  const html=render(), [draft,verified]=html.split('<section class="library-answer"');
   assert.match(verified,/数学库按所列前提复算/);
   assert.match(verified,/下界 1\/4、上界 1\/2/);
   assert.doesNotMatch(verified,/原模型值|估计端已收到/);
   assert.match(draft,/原模型值/);
   page.context.receipt.binding='review-a';
   assert.match(render(),/估计端已收到下界 1\/4、上界 1\/2/);
+});
+
+test('original model POINT and verified reverse PARTIAL stay visibly separate',()=>{
+  const h=harness(fixture());
+  h.context.report={draft:{status:'POINT',functional:'<script>bad()</script>',value:2},
+    independent_replay:true,population_ate:{state:'PARTIAL',message:'条件下的结果',
+      reading:{target:{value:{population:'客服',period:'次月',outcome:'评分',direction:'0-1',
+        treatment_1:'参加培训',treatment_0:'不参加培训'}}}},
+    conditional_answer:{status:'PARTIAL',functional:'[-U, -L]'},proof:{target_operation:{operation:'NEGATE_VERIFIED_ATE'}}};
+  const html=vm.runInContext('directResultHTML(report)',h.context);
+  const [original,verified]=html.split('<section class="library-answer"');
+  assert.match(original,/LLM 原答/);assert.match(original,/模型认为可点识别/);
+  assert.match(original,/&lt;script&gt;bad\(\)&lt;\/script&gt;/);assert.doesNotMatch(html,/<script>/);
+  assert.match(verified,/数学库核验/);assert.match(verified,/可确定上下界/);
+  assert.match(verified,/不参加培训 减去 参加培训/);assert.match(verified,/T=1：参加培训；T=0：不参加培训/);
+  assert.match(verified,/识别界限/);assert.doesNotMatch(verified,/模型认为可点识别|bad\(\)/);
+});
+
+test('original display preserves declined assumptions and does not turn a ratio into a difference',()=>{
+  const h=harness(fixture());
+  h.context.original={target:{quantity:'ratio',intervention:'参加',reference:'不参加'},
+    assumptions:[{status:'NOT_ADOPTED',statement:'无干扰'},{status:'UNDECIDED',statement:'单调性'}]};
+  const html=vm.runInContext('modelOriginalHTML(original)',h.context);
+  assert.match(html,/情形：参加；参照：不参加/);assert.doesNotMatch(html,/参加 减去 不参加/);
+  assert.match(html,/不采用：无干扰/);assert.match(html,/尚未决定：单调性/);
+});
+
+test('local targets render executed terms, retain unresolved questions and show adopted sources',()=>{
+ const view=fixture();view.review_kind=null;
+ view.result={version:'direct-verification/25',decision:'CONDITIONAL_RESULT',checks:[],draft:{status:'NEEDS_INPUT',functional:'模型原式'},
+  review_record:{decisions:{consistency:'ADOPTED'}},condition_review:{kind:'network_local_targets',items:[{code:'consistency',label:'一致性',quote:'记录对应实际完整安排'}]},
+  local_targets:{state:'INCOMPLETE',message:'逐问核验',parts:[{id:'q1',question:'第一个比较',state:'POINT',independent_replay:true,
+   proof:{exposure:'any',assignment:{variable:'接受服务'}},answer:{target:{population:['甲','乙'],outcome:'评分',time:'次月'},estimate_handoff:{}},
+   native:{summary:{identified_functional:'原生精确式',constituent_arms:[
+    {node_id:'甲',own_treatment:0,exposure_state:1,coefficient:'-1/3'},
+    {node_id:'甲',own_treatment:1,exposure_state:1,coefficient:'1/3'},
+    {node_id:'乙',own_treatment:0,exposure_state:1,coefficient:'-2/3'},
+    {node_id:'乙',own_treatment:1,exposure_state:1,coefficient:'2/3'}]}}},
+   {id:'q2',question:'另一个未覆盖问题',state:'NOT_COVERED',message:'未改写目标'}]}};
+ const h=harness(view),html=h.element('#result').innerHTML,[model,library]=html.split('<section class="library-answer"');
+ assert.match(model,/模型原式/);assert.doesNotMatch(library,/模型原式/);
+ assert.match(library,/<math display="block"/);assert.match(library,/<mfrac><mn>1<\/mn><mn>3<\/mn><\/mfrac>/);
+ assert.match(library,/<mfrac><mn>2<\/mn><mn>3<\/mn><\/mfrac>/);
+ assert.match(library,/原生精确式/);assert.match(library,/未改写目标/);assert.match(library,/记录对应实际完整安排/);
+ assert.match(library,/尚不自动下发估计/);assert.equal(h.element('#network-conditions').hidden,true);
+});
+
+test('a general linear target cannot be displayed as a paired difference with invented weights',()=>{
+ const h=harness(fixture());h.context.terms=[{node_id:'甲<script>',own_treatment:1,exposure_state:2,coefficient:'2/3'},
+   {node_id:'乙',own_treatment:0,exposure_state:1,coefficient:'-1/5'}];
+ const html=vm.runInContext('linearArmMathHTML(terms)',h.context);
+ assert.doesNotMatch(html,/<munder>|<script>/);assert.match(html,/&lt;script&gt;/);
+ assert.match(html,/<mn>5<\/mn>/);assert.match(html,/<mo>−<\/mo>/);
+});
+
+test('ATE and interval typesetting preserves signs, parentheses and infinities without treating prose as a formula',()=>{
+ const h=harness(fixture());
+ for(const [functional,status] of [['E[Y | T=0] - E[Y | T=1]','POINT'],
+  ['[-(P(Y=1,T=1)+P(Y=0,T=0)), -(-P(Y=0,T=1)-P(Y=1,T=0))]','PARTIAL'],
+  ['(-inf, -(0 - E[Y | T=0])]','PARTIAL']]){
+  h.context.a={functional,status};const html=vm.runInContext('populationFormulaHTML(a)',h.context);
+  assert.match(html,/<math display="block"/);assert.match(html,/<mo>−<\/mo>/);
+  assert.match(html,status==='POINT'?/<mo>=<\/mo>/:/<mo>∈<\/mo>/);
+  assert.ok(html.includes(functional.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')));
+ }
+ h.context.a={status:'POINT',functional:'<script>alert(1)</script> 不认识的表达式'};
+ assert.doesNotMatch(vm.runInContext('populationFormulaHTML(a)',h.context),/<math|<script>/);
 });
 
 test('the policy result shows both branches and accepts one explicit reply to the open question',async()=>{
@@ -220,7 +289,7 @@ function fixture(kind='query') {
     review_sheets:{[kind]:{binding_sha256:'fixture-binding',fields:{
       'common.outcome':{candidate:{value:'本周每小时净收入'}},
       ...(kind==='source'?{'':{candidate}}:{})},source_catalog:{s1:{text:'冻结的测试材料'}}}},
-    plan:kind==='query'?null:{reading_candidate:candidate,methods:[{method:'R1A_COMPOSITION'}]},
+    plan:kind==='query'?null:{reading_candidate:candidate,methods:[{method:'network.randomized.local_contrast'}]},
   };
 }
 
@@ -251,7 +320,7 @@ if (require.main === module) {
     const f=view.plan.reading_candidate;f.version='network-source-selections-1';
     f.target={kind:'FIXED_POLICY_MEAN',assignment:{'甲店':1,'乙店':0},population:['甲店','乙店'],aggregation:'EQUAL_MEAN'};
     f.information[0].operator='ALL_OUTCOMES_TOGETHER_WITH_FULL_ASSIGNMENT';
-    view.plan.methods=[{method:'R1B_FULL_ASSIGNMENT'}];
+    view.plan.methods=[{method:'network.randomized.full_policy_mean'}];
     const h=harness(view);compact(h,true);
     assert.match(h.element('#compact-review').innerHTML,/甲店接受处理；乙店不接受处理/);
     assert.match(h.element('#compact-review').innerHTML,/联合总体分布/);
@@ -260,7 +329,7 @@ if (require.main === module) {
       const missing=clone(view);missing.plan.reading_candidate.scientific_statements.consistency.status=status;
       compact(harness(missing),false);
     }
-    view.plan.methods[0].method='R2_MEAN_SIGNATURE';compact(harness(view),false);
+    view.plan.methods[0].method='network.randomized.signature_policy_mean';compact(harness(view),false);
   });
   test('explicitly adopted conditions can be confirmed and remain visible; unknowns cannot',async()=>{
     const view=fixture('science');view.automatic_review=true;
@@ -376,7 +445,7 @@ if (require.main === module) {
     f.target={kind:'FIXED_POLICY_MEAN_DIFFERENCE',operation:'FIRST_MINUS_SECOND',
       first:{assignment:{a:1,b:1},population:['a','b'],aggregation:'EQUAL_MEAN'},
       second:{assignment:{a:0,b:0},population:['a','b'],aggregation:'EQUAL_MEAN'},shared_outcome_and_context:{value:true}};
-    view.plan.methods=[{method:'R1B_ENDPOINT_DIFFERENCE'}];
+    view.plan.methods=[{method:'network.randomized.full_policy_contrast'}];
     const h=harness(view);compact(h,true);assert.match(h.element('#compact-review').innerHTML,/减去第二方案/);
     assert.match(h.element('#compact-review').innerHTML,/2 个评价对象/);
     await h.confirm();assert.equal(h.requests.length,1);
@@ -596,7 +665,7 @@ test('usage page omits the coverage catalog and shows limits only for an actual 
  vm.runInContext('coverageInfo=metadata;renderUploadLimits()',h.context);
  assert.match(h.element('#network-import-limit').textContent,/2000 个对象/);
  const source=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');assert.doesNotMatch(source,/coverage-help|coverage-content|上方能力范围|<span>结果说明<\/span>/);
- h.context.r={state:'POINT',methods:[{method:'R1A_COMPOSITION'}],facts:{study:{nodes:Array(100).fill('a')}}};
+ h.context.r={state:'POINT',methods:[{method:'network.randomized.local_contrast'}],facts:{study:{nodes:Array(100).fill('a')}}};
  assert.equal(vm.runInContext('methodScopeHTML(r)',h.context),'');
  h.context.r={state:'ADAPTER_NOT_CONNECTED',reason_code:'EXTENDED_DESIGN_EXACT_ENUMERATION_LIMIT_8',reading_candidate:{study:{nodes:Array(9).fill('a')},assignment:{kind:'RERANDOMIZED_BALANCED'}}};
  assert.match(vm.runInContext('resultHTML(r)',h.context),/最多支持 8 个对象/);

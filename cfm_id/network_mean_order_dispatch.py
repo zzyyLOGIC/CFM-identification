@@ -42,7 +42,7 @@ def compile_reviewed(plan, row, records, authority):
     # Compile both endpoints through the same reviewed native target/A4/A5
     # constructors as the existing contrast. Do not create mean-box evidence.
     compiled = {s: policy._compile(dict(plan['endpoint_plans'][s], plan_sha256=plan['plan_sha256']),
-        dict(row, method=policy.R2), records, authority) for s in ('first', 'second')}
+        dict(row, method=policy.SIGNATURE_POLICY), records, authority) for s in ('first', 'second')}
     first, second = compiled['first'], compiled['second']
     if any(sha(canonical_data(first[i])) != sha(canonical_data(second[i])) for i in (0, 2, 3, 4, 5)):
         raise DispatchError('CHECK_BLOCKED', 'MEAN_ORDER_COMMON_MODEL_MISMATCH')

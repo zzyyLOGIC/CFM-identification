@@ -39,79 +39,56 @@ class BusinessBinding:
 def business_bindings():
     # Static imports only. Caller text can never choose an import or function.
     from . import network_policy_dispatch as mean, network_contrast_dispatch as contrast
-    from . import network_bounded_dispatch as bounded, dag_method_dispatch as dag
+    from . import dag_method_dispatch as dag
     from . import network_effect_dispatch as effects
     from . import network_observational_policy_dispatch as observational
     from . import network_extended_dispatch as extended
     from cfm_id_llm import network_extended_reading as extended_reading
-    from .workflows import policy_difference
-    from . import bounded_count_solver, bounded_count_verify
-    from . import bounded_finite_solver, bounded_finite_verify
-    from . import bounded_policy_solver, bounded_policy_verify
-    from . import bounded_contrast_solver, bounded_contrast_verify, fixed_comparison
-    from . import network_mean_order_dispatch as order, mean_order_solver, mean_order_verify
-    from pfn_pipeline import identification_policy_r1b as r1b, identification_policy_r2 as r2
-    from pfn_pipeline import identification_business as network
-    from pfn_pipeline.identification_batch import identify_randomized_network_batch
-    from pfn_pipeline.identification_composition import identify_verified_linear_target,replay_verified_composition
-    dag_routes = {r.capability.route_id: r for r in registrations()}
+    from . import policy_methods, local_methods, observational_methods, finite_policy_methods, dag_methods
+    def policy_bindings(operation):
+        return tuple(MethodBinding(m.method_id, m.native_route_ids, m.producers, m.replayers)
+                     for m in policy_methods.methods(operation))
+    def local_bindings(operation):
+        return tuple(MethodBinding(m.method_id, m.native_route_ids, m.producers, m.replayers)
+                     for m in local_methods.methods(operation))
+    def observational_bindings(operation):
+        return tuple(MethodBinding(m.method_id, m.native_route_ids, m.producers, m.replayers)
+                     for m in observational_methods.methods(operation))
     bindings = (
         BusinessBinding(mean.FAMILY, 'UNIT_NETWORK', ('FIXED_POLICY_VALUE',),
             'One complete fixed policy, declared evaluation population and equal mean; native scope checks remain required.',
-            (MethodBinding(mean.R1B, (mean.R1B,), (r1b.identify_verified_fixed_policy,), (r1b.replay_verified_fixed_policy,)),
-             MethodBinding(mean.R2, (mean.R2,), (r2.identify_verified_signature_policy,), (r2.replay_verified_signature_policy,)),
-             MethodBinding(bounded.METHOD, (bounded.METHOD,), (bounded_policy_solver.solve,), (bounded_policy_verify.replay,)),
-             MethodBinding(bounded.COUNT_METHOD,(bounded.COUNT_METHOD,),
-                (bounded_count_solver.solve_policy,),(bounded_count_verify.replay_policy,)),
-             MethodBinding(bounded.FINITE_METHOD,(bounded.FINITE_METHOD,),
-                (bounded_finite_solver.solve_policy,),(bounded_finite_verify.replay_policy,))),
+            policy_bindings(policy_methods.MEAN),
             mean.inspect_methods, mean.native_reviews_from_json, mean._execute_plan, True, True),
         BusinessBinding(contrast.FAMILY, 'UNIT_NETWORK', ('TOTAL_EFFECT',),
             'Only first minus second of two complete fixed policies with one population, outcome and context; not arbitrary total effects.',
-            (MethodBinding(contrast.POINT_METHOD, (mean.R1B,),
-                (network.identify_network_business_query, fixed_comparison.compose),
-                (network.replay_verified_business_outcome, fixed_comparison.replay)),
-             MethodBinding(contrast.R2_METHOD, (mean.R2,),
-                (network.identify_network_business_query, policy_difference.compose),
-                (network.replay_verified_business_outcome, policy_difference.replay)),
-             MethodBinding(contrast.BOUNDED_METHOD, (contrast.BOUNDED_METHOD,),
-                (bounded_contrast_solver.solve,), (bounded_contrast_verify.replay,)),
-             MethodBinding(contrast.COUNT_METHOD,(contrast.COUNT_METHOD,),
-                (bounded_count_solver.solve_contrast,),(bounded_count_verify.replay_contrast,)),
-             MethodBinding(contrast.FINITE_METHOD,(contrast.FINITE_METHOD,),
-                (bounded_finite_solver.solve_contrast,),(bounded_finite_verify.replay_contrast,)),
-             MethodBinding(order.METHOD, (order.METHOD,),
-                (mean_order_solver.solve,), (mean_order_verify.replay,))),
+            policy_bindings(policy_methods.DIFFERENCE),
             contrast.inspect_methods, contrast.native_reviews_from_json, contrast._execute_plan, True, True),
         BusinessBinding('VARIABLE_DAG_FACTS', 'VARIABLE_DAG', ('INTERVENTIONAL_DISTRIBUTION',),
             'Existing finite variable DAG contracts only; no network/DAG composition.',
-            tuple(MethodBinding(method, (method,), (dag_routes[method].adapter_type.submit,),
-                (dag_routes[method].adapter_type.replay,)) for method in dag.METHODS),
+            tuple(MethodBinding(m.method_id, m.native_route_ids, m.producers, m.replayers)
+                  for m in dag_methods.methods()),
             dag.inspect_methods, dag.native_reviews_from_json, dag._execute_plan),
         BusinessBinding(effects.FAMILY, 'UNIT_NETWORK', effects.TARGET_KINDS,
             'Direct, spillover and local total contrasts under the original conditional design; explicit fixed evaluation population and reviews. D1/strict-majority supports external review; other native D1-D6/E1-E5 combinations retain synthetic-only admission. Complete-policy TOTAL_EFFECT uses the separate contrast reader.',
-            (MethodBinding(effects.METHOD,(effects.METHOD,),
-                (identify_randomized_network_batch,network.identify_network_business_query,identify_verified_linear_target),
-                (network.replay_verified_business_outcome,replay_verified_composition)),),
+            local_bindings(local_methods.DIFFERENCE),
             effects.inspect_methods,effects.native_reviews_from_json,effects._execute_plan,True),
         BusinessBinding(observational.FAMILY, 'UNIT_NETWORK', ('FIXED_POLICY_VALUE',),
             'Finite observational policy mean at fixed pretreatment W; explicit population law and conditional exchangeability. Full-policy support, or separately reviewed all-assignment mean sufficiency and signature support. Synthetic research review.',
-            (MethodBinding(observational.METHOD,(observational.METHOD,),
-                (network.identify_network_business_query,), (network.replay_verified_business_outcome,)),
-             MethodBinding(observational.SIGNATURE_METHOD,(observational.SIGNATURE_METHOD,),
-                (network.identify_network_business_query,), (network.replay_verified_business_outcome,))),
+            observational_bindings(observational_methods.MEAN),
             observational.inspect_methods,observational.native_reviews_from_json,observational._execute_plan,
             note_review=True,assignment_family='OBSERVATIONAL'),
     ) + tuple(BusinessBinding(family,'UNIT_NETWORK',kinds,scope,
-        tuple(MethodBinding(m,(m,),(network.identify_network_business_query,),
-            (network.replay_verified_business_outcome,)) for m in extended.METHODS[family]),
+        local_bindings(local_methods.ARM_MEAN) if family == extended_reading.ARM else
+        observational_bindings(observational_methods.DIFFERENCE) if family == extended_reading.OBS else
+        tuple(MethodBinding(m.method_id,m.native_route_ids,m.producers,m.replayers)
+              for m in finite_policy_methods.methods()),
         extended.inspect_methods,extended.native_reviews_from_json,extended._execute_plan,
         note_review=True,assignment_family=regime)
         for family,kinds,scope,regime in (
             (extended_reading.ARM,('NETWORK_DESIGN_STANDARDIZED_ARM_MEAN',),
              'One explicit node-arm mean under original conditional design; D1-D6/E1-E5, synthetic review.',None),
             (extended_reading.MIX,('STOCHASTIC_POLICY_VALUE',),
-             'Explicit finite complete policies and positive weights; each component independently verified R1b; synthetic review.',None),
+             'Explicit finite complete policies and positive weights; each complete policy independently verified; synthetic review.',None),
             (extended_reading.OBS,effects.TARGET_KINDS,
              'Fixed-W observed-law standardized effects or separately licensed shared-stratum/local-binary-covariate exposure effects; native A4 and scope guards retained; synthetic review.','OBSERVATIONAL')))
     keys = [(b.structure, kind, b.assignment_family) for b in bindings for kind in b.target_kinds]
@@ -202,6 +179,8 @@ def _name(f):
 
 def inventory():
     """Fresh descriptive JSON. Editing it never changes executable bindings."""
+    from .method_catalog import homepage_entries
+    from .dedicated_entries import inventory as dedicated_inventory
     bindings = business_bindings()
     readers = [dict(reader_id=b.reader_id, structure=b.structure, target_kinds=list(b.target_kinds), scope=b.scope,
         **(dict(assignment_family=b.assignment_family) if b.assignment_family is not None else {}),
@@ -215,7 +194,10 @@ def inventory():
     return dict(version='identification-capability-registry-2',
         scope='Maintained capabilities only; not an inventory of all historical backends.',
         formal_research_adapters=[r.describe() for r in registrations()],
+        dedicated_entries=dedicated_inventory(),
         separate_native_entries=native, common_business_readers=readers,
+        homepage_adapters=homepage_entries(),
+        method_description_catalog='cfm_id.method_catalog.catalog',
         internal_research_sessions=[dict(lane_id=s.lane_id, group=s.group) for s in session_bindings()],
         registration_is_applicability=False, creates_reviews=False, automatic_fallback=False,
         production_admission=False, estimation_handoff_allowed=False)
@@ -246,28 +228,23 @@ class Registration:
 
 def registrations():
     # Fixed imports only. Neither material text nor route IDs choose a module path.
-    from .research_route_adapters import DagBackdoorRoute,MeanOrderRoute
-    from .dag_adjustment_adapter import DagAdjustmentRoute
-    from .dag_frontdoor_adapter import DagFrontdoorRoute
-    from .dag_frontdoor_contract import FrontdoorProblem,FrontdoorReview
+    from .research_route_adapters import MeanOrderRoute
+    from . import dag_methods
     from .iv_route_contract import IVProblem,IVReview
     from .iv_research_adapter import BinaryIVRoute
-    from .dag_backdoor_contract import BackdoorProblem,BackdoorReview
-    from .dag_adjustment_contract import AdjustmentProblem,AdjustmentReview
     from .mean_order_contract import MeanOrderProblem,ReviewedMeanOrder
+    def dag_registration(method_id):
+        m=dag_methods.resolve(method_id)
+        return Registration(m.adapter_type,m.problem_type,m.review_type,m.version,
+            'EXTERNAL_DECLARATIVE_RESEARCH_OR_SYNTHETIC_TEST','PER_CONDITION_ACCEPTED_PENDING_REJECTED',
+            ('POINT',),'evaluation.dag_business_workflow')
     return (
-        Registration(DagBackdoorRoute,BackdoorProblem,BackdoorReview,'dag-backdoor-1',
-            'EXTERNAL_DECLARATIVE_RESEARCH_OR_SYNTHETIC_TEST','PER_CONDITION_ACCEPTED_PENDING_REJECTED',
-            ('POINT',),'evaluation.dag_business_workflow'),
-        Registration(DagAdjustmentRoute,AdjustmentProblem,AdjustmentReview,'dag-adjustment-1',
-            'EXTERNAL_DECLARATIVE_RESEARCH_OR_SYNTHETIC_TEST','PER_CONDITION_ACCEPTED_PENDING_REJECTED',
-            ('POINT',),'evaluation.dag_business_workflow'),
+        dag_registration(dag_methods.BACKDOOR),
+        dag_registration(dag_methods.ADJUSTMENT),
         Registration(MeanOrderRoute,MeanOrderProblem,ReviewedMeanOrder,'mean-order-d2-e1-1',
             'SYNTHETIC_TEST_ONLY','EXPLICIT_TRUE_SYNTHETIC_ATTESTATIONS',
             ('POINT','PARTIAL','INCOMPATIBLE'),'cfm_id.workflows.mean_order'),
-        Registration(DagFrontdoorRoute,FrontdoorProblem,FrontdoorReview,'dag-frontdoor-1',
-            'EXTERNAL_DECLARATIVE_RESEARCH_OR_SYNTHETIC_TEST','PER_CONDITION_ACCEPTED_PENDING_REJECTED',
-            ('POINT',),'evaluation.dag_business_workflow'),
+        dag_registration(dag_methods.FRONTDOOR),
         Registration(BinaryIVRoute,IVProblem,IVReview,'binary-iv-research-1',
             'SEPARATE_SOURCE_READING_AND_SCIENTIFIC_REVIEW','PER_CONDITION_ACCEPTED_PENDING_REJECTED',
             ('POINT','PARTIAL','INCOMPATIBLE'),None),
@@ -275,11 +252,9 @@ def registrations():
 
 def separate_entries():
     # Current maintained lanes, not an exhaustive inventory of historical backends.
+    from .method_compat import native_network_routes
     return [
-        dict(entry_id='NETWORK_POINT_EXISTING_BUSINESS',route_ids=[
-            'R1A_RANDOMIZED_ARM','R1A_COMPOSITION','R1B_FULL_ASSIGNMENT','R1B_FINITE_POLICY',
-            'R2_MEAN_SIGNATURE','R3_FULL_ASSIGNMENT','R3_MEAN_SIGNATURE',
-            'R3_P_STANDARDIZED_EFFECTS','R3_EXPOSURE_ADJUSTED_EFFECTS','R3_NODEWISE_EXPOSURE_ADJUSTED_EFFECTS'],
+        dict(entry_id='NETWORK_POINT_EXISTING_BUSINESS',route_ids=native_network_routes(),
             entry='pfn_pipeline.identification_business',
             reason='Native business/scientific context and route-specific reviews remain required.'),
         dict(entry_id='BOUNDED_POLICY_MEAN_D2_E1',route_ids=['BOUNDED_POLICY_MEAN_D2_E1'],

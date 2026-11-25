@@ -127,7 +127,9 @@ def test_unknown_subfields_remain_explicit_and_have_one_authoritative_copy():
 def test_catalog_methods_do_not_become_study_categories():
     assert validate_catalog()
     assert set(FACET_DIMENSIONS)=={'target','assignment','exposure','structure','information','assumptions'}
-    assert set(METHOD_NAVIGATION)=={'R1a','R1b','R2','R3'}
+    from cfm_id.method_definitions import definitions
+    assert dict(METHOD_NAVIGATION)=={d['id']:d['name'] for d in definitions()}
+    assert all(not key.startswith(('R1', 'R2', 'R3')) for key in METHOD_NAVIGATION)
     assert VERSION=='internal-study-model/1'
 
 

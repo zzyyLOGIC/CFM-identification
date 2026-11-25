@@ -67,8 +67,8 @@ def test_positive_missing_refusal_and_rejected_source_keep_native_boundaries(var
     p=dispatch.inspect_methods(s,'q1',**o)
     a=approval_records(p) if variant in ('full','rejected_source') else dict(research_protocol_selected=True)
     if variant=='rejected_source':
-        rec=a['native_reviews']['R1A_COMPOSITION']['reading_review'].model_dump(mode='json');rec['decisions']['source_entailment']='REJECTED'
-        a['native_reviews']['R1A_COMPOSITION']['reading_review']=rec
+        rec=a['native_reviews']['network.randomized.local_contrast']['reading_review'].model_dump(mode='json');rec['decisions']['source_entailment']='REJECTED'
+        a['native_reviews']['network.randomized.local_contrast']['reading_review']=rec
     before=deepcopy(o['candidate']);r=dispatch.execute(s,'q1',**o,**a)
     assert r['state']==expected and o['candidate']==before
     assert bool(r['independent_replay'])==(variant=='full')

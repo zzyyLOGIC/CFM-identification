@@ -229,7 +229,7 @@ def retained_question(report):
         report['clarification_questions']=requests
 
 
-def verify(case,draft,*,version="direct-verification/24",**options):
+def verify(case,draft,*,version="direct-verification/25",**options):
     from .network_protocol_terms import reading_revision
     if reading_revision.get() is not None:
         return _verify(case,draft,version=version,**options)
@@ -244,6 +244,15 @@ def verify(case,draft,*,version="direct-verification/24",**options):
 
 def _verify(case, draft, *, version, network=None, network_focus=False, science_review=None,scope_choice=None, _index_ranges=False, _multisource=True):
     """Use the proven functional for the exact declared target, and preserve the original draft."""
+    if version == 'direct-verification/25':
+        from . import network_local_targets
+        data=case if isinstance(case,dict) else case.model_dump(mode='json')
+        if network_local_targets.eligible(data,network):
+            if scope_choice is not None:raise ValueError('LOCAL_TARGET_EXPLICIT_SCOPE_REQUIRED')
+            return network_local_targets.verify(data,draft,network,science_review=science_review,network_focus=network_focus)
+        # Historical reports and their certificates keep their original version.
+        return verify(data,draft,version='direct-verification/24',network=network,network_focus=network_focus,
+                      science_review=science_review,scope_choice=scope_choice)
     if version == "direct-verification/24":
         from . import direct_policy_exchange, policy_bounds_sources
         data=case if isinstance(case,dict) else case.model_dump(mode="json")
@@ -577,6 +586,16 @@ def replay(case, draft, report):
     if not isinstance(report, dict):
         return False
     try:
+        if report.get('local_targets'):
+            rebuilt=verify(case,draft,version='direct-verification/25',network=report['network_manifest'],
+                           network_focus=report.get('network_focus',False),science_review=report.get('review_record'))
+            return digest(rebuilt)==digest(report)
+        if report.get('joint_entry'):
+            from .joint_natural_entry import replay as replay_joint
+            return replay_joint(case,draft,report)
+        if report.get("population_ate"):
+            from .population_ate_entry import replay as replay_population_ate
+            return replay_population_ate(case,draft,report)
         options = dict(version=report.get("version"),network=report.get("network_manifest"),network_focus=report.get("network_focus",False))
         if report.get("version") in ("direct-verification/12","direct-verification/13","direct-verification/14","direct-verification/15","direct-verification/16","direct-verification/17","direct-verification/18","direct-verification/19","direct-verification/20","direct-verification/21","direct-verification/22","direct-verification/23","direct-verification/24"):
             options["science_review"]=report.get("review_record")

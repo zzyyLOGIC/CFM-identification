@@ -74,11 +74,11 @@ def test_deleting_real_same_paragraph_bound_fails_independent_source_review(monk
     plan = dispatch.inspect_methods(state, 'q1', **opts)
     assert plan['state'] == 'REVIEW_REQUIRED'
     a = approval_records(plan)
-    review = a['native_reviews']['R1A_COMPOSITION']['reading_review'].model_dump(mode='json')
+    review = a['native_reviews']['network.randomized.local_contrast']['reading_review'].model_dump(mode='json')
     review['decisions']['all_information_and_restrictions_preserved'] = 'REJECTED'
     review['decisions']['source_entailment'] = 'REJECTED'
     review['evidence'] = 'Synthetic source audit: the numerical bound in the original information paragraph was omitted. Type-correct information is insufficient.'
-    a['native_reviews']['R1A_COMPOSITION']['reading_review'] = dispatch.DispatchReview.model_validate(review)
+    a['native_reviews']['network.randomized.local_contrast']['reading_review'] = dispatch.DispatchReview.model_validate(review)
     monkeypatch.setattr(effects, '_compile', lambda *a, **kw: pytest.fail('Rejected source reached math'))
     result = dispatch.execute(state, 'q1', **opts, **a)
     assert result['state'] == 'CHECK_BLOCKED' and not result['backend_called']

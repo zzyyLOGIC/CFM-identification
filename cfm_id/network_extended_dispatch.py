@@ -3,20 +3,23 @@
 All scientific admission follows source review and version-bound worksheets.
 No native producer, support calculator or independent replayer is changed.
 """
+from .method_compat import canonical_id, native_id
 from copy import deepcopy
 from fractions import Fraction
 from functools import partial
 from .business_dispatch import sha,worksheet,checked_review,DispatchError,empty_result,PLAN_DECISIONS
 from .network_policy_dispatch import native_reviews_from_json,BASE_CONDITIONS
-from .network_effect_dispatch import _native_payload
+from .native_evidence import payload as _native_payload
+from . import local_methods, local_execution, observational_methods, native_outcome_execution
+from . import finite_policy_methods
 from . import network_design_adapter as design
 from . import research_spec_observational_adapters as observed_attributes
 from cfm_id_llm import network_extended_reading as reading
 
-ARM='R1A_RANDOMIZED_ARM';MIX='R1B_FINITE_POLICY'
-P='R3_P_STANDARDIZED_EFFECTS';B='R3_EXPOSURE_ADJUSTED_EFFECTS';X='R3_NODEWISE_EXPOSURE_ADJUSTED_EFFECTS'
+ARM='network.randomized.local_mean';MIX=finite_policy_methods.METHOD
+P=observational_methods.OBSERVED_EFFECT;B=observational_methods.STRATIFIED_EFFECT;X=observational_methods.NODEWISE_EFFECT
 METHODS={reading.ARM:(ARM,),reading.MIX:(MIX,),reading.OBS:(P,B,X)}
-AVG={'OBSERVED_ALLOCATION_CONDITIONAL':P,'SHARED_PRETREATMENT_STRATUM':B,'OWN_AND_NEIGHBOR_BINARY_FEATURE':X}
+AVG=observational_methods.effect_routes()
 BASIC=('consistency','fixed_pretreatment_network','finite_conditional_first_moments')
 SCIENCE_NAMES={
  'known_assignment_law':'过去试点的完整抽签规则已知',
@@ -148,10 +151,10 @@ def inspect_methods(entry,raw,*,note_review=None):
             science=SCIENCE.get(method,BASIC)
             for name in science:
                 d=getattr(c.assumptions,name);require(d,name)
-                if hasattr(d,'scope') and d.value is True:
+                if getattr(d,'scope',None) is not None and d.value is True:
                     if d.scope=='UNKNOWN':missing.append('请明确科学声明是否覆盖所有二元完整安排：'+name)
                     elif d.scope!='ALL_BINARY_ASSIGNMENTS':blocked.append('SCIENTIFIC_SCOPE_NOT_CONNECTED:'+name)
-                    if not set(t.population or [])<=set(d.covered_nodes):missing.append('科学声明没有覆盖全部评价对象：'+name)
+                    if d.covered_nodes is not None and not set(t.population or [])<=set(d.covered_nodes):missing.append('科学声明没有覆盖全部评价对象：'+name)
             # A stronger, unused claim is retained and reviewed, never silently discarded.
             science=tuple(dict.fromkeys((*science,*(n for n,d in c.assumptions if d.value is True))))
             if t.kind!=entry['selected_query']['target']['kind']:
@@ -309,15 +312,20 @@ def _native_inputs(plan,row,pair):
     if target_coordinates(c,plan['fact_family'],source_index=row['source_index'])!=plan['proposed_target']:raise ValueError('TARGET_PLAN_MISMATCH')
     review=pair['science_review'];evidence=review.evidence+'; review='+review.binding_sha256
     provenance=lambda ids:'Reviewed original source locators: '+','.join(ids)+'; '+evidence
-    def condition(name):return Assumption(name=name,source='demo_specification',confirmed=True,status='ADMITTED',evidence=[provenance(getattr(c.assumptions,name).source_ids),review.reviewer])
+    external=getattr(review,'authority',None)=='EXTERNAL_RESEARCH_REVIEW'
+    def condition(name):return Assumption(name=name,source='human_confirmation' if external else 'demo_specification',confirmed=True,status='ADMITTED',evidence=[provenance(getattr(c.assumptions,name).source_ids),review.reviewer])
     if row['method']==ARM:
+        local_methods.resolve(row['method'],local_methods.ARM_MEAN)
         net=NetworkExposureSpec(network_id='arm_'+sha(c.study.model_dump()),node_ids=c.study.nodes,undirected_edges=c.study.edges)
         return core.ArmInquiryV21(design.make_arm(c,net,source=provenance(s.source_ids),evidence=evidence))
     isobs=plan['fact_family']==reading.OBS
+    if not isobs:
+        finite_policy_methods.resolve(row['method'],finite_policy_methods.OPERATION)
     context=plan['proposed_target']['context']
     if isobs:
         question=observed_attributes.from_effect_reading(c,s)
         observed_attributes.require_effect_coordinates(question,plan['proposed_target'],exposure_kind=c.exposure.kind)
+        observational_methods.require_effect(row['method'],question,s.operator)
         context=question.study.context_reference+'; fixed pretreatment W: '+question.fixed_background.definition
         study=observed_attributes.effect_native_study(question,
             network_id='network_'+sha(dict(nodes=list(question.study.node_order),edges=sorted(sorted(e) for e in c.study.edges),context=context)),
@@ -340,6 +348,9 @@ def _native_inputs(plan,row,pair):
             assumptions,(a4,)) for x in t.components)
     signature=declare_policy_signature(study,**design.exposure_payload(c.exposure))
     request=observed_attributes.native_effect_request(question,cohort_evidence=provenance(t.population_fixed_before_treatment.source_ids))
+    if external:
+        from dataclasses import replace
+        request=replace(request,cohort_authority='HUMAN_CONFIRMED_PRETREATMENT')
     method=row['method'];assumptions=tuple(condition(n) for n in (SCIENCE[P] if method==P else BASIC))
     if method==P:
         arms=tuple((a.node,a.own,a.exposure) for a in getattr(s,'covered_cells',()))
@@ -384,23 +395,39 @@ def _execute_plan(plan,*,plan_review=None,native_reviews=None,research_protocol_
             if pair[k].authority!=review.authority:raise ValueError('REVIEW_AUTHORITY_MISMATCH')
         inquiry=_native_inputs(plan,row,pair);original=sha(_native_payload(inquiry))
         from pfn_pipeline import identification_business as core
+        observed_binding=(observational_methods.resolve(method,observational_methods.DIFFERENCE)
+                          if plan['fact_family']==reading.OBS else None)
+        mixture_binding=(finite_policy_methods.resolve(method,finite_policy_methods.OPERATION)
+                         if plan['fact_family']==reading.MIX else None)
         out['backend_called']=True
         if method==MIX:
             components=[]
             for q in inquiry:
-                answer=core.identify_network_business_query(q)
+                answer,component_digest=native_outcome_execution.identify(mixture_binding,q,
+                    fingerprint=lambda value:sha(_native_payload(value)))
                 out['attempts'].append(dict(stage='POLICY_COMPONENT',state=answer.status,reason_code=answer.reason_code))
                 if answer.status!='POINT':return dict(out,state=answer.status,reason_code=answer.reason_code)
                 r=answer.result
-                if answer.route!='R1B_FULL_ASSIGNMENT' or r.study!=q.study or r.target!=q.target or r.sources!=q.r1b_sources or r.assumptions!=q.assumptions or not core.replay_verified_business_outcome(answer):raise ValueError('FIXED_COMPONENT_INPUT_OR_REPLAY_MISMATCH')
+                if answer.route!=mixture_binding.component_route or r.study!=q.study or r.target!=q.target or r.sources!=q.r1b_sources or r.assumptions!=q.assumptions:raise ValueError('FIXED_COMPONENT_INPUT_OR_REPLAY_MISMATCH')
+                try:
+                    native_outcome_execution.replay_outcome(mixture_binding,answer,inquiry=q,
+                        input_digest=component_digest,fingerprint=lambda value:sha(_native_payload(value)))
+                except native_outcome_execution.NativeReplayMismatch as exc:
+                    raise ValueError('FIXED_COMPONENT_INPUT_OR_REPLAY_MISMATCH') from exc
                 components.append(r)
             if original!=sha(_native_payload(inquiry)):raise ValueError('COMPONENT_NATIVE_INPUT_MUTATED')
             inquiry=core.FinitePolicyInquiryV21(tuple(components),tuple(x['weight'] for x in plan['proposed_target']['policies']))
-        before=sha(_native_payload(inquiry));result=core.identify_network_business_query(inquiry)
-        if sha(_native_payload(inquiry))!=before:raise ValueError('NATIVE_INPUT_MUTATED')
+        if method==ARM:
+            result,before=local_execution.identify(method,local_methods.ARM_MEAN,inquiry)
+        elif observed_binding is not None:
+            result,before=native_outcome_execution.identify(observed_binding,inquiry,
+                fingerprint=lambda value:sha(_native_payload(value)))
+        else:
+            result,before=native_outcome_execution.identify(mixture_binding,inquiry,
+                fingerprint=lambda value:sha(_native_payload(value)))
         out['attempts'].append(dict(method=method,state=result.status,reason_code=result.reason_code))
         if result.status!='POINT':return dict(out,state=result.status,reason_code=result.reason_code)
-        if result.route!=method:raise ValueError('NATIVE_ROUTE_MISMATCH')
+        if result.route!=native_id(method):raise ValueError('NATIVE_ROUTE_MISMATCH')
         r=result.result
         if method==ARM:
             if sha(_native_payload(r.task))!=sha(_native_payload(inquiry.task)):raise ValueError('ARM_TARGET_INPUT_MISMATCH')
@@ -416,8 +443,14 @@ def _execute_plan(plan,*,plan_review=None,native_reviews=None,research_protocol_
                 if hasattr(inquiry,name) and getattr(r,name)!=getattr(inquiry,name):raise ValueError('OBSERVATIONAL_INPUT_MISMATCH:'+name)
             if len(r.proofs)!=1:raise ValueError('EXACT_EFFECT_PROOF_REQUIRED')
             cert=r.summary();expression=r.proofs[0].identified_functional;fingerprint=r.proofs[0].target_fingerprint
-        saved=sha(_native_payload(result))
-        if core.replay_verified_business_outcome(result) is not True or saved!=sha(_native_payload(result)) or before!=sha(_native_payload(inquiry)):raise ValueError('INDEPENDENT_REPLAY_OR_MUTATION_FAILURE')
+        if method==ARM:
+            local_execution.replay_outcome(method,local_methods.ARM_MEAN,result,inquiry=inquiry,input_digest=before)
+        elif observed_binding is not None:
+            native_outcome_execution.replay_outcome(observed_binding,result,inquiry=inquiry,
+                input_digest=before,fingerprint=lambda value:sha(_native_payload(value)))
+        else:
+            native_outcome_execution.replay_outcome(mixture_binding,result,inquiry=inquiry,
+                input_digest=before,fingerprint=lambda value:sha(_native_payload(value)))
         claim=dict(kind='POINT',representation='NATIVE_NETWORK_OBSERVED_FUNCTIONAL',target=deepcopy(plan['proposed_target']),target_fingerprint=fingerprint,expression=expression,numeric_value=None)
         answer=dict(method=method,mathematical_claim=claim,certificate=cert,independent_replay=True,reviewed_input_sha256=original,native_evidence=_native_payload(result))
         return dict(out,state='POINT',primary_method=method,mathematical_claim=claim,certificate=cert,independent_replay=True,answers=[answer],partial_fallback_performed=False)

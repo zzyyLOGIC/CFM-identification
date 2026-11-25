@@ -4,6 +4,7 @@ Check saved identities, not scientific truth. In particular exchangeability is
 not learned from the support table, and marginal support is not joint support.
 """
 from copy import deepcopy
+from .method_compat import native_id
 from . import network_observational_policy_dispatch as observational
 from .business_dispatch import sha
 
@@ -35,7 +36,7 @@ def check_answer(plan, answer, attempt):
         signature_route = method==observational.SIGNATURE_METHOD
         if (not attempt or attempt['state'] != 'POINT' or claim['kind'] != 'POINT'
                 or target['kind'] != 'FIXED_FULL_ASSIGNMENT_POLICY_MEAN'
-                or method not in observational.METHODS or native['route'] != method or certificate['route'] != method
+                or method not in observational.METHODS or native['route'] != native_id(method) or certificate['route'] != native_id(method)
                 or native['status'] != 'POINT' or native['verification_status'] != 'VERIFIED'
                 or (not signature_route and (native['signature'] is not None or native['sufficiency'] is not None or certificate['signature'] is not None))
                 or study['observation_regime'] != 'observational' or study['assignment_design_json'] is not None

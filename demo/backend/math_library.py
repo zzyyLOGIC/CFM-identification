@@ -3,7 +3,7 @@ from dataclasses import fields
 import json
 from pydantic import TypeAdapter
 
-from cfm_id import dag_id_route, research_route_catalog, research_route_entry
+from cfm_id import dag_id_route, dedicated_entries, research_route_catalog, research_route_entry
 from cfm_id.capability_registry import registrations
 from cfm_id_llm.compact_study import digest
 import pfn_pipeline as native
@@ -40,14 +40,15 @@ OPERATIONS={
 
 def catalog():
     routes={r.capability.route_id:METHODS.get(r.capability.route_id,'二元工具变量的 LATE 与总体 ATE') for r in registrations()}
-    routes[dag_id_route.ROUTE]='一般变量图 ID 与不可识别见证'
+    routes.update({e.id:e.label for e in dedicated_entries.entries()})
     return dict(classic=METHODS,native={k:dict(label=v[0],description=v[1]) for k,v in OPERATIONS.items()},
                 research=routes)
 
 
 def schema(op):
-    if op==dag_id_route.ROUTE:
-        return dict(problem=dag_id_route.GeneralIdProblem.model_json_schema(),review=dag_id_route.GeneralIdReview.model_json_schema())
+    special=dedicated_entries.resolve(op)
+    if special is not None:
+        return dict(problem=special.problem_schema(),review=special.review_type.model_json_schema())
     if op in catalog()['research']:
         return research_route_catalog.schemas(op)
     if op=='population':
@@ -60,7 +61,10 @@ def schema(op):
         return dict(study='declare_network_study',target=dict(assignment='按名册顺序的 0/1 数组',unit_weights='同序权重',
                      authority='目标来源'),signature=dict(grouping='暴露映射',core_collaborators='仅核心多数使用'))
     if op=='requirements':
-        return dict(route_ids=native.implemented_assumption_catalog_v27()['route_ids'],optional=['route','design_kind'])
+        from cfm_id.method_catalog import catalog as method_catalog
+        return dict(route_ids=native.implemented_assumption_catalog_v27()['route_ids'],
+                    method_ids=[m['method_id'] for m in method_catalog()['methods']],
+                    optional=['route','design_kind','method'])
     if op not in OPERATIONS:
         raise ValueError('UNKNOWN_MATH_OPERATION')
     from pfn_pipeline.identification_a4_shadow import declare_a4_source
@@ -113,7 +117,12 @@ def _business(problem):
 def _diagnostic(op,p):
     from pfn_pipeline.network_inquiry_shadow import declare_network_study,fixed_policy_target_from_context
     if op=='requirements':
-        return dict(catalog=native.implemented_assumption_catalog_v27(),shared_catalog=native.implemented_assumption_catalog_v27p2(),
+        from pfn_pipeline.identification_assumption_inventory import legacy_ate_condition_catalog
+        from cfm_id.method_catalog import catalog as method_catalog, describe
+        return dict(catalog=native.implemented_assumption_catalog_v27(),legacy_ate_catalog=legacy_ate_condition_catalog(),
+                    method_catalog=method_catalog(),
+                    method_required=describe(p['method']) if 'method' in p else None,
+                    shared_catalog=native.implemented_assumption_catalog_v27p2(),
                     nodewise_catalog=native.implemented_assumption_catalog_v28(),shared_stratum=native.requirements_for_exposure_adjustment_v27p2(),
                     nodewise=native.requirements_for_nodewise_adjustment_v28(),required=native.requirements_for_route_v27(
                     p['route'],design_kind=p.get('design_kind')) if p.get('route') else None)
@@ -179,20 +188,21 @@ def _compute(op,p):
     return native.replay_verified_effect_bundle(native.identify_verified_effect_bundle(batch,source,requests)).summary()
 
 
-def run(value):
+def _run(value):
     op,p=value['operation'],value['problem']
     if not isinstance(p,dict):
         raise ValueError('STRUCTURED_PROBLEM_REQUIRED')
     review=value.get('review')
-    if op==dag_id_route.ROUTE:
-        problem=dag_id_route.GeneralIdProblem.model_validate(p)
-        return dag_id_route.prepare(problem) if review is None else dag_id_route.submit(problem,dag_id_route.GeneralIdReview.model_validate(review))
+    special=dedicated_entries.resolve(op)
+    if special is not None:
+        problem=special.parse_problem(p)
+        return special.module.prepare(problem) if review is None else special.module.submit(problem,special.review_type.model_validate(review))
     if op in catalog()['research']:
         return research_route_entry.run_registered_route(op,p,review=review,research_protocol_selected=review is not None)
     if op not in OPERATIONS:
         raise ValueError('UNKNOWN_MATH_OPERATION')
     allowed={'population':{'spec','population_truth'},'business':{'kind','inquiry'},'r3_pair':{'left','right'},
-             'requirements':{'route','design_kind'},'signature_support':{'study','target','signature'},
+             'requirements':{'route','design_kind','method'},'signature_support':{'study','target','signature'},
              'quota_support':{'study','target'},'linear':{'task','a4','terms'},'effects':{'task','a4','requests'},
              'legacy_compare':{'task','legacy_task'}}.get(op,{'task'})
     if p.keys()-allowed:
@@ -207,3 +217,10 @@ def run(value):
     result=_compute(op,p)
     return dict(state=result.get('status') or result.get('coverage') or 'COMPUTED',result=result,
                 input_binding=sheet['binding'],estimation_handoff_allowed=False)
+
+
+def run(value):
+    from cfm_id.entry_diagnostics import summarize
+    result=_run(value)
+    result={k:v for k,v in result.items() if k!='entry_diagnostics'}
+    return dict(result,entry_diagnostics=summarize(result,operation=value['operation'],problem=value['problem']))

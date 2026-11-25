@@ -68,6 +68,7 @@ def checked_review(value, sheet, *, field_worksheet=None):
 
 def empty_result():
     return dict(state='CHECK_BLOCKED', reason_code=None, backend_called=False,
+                method_identity_version='semantic-methods-1',
                 independent_replay=False, mathematical_claim=None, certificate=None,
                 answers=[], clarification_questions=[],
                 evidence_status='CURRENT_READING_NOT_PROVEN_SOURCE_ABSENCE',
@@ -418,7 +419,8 @@ def inspect_methods(intake, query_id, *, query_review, candidate, request_sha256
             capabilities.plan_binding(result, reader_id=entry['reader_id'])
     except capabilities.RegistryError as exc:
         result = dict(empty_result(), reason_code='CAPABILITY_REGISTRATION_MISMATCH', registration_error=str(exc))
-    return _revision_evidence(result,entry)
+    from .method_matching import attach
+    return attach(_revision_evidence(result,entry), reader_id=entry['reader_id'])
 
 
 def _revision_evidence(result,entry):
@@ -458,4 +460,7 @@ def execute(intake, query_id, *, query_review, candidate, request_sha256,
         return dict(empty_result(), reason_code='CAPABILITY_REGISTRATION_MISMATCH', registration_error=str(exc))
     result = binding.execute(plan, plan_review=plan_review, native_reviews=native_reviews,
                            research_protocol_selected=research_protocol_selected)
+    from .method_matching import REPORT_KEY
+    if REPORT_KEY in plan:
+        result[REPORT_KEY] = deepcopy(plan[REPORT_KEY])
     return _revision_evidence(result,plan)

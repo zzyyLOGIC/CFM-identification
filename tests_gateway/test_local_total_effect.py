@@ -60,7 +60,7 @@ def test_total_missing_conditions_or_changed_target_never_execute(monkeypatch,fa
     elif failure=='finite_sample':
         for source in facts['information']:source.update(operator='FINITE_SAMPLE',availability='FINITE_SAMPLE',arm_cells=[])
     elif failure=='pending_science':
-        approved['native_reviews']['R1A_COMPOSITION']['science_review'].decisions['consistency']='PENDING'
+        approved['native_reviews']['network.randomized.local_contrast']['science_review'].decisions['consistency']='PENDING'
     else:
         facts['target']['reference'],facts['target']['evaluated']=facts['target']['evaluated'],facts['target']['reference']
     result=dispatch.execute(session,'q1',**changed,**approved)

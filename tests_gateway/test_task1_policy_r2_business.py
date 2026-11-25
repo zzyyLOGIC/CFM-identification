@@ -23,9 +23,9 @@ def _plan(design, family):
 @pytest.mark.parametrize('design', ['D7', 'D8'])
 def test_r2_policy_mean_is_planned_and_point(design):
     _, plan = _plan(design, 'policy')
-    assert 'R2_MEAN_SIGNATURE' in [m['method'] for m in plan['methods']]
-    row = next(m for m in plan['methods'] if m['method'] == 'R2_MEAN_SIGNATURE')
-    records = approval_records(plan)['native_reviews']['R2_MEAN_SIGNATURE']
+    assert 'network.randomized.signature_policy_mean' in [m['method'] for m in plan['methods']]
+    row = next(m for m in plan['methods'] if m['method'] == 'network.randomized.signature_policy_mean')
+    records = approval_records(plan)['native_reviews']['network.randomized.signature_policy_mean']
     st, target, sources, assumptions, signature, sufficiency = policy_dispatch._compile(
         plan, row, records, 'SYNTHETIC_TEST')
     inquiry = FixedPolicyInquiryV21(study=st, target=target, assumptions=assumptions,
@@ -38,12 +38,12 @@ def test_r2_policy_mean_is_planned_and_point(design):
 @pytest.mark.parametrize('design', ['D7', 'D8'])
 def test_r2_two_policy_difference_endpoints_are_point(design):
     _, plan = _plan(design, 'contrast')
-    assert 'R2_ENDPOINT_DIFFERENCE' in [m['method'] for m in plan['methods']]
-    row = next(m for m in plan['methods'] if m['method'] == 'R2_ENDPOINT_DIFFERENCE')
-    records = approval_records(plan)['native_reviews']['R2_ENDPOINT_DIFFERENCE']
+    assert 'network.randomized.signature_policy_contrast' in [m['method'] for m in plan['methods']]
+    row = next(m for m in plan['methods'] if m['method'] == 'network.randomized.signature_policy_contrast')
+    records = approval_records(plan)['native_reviews']['network.randomized.signature_policy_contrast']
     inquiries, _ = contrast._compile_pair(plan, row, records, 'SYNTHETIC_TEST')
     out = dict(attempts=[], backend_called=False)
-    result = contrast._point(inquiries, plan, out, method='R2_ENDPOINT_DIFFERENCE')
+    result = contrast._point(inquiries, plan, out, method='network.randomized.signature_policy_contrast')
     assert result['state'] == 'POINT'
-    assert result['primary_method'] == 'R2_ENDPOINT_DIFFERENCE'
+    assert result['primary_method'] == 'network.randomized.signature_policy_contrast'
     assert [a['state'] for a in out['attempts']] == ['POINT', 'POINT']

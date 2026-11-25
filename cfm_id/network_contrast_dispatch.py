@@ -1,8 +1,9 @@
-"""Reviewed ordered policies -> existing R1b/R2 endpoints or joint mean box.
+"""Reviewed ordered policies -> existing full-policy/signature-policy endpoints or joint mean box.
 
 One common model, one scientific review, two explicit targets. No subtraction
 of separate intervals, inferred bounds, fallback or new mathematical theorem.
 """
+from .method_compat import canonical_id, native_id
 from copy import deepcopy
 from .business_dispatch import (sha, worksheet, checked_review, DispatchError,
     empty_result, PLAN_DECISIONS)
@@ -10,13 +11,14 @@ from . import network_policy_dispatch as policy
 from . import network_bounded_dispatch as bounded
 from . import network_mean_order_dispatch as mean_order
 from . import research_spec_policy_adapters as policy_attributes
+from . import policy_methods
 from .bounded_policy_contract import BoundedPolicyUnavailable
 from cfm_id_llm import network_contrast_reading as reading
 from cfm_id_bridge.scientific_binding import sha as native_sha, canonical_data
 
 FAMILY = 'NETWORK_POLICY_CONTRAST_FACTS'
-POINT_METHOD = 'R1B_ENDPOINT_DIFFERENCE'
-R2_METHOD = 'R2_ENDPOINT_DIFFERENCE'
+POINT_METHOD = 'network.randomized.full_policy_contrast'
+SIGNATURE_METHOD = 'network.randomized.signature_policy_contrast'
 BOUNDED_METHOD = 'BOUNDED_POLICY_CONTRAST_D2_E1'
 COUNT_METHOD = 'BOUNDED_POLICY_CONTRAST_D2_E4'
 FINITE_METHOD='BOUNDED_POLICY_CONTRAST_FINITE'
@@ -102,7 +104,7 @@ def inspect_methods(entry, raw, *, note_review=None, information_evidence_review
         finite_method = mean_order.METHOD if order_context is not None else next(
             (m for m in bounded.METHODS if all(any(r['method']==m for r in plans[s]['methods']) for s in SIDES)),bounded.METHOD)
         bounded_pair = all(any(r['method'] == finite_method for r in plans[s]['methods']) for s in SIDES)
-        base_methods = ((finite_method,) if bounded_pair else tuple(m for m in (policy.R1B,policy.R2)
+        base_methods = ((finite_method,) if bounded_pair else tuple(m for m in (policy.FULL_POLICY,policy.SIGNATURE_POLICY)
             if all(any(r['method']==m for r in plans[s]['methods']) for s in SIDES)))
         if not base_methods:
             return dict(out, state='ADAPTER_NOT_CONNECTED', reason_code='CONTRAST_ENDPOINT_METHOD_COMBINATION_NOT_CONNECTED',
@@ -114,8 +116,7 @@ def inspect_methods(entry, raw, *, note_review=None, information_evidence_review
             if (first['source_indices']!=second['source_indices'] or
                     first['science_worksheet']['decisions']!=second['science_worksheet']['decisions']):
                 raise ValueError('COMMON_CONTRAST_REVIEW_SCOPE_REQUIRED')
-            method = {bounded.METHOD:BOUNDED_METHOD,bounded.COUNT_METHOD:COUNT_METHOD,bounded.FINITE_METHOD:FINITE_METHOD,mean_order.METHOD:mean_order.METHOD,
-                      policy.R1B:POINT_METHOD,policy.R2:R2_METHOD}[base_method]
+            method = policy_methods.difference_for(base_method).method_id
             binding = sha(dict(entry=entry, raw=raw, endpoint_plans=plans, target=proposed, method=method))
             out['methods'].append(dict(method=method, source_indices=first['source_indices'],
                 applicability='NOT_CHECKED_BEFORE_SCIENCE_REVIEW',
@@ -144,33 +145,35 @@ def _compile_pair(plan, row, records, authority):
     from pfn_pipeline.identification_business import FixedPolicyInquiryV21
     question = policy_attributes.from_endpoint_plans(plan['endpoint_plans'])
     question.require_coordinates(plan['proposed_target'])
+    method_contract = policy_methods.resolve(row['method'], question.operation)
     inquiries, information = {}, {}
     for side in SIDES:
         endpoint = dict(plan['endpoint_plans'][side], plan_sha256=plan['plan_sha256'])
-        if row['method'] in BOUNDED_METHODS:
+        if method_contract.strategy == policy_methods.BOX:
             inquiries[side], information[side] = bounded.compile_reviewed(endpoint, row, records, authority)
         else:
-            method = policy.R2 if row['method']==R2_METHOD else policy.R1B
+            if method_contract.strategy != policy_methods.COMPOSITION:
+                raise ValueError('POLICY_ENDPOINT_COMPOSITION_REQUIRED')
+            method = method_contract.endpoint_method
             st,target,sources,assumptions,signature,sufficiency = policy._compile(
                 endpoint,dict(row,method=method),records,authority)
             inquiries[side] = (FixedPolicyInquiryV21(study=st,target=target,assumptions=assumptions,
-                r2_signature=signature,r2_sufficiency=sufficiency,r2_sources=sources) if method==policy.R2 else
+                r2_signature=signature,r2_sufficiency=sufficiency,r2_sources=sources) if method==policy.SIGNATURE_POLICY else
                 FixedPolicyInquiryV21(study=st,target=target,assumptions=assumptions,r1b_sources=sources))
     return inquiries, information
 
 
 def _point(inquiries, plan, out, method=POINT_METHOD):
-    from pfn_pipeline import identification_business as core
-    if method==R2_METHOD:
-        from .workflows import policy_difference as composition
-    else:
-        from . import fixed_comparison as composition
+    method_contract = policy_methods.resolve(method, policy_methods.DIFFERENCE)
+    if method_contract.strategy != policy_methods.COMPOSITION:
+        raise ValueError('POLICY_ENDPOINT_COMPOSITION_REQUIRED')
+    kernel, composition = method_contract.kernel, method_contract.composition
     target = {k: plan['proposed_target'][k] for k in ('node_order','first','second','unit_weights','operation')}
     original = native_sha(inquiries)
     results = {}
     for side in SIDES:
         out['backend_called'] = True
-        result = core.identify_network_business_query(inquiries[side])
+        result = kernel.produce(inquiries[side])
         if native_sha(inquiries) != original:
             raise DispatchError('CHECK_BLOCKED', 'CONTRAST_NATIVE_INPUT_MUTATED')
         out['attempts'].append(dict(endpoint=side, state=result.status, reason_code=result.reason_code))
@@ -178,26 +181,26 @@ def _point(inquiries, plan, out, method=POINT_METHOD):
             continue
         r = result.result
         expected = inquiries[side]
-        native_route = policy.R2 if method==R2_METHOD else policy.R1B
+        native_route = native_id(method_contract.endpoint_method)
         actual_input = [r.study,r.target,r.sources,r.assumptions]
         expected_input = [expected.study,expected.target,
-            expected.r2_sources if method==R2_METHOD else expected.r1b_sources,expected.assumptions]
-        if method==R2_METHOD:
+            expected.r2_sources if method==SIGNATURE_METHOD else expected.r1b_sources,expected.assumptions]
+        if method==SIGNATURE_METHOD:
             actual_input += [r.signature,r.sufficiency]
             expected_input += [expected.r2_signature,expected.r2_sufficiency]
         if result.route != native_route or native_sha(actual_input)!=native_sha(expected_input):
             raise DispatchError('CHECK_BLOCKED', 'CONTRAST_ENDPOINT_INPUT_MISMATCH')
         before = native_sha(result)
-        if core.replay_verified_business_outcome(result) is not True or native_sha(result) != before:
+        if kernel.replay(result) is not True or native_sha(result) != before:
             raise DispatchError('CHECK_BLOCKED', 'CONTRAST_ENDPOINT_REPLAY_MISMATCH')
         results[side] = result
     if len(results) != 2:
         need = any(r['state'] == 'NEEDS_INPUT' or (r['reason_code'] or '').startswith('A4_') for r in out['attempts'])
         return dict(out, state='NEEDS_INPUT' if need else 'UNSUPPORTED',
-                    reason_code='TWO_R2_ENDPOINTS_NOT_IDENTIFIED' if method==R2_METHOD else 'TWO_R1B_ENDPOINTS_NOT_IDENTIFIED',
+                    reason_code='TWO_R2_ENDPOINTS_NOT_IDENTIFIED' if method==SIGNATURE_METHOD else 'TWO_R1B_ENDPOINTS_NOT_IDENTIFIED',
                     nonidentification_proved=False, partial_fallback_performed=False)
     binding = dict(plan_sha256=plan['plan_sha256'], query_id=plan['query_id'], reviewed_inputs_sha256=original)
-    certificate = composition.compose(results['first'], results['second'], target=target, binding=binding)
+    certificate = composition.produce(results['first'], results['second'], target=target, binding=binding)
     before = sha(certificate); endpoints_before = native_sha(results)
     if (composition.replay(certificate, results['first'], results['second'], target=target, binding=binding) is not True
             or sha(certificate) != before or native_sha(results) != endpoints_before or native_sha(inquiries) != original):
@@ -209,28 +212,12 @@ def _point(inquiries, plan, out, method=POINT_METHOD):
 
 
 def _bounded(inquiries, information, plan, out):
-    from . import bounded_contrast_contract as contract
-    from . import bounded_contrast_solver as producer, bounded_contrast_verify as verifier
-    validate,solve,replay,digest=contract.validate_pair,producer.solve,verifier.replay,contract.input_digest
+    from .policy_execution import bounded_solution, PolicyEvidenceMismatch
     method=plan['methods'][0]['method']
-    if method==COUNT_METHOD:
-        from .bounded_count_contract import validate_pair as validate,input_digest as count_digest
-        from .bounded_count_solver import solve_contrast as solve
-        from .bounded_count_verify import replay_contrast as replay
-        digest=lambda q,i:count_digest(q,i,'contrast')
-    if method==FINITE_METHOD:
-        from .bounded_finite_contract import validate_pair as validate,input_digest as finite_digest
-        from .bounded_finite_solver import solve_contrast as solve
-        from .bounded_finite_verify import replay_contrast as replay
-        digest=lambda q,i:finite_digest(q,i,'contrast')
-    validate(inquiries, information)
-    original = digest(inquiries, information)
-    out['backend_called'] = True
-    certificate = solve(inquiries, information)
-    before = sha(certificate)
-    if (digest(inquiries, information) != original or
-            replay(certificate, inquiries=inquiries, information=information) is not True or
-            digest(inquiries, information) != original or sha(certificate) != before):
+    try:
+        certificate, original = bounded_solution(method, policy_methods.DIFFERENCE, inquiries, information,
+            before_compute=lambda: out.update(backend_called=True))
+    except PolicyEvidenceMismatch:
         raise DispatchError('CHECK_BLOCKED', 'JOINT_CONTRAST_INPUT_OR_REPLAY_MISMATCH')
     from .bounded_mean_formula import mathematical_claim
     claim=mathematical_claim(certificate,plan['proposed_target'])
@@ -263,10 +250,11 @@ def _execute_plan(plan, *, plan_review=None, native_reviews=None, research_proto
             raise DispatchError('REVIEW_REQUIRED', 'CONTRAST_READING_AND_SCIENCE_REVIEWS_REQUIRED')
         if not plan['methods'] or (any(r['method'] in (*BOUNDED_METHODS,mean_order.METHOD) for r in plan['methods']) and len(plan['methods'])!=1):
             raise ValueError('EXACT_JOINT_METHOD_REQUIRED')
+        policy_methods.require_plan(plan['methods'], policy_methods.DIFFERENCE)
         by_method = native_reviews_from_json(plan,native_reviews)
         # Check every planned method before invoking either endpoint backend.
         for row in plan['methods']:
-            if row['method'] not in (POINT_METHOD,R2_METHOD,*BOUNDED_METHODS,mean_order.METHOD):raise ValueError('UNKNOWN_CONTRAST_METHOD')
+            if row['method'] not in (POINT_METHOD,SIGNATURE_METHOD,*BOUNDED_METHODS,mean_order.METHOD):raise ValueError('UNKNOWN_CONTRAST_METHOD')
             records=by_method[row['method']]
             for key,field in (('reading_review','reading_worksheet'),('science_review','science_worksheet')):
                 record=checked_review(records[key],row[field])
@@ -307,3 +295,8 @@ def _execute_plan(plan, *, plan_review=None, native_reviews=None, research_proto
         return dict(out, state=exc.state, reason_code=exc.reason)
     except (ValueError, TypeError, KeyError, AttributeError, ArithmeticError):
         return dict(out, state='CHECK_BLOCKED', reason_code='INVALID_CONTRAST_REVIEW_OR_NATIVE_EVIDENCE')
+
+
+def __getattr__(name):
+    from .method_compat import legacy_attribute
+    return legacy_attribute(name, globals())

@@ -50,11 +50,11 @@ def test_source_semantics_rejection_blocks_even_when_wrong_scope_covers_target(d
             arm_cells=[dict(node=n,own=a,exposure=x) for n in data['nodes'] for a in (0,1) for x in (0,1)])
     before=deepcopy(raw);opts=dict(query_review=e['query_review'],candidate=raw,request_sha256=e['request_sha256'])
     plan=dispatch.inspect_methods(s,'q1',**opts);assert plan['state']=='REVIEW_REQUIRED'
-    a=approval_records(plan);v=a['native_reviews']['R1A_COMPOSITION']['reading_review'].model_dump(mode='json')
+    a=approval_records(plan);v=a['native_reviews']['network.randomized.local_contrast']['reading_review'].model_dump(mode='json')
     v['decisions']['all_information_and_restrictions_preserved']='REJECTED'
     v['decisions']['source_entailment']='REJECTED'
     v['evidence']='Explicit synthetic source audit rejects loss or invention of declared A4 scope; covering target cells alone does not establish faithful source reading.'
-    a['native_reviews']['R1A_COMPOSITION']['reading_review']=dispatch.DispatchReview.model_validate(v)
+    a['native_reviews']['network.randomized.local_contrast']['reading_review']=dispatch.DispatchReview.model_validate(v)
     monkeypatch.setattr(effects,'_compile',lambda *a,**kw:pytest.fail('Rejected information must not reach math'))
     r=dispatch.execute(s,'q1',**opts,**a)
     assert r['state']=='CHECK_BLOCKED' and not r['backend_called'] and raw==before

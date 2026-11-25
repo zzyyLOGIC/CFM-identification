@@ -10,7 +10,7 @@ from . import network_policy_dispatch as policy, network_bounded_dispatch as bou
 from . import method_requirements as requirements
 from . import network_mean_order_dispatch as orders
 
-BASE_METHODS = {contrast.POINT_METHOD: policy.R1B, contrast.R2_METHOD: policy.R2,
+BASE_METHODS = {contrast.POINT_METHOD: policy.FULL_POLICY, contrast.SIGNATURE_METHOD: policy.SIGNATURE_POLICY,
                 contrast.BOUNDED_METHOD: bounded.METHOD, orders.METHOD: orders.METHOD}
 JOINT_METHODS = (contrast.BOUNDED_METHOD, orders.METHOD)
 COORDINATES = ('node_order', 'first', 'second', 'unit_weights', 'operation')
@@ -73,7 +73,7 @@ def check_answer(plan, answer, attempt):
                     or claim['kind'] != cert['status']):
                 raise ValueError('joint record')
         else:
-            expected_version = {contrast.POINT_METHOD: r1b_version, contrast.R2_METHOD: r2_version}[answer['method']]
+            expected_version = {contrast.POINT_METHOD: r1b_version, contrast.SIGNATURE_METHOD: r2_version}[answer['method']]
             endpoints = native['endpoints']
             expected_binding = dict(plan_sha256=plan['plan_sha256'], query_id=plan['query_id'],
                                     reviewed_inputs_sha256=answer['reviewed_input_sha256'])

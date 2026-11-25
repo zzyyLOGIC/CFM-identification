@@ -2,6 +2,7 @@
 from copy import deepcopy
 from dataclasses import replace
 import json
+import runpy
 from pathlib import Path
 
 import pytest
@@ -109,9 +110,11 @@ def test_new_source_materials_report_review_and_packet_retain_original_bounds(me
 
 
 EXAMPLES=json.loads((Path(__file__).parents[1]/'demo/math-library-examples.json').read_text(encoding='utf-8'))
+EXAMPLES['SYMBOLIC_MEAN_JOINT'] = runpy.run_path(str(Path(__file__).with_name('test_symbolic_joint_bounds.py')))['fixture']()
 OPERATIONS=['population','task','batch','linear','effects','business','r3_pair','signature_support','quota_support',
             'legacy_bridge','legacy_compare','requirements','DAG_CLASSICAL_BACKDOOR','DAG_CLASSICAL_FRONTDOOR',
-            'DAG_ADJUSTMENT','DAG_GENERAL_ID','BINARY_IV_LATE_ATE','MEAN_ORDER_D2_E1']
+            'DAG_ADJUSTMENT','DAG_GENERAL_ID','BINARY_IV_LATE_ATE','MEAN_ORDER_D2_E1',
+            'DAG_JOINT_ID','FINITE_MEAN_JOINT','SYMBOLIC_MEAN_JOINT']
 
 
 @pytest.mark.parametrize('op',OPERATIONS)
@@ -124,6 +127,8 @@ def test_every_registered_math_operation_keeps_problem_and_original_gate(op):
     after=math_library.run(dict(operation=op,problem=restored['problem']))
     assert wire(before)==wire(after)
     assert not after.get('estimation_handoff_allowed')
+    if op in ('DAG_JOINT_ID','FINITE_MEAN_JOINT','SYMBOLIC_MEAN_JOINT'):
+        assert after['state'] == 'REVIEW_REQUIRED' and not after['backend_called']
     assert any(i['code']=='QUESTION_EQUIVALENCE_NOT_INFERRED' for i in expand(build_view(doc,contract='math-request')).issues)
     if op in ('population','task','batch','linear','effects','business','r3_pair','legacy_bridge','legacy_compare'):
         sheet=before['worksheet']

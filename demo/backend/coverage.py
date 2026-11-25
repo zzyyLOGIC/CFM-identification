@@ -12,13 +12,13 @@ def summary():
     groups = [
         ('网络中的直接与同伴效应',
          '比较本人或同伴的参与状态；也可求一个指定状态下的平均结果。其余人的安排按所声明的分配规律平均。',
-         ('R1A_RANDOMIZED_ARM', 'R1A_COMPOSITION')),
+         ('network.randomized.local_mean', 'network.randomized.local_contrast')),
         ('完整方案的平均结果与差值',
          '说明每个对象在方案中做什么，计算一份方案的平均结果，或两份方案的差。也支持明确列出的有限随机方案。',
-         ('R1B_FULL_ASSIGNMENT', 'R2_MEAN_SIGNATURE', 'R1B_ENDPOINT_DIFFERENCE', 'R2_ENDPOINT_DIFFERENCE', 'R1B_FINITE_POLICY')),
+         ('network.randomized.full_policy_mean', 'network.randomized.signature_policy_mean', 'network.randomized.full_policy_contrast', 'network.randomized.signature_policy_contrast', 'network.randomized.finite_policy_mean')),
         ('观察性网络问题',
          '处理不是随机分配时，支持已实现的固定背景、共同分层及本人和邻居特征调整。必须另行确认排除混杂的条件。',
-         ('R3_FULL_ASSIGNMENT', 'R3_MEAN_SIGNATURE', 'R3_P_STANDARDIZED_EFFECTS', 'R3_EXPOSURE_ADJUSTED_EFFECTS', 'R3_NODEWISE_EXPOSURE_ADJUSTED_EFFECTS')),
+         ('network.observational.full_policy_mean', 'network.observational.signature_policy_mean', 'network.observational.observed_law_contrast', 'network.observational.shared_stratum_contrast', 'network.observational.local_covariate_contrast')),
         ('有限网络的上下界 · PARTIAL',
          '一份完整方案的均值、两份方案的均值差。需明确总体信息、结果或均值范围，以及采用的模型条件。可给出界限公式；有总体数值时再代入。',
          ('BOUNDED_POLICY_MEAN_D2_E1', 'BOUNDED_POLICY_MEAN_D2_E4', 'BOUNDED_POLICY_MEAN_FINITE',
@@ -32,12 +32,14 @@ def summary():
         raise ValueError('WEB_COVERAGE_PRESENTATION_MISMATCH')
     # Wire names also occur in archived evidence. Only project them to text here.
     labels = dict(registered)
+    from cfm_id.method_compat import aliases
+    labels.update({old: registered[new] for old, new in aliases().items() if new in registered})
     from cfm_id.compact_review import LOCAL_CONTRAST, FULL_POLICY, EXPOSURE_POLICY
     for alias, key in {
-        LOCAL_CONTRAST: 'R1A_COMPOSITION', FULL_POLICY: 'R1B_FULL_ASSIGNMENT',
-        EXPOSURE_POLICY: 'R2_MEAN_SIGNATURE',
-        'R1a': 'R1A_COMPOSITION', 'R1b': 'R1B_FULL_ASSIGNMENT',
-        'R2': 'R2_MEAN_SIGNATURE', 'R2_MEAN_SUFFICIENCY': 'R2_MEAN_SIGNATURE',
+        LOCAL_CONTRAST: 'network.randomized.local_contrast', FULL_POLICY: 'network.randomized.full_policy_mean',
+        EXPOSURE_POLICY: 'network.randomized.signature_policy_mean',
+        'R1a': 'network.randomized.local_contrast', 'R1b': 'network.randomized.full_policy_mean',
+        'R2': 'network.randomized.signature_policy_mean', 'R2_MEAN_SUFFICIENCY': 'network.randomized.signature_policy_mean',
         'BACKDOOR': 'DAG_CLASSICAL_BACKDOOR',
     }.items():
         labels[alias] = registered[key]

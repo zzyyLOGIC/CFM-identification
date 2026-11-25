@@ -95,7 +95,9 @@ class Run:
     automatic_fact_format_repairs: int = 0
     automatic_focused_stages: set = field(default_factory=set)
     automatic_audit_length_retries: set = field(default_factory=set)
+    automatic_direct_length_retries: set = field(default_factory=set)
     user_question: dict | None = None
+    clarification_handoff: dict | None = None
     lock: object = field(default_factory=threading.RLock)
 
     @property
@@ -191,12 +193,14 @@ class Engine:
         with run.lock:
             from . import recovery
             from .study_math import offered
+            from cfm_id.entry_diagnostics import summarize as entry_diagnostics
             return deepcopy(dict(id=run.id,stage=run.stage,busy=run.busy,error=run.error,
                 created=run.created,events=run.events,queries=run.queries,query_id=run.query_id,
                 case=run.case,attachment_report=run.attachment_report,reading_mode=run.reading_mode,
                 compact_plan=run.plan if run.reading_mode=='compact' and not run.result else None,
                 review_kind=run.review_kind,review_sheets=run.review_sheets,review_templates=run.review_templates,
                 plan=run.plan,result=run.result,estimate=run.estimate,
+                entry_diagnostics=entry_diagnostics(run.result,plan=run.plan) if run.result else None,
                 uploaded_math=offered(run.case),uploaded_math_review=run.artifacts.get('uploaded_math_review'),
                 estimate_receipt=run.artifacts.get('estimate_intake_receipt'),
                 synthetic=run.synthetic,provider=run.provider,review_summary=summarize(run),
@@ -220,7 +224,11 @@ class Engine:
                 code=getattr(exc,'code',None) or getattr(exc,'reason',None) or type(exc).__name__
                 # Provider exceptions have deliberately bounded messages. Do not
                 # serialize arbitrary exception text which may include credentials.
-                message=str(exc)[:2000] if isinstance(exc,ValueError) else '本阶段未完成，请查看诊断或补充材料后新建读取。'
+                message=str(exc)[:2000] if isinstance(exc,ValueError) else '本阶段未完成，请查看诊断后重试；不要为处理程序或模型接口错误补写研究条件。'
+                if code=='TIMEOUT':
+                    message='模型服务未在本次等待时限内返回，请稍后重试。已保留原输入；不需要补充研究条件。'
+                if code=='INCOMPLETE_COMPLETION' and getattr(exc,'diagnostics',{}).get('finish_reason')=='length':
+                    message='模型回复达到长度上限，未形成完整答复，本次没有据此执行识别。已保留输入和诊断；这不是研究条件缺失，不需要补写条件。'
                 run.error=self._clean(dict(code=code,message=message))
                 self.event(run,'STOPPED','本阶段停止，未生成新的识别结论。')
                 self.save(run,'error',run.error)
@@ -383,8 +391,10 @@ class Engine:
             from cfm_id_llm.providers.base import ProviderError
             focused=run.reading_mode=='network_direct_verify'
             try:
-                report=project.direct_then_verify(run.case,lambda request,stage:self.call(run,request,stage),
-                                                  network=run.network,network_focus=focused)
+                report=project.direct_then_verify(run.case,lambda request,stage:self._call_direct(run,request,stage),
+                                                  network=run.network,network_focus=focused,
+                                                  population_ate=run.reading_mode=='direct_verify',
+                                                  clarification_handoff=run.clarification_handoff)
             except ProviderError as exc:
                 if exc.code!='MALFORMED_RESPONSE' or run.network is None:
                     raise
@@ -398,6 +408,22 @@ class Engine:
 
     def _finish_direct_verification(self,run,report):
         from cfm_id import direct_policy_exchange
+        if (report.get('joint_entry',{}).get('completed') and report.get('independent_replay')
+                and report['joint_entry'].get('state') in ('POINT','PARTIAL','SYMBOLIC_BOUNDS')):
+            from cfm_id import joint_query_exchange
+            # Derive from the current source review and independently replayed
+            # certificate. A prior inbox receipt can never authorize this run.
+            packet=joint_query_exchange.packet(run.case,report)
+            try:
+                receipt=self.estimate_inbox.receive(run.id,packet)
+                self.save(run,'identification_handoff',packet)
+                self.save(run,'estimate_intake_receipt',receipt)
+            except Exception:
+                self.estimate_inbox.revoke(run.id)
+                self.save(run,'estimate_intake_receipt',dict(run_id=run.id,state='DELIVERY_FAILED'))
+                raise
+            report=deepcopy(report)
+            report.update(estimation_handoff_allowed=True,scientific_approval=run.authority=='EXTERNAL_RESEARCH_REVIEW')
         if not report.get('estimation_handoff_allowed'):
             self._revoke_network_delivery(run)
         proof=report.get('proof') or {}
@@ -444,13 +470,13 @@ class Engine:
                 status=answer['status'],value=answer['value'],assumptions=answer['assumptions'],
                 estimate_handoff=answer['estimate_handoff'],source_proof=proof,
                 scientific_approval=False,estimation_handoff_allowed=False))
-        elif 'identification_handoff' in run.artifacts:
+        elif 'identification_handoff' in run.artifacts and not report.get('estimation_handoff_allowed'):
             self.save(run,'identification_handoff',dict(version='identification-handoff/1',status='RECHECK_REQUIRED',
                 estimate_handoff={'mode':'STOP'},scientific_approval=False,estimation_handoff_allowed=False))
         self.save(run,'direct_verification',report)
         run.result=report
         questions=report.get('clarification_questions',[])
-        if not questions:
+        if not questions and not report.get('population_ate') and not report.get('local_targets') and not report.get('joint_entry'):
             from .direct_questions import explicit_questions
             questions=explicit_questions(report)
             if questions:
@@ -458,6 +484,30 @@ class Engine:
                     items=questions,scientific_approval=False,input_sha256=report.get('input_sha256'),
                     draft_sha256=report.get('draft_sha256')))
         run.user_question=None
+        if report.get('joint_entry'):
+            entry=report['joint_entry']
+            if questions:
+                run.user_question=dict(kind='NEEDS_CLARIFICATION',items=questions,message='请补充这些问题所缺的信息。')
+            self.event(run,'RESULT' if entry.get('completed') else
+                       'REVIEW_REQUIRED' if questions or report.get('condition_review') else 'STOPPED',entry['message'])
+            return
+        if report.get('local_targets'):
+            entry=report['local_targets']
+            if questions:
+                run.user_question=dict(kind='NEEDS_CLARIFICATION',items=questions,message='请补充这些问题所缺的信息。')
+            self.event(run,'RESULT' if entry['state'] in ('COMPLETED','INCOMPLETE') else
+                       'REVIEW_REQUIRED' if questions or report.get('condition_review') else 'STOPPED',entry['message'])
+            return
+        if report.get('population_ate'):
+            entry=report['population_ate']
+            if questions:
+                run.user_question=dict(kind='NEEDS_CLARIFICATION',items=questions,message='请确认以下研究信息。')
+                self.event(run,'REVIEW_REQUIRED',entry['message'])
+            elif entry['state']=='REVIEW_REQUIRED':
+                self.event(run,'REVIEW_REQUIRED',entry['message'])
+            else:
+                self.event(run,'RESULT' if report.get('independent_replay') else 'STOPPED',entry['message'])
+            return
         if report.get('review_scope')=='SYNTHETIC_TEST_ONLY' and not run.synthetic and report.get('review_record'):
             self.event(run,'RESULT','已记录研究者的判断。本路线提供条件结果，真实研究的估计交接待单独审核')
         elif report.get('condition_review') and not report['estimation_handoff_allowed']:
@@ -585,6 +635,32 @@ class Engine:
                 diagnostics=client.last_diagnostics,automatic_retries=0))
             client.api_key=None;key=None
 
+    def _call_direct(self,run,request,stage):
+        """One complete retry per direct workflow phase, including source audit.
+
+        This path uses full-field audit contracts. The classic audit's sparse
+        findings instruction must never be reused here. Truncated JSON and
+        partial reasoning are not candidates and cannot enter a mathematical
+        or scientific approval gate.
+        """
+        from cfm_id_llm.providers.base import ProviderError
+        try:return self.call(run,request,stage)
+        except ProviderError as exc:
+            if exc.code!='INCOMPLETE_COMPLETION' or exc.diagnostics.get('finish_reason')!='length':raise
+            scope=stage
+            for phase in ('joint_source_read','joint_source_audit','joint_gap_review','joint_condition_semantics','network_source_route'):
+                if stage.startswith(phase):scope=phase
+            if stage=='joint_audit_format_retry':scope='joint_source_audit'
+            if stage=='joint_source_format_retry':scope='joint_source_read'
+            if scope in run.automatic_direct_length_retries:raise
+            run.automatic_direct_length_retries.add(scope)
+            self.save(run,stage+'_length_recovery',dict(scope=scope,reason='OUTPUT_TRUNCATED',
+                attempts=1,scientific_approval=False,retry_stage=stage+'_length_retry'))
+            retry=deepcopy(request)
+            retry['system_prompt']+='\n上次回复因长度上限中断，整份未采用。请根据同一份原文和输出合同重新返回完整JSON。说明简短，但字段、审核项、引文、未知项和额外条件必须完整保留；不要续写半份JSON，也不要为了缩短输出改题或删条件。'
+            self.event(run,'READING','模型回复未写完整，后台重新请求一次完整答复；无需重新提交或补条件。')
+            return self.call(run,retry,stage+'_length_retry')
+
     def _call_audit(self,run,request,stage):
         """Recover one truncated review per phase; never accept partial JSON.
 
@@ -635,6 +711,26 @@ class Engine:
             self.launch(run,self._register_classic_result)
         elif action=='compact_confirm' and run.reading_mode=='compact':
             self.launch(run,self._compact_finish,deepcopy(payload))
+        elif action=='review_population_ate_conditions':
+            from cfm_id.population_ate_entry import check_review
+            with run.lock:
+                if run.busy:raise ValueError('RUN_ALREADY_BUSY')
+                sheet=(run.result or {}).get('condition_review')
+                if (not sheet or sheet.get('kind')!='population_ate' or not isinstance(payload,dict)
+                        or set(payload)!={'binding','decisions'}):
+                    raise ValueError('POPULATION_ATE_REVIEW_NOT_AVAILABLE')
+                record=dict(binding=payload['binding'],authority=run.authority,decisions=deepcopy(payload['decisions']))
+                check_review(sheet,record)
+                self.launch(run,self._review_population_ate,record)
+        elif action=='review_joint_conditions':
+            from cfm_id.joint_natural_entry import check_review
+            with run.lock:
+                sheet=(run.result or {}).get('condition_review')
+                if (run.busy or not sheet or sheet.get('kind')!='joint_natural' or not isinstance(payload,dict)
+                        or set(payload)!={'binding','decisions'}):raise ValueError('JOINT_REVIEW_NOT_AVAILABLE')
+                record=dict(binding=payload['binding'],authority=run.authority,decisions=deepcopy(payload['decisions']))
+                check_review(sheet,record)
+                self.launch(run,self._review_joint,record)
         elif action=='choose_network_population':
             with run.lock:
                 sheet=(run.result or {}).get('scope_worksheet')
@@ -652,6 +748,8 @@ class Engine:
                 if not sheet or not isinstance(payload,dict) or set(payload)!={'binding','decisions'}:
                     raise ValueError('NETWORK_REVIEW_NOT_AVAILABLE')
                 record=dict(binding=payload['binding'],authority=run.authority,decisions=deepcopy(payload['decisions']))
+                if sheet.get('kind')=='network_local_targets':
+                    from cfm_id.network_local_targets import check_review
                 check_review(sheet,record)
                 if run.result.get('review_record')==record and not run.error:
                     return
@@ -681,6 +779,12 @@ class Engine:
                 self.launch(run,self._recheck,entry,feedback)
         else:raise ValueError('UNKNOWN_ACTION')
 
+    def _review_joint(self,run,record):
+        from cfm_id.joint_natural_entry import complete
+        report=complete(run.case,run.result,record)
+        self.save(run,'joint_scientific_review',record)
+        self._finish_direct_verification(run,report)
+
     def _revoke_network_delivery(self,run):
         if run.artifacts.get('estimate_intake_receipt',{}).get('state') in ('RECEIVED','QUEUED','DELIVERY_FAILED'):
             self.estimate_inbox.revoke(run.id)
@@ -703,6 +807,13 @@ class Engine:
         self._revoke_network_delivery(run)
         self._finish_direct_verification(run,report)
 
+    def _review_population_ate(self,run,record):
+        from cfm_id.population_ate_entry import complete
+        self.event(run,'IDENTIFYING','正在按本次确认的条件调用数学库并独立重放')
+        report=complete(run.case,run.result,record)
+        self.save(run,'population_ate_review',record)
+        self._finish_direct_verification(run,report)
+
     def _choose_network_population(self,run,choice):
         from cfm_id.direct_verification import verify
         self._revoke_network_delivery(run)
@@ -715,6 +826,7 @@ class Engine:
     def _clarify(self,run,text):
         self._revoke_network_delivery(run)
         previous=run.result or {}
+        previous_case=deepcopy(run.case)
         number=1+sum(k.startswith('input_revision_') for k in run.artifacts)
         self.save(run,f'input_revision_{number}',dict(case=run.case,intake=plain(run.intake),
             submission=run.submission,reviews=run.reviews,plan=run.plan,result=run.result))
@@ -726,6 +838,9 @@ class Engine:
         if (previous.get('proof') or {}).get('method') in (policy_value,DEGREE) and len(prompts)==1:
             label=prompts[0]
         run.case['sources'].append(dict(source_id=f'user_reply_{uuid4().hex[:8]}',kind='OTHER',label=label,text=text))
+        from cfm_id_llm.network_source_route import continuation
+        run.clarification_handoff=continuation(run.case,previous_case,previous)
+        if run.clarification_handoff:self.save(run,'clarification_target_handoff',run.clarification_handoff)
         self.save(run,'case',run.case)
         run.intake=None;run.entry=None;run.submission=None;run.query_review=None;run.query_id=None
         run.queries=[];run.reviews={};run.plan=None;run.result=None;run.estimate=None

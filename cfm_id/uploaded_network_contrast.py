@@ -339,7 +339,7 @@ def bind(case,draft,network,report):
 
 
 def solve_materials(case, table, group, row, pair, rule, law, variable, labels, lines, docs, cited, *,
-                    population_rows=(), remaining_row=None, population_unavailable=False):
+                    population_rows=(), remaining_row=None, population_unavailable=False, unit_weights=None):
     nodes=list(table.nodes)
     corpus="。".join(r["quote"] for r in docs)
     interface=[r for r in docs if re.search(r"(?:允许|可(?:以)?查询|可用|可(?:以)?使用|可提供).{0,45}(?:平均(?:评分|结果)|条件均值|条件平均|均值)",r["quote"])]
@@ -366,8 +366,11 @@ def solve_materials(case, table, group, row, pair, rule, law, variable, labels, 
             continue
         assumptions.append(dict(code=key,label=label,**candidates[0]))
     outcomes,time=labels
+    if unit_weights is not None and (set(unit_weights)!=set(group) or any(Fraction(w)<=0 for w in unit_weights.values())
+                                    or sum(map(Fraction,unit_weights.values()))!=1):
+        raise ValueError('INVALID_EXPLICIT_EVALUATION_WEIGHTS')
     contrast=dict(kind="original_local",scope="whole" if group==nodes else "subgroup",population=group,
-                  weights=[str(Fraction(1,len(group)))]*len(group),ends=[list(p) for p in pair],
+                  weights=([unit_weights[n] for n in group] if unit_weights is not None else [str(Fraction(1,len(group)))]*len(group)),ends=[list(p) for p in pair],
                   variable=variable,outcome=outcomes,time=time,remaining=remaining["quote"],
                   intervention=str(pair[0]),reference=str(pair[1]))
     facts=dict(contrast=contrast,network=dict(basis="edges",nodes=nodes,edges=list(table.edges),pre=True,complete_for=nodes,roster_complete=True),

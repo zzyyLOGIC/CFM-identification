@@ -5,7 +5,7 @@
 | 用途 | 模块 / 命令 |
 |---|---|
 | 无路线选择的业务读取会话 | cfm_id.business_intake；cfm-id-intake；见 BUSINESS_INTAKE_ZH.md |
-| 审核后的事实读取与方法检查 | cfm_id.business_dispatch；cfm-id-dispatch；见 BUSINESS_DISPATCH_ZH.md；首个范围为变量 DAG，其他结构明确标为桥接未完成 |
+| 审核后的事实读取与方法检查 | cfm_id.business_dispatch；cfm-id-dispatch；变量 DAG 与已登记网络读取共八种；实际入口与保留的专用实现见 RESEARCH_SPEC_ENTRY_STATUS_ZH.md |
 | 内部专门研究会话与恢复 | cfm_id.research_session；cfm-id-session；见 RESEARCH_SESSION_ZH.md |
 | 逐项科学声明审核与撤回 | cfm_id.review_items；research_session.begin_item_review / decide_item / finalize_item_review；不生成原生许可 |
 | 固定政策均值／差值会话适配 | cfm_id.session_policy_routes；显式选择公式 POINT 或有限界限入口，均复用原数学与审核 |

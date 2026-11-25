@@ -80,7 +80,7 @@ def test_business_population_and_signed_terms_match_exhaustive_assignment_oracle
     assert p['state']=='REVIEW_REQUIRED' and all(v=='PENDING' for v in p['plan_worksheet']['decisions'].values())
     r=dispatch.execute(s,qid,**o,**approval_records(p))
     assert r['state']=='POINT' and r['independent_replay'] is True, r.get('reason_code')
-    assert r['primary_method']=='R1A_COMPOSITION' and r['mathematical_claim']['numeric_value'] is None
+    assert r['primary_method']=='network.randomized.local_contrast' and r['mathematical_claim']['numeric_value'] is None
     c=o['candidate'];nodes=c['study']['nodes'];target=c['target'];rates=c['assignment']['probabilities']
     # Independent enumeration allows Y_i to vary within an exposure group.
     # It therefore also catches accidentally substituting an exposure-sufficient

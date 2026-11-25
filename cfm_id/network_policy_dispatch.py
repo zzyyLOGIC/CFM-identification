@@ -1,8 +1,9 @@
-"""Reviewed fixed-policy facts -> unchanged R1b/R2 solvers and verifiers.
+"""Reviewed fixed-policy facts -> unchanged full-policy/signature-policy solvers and verifiers.
 
 The LLM declares facts only. Typed scientific admissions are constructed only
 after separate, exact, independently supplied reviews. No partial-ID fallback.
 """
+from .method_compat import canonical_id, native_id
 from copy import deepcopy
 from dataclasses import asdict
 from .business_dispatch import (sha, worksheet, checked_review, DispatchReview,
@@ -14,17 +15,17 @@ from . import network_design_adapter as design_adapter
 from . import research_spec_policy_adapters as policy_attributes
 from cfm_id_llm import network_design_reading as design_fields
 
-R1B = 'R1B_FULL_ASSIGNMENT'
-R2 = 'R2_MEAN_SIGNATURE'
+FULL_POLICY = 'network.randomized.full_policy_mean'
+SIGNATURE_POLICY = 'network.randomized.signature_policy_mean'
 FAMILY = 'NETWORK_FIXED_POLICY_FACTS'
 BASE_CONDITIONS = ('known_assignment_law','full_vector_randomization','consistency',
                    'fixed_pretreatment_network','finite_conditional_first_moments')
 READING_DECISIONS = ('target_policy_population_and_weights','network_assignment_and_variable_meaning',
                      'all_information_and_restrictions_preserved','source_entailment')
-R2_SCIENCE_DECISIONS = ('mean_sufficiency_all_assignments_and_weighted_nodes',)
-# R2's mean-signature route conditions on an E1-E5 grouping; weighted/grouped
+SIGNATURE_SCIENCE_DECISIONS = ('mean_sufficiency_all_assignments_and_weighted_nodes',)
+# SIGNATURE_POLICY's mean-signature route conditions on an E1-E5 grouping; weighted/grouped
 # exposures are not (yet) a signature family for that route.
-R2_SIGNATURE_KINDS = frozenset(design_fields.EXPOSURE_GROUPS) - {'WEIGHTED_EXPOSURE','GROUPED_EXPOSURE'}
+SIGNATURE_KINDS = frozenset(design_fields.EXPOSURE_GROUPS) - {'WEIGHTED_EXPOSURE','GROUPED_EXPOSURE'}
 
 
 def target_coordinates(c):
@@ -162,27 +163,18 @@ def inspect_methods(entry, raw, *, note_review=None, information_evidence_review
             if source.operator=='NODE_SIGNATURE_MEANS' and not source.signature_cells:
                 return dict(out,state='NEEDS_INPUT',reason_code='SIGNATURE_MEAN_CELLS_MISSING')
             usable.append(i)
-        indices = {R1B:[i for i in usable if c.information[i].operator!='NODE_SIGNATURE_MEANS']}
-        sf = c.mean_sufficiency
-        r2_condition = (c.exposure.kind in R2_SIGNATURE_KINDS
-            and not design_fields.missing_exposure(c.exposure,c.study.nodes) and bool(c.exposure.source_ids)
-            and sf.value is True and sf.scope=='ALL_BINARY_ASSIGNMENTS' and bool(sf.source_ids)
-            and set(c.target.population)<=set(sf.covered_nodes))
-        indices[R2] = [i for i in usable if c.information[i].operator!='ASSIGNMENT_NODE_MEANS'] if r2_condition else []
-        for method in (R1B,R2):
-            if not indices[method]:
-                reason = ('R2_ADDITIONAL_DECLARATIONS_NOT_ESTABLISHED' if method==R2 and not r2_condition
-                          else 'POPULATION_INFORMATION_NOT_SUPPLIED_FOR_METHOD')
-                out['exclusions'].append(dict(method=method,reason_code=reason,
-                    unresolved=(not usable if method==R1B else sf.value is None or
-                        (sf.value is True and (sf.scope=='UNKNOWN' or c.exposure.kind=='UNKNOWN' or design_fields.missing_exposure(c.exposure,c.study.nodes) or
-                            not set(c.target.population)<=set(sf.covered_nodes))) or
-                        (r2_condition and not indices[R2]))))
+        from .method_preparation import randomized_policy
+        for choice in randomized_policy(c, usable):
+            method = choice.method
+            indices = list(choice.source_indices)
+            if choice.reason_code:
+                out['exclusions'].append(dict(method=method,reason_code=choice.reason_code,
+                    unresolved=choice.unresolved))
                 continue
-            binding = sha(dict(entry=entry,raw=raw,method=method,source_indices=indices[method]))
-            science = (*BASE_CONDITIONS,*design_adapter.extra_science(c),*('a4_source_'+str(i) for i in indices[method]))
-            if method==R2: science += R2_SCIENCE_DECISIONS
-            out['methods'].append(dict(method=method,source_indices=indices[method],
+            binding = sha(dict(entry=entry,raw=raw,method=method,source_indices=indices))
+            science = (*BASE_CONDITIONS,*design_adapter.extra_science(c),*('a4_source_'+str(i) for i in indices))
+            if method==SIGNATURE_POLICY: science += SIGNATURE_SCIENCE_DECISIONS
+            out['methods'].append(dict(method=method,source_indices=indices,
                 applicability='NOT_CHECKED_BEFORE_SCIENCE_REVIEW',
                 reading_worksheet=worksheet(binding,READING_DECISIONS),
                 science_worksheet=worksheet(binding,science)))
@@ -213,6 +205,7 @@ def native_reviews_from_json(plan, records):
 
 def _compile(plan, row, records, authority):
     """Only called after every independent review passes; not a parser default."""
+    from . import policy_methods
     from pfn_pipeline._internal.identification.schemas import Assumption
     from pfn_pipeline.network_inquiry_shadow import declare_network_a4_source
     from pfn_pipeline.identification_policy_r2 import (declare_policy_signature,
@@ -220,6 +213,8 @@ def _compile(plan, row, records, authority):
     c = NetworkPolicyReading.model_validate(plan['facts'])
     question = policy_attributes.from_reading(c)
     question.require_coordinates(plan['proposed_target'])
+    if policy_methods.resolve(row['method'], question.operation).strategy != policy_methods.POINT:
+        raise ValueError('NATIVE_POLICY_POINT_METHOD_REQUIRED')
     provenance = lambda ids: 'Reviewed original source locators: '+','.join(ids)
     design = design_adapter.design_payload(c.assignment, nodes=tuple(c.study.nodes))
     # Target identity must not change merely because q, A4 or A5 changes.
@@ -237,7 +232,7 @@ def _compile(plan, row, records, authority):
     assumptions = tuple(condition(name,getattr(c.assumptions,name).source_ids) for name in BASE_CONDITIONS)
     if design_adapter.extra_science(c):
         assumptions += (condition(design_fields.D6_CONDITION,c.first_stage_exclusion.source_ids),)
-    sig = declare_policy_signature(st,**design_adapter.exposure_payload(c.exposure)) if row['method']==R2 else None
+    sig = declare_policy_signature(st,**design_adapter.exposure_payload(c.exposure)) if row['method']==SIGNATURE_POLICY else None
     suff = (admit_mean_signature_sufficiency(st,sig,covered_nodes=tuple(c.mean_sufficiency.covered_nodes),
         assumption=condition('mean_signature_sufficiency',c.mean_sufficiency.source_ids)) if sig else None)
     sources=[]
@@ -246,7 +241,7 @@ def _compile(plan, row, records, authority):
         kwargs=dict(source_id='source_'+sha(s.model_dump()),operator=s.operator,
             outcome_nodes=tuple(s.outcome_nodes),admission='ADMITTED',availability=s.availability,
             provenance=provenance(s.source_ids)+'; independent review: '+review.reviewer+'; '+review.evidence)
-        if row['method']==R1B:
+        if row['method']==FULL_POLICY:
             source=declare_network_a4_source(st,**kwargs,assignment_cells=tuple(tuple(z) for z in s.assignment_cells))
         else:
             source=declare_signature_population_source(st,sig,**kwargs,
@@ -277,6 +272,8 @@ def _execute_plan(plan, *, plan_review=None, native_reviews=None, research_proto
             raise DispatchError('REVIEW_REQUIRED','NETWORK_READING_AND_SCIENCE_REVIEWS_REQUIRED')
         if type(native_reviews) is not dict or set(native_reviews)!={r['method'] for r in plan['methods']}:
             raise DispatchError('CHECK_BLOCKED','EXACT_PLANNED_NETWORK_REVIEWS_REQUIRED')
+        from . import policy_methods
+        policy_methods.require_plan(plan['methods'], policy_methods.MEAN)
         # All branch approvals must pass before any mathematical call.
         records={}
         for row in plan['methods']:
@@ -295,6 +292,7 @@ def _execute_plan(plan, *, plan_review=None, native_reviews=None, research_proto
                 raise DispatchError('CHECK_BLOCKED','EXACT_BOUNDED_MODEL_PLAN_REQUIRED')
             return execute_reviewed(plan,plan['methods'][0],records[plan['methods'][0]['method']],review,out)
         from pfn_pipeline import identification_policy_r1b as r1b,identification_policy_r2 as r2
+        from .policy_execution import point_solution
         answers=[]
         for row in plan['methods']:
             st,target,sources,assumptions,sig,suff=_compile(plan,row,records[row['method']],review.authority)
@@ -303,12 +301,7 @@ def _execute_plan(plan, *, plan_review=None, native_reviews=None, research_proto
                 asdict(suff) if suff else None])
             out['backend_called']=True
             try:
-                if row['method']==R1B:
-                    result=r1b.identify_verified_fixed_policy(st,target,sources,assumptions=assumptions)
-                    replay=r1b.replay_verified_fixed_policy
-                else:
-                    result=r2.identify_verified_signature_policy(st,target,sig,sources,assumptions=assumptions,sufficiency=suff)
-                    replay=r2.replay_verified_signature_policy
+                result,replay=point_solution(row['method'], (st,target,sources,assumptions,sig,suff))
             except (r1b.R1bPolicyUnavailable,r2.R2PolicyUnavailable) as exc:
                 out['attempts'].append(dict(method=row['method'],state='NOT_APPLICABLE',reason_code=exc.reason_code))
                 continue
@@ -316,8 +309,8 @@ def _execute_plan(plan, *, plan_review=None, native_reviews=None, research_proto
             # not merely against the problem carried inside a returned proof.
             returned=native_sha([asdict(result.study),asdict(result.target),[asdict(s) for s in result.sources],
                 [a.model_dump(mode='json') for a in result.assumptions],
-                asdict(result.signature) if row['method']==R2 else None,
-                asdict(result.sufficiency) if row['method']==R2 else None])
+                asdict(result.signature) if row['method']==SIGNATURE_POLICY else None,
+                asdict(result.sufficiency) if row['method']==SIGNATURE_POLICY else None])
             full_before=native_sha(result)
             if returned!=inputs or replay(result) is not True or native_sha(result)!=full_before:
                 raise DispatchError('CHECK_BLOCKED','NETWORK_RESULT_INPUT_OR_REPLAY_MISMATCH')
@@ -346,3 +339,8 @@ def _execute_plan(plan, *, plan_review=None, native_reviews=None, research_proto
         return dict(out,state=exc.state,reason_code=exc.reason)
     except (ValueError,TypeError,KeyError,AttributeError,ZeroDivisionError):
         return dict(out,state='CHECK_BLOCKED',reason_code='INVALID_NETWORK_REVIEW_OR_NATIVE_EVIDENCE')
+
+
+def __getattr__(name):
+    from .method_compat import legacy_attribute
+    return legacy_attribute(name, globals())

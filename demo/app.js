@@ -155,7 +155,8 @@ function boundContrastHTML(report){
 }
 function renderNetworkConditions(run){
  const panel=$('#network-conditions'), form=$('#network-condition-form'), sheet=run.result?.condition_review;
- panel.hidden=!sheet||run.result.estimation_handoff_allowed||run.busy;
+ panel.hidden=!sheet||run.result.estimation_handoff_allowed||run.result.population_ate?.completed||run.result.joint_entry?.completed||
+  ['COMPLETED','INCOMPLETE'].includes(run.result.local_targets?.state)||run.busy;
  if(panel.hidden)return;
  if(form.dataset.binding!==sheet.binding){
   form.dataset.binding=sheet.binding;
@@ -163,9 +164,13 @@ function renderNetworkConditions(run){
   $('#network-condition-items').innerHTML=sheet.items.map(item=>`<label><b>${esc(item.label)}</b><span>${esc(item.quote)}</span><select required name="${esc(item.code)}"><option value="">请选择</option><option value="ADOPTED">本次采用</option><option value="UNSURE">暂不确定</option><option value="DECLINED">本次不采用</option></select></label>`).join('');
   for(const [key,value] of Object.entries(run.result.review_record?.decisions||{}))form.elements.namedItem(key).value=value;
  }
+ // A submitted decision can change without changing the source-sheet binding.
+ for(const [key,value] of Object.entries(run.result.review_record?.decisions||{})){
+  const field=form.elements.namedItem(key);if(field)field.value=value;
+ }
  if(run.result.review_scope==='SYNTHETIC_TEST_ONLY'&&!run.synthetic){
   $('#network-condition-message').textContent='此方法当前只登记合成示例的审核结果。真实研究可以查看条件计算和证据。';
- }else if(run.result.review_record)$('#network-condition-message').textContent='已保存本次判断。所列前提均采用后可向估计端交接。';
+ }else if(run.result.review_record)$('#network-condition-message').textContent='已保存本次选择；暂不确定的项目仍待确认，尚未执行识别。';
 }
 $('#network-condition-form').onsubmit=async event=>{
  event.preventDefault();
@@ -173,7 +178,8 @@ $('#network-condition-form').onsubmit=async event=>{
  if(button.disabled||current?.busy)return;
  button.disabled=true;
  try{
-  await api('/api/action',{id:current.id,action:'review_network_conditions',payload:{binding:form.dataset.binding,decisions:Object.fromEntries(new FormData(form))}});
+  const action=current.result?.condition_review?.kind==='joint_natural'?'review_joint_conditions':current.result?.condition_review?.kind==='population_ate'?'review_population_ate_conditions':'review_network_conditions';
+  await api('/api/action',{id:current.id,action,payload:{binding:form.dataset.binding,decisions:Object.fromEntries(new FormData(form))}});
   await poll();
  }catch(error){message.textContent=error.message;}
  finally{button.disabled=false;}
@@ -220,14 +226,165 @@ function networkAlignmentHTML(alignment){
  const note=alignment.source_target_complete?'网页已读取名册和关系表。模型原答保留供复核，本次未发送估计查询。':'本次未发送估计查询。';
  return '<section class="network-alignment"><h4>'+heading+'</h4><p>'+note+'</p><ul>'+items+'</ul></section>';
 }
+function modelOriginalHTML(raw){
+ if(raw==null||typeof raw==='object'&&!Object.keys(raw).length)return '<p class="muted">本次没有保存模型原答。</p>';
+ const answer=raw.answer??raw;
+ const answers=Array.isArray(answer)?answer:Array.isArray(answer.answers)?answer.answers:[answer];
+ const text=v=>typeof v==='string'||typeof v==='number'?String(v):v&&typeof v==='object'?(v.statement||v.description||v.label||v.name||''):'';
+ const status={POINT:'模型认为可点识别',PARTIAL:'模型认为只能确定范围',NO_USEFUL_ID:'模型认为不能给出有效界限',NEEDS_INPUT:'模型认为需要补充信息',NOT_IDENTIFIED:'模型认为不可识别',NOT_COVERED:'模型认为当前方法未覆盖'};
+ const mathTextHTML=value=>typeof ModelMath==='object'?ModelMath.render(value):esc(value);
+ const body=answers.map((a,i)=>{
+  if(typeof a==='string')return '<div class="model-formula-text">'+mathTextHTML(a)+'</div>';
+  if(!a||typeof a!=='object')return '';
+  const t=a.target||{};
+  const comparison=text(t.intervention)&&text(t.reference)?(t.quantity==='difference'?text(t.intervention)+' 减去 '+text(t.reference):'情形：'+text(t.intervention)+'；参照：'+text(t.reference)):'';
+  const goal=[text(t.population),text(t.outcome),text(t.time),comparison].filter(Boolean).join('；');
+  const assumptionText=v=>{
+   const label=({ADOPTED:'采用',NOT_ADOPTED:'不采用',UNDECIDED:'尚未决定',UNKNOWN:'未说明'})[v?.status];
+   return (label?label+'：':'')+text(v);
+  };
+  const assumptions=Array.isArray(a.assumptions)?a.assumptions.map(assumptionText).filter(Boolean):[text(a.assumptions)].filter(Boolean);
+  const functional=text(a.functional);
+  return (answers.length>1?'<h4>'+esc(a.question_part||('子问题 '+(i+1)))+'</h4>':'')+
+   (goal?'<p>'+esc(goal)+'</p>':'')+
+   (a.status?'<p><b>'+esc(status[a.status]||('模型判断：'+a.status))+'</b></p>':'')+
+   (a.functional?'<h4>模型给出的公式或依据</h4>'+(functional?'<div class="model-formula-text">'+mathTextHTML(functional)+'</div>':'<pre>'+esc(JSON.stringify(a.functional,null,2))+'</pre>'):'')+
+   (a.value!=null?'<p>模型给出的数值：'+esc(typeof a.value==='object'?JSON.stringify(a.value):a.value)+'</p>':'')+
+   (assumptions.length?'<details><summary>模型列出的条件</summary><ul>'+assumptions.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ul></details>':'')+
+   (a.reason?'<details><summary>模型的解释</summary><div class="model-formula-text">'+mathTextHTML(text(a.reason))+'</div></details>':'');
+ }).join('');
+ return body+'<details class="model-draft"><summary>查看模型原答（供对照）</summary><pre>'+esc(JSON.stringify(raw,null,2))+'</pre></details>';
+}
 function directResultHTML(report,receipt){
- const raw=report.draft;
- const draft=raw&&Object.keys(raw).length
-  ? '<details class="model-draft"><summary>查看模型原答（供对照）</summary><pre>'+esc(JSON.stringify(raw,null,2))+'</pre></details>'
-  : '';
- return directAnswerHTML(report,receipt)+networkAlignmentHTML(report.network_alignment)+draft;
+  return '<div class="answer-comparison"><section class="model-answer" aria-label="LLM 原答"><h3>LLM 原答</h3><p class="muted">保留本轮读取的模型原答。右侧给出数学库的独立结果，二者可能不同。</p>'+modelOriginalHTML(report.draft)+
+  '</section><section class="library-answer" aria-label="数学库核验"><h3>数学库核验</h3><p class="muted">按本次目标和确认的条件计算；未通过的地方会说明原因。</p>'+directAnswerHTML(report,receipt)+networkAlignmentHTML(report.network_alignment)+'</section></div>';
+}
+function jointCertificateHTML(c,problem=null){
+ const math=tex=>ModelMath.render('\\['+tex+'\\]');
+ const fraction=x=>{if(!/^-?\d+(?:\/\d+)?$/.test(x))throw Error('Invalid rational');const [a,b]=x.split('/');return b?'\\frac{'+a+'}{'+b+'}':a;};
+  const linear=terms=>terms.map(([v,symbol],i)=>{const negative=v.startsWith('-'),absolute=negative?v.slice(1):v;return (negative?'-':i?'+':'')+(absolute==='1'?'':fraction(absolute))+symbol;}).join('');
+ try{
+  if(c.version==='symbolic-mean-joint-1')return SymbolicBounds.html(c,problem);
+  if(c.kind==='DAG_SINGLE_SOURCE'){
+   if(c.native.nonidentification_proved)return '<p>在本题声明的因果图和总体资料下，已核验存在不能唯一确定该干预分布的见证。这是本图下的结论，不是程序未找到入口。</p>';
+   const original=c.native.certificate;
+   return jointCertificateHTML({...original,target:{...original.target,treatments:[original.target.treatment]}});
+  }
+  if(c.kind==='BINARY_IV_SOURCE'){
+   const a=c.answer,t=c.target,st=c.study;
+   const formula=a.status==='POINT'&&t.kind==='LATE'?math('\\tau_C='+(t.treated===0?'-':'')+'\\frac{\\mathbb E[Y\\mid Z=1]-\\mathbb E[Y\\mid Z=0]}{\\mathbb E[D\\mid Z=1]-\\mathbb E[D\\mid Z=0]}='+fraction(a.value)):
+    Array.isArray(a.value)?math('\\tau\\in['+fraction(a.value[0])+','+fraction(a.value[1])+']'):a.value!==null?math('\\tau='+fraction(a.value)):'<p>'+esc(a.reason)+'</p>';
+   return formula+'<p>Z：'+esc(st.instrument)+'；D：'+esc(st.treatment)+'；Y：'+esc(st.outcome)+'。</p><p>'+esc(a.reason)+'</p><details><summary>查看识别库原始公式</summary><pre>'+esc(a.functional)+'</pre></details>';
+  }
+   if(c.kind==='EXISTING_NETWORK_POLICY_COMPOSITION')return math('\\theta='+linear(c.coefficients.map((v,i)=>[v,'\\theta_{'+(i+1)+'}'])))+c.components.map((x,i)=>'<h4>θ'+(i+1)+' 对应的政策均值</h4>'+jointCertificateHTML(x)).join('');
+  if(c.kind==='EXISTING_OBSERVATIONAL_EFFECT'){
+   const r=c.native_outcome.result,proof=r.proofs[0],nodes=r.study.node_order;
+    const terms=linear(proof.terms.map(t=>[t.coefficient,'\\,m_{'+(nodes.indexOf(t.node_id)+1)+'}('+t.own_treatment+','+t.exposure_state+')']));
+   const avg=c.target.averaging,base='\\mathbb E[Y_i^{\\rm obs}\\mid T_i=a,S_i=s';
+   let definition,guide;
+   if(avg==='OBSERVED_ALLOCATION_CONDITIONAL'){definition='m_i(a,s)='+base+',W]';guide='其余安排按固定背景下实际采用规律平均。';}
+   else if(avg==='SHARED_PRETREATMENT_STRATUM'){definition='m_i(a,s)=\\sum_b P(B=b\\mid W)'+base+',B=b,W]';guide='B：'+r.source.adjustment_variable+'；按其总体占比平均。';}
+   else if(avg==='OWN_AND_NEIGHBOR_BINARY_FEATURE'){definition='m_i(a,s)=\\sum_c P(C_i=c\\mid W)'+base+',C_i=c,W]';guide='Cᵢ 由本人特征和全部关系邻居中该特征为1的人数组成；特征：'+r.source.feature_name+'。';}
+   else throw Error('Unknown averaging');
+   return math('\\tau='+terms)+math(definition)+'<p>'+esc(guide)+' Y 是结果，T 是本人使用状态，S 是材料定义的同伴状态，W 是固定背景。</p><p>'+nodes.map((n,i)=>(i+1)+'：'+esc(n)).join('；')+'。</p><details><summary>查看识别库原始公式</summary><pre>'+esc(c.identified_functional)+'</pre></details>';
+  }
+  if(c.kind==='EXISTING_NETWORK_POLICY'){
+   const r=c.native_outcome.result,parts=r.components||[r];
+   const origin='<details><summary>查看识别库原始公式</summary><pre>'+esc(c.identified_functional)+'</pre></details>';
+   if(c.native_outcome.route==='R2_MEAN_SIGNATURE'){
+    const terms=r.policy_node_classes.map(([node,a,s],i)=>[r.node_weights[i],'\\,\\mathbb E[Y_{'+(r.study.node_order.indexOf(node)+1)+'}^{\\rm obs}\\mid T_{'+(r.study.node_order.indexOf(node)+1)+'}='+a+',S_{'+(r.study.node_order.indexOf(node)+1)+'}='+s+',W]']);
+    return math('\\theta='+linear(terms))+'<p>θ 是本题政策的平均结果；Tᵢ 是本人状态，Sᵢ 是原文定义的同伴状态，W 是固定背景。各项取自原证书的目标签名及权重。</p><p>'+r.study.node_order.map((n,i)=>(i+1)+'：'+esc(n)).join('；')+'。</p>'+origin;
+   }
+   if(!r.components&&!['R3_FULL_ASSIGNMENT','R1B_FULL_ASSIGNMENT'].includes(c.native_outcome.route))return '<pre class="formula">'+esc(c.identified_functional)+'</pre>'+origin;
+   const body=parts.map((p,k)=>{
+    const t=p.target;
+    const terms=t.unit_weights.map((w,i)=>fraction(w)+'\\,\\mathbb E[Y_{'+(i+1)+'}^{\\rm obs}\\mid \\mathbf T=('+t.policy_assignment.join(',')+'),W]').join('+');
+    return r.components?fraction(r.policy_probabilities[k])+'\\left('+terms+'\\right)':terms;
+   }).join('+');
+   return math('\\theta='+body)+'<p>θ 是本题政策下的平均结果；Y 是结果，T 是完整使用名单，W 是本次固定背景。方案选择概率与试点分配概率分别保留。</p><p>'+parts[0].study.node_order.map((n,i)=>(i+1)+'：'+esc(n)).join('；')+'。</p>'+origin;
+  }
+  if(c.version==='finite-mean-joint-1'){
+   if(c.status==='INCOMPATIBLE')return '<p>没有同时满足这些条件的均值，未生成区间。</p>';
+   return math('\\theta '+(c.status==='POINT'?'='+fraction(c.lower):'\\in ['+fraction(c.lower)+','+fraction(c.upper)+']'))+'<p>θ 表示上面业务问题的目标值。</p>';
+  }
+  const names=new Map(c.graph.nodes.map((n,i)=>[n,'x_{'+(i+1)+'}'])),defs=[],memo=new Map();
+  const list=xs=>xs.map(x=>{if(!names.has(x))throw Error('Unknown variable');return names.get(x);}).join(',');
+  function expr(e,depth=0){
+   if(depth>50)throw Error('Formula depth');
+   if(e.operation==='OBSERVED_JOINT')return 'P('+list(c.graph.nodes)+')';
+   if(e.operation==='SUM')return e.over.length?'\\sum_{'+list(e.over)+'}\\left('+expr(e.operand,depth+1)+'\\right)':expr(e.operand,depth+1);
+   if(e.operation==='MARGINAL'){if(e.of.operation==='OBSERVED_JOINT')return 'P('+list(e.keep)+')';const over=e.scope.filter(x=>!e.keep.includes(x));return over.length?'\\sum_{'+list(over)+'}\\left('+expr(e.of,depth+1)+'\\right)':expr(e.of,depth+1);}
+   if(e.operation==='PRODUCT')return e.operands.length===1?expr(e.operands[0],depth+1):e.operands.map(x=>'\\left('+expr(x,depth+1)+'\\right)').join('\\,')||'1';
+   if(e.operation==='CONDITIONAL'){
+    let law='P';if(e.of.operation!=='OBSERVED_JOINT'){const key=JSON.stringify(e.of);if(!memo.has(key)){const body=expr(e.of,depth+1),name='Q_{'+(memo.size+1)+'}';memo.set(key,name);defs.push(name+'='+body);}law=memo.get(key);}
+    return law+'('+list(e.outcome)+(e.given.length?'\\mid '+list(e.given):'')+')';
+   }throw Error('Unsupported formula node');
+  }
+  const formula='P('+list(c.target.outcome)+'\\mid \\operatorname{do}('+list(c.target.treatments)+'))='+expr(c.functional);
+   return math(formula)+defs.map(math).join('')+'<p>'+c.graph.nodes.map((n,i)=>'X'+(i+1)+'：'+esc(n)).join('；')+'。</p>'+
+    (c.information_basis?.output_kind==='SYMBOLIC_FUNCTIONAL_ONLY'?'<p>现有资料是有限样本。这里给出总体分布的符号公式，没有把样本频率当作总体概率，也尚未计算效果数值。</p>':'');
+ }catch{return '<p>请展开证书查看完整公式结构。</p>';}
 }
 function directAnswerHTML(report,receipt){
+ if(report.joint_entry){
+  const entry=report.joint_entry,s=entry.reading,c=entry.native_result?.certificate;
+  const supplied=entry.given_probability_source;
+  const sourceValue=supplied?.state==='MATCHED_SOURCE_VALUE'?'<section class="given-source-value"><h4>材料已经给出的数值</h4><p><strong>'+esc(supplied.value)+'</strong>。对应 '+Object.entries(supplied.quantity.intervention).map(([k,v])=>esc(k)+'='+esc(v)).join('，')+' 时 '+Object.entries(supplied.quantity.event).map(([k,v])=>esc(k)+'='+esc(v)).join('，')+' 的概率。</p><p>'+esc(supplied.quantity.population)+'；'+esc(supplied.quantity.period)+'；'+esc(supplied.quantity.context)+'。</p><p>已核对这条材料与本题的范围。图和额外条件的联合数学核验尚未完成。</p><details><summary>查看这条数值的原文</summary>'+supplied.evidence.map(e=>'<blockquote>'+esc(e.quote)+'</blockquote>').join('')+'</details></section>':supplied?.state==='CONFLICTING_SOURCE_VALUES'?'<section class="given-source-value"><h4>材料给出了不同数值</h4><p>同一目标在材料中分别为 '+supplied.values.map(esc).join('、')+'，尚不能选取其中一个作为答案。</p></section>':'';
+  const titles={POINT:'可点识别',PARTIAL:'可确定上下界',SYMBOLIC_BOUNDS:'随参数变化的上下界',INCOMPATIBLE:'条件互相冲突',NONIDENTIFIABLE:'已验证不可识别',REVIEW_REQUIRED:'确认本次问题与科学前提',NEEDS_INPUT:'需要补充信息',UNSUPPORTED:'当前完整材料尚不支持',READING_RECHECK_REQUIRED:'后台读取尚未通过复核'};
+  const target=s?.dag_target?.value||s?.network_target?.value||s?.target?.value||(s?.problem?{description:s.problem.target_description}:null);
+  const observed=entry.operation==='NETWORK_OBSERVATIONAL_EFFECTS';
+  const observedTarget=observed?(report.condition_review?.items||[]).find(x=>x.code==='target')?.quote:'';
+   const note=entry.operation==='DAG_SINGLE_SOURCE'?'一般ID方法按本题的单变量干预及完整因果图检查。':entry.operation==='BINARY_IV_SOURCE'?'结果针对本题的人群、实际处理两端及采用的工具变量条件。':entry.operation==='DAG_JOINT_ID'?'这是同一次联合干预的分布公式，没有把多个单变量结果拼接。':c?.kind==='EXISTING_NETWORK_POLICY_COMPOSITION'?'公式按原题的政策分量、相减方向及概率加权。':c?.kind==='EXISTING_NETWORK_POLICY'?'这是按原题完整方案和评价权重核验的政策均值。':observed?'公式保留本题比较两端及原文指定的平均方式。':'界限针对本次列明的全部均值及线性限制；已保留不直接出现在目标里的约束。';
+  const decisionLabel=code=>({ADOPTED:'本次确认采用',DECLINED:'本次不采用',UNSURE:'本次暂不确定'}[report.review_record?.decisions?.[code]]);
+  const conditions=observed?(report.condition_review?.items||[]).filter(x=>x.code!=='target').map(x=>'<li>'+esc(x.quote)+(decisionLabel(x.code)?'（'+esc(decisionLabel(x.code))+'）':'')+'</li>').join(''):(s?.conditions||[]).filter(x=>x.status!=='UNKNOWN').map(x=>'<li>'+esc(x.statement)+'（'+esc(decisionLabel(x.code)||{ADOPTED:'原文采用',NOT_ADOPTED:'原文不采用',UNDECIDED:'尚未决定',CONTRADICTED:'冲突'}[x.status]||x.status)+'）</li>').join('');
+  const constraints=[...(s?.constraints||[]),...(s?.mean_orders||[])].map(x=>'<li>'+esc(x.description)+'（'+esc({ADOPTED:'采用',NOT_ADOPTED:'不采用',UNDECIDED:'尚未决定'}[x.status]||x.status)+'）</li>').join('');
+  const values=Object.entries(target?.intervention_values||{}).map(([k,v])=>esc(k)+'='+esc(v)).join('，');
+  const problems=[...(entry.failure_details||[]).filter(x=>x.kind==='MODEL_SOURCE_MISMATCH').map(x=>'后台复核指出：'+x.reason),
+   ...(entry.input_diagnostics||[]).filter(x=>x.cause==='READING_OMISSION').map(x=>'原文已有说明，但模型未完整保留：'+x.reason)];
+  const diagnosis=problems.length?'<ul class="reading-diagnostics">'+[...new Set(problems)].slice(0,3).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':
+   (entry.failure_details||[]).some(x=>x.kind==='MODEL_OUTPUT_CONTRACT')?'<p>模型返回的字段或引用仍不符合接口要求，后台重读未能修复。具体错误保存在下方记录中。</p>':'';
+  return '<section><h3>'+esc(entry.reason_code==='REVIEW_PREMISE_DECLINED'?'本路线已停止':titles[entry.state]||entry.state)+'</h3><p>'+esc(entry.message)+'</p>'+ (target||observedTarget?'<p>'+esc(observedTarget||target.description||target.context)+'</p>':'')+
+   diagnosis+sourceValue+
+   (c&&report.independent_replay?jointCertificateHTML(c,entry.problem)+'<p>'+esc(note)+'证书核验通过。</p>':'')+
+   (target?.period||s?.study?.value?.period?'<p>评价时期：'+esc(target?.period||s.study.value.period)+'。'+(values?'本题设定：'+values+'。':'')+'</p>':'')+
+   (conditions||constraints?'<details><summary>本次采用与保留的条件</summary><ul>'+conditions+constraints+'</ul></details>':'')+
+   '<details><summary>来源、转换及证书记录</summary><pre>'+esc(JSON.stringify(entry,null,2))+'</pre></details><p class="muted">'+(report.estimation_handoff_allowed?'本问题的公式或界限已交付查询接口。尚未选择或执行样本估计器，不能把该回执当作估计结果。':'本入口尚未交付估计查询。')+'</p></section>';
+ }
+ if(report.local_targets){
+  const entry=report.local_targets;
+  const titles={POINT:'可点识别',REVIEW_REQUIRED:'等待确认共同前提',NEEDS_INPUT:'需要补充信息',NOT_COVERED:'当前入口尚未覆盖',READING_RECHECK_REQUIRED:'目标尚未完整核对',UNDEFINED:'原设计下该比较未定义'};
+  const parts=entry.parts.map((p,i)=>{
+   const a=p.answer,n=p.native?.summary;
+   const coords=n?'<p>评价对象：'+esc(a.target.population.join('、'))+'；结果：'+esc(a.target.outcome)+'；时期：'+esc(a.target.time)+'。</p>':'';
+   const formula=n?'<h4>识别公式</h4>'+localTargetFormulaHTML(p)+'<p>本问证书已独立重放。权重与比较方向按原材料保留。</p>':'';
+   return '<section class="local-target"><h4>问题 '+(i+1)+'：'+esc(p.question)+'</h4><p><b>'+esc(titles[p.state]||p.state)+'</b></p>'+coords+formula+(p.message?'<p>'+esc(p.message)+'</p>':'')+
+    (n?'<details><summary>本问的查询、权重和证书</summary><pre>'+esc(JSON.stringify({queries:a.estimate_handoff,certificate:n},null,2))+'</pre></details>':'')+'</section>';
+  }).join('');
+  const adopted=report.review_record?.decisions||{};
+  const conditions=(report.condition_review?.items||[]).filter(x=>adopted[x.code]==='ADOPTED');
+  const conditionsHTML=conditions.length?'<section class="local-target-conditions"><h4>本次采用的共同前提</h4><ul>'+conditions.map(x=>'<li>'+esc(x.quote)+'</li>').join('')+'</ul><p class="muted">公式以这些前提成立为条件；证书不证明现实中的假设成立。</p></section>':'';
+  return '<section><h3>'+esc(entry.message)+'</h3>'+parts+conditionsHTML+'<p>每个问题单独核验；未完成的问题不会被省略。本入口交付识别公式和证书，尚不自动下发估计。</p></section>';
+ }
+ if(report.population_ate){
+  const entry=report.population_ate, t=entry.reading?.target?.value, a=report.conditional_answer;
+  const titles={POINT:'可点识别',PARTIAL:'可确定上下界',NO_USEFUL_ID:'当前条件不能给出有效界限',
+   NEEDS_INPUT:'需要确认研究信息',REVIEW_REQUIRED:'确认本次问题与科学前提',
+   NOT_COVERED:'当前方法尚不能核验这份完整研究',READING_RECHECK_REQUIRED:'业务读取尚未通过复核',CONFLICT:'材料中的条件存在冲突'};
+  const first=t?.direction==='0-1'?t?.treatment_0:t?.treatment_1,second=t?.direction==='0-1'?t?.treatment_1:t?.treatment_0;
+  const target=t?'<p>评价对象：'+esc(t.population)+'。结果：'+esc(t.outcome)+'；时期：'+esc(t.period)+'。</p><p>'+esc(first)+' 减去 '+esc(second)+'。</p>':'';
+  const certified=report.independent_replay===true;
+  const resultLabel=a?.status==='POINT'?'识别公式':a?.status==='NO_USEFUL_ID'?'当前可确定的范围':'识别界限';
+  const verifiedNote=report.proof?.target_operation?'原方向的证书已独立重放；比较方向的转换随本题记录保存，可重放核对。处理编码不变。':'公式由现有数学库生成，证书独立重放通过。';
+  const formula=certified&&a?'<h4>'+resultLabel+'</h4>'+populationFormulaHTML(a)+'<p>T=1：'+esc(t.treatment_1)+'；T=0：'+esc(t.treatment_0)+'；Y：'+esc(t.outcome)+'。</p><p>'+verifiedNote+'这里尚未代入样本计算估计值。</p>':'';
+  const stateNames={ADOPTED:'原文采用',NOT_ADOPTED:'原文不采用',UNDECIDED:'尚未决定',UNKNOWN:'未说明',CONTRADICTED:'存在否定或冲突'};
+  const conditions=(entry.reading?.conditions||[]).filter(c=>c.status!=='UNKNOWN').map(c=>'<li>'+esc(stateNames[c.status])+ '：'+esc(c.statement)+'</li>').join('');
+  const design=entry.reading?.design?.value;
+  const designNote=design?.kind==='RANDOMIZED'?'<p>处理按原文所述规则随机分配，接受处理的概率为 '+esc(design.probability)+'。</p>':'';
+  const native=entry.native_result?'<details><summary>数学执行与证书记录</summary><pre>'+esc(JSON.stringify(report.proof?.target_operation?{native_result:entry.native_result,target_operation:report.proof.target_operation}:entry.native_result,null,2))+'</pre></details>':'';
+  return '<section><h3>'+esc(titles[entry.state]||entry.state)+'</h3>'+target+(certified?'':'<p>'+esc(entry.message)+'</p>')+formula+
+    (conditions?'<h4>本次条件</h4>'+designNote+'<ul>'+conditions+'</ul>':'')+
+    '<details><summary>目标、来源与后台核对记录</summary><pre>'+esc(JSON.stringify({reading:entry.reading,audit:entry.audit,review:report.review_record},null,2))+'</pre></details>'+native+'</section>';
+ }
  const method=report.proof?.method;
  const binding=report.condition_review?.binding;
  const received=!!(binding&&report.estimation_handoff_allowed&&receipt?.binding===binding&&receipt.state==='RECEIVED'&&receipt.consumer==='autocfm_estimation_query_intake');
@@ -286,7 +443,10 @@ function directAnswerHTML(report,receipt){
   const diagnostic={target:a.target,support:proof.joint_probabilities,formula:report.conditional_answer?.functional,
    assumptions:report.condition_review?.items||a.assumptions,estimate_handoff:report.conditional_answer?.estimate_handoff};
   if(natural)diagnostic.source_evidence=report.network_alignment?.fields;
-  return `<section><h3>${esc(titles[report.decision])}</h3><p>${esc(summary)}</p>${source}${probabilities}<p>${esc(details)}</p><details><summary>查看联合概率与公式</summary><pre>${esc(JSON.stringify(diagnostic,null,2))}</pre></details></section>`;
+  const h=(report.conditional_answer||a).estimate_handoff;
+  const terms=h?.queries?.length&&h.queries.length===h?.operator_spec?.forms?.[0]?.length?h.queries.map((q,i)=>({node_id:q.unit,own_treatment:q.own,exposure_state:q.exposure,coefficient:h.operator_spec.forms[0][i]})):[];
+  const formula=a.status==='POINT'?linearArmMathHTML(terms):'';
+  return `<section><h3>${esc(titles[report.decision])}</h3><p>${esc(summary)}</p>${source}${formula}${probabilities}<p>${esc(details)}</p><details><summary>查看联合概率与公式</summary><pre>${esc(JSON.stringify(diagnostic,null,2))}</pre></details></section>`;
  }
  if(report.proof?.method==='DAG_INPUT'||report.checks?.some(c=>c.code==='BOUNDED_MATERIALS')){
   const a=report.effective_answer||{};
@@ -305,7 +465,9 @@ function directAnswerHTML(report,receipt){
  const fields=Array.isArray(a?.answers)?a.answers.map((p,i)=>[p.question_part||('子问题 '+(i+1)),p]):a?[['研究目标',a.target],['识别结论',a.status],['识别公式或依据',a.functional],['数值',a.value],['科学假设',a.assumptions],['估计交接建议',a.estimate_handoff],['推导',a.reason]]:[];
  const evidence=report.checks.map(c=>`<li><b>${esc(({CHECKED:'已检查',CONFLICT:'有冲突',UNCHECKED:'待核对'})[c.state]||c.state)}</b> ${esc(c.detail)}</li>`).join('');
  const provenance=displaysMath?'以下结果由数学库按所列条件得到。':a?'以下为研究草案，各项的核验情况见程序记录。':'';
- const fieldHTML=fields.filter(([,v])=>v!==null&&v!==undefined).map(([label,v])=>`<h4>${esc(label)}</h4><pre>${show(v)}</pre>`).join('');
+ const fieldHTML=displaysMath?fields.filter(([,v])=>v!==null&&v!==undefined).map(([label,v])=>`<h4>${esc(label)}</h4><pre>${show(v)}</pre>`).join(''):
+  '<p>尚未生成数学库核验结果。</p>'+(a?.reason?'<p>'+show(a.reason)+'</p>':'')+
+  (a?'<details><summary>程序保留的待核验记录</summary><pre>'+show(a)+'</pre></details>':'');
  const reading=report.network_reading?'<details><summary>网络事实与原文依据</summary>'+Object.entries(report.network_reading.fields).map(([k,v])=>'<h4>'+esc(({network:'处理前网络',exposure:'暴露映射',assignment:'分配规则',contrast:'比较两端'})[k])+'</h4><p>'+esc(sourceStates[v.state]||v.state)+'</p>'+(v.proposed!=null?'<pre>'+show(v.proposed)+'</pre>':'')+(v.source_value!=null?'<p>原文核验取值</p><pre>'+show(v.source_value)+'</pre>':'')+(v.evidence?.length?'<p>模型所引原文</p>':v.source_candidates?.length?'<p>程序定位的相关原文</p>':'')+((v.evidence?.length?v.evidence:v.source_candidates)||[]).map(e=>'<blockquote><strong>'+esc(e.source_id)+'</strong> '+esc(e.quote)+'</blockquote>').join('')).join('')+'</details>':'';
  const proof=hasMath?`<details><summary>条件化数学结果与重放证据</summary><pre>${show(report.conditional_answer)}</pre><pre>${show(report.proof)}</pre></details>`:'';
  return `<section><h3>${esc(titles[report.decision])}</h3>${provenance?'<p>'+provenance+'</p>':''}${fieldHTML}${boundContrastHTML(report)}${reading}<h4>程序核对记录</h4><ul>${evidence}</ul>${proof}</section>`;
@@ -340,6 +502,12 @@ function renderRun(r){
  $('#request-point').disabled=r.busy;
  $('#events').innerHTML=r.events.map(e=>`<li>${new Date(e.time*1000).toLocaleTimeString()} · ${esc(e.message)}</li>`).join('');
  $('#downloads').innerHTML=`<details class="optional"><summary>下载输入与结果</summary><div class="download-links">${r.downloads.map(n=>`<a href="/api/download?id=${encodeURIComponent(r.id)}&name=${encodeURIComponent(n)}">${esc(n)}.json ↓</a>`).join('')}</div></details>`;
+ if(r.entry_diagnostics){
+  const d=r.entry_diagnostics,details=document.createElement('details'),summary=document.createElement('summary'),content=document.createElement('p');
+  summary.textContent='为什么使用这个方法／停在哪里';
+  content.textContent=[d.method?.label,d.method?.preparation_basis,...(d.missing_or_stopping||[]),d.alternative_methods].filter(Boolean).join('\n');
+  details.append(summary,content);$('#downloads').append(details);
+ }
  if(!r.busy&&r.result&&['direct_verify','network_direct_verify','network_local_review'].includes(r.reading_mode)){
   const box=$('#downloads'),extra=r.uploaded_math;
   if(extra){
@@ -622,7 +790,7 @@ function reviewSummary(r){
  if(contrastFacts&&(target.operation!=='FIRST_MINUS_SECOND'||JSON.stringify(target.first?.population)!==JSON.stringify(target.second?.population)||target.first?.aggregation!==target.second?.aggregation||target.shared_outcome_and_context?.value!==true))attention.push('比较方向、共同评价名单、加权方式或共同结果背景尚未对齐。');
  if(['source','science','data'].includes(r.review_kind)&&!localFacts&&!fixedFacts&&!contrastFacts)attention.push('当前材料不足以生成可确认的条件摘要。');
  if(r.review_kind==='science'){
-  if(!plan.methods?.length||plan.methods.some(m=>!(localFacts&&m.method==='R1A_COMPOSITION')&&!(fixedFacts&&m.method==='R1B_FULL_ASSIGNMENT')&&!(contrastFacts&&m.method==='R1B_ENDPOINT_DIFFERENCE')))attention.push('本路线的科学条件需要单独核对。');
+  if(!plan.methods?.length||plan.methods.some(m=>!(localFacts&&m.method==='network.randomized.local_contrast')&&!(fixedFacts&&m.method==='network.randomized.full_policy_mean')&&!(contrastFacts&&m.method==='network.randomized.full_policy_contrast')))attention.push('本路线的科学条件需要单独核对。');
   if(assignment.kind==='TWO_STAGE_QUOTA_MIXTURE'&&!['ADOPTED','PROPOSED'].includes(stageStatus))attention.push('第一阶段名额方案的排除条件尚未明确采用，不能直接确认。');
   for(const key of Object.keys(scienceNames))if(!['ADOPTED','PROPOSED'].includes(statements[key]?.status))attention.push(scienceNames[key]+'尚未明确采用或拟采用，不能直接确认。');
  }
@@ -738,7 +906,7 @@ function renderReview(r){
  if(r.plan?.proposed_target){const t=r.plan.proposed_target;html+=`<div class="target-preview"><h4>本次交给识别库的目标</h4><p>${esc(t.outcome||t.kind)}</p><p>评价对象：${esc((t.evaluation_population||t.node_order||[]).join('、'))}</p><p>背景／时期：${esc(t.context||'以原始研究说明为准')}</p><details><summary>核对完整目标与权重</summary><pre>${esc(JSON.stringify(t,null,2))}</pre></details></div>`;}
  for(const [name,sheet] of Object.entries(r.review_sheets||{})){
   const record=records[name]||{};
-  const title=labels[name]||(coverageInfo?.method_labels?.[name.split('.')[0]]||name.split('.')[0])+(name.endsWith('.science_review')?' · 科学条件':' · 目标和条件交接');
+  const title=labels[name]||(coverageInfo?.method_labels?.[name.replace(/\.(science_review|reading_review)$/,'')]||name.replace(/\.(science_review|reading_review)$/,''))+(name.endsWith('.science_review')?' · 科学条件':' · 目标和条件交接');
   html+=`<details class="review-sheet" open><summary>${esc(title)}</summary>`;
   if(sheet.correspondence)html+=`<pre>${esc(JSON.stringify(sheet.correspondence,null,2))}</pre>`;
   if(sheet.instruction)html+=`<p class="muted">${esc(sheet.instruction)}</p>`;
@@ -837,6 +1005,76 @@ function peerText(kind,state){
 }
 function expectation(own,peer,policy){const condition=policy!==undefined?`T = (${policy.join(', ')})`:`Tᵢ = ${own}, Sᵢ = ${peer}`;return `<mi mathvariant="double-struck">E</mi><mo>[</mo><msubsup><mi>Y</mi><mi>i</mi><mtext>obs</mtext></msubsup><mo>∣</mo>${mathText(condition+', W')}<mo>]</mo>`;}
 function numberMath(x){const s=String(x);return /^-?\d+\/\d+$/.test(s)?'<mfrac>'+s.split('/').map(v=>'<mn>'+esc(v)+'</mn>').join('')+'</mfrac>':mathText(s);}
+// Render executed coordinates, never infer a certified formula from model prose.
+// The factored form is used only when every pair has opposite exact coefficients
+// and the same two states. Otherwise display the actual term list without factoring.
+function linearArmMathHTML(terms){
+ if(!Array.isArray(terms)||!terms.length||terms.some(t=>!t.node_id||
+   !/^-?\d+(?:\/[1-9]\d*)?$/.test(String(t.coefficient))||
+   !Number.isInteger(t.own_treatment)||!Number.isInteger(t.exposure_state)))return '';
+ const nodes=[...new Set(terms.map(t=>t.node_id))];
+ const groups=nodes.map(node=>terms.filter(t=>t.node_id===node));
+ const equalState=(a,b)=>a.own_treatment===b.own_treatment&&a.exposure_state===b.exposure_state;
+ const pairs=groups.map(g=>({positive:g.find(t=>!String(t.coefficient).startsWith('-')),
+                           negative:g.find(t=>String(t.coefficient).startsWith('-')),length:g.length}));
+ const pairable=pairs.every(p=>p.length===2&&p.positive&&p.negative&&
+   String(p.negative.coefficient)==='-'+String(p.positive.coefficient))&&
+   pairs.every(p=>equalState(p.positive,pairs[0].positive)&&equalState(p.negative,pairs[0].negative));
+ const mu=(i,a,s)=>'<mrow><msub><mi>μ</mi>'+mathText(i)+'</msub><mo stretchy="false">(</mo>'+numberMath(a)+'<mo>,</mo>'+numberMath(s)+'<mo stretchy="false">)</mo></mrow>';
+ let body='<mi>τ</mi><mo>=</mo>';
+ if(pairable){
+  const p=pairs[0];
+  body+='<munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>V</mi></mrow></munder><msub><mi>w</mi><mi>i</mi></msub><mrow><mo>[</mo>'+mu('i',p.positive.own_treatment,p.positive.exposure_state)+'<mo>−</mo>'+mu('i',p.negative.own_treatment,p.negative.exposure_state)+'<mo>]</mo></mrow>';
+ }else{
+  body+=terms.map((t,j)=>{const c=String(t.coefficient),neg=c.startsWith('-'),abs=neg?c.slice(1):c;
+   return (neg?'<mo>−</mo>':j?'<mo>+</mo>':'')+(abs==='1'?'':numberMath(abs)+'<mo>·</mo>')+mu(nodes.indexOf(t.node_id)+1,t.own_treatment,t.exposure_state);
+  }).join('');
+ }
+ const weights=pairable?'<div class="formula-weight-list">'+nodes.map((n,i)=>'<span>'+esc(n)+'：<math><msub><mi>w</mi><mn>'+(i+1)+'</mn></msub><mo>=</mo>'+numberMath(pairs[i].positive.coefficient)+'</math></span>').join('')+'</div>':'<p>'+nodes.map((n,i)=>(i+1)+'：'+esc(n)).join('；')+'</p>';
+ return '<div class="formula native-linear-formula"><math display="block" aria-label="按已验证系数合成的局部效应"><mrow>'+body+'</mrow></math></div>'+
+  (nodes.length>8?'<details><summary>查看评价名单与权重</summary>'+weights+'</details>':weights)+
+  '<details class="formula-guide"><summary>符号含义</summary><p>τ 是本问的平均结果差；i 按所列名单顺序编号。'+(pairable?'V 是参与平均的对象，wᵢ 是评价权重。':'各项系数按识别库原式保留。')+'</p><div class="formula"><math display="block"><mrow>'+mu('i','a','s')+'<mo>=</mo>'+expectation('a','s')+'</mrow></math></div><p>μᵢ(a,s) 是本人状态为 a、同伴状态为 s 时的总体条件均值；Y 是结果，T 是本人处理状态，S 是同伴状态，W 是本次固定背景。其余安排按原分配规则在该情形下平均。</p></details>';
+}
+function localTargetFormulaHTML(part){
+ const n=part.native?.summary;if(!n)return '';
+ const rendered=linearArmMathHTML(n.constituent_arms);
+ const exposure={any:'S=1：至少一名相邻对象接受处理；S=0：没有相邻对象接受处理。',majority:'S=1：超过一半相邻对象接受处理；S=0：至多一半。',count:'S 是相邻对象中接受处理的人数。'}[part.proof?.exposure]||'';
+ const treatment=part.proof?.assignment?.variable;
+ return (rendered||'<pre class="formula">'+esc(n.identified_functional)+'</pre>')+
+  '<p class="muted">'+esc((treatment?'T 是“'+treatment+'”的0/1编码。':'')+exposure)+'</p>'+
+  '<details class="formula-origin"><summary>查看识别库原始公式</summary><pre>'+esc(n.identified_functional)+'</pre></details>';
+}
+function populationFormulaHTML(answer){
+ // A strict display tokenizer: preserve operators and parentheses, with no
+ // symbolic simplification or interpretation of arbitrary model prose/HTML.
+ const source=String(answer.functional||'');
+ const token=/^(\s+|E\[Y\s*\|\s*T=[01]\]|P\(Y=[01],T=[01]\)|(?:inf|∞)|\d+(?:\.\d+)?(?:\/[1-9]\d*)?|[+−\-()[\],])/;
+ function expression(text){let rest=text,body='';
+ while(rest){
+  const m=rest.match(token);if(!m)return null;
+  const s=m[0];rest=rest.slice(s.length);if(/^\s+$/.test(s))continue;
+  if(s.startsWith('E['))body+='<mi mathvariant="double-struck">E</mi><mo>[</mo><mi>Y</mi><mo>∣</mo><mi>T</mi><mo>=</mo><mn>'+s.match(/T=([01])/)[1]+'</mn><mo>]</mo>';
+  else if(s.startsWith('P(')){const v=s.match(/Y=([01]),T=([01])/);body+='<mi>P</mi><mo>(</mo><mi>Y</mi><mo>=</mo><mn>'+v[1]+'</mn><mo>,</mo><mi>T</mi><mo>=</mo><mn>'+v[2]+'</mn><mo>)</mo>';}
+  else if(s==='inf'||s==='∞')body+='<mi>∞</mi>';
+  else if(/^\d/.test(s))body+=numberMath(s);
+  else body+='<mo>'+esc(s==='-'?'−':s)+'</mo>';
+ }
+ return body;
+ }
+ const body=expression(source);
+ if(body===null)return '<pre class="formula">'+esc(source)+'</pre>';
+ if(!body)return '';
+ let content='<mrow><mi>τ</mi><mo>'+(answer.status==='POINT'?'=':'∈')+'</mo>'+body+'</mrow>';
+ if(answer.status!=='POINT'&&'[('.includes(source[0])&&'])'.includes(source.at(-1))){
+  const inner=source.slice(1,-1);let depth=0,split=-1;
+  for(let i=0;i<inner.length;i++){if('(['.includes(inner[i]))depth++;else if(')]'.includes(inner[i]))depth--;else if(inner[i]===','&&depth===0){split=i;break;}}
+  if(split>0){
+   const row=(name,value)=>'<mtr><mtd columnalign="right"><mi>'+name+'</mi><mo>=</mo></mtd><mtd columnalign="left"><mrow>'+expression(value)+'</mrow></mtd></mtr>';
+   content='<mrow><mi>τ</mi><mo>∈</mo><mo>'+source[0]+'</mo><mi>L</mi><mo>,</mo><mi>U</mi><mo>'+source.at(-1)+'</mo></mrow></math></div><div class="formula"><math display="block"><mtable rowspacing="0.7em">'+row('L',inner.slice(0,split))+row('U',inner.slice(split+1))+'</mtable>';
+  }
+ }
+ return '<div class="formula"><math display="block">'+content+'</math></div><p class="muted">τ 表示本次指定方向的平均结果差。</p><details class="formula-origin"><summary>查看识别库原始公式</summary><pre>'+esc(source)+'</pre></details>';
+}
 function dagSymbols(f){
  if(f.operation==='CLASSICAL_FRONTDOOR')return [
   {variable:f.free_values.intervention_value.variable,symbol:'X',value:'x',role:'处理'},

@@ -127,7 +127,11 @@
         "tests_gateway/test_observational_signature_entry.py",
         "tests_gateway/test_contrast_conditioning.py",
         "tests_gateway/test_local_total_effect.py",
-        "tests_gateway/test_iv_research_route.py"
+        "tests_gateway/test_iv_research_route.py",
+        "tests_gateway/test_policy_execution_contracts.py",
+        "tests_gateway/test_local_execution_contracts.py",
+        "tests_gateway/test_observational_execution_contracts.py",
+        "tests_gateway/test_remaining_execution_contracts.py"
       ]
     },
     {
@@ -152,7 +156,8 @@
         "tests_gateway/test_materials_runtime_boundary.py",
         "tests_gateway/test_runtime_relocation.py",
         "tests_gateway/test_legacy_network_runtime_boundary.py",
-        "tests_gateway/test_evidence_ownership.py"
+        "tests_gateway/test_evidence_ownership.py",
+        "tests_gateway/test_method_catalog.py"
       ]
     },
     {
@@ -195,7 +200,8 @@
         "tests_gateway/test_network_mean_order_dispatch.py::test_extension_is_source_reviewable_and_legacy_profiles_remain_strict",
         "tests_gateway/test_mean_order_field_contract.py::test_not_assumed_schema_parser_and_diagnostic_agree",
         "tests_gateway/test_observational_signature_entry.py::test_signature_zero_support_is_no_nonidentification_proof",
-        "tests_gateway/test_mean_order_ownership.py::test_request_schema_review_and_recheck_share_one_owner"
+        "tests_gateway/test_mean_order_ownership.py::test_request_schema_review_and_recheck_share_one_owner",
+        "tests_gateway/test_method_catalog.py::test_every_registered_method_and_native_entry_is_described"
       ]
     },
     "chain": {
@@ -241,7 +247,12 @@
         "tests_gateway/test_contrast_conditioning.py",
         "tests_gateway/test_shared_fact_definitions.py",
         "tests_gateway/test_local_total_effect.py",
-        "tests_gateway/test_iv_research_route.py"
+        "tests_gateway/test_iv_research_route.py",
+        "tests_gateway/test_method_catalog.py",
+        "tests_gateway/test_policy_execution_contracts.py",
+        "tests_gateway/test_local_execution_contracts.py",
+        "tests_gateway/test_observational_execution_contracts.py",
+        "tests_gateway/test_remaining_execution_contracts.py"
       ]
     }
   }

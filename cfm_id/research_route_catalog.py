@@ -12,13 +12,14 @@ def resolve(route_id):
 
 
 def inventory():
+    from .dedicated_entries import inventory as dedicated
     separate=[dict(**r,callable_here=False,automatic_fallback=False) for r in separate_entries()]
     return dict(version=VERSION,scope='Current explicit research adapters and selected maintained business lanes; not all historical backends.',
         input_level='EXPLICIT_MATHEMATICAL_PROBLEM',automatic_route_inference=False,
         implemented_routes=[r.describe() for r in registrations()],separate_entries=separate,
+        dedicated_entries=dedicated(),
         planned_routes=[
-            dict(route_id='DAG_SET_OR_CONDITIONAL_FRONTDOOR',status='NOT_IMPLEMENTED',callable_here=False),
-            dict(route_id='GENERAL_GRAPHICAL_ID',status='NO_REGISTERED_CONTRACT_IN_THIS_ENTRY',callable_here=False)],
+            dict(route_id='DAG_SET_OR_CONDITIONAL_FRONTDOOR',status='NOT_IMPLEMENTED',callable_here=False)],
         result_contract=dict(
             proved_states=['POINT','PARTIAL','INCOMPATIBLE'],
             stopping_states=['NEEDS_INPUT','REVIEW_REQUIRED','UNSUPPORTED','CHECK_BLOCKED'],
@@ -32,6 +33,10 @@ def inventory():
         default_core_modified=False,production_admission=False,estimation_handoff_allowed=False)
 
 def schemas(route_id):
+    from .dedicated_entries import resolve as resolve_dedicated
+    e=resolve_dedicated(route_id)
+    if e is not None:
+        return dict(route=dict(route_id=e.id,scope=e.scope),problem=e.problem_schema(),review=e.review_type.model_json_schema())
     r=resolve(route_id)
     return dict(route=r.describe(),problem=r.problem_type.model_json_schema(),review=r.review_type.model_json_schema())
 

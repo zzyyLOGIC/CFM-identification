@@ -1,9 +1,11 @@
 {
   "schema_version": "literature-support-route-1",
   "route_id": "MEAN_ORDER_D2_E1_RESEARCH",
-  "updated_on": "2026-10-24",
-  "development_status": "OPT_IN_SYNTHETIC_BUSINESS_BRIDGE_WITH_SINGLE_REVISED_LIVE_PASS_NOT_PRODUCTION",
-  "route_registered": false,
+  "updated_on": "2026-11-24",
+  "development_status": "REGISTERED_SYNTHETIC_RESEARCH_AND_BUSINESS_BRIDGE_NOT_PRODUCTION",
+  "native_route_ids": ["MEAN_ORDER_D2_E1"],
+  "route_registered": true,
+  "status_check_basis": "cfm_id.capability_registry.registrations and docs/NETWORK_MEAN_ORDER_ENTRY_ZH.md; status metadata only, not a new live-LLM acceptance claim.",
   "production_admission": false,
   "estimation_handoff_allowed": false,
   "theorem": {

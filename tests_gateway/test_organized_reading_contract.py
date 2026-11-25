@@ -92,7 +92,7 @@ def test_instruction_profile_retains_reviewed_condition_and_fact_instructions():
 @pytest.mark.parametrize('decision,expected',[('PENDING','REVIEW_REQUIRED'),('REJECTED','CHECK_BLOCKED'),('MISSING','CHECK_BLOCKED')])
 def test_native_condition_review_is_required_for_instruction_profile(decision,expected):
     s,e,o=setup();p=dispatch.inspect_methods(s,'q1',**o);a=approval_records(p)
-    decisions=a['native_reviews']['R3_FULL_ASSIGNMENT']['reading_review'].decisions
+    decisions=a['native_reviews']['network.observational.full_policy_mean']['reading_review'].decisions
     assert previous.MATCH_DECISION in decisions
     if decision=='MISSING':decisions.pop(previous.MATCH_DECISION)
     else:decisions[previous.MATCH_DECISION]=decision

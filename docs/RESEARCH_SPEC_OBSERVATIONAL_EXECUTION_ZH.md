@@ -2,6 +2,8 @@
 
 更新日期：2026-11-24。本阶段迁移观察性局部效应及固定政策均值的目标构造。没有改变数学 Core、科学条件、来源审核或 LLM 合同。[所有维护入口的状态](RESEARCH_SPEC_ENTRY_STATUS_ZH.md)另列，不把“已登记”“已迁移目标”“已支持自动读取”混为一谈。
 
+执行层现已接入共同方法绑定：`observational_methods` 同时供能力登记和实际调用使用，并核对局部方法与明确的平均方式／总体算子对应。计算与布尔重放共用 `native_outcome_execution`，各路线仍核对自己的科学输入、目标和原生类型。完整安排与签名路线的选择规则不变，不默认增加充分性或切换平均方式。详见[执行结构](EXECUTION_ARCHITECTURE_ZH.md)。
+
 ## 三种局部目标不能互相替代
 
 | 目标内部类型 | 什么保持固定 | 按什么平均 | 既有方法标识与必要科学条件 |
@@ -22,6 +24,7 @@
 - [research_spec_observational_adapters.py](../cfm_id/research_spec_observational_adapters.py) 读取已确定的旧字段，构造旧目标坐标、原生研究和查询。平均方式与可接受总体算子的对应只登记一次，由入口检查和构造共同使用。
 - [research_spec_coordinates.py](../cfm_id/research_spec_coordinates.py) 继续共用名单、定义、评价权重；`LocalState` 共用本人／同伴坐标；观察性目标不继承随机化的 `LocalQuestion`。
 - [network_extended_dispatch.py](../cfm_id/network_extended_dispatch.py) 接入三条局部效应路线；[network_observational_policy_dispatch.py](../cfm_id/network_observational_policy_dispatch.py) 接入完整名单法与条件均值标签法。
+- [observational_methods.py](../cfm_id/observational_methods.py) 统一上述方法的目标操作、平均方式和实际函数绑定；[native_outcome_execution.py](../cfm_id/native_outcome_execution.py) 复用原生业务结果的调用与证据不变性检查，不代替来源／科学审核。
 
 ```text
 研究定义：名单、处理、结果、时期／业务背景

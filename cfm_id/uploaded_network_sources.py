@@ -76,7 +76,7 @@ def matches_file_declarations(table, docs):
     return True
 
 
-def from_materials(case, network, *, extended=False, source_scope=False):
+def from_materials(case, network, *, extended=False, source_scope=False, evaluation_weights=None):
     q=case["business_question"]
     if (not re.search(contrast.ORIGINAL,q) or len(re.findall(r"[？?]",q))>1
             or re.search(r"第二问|另一问|反向再|两种设计|后者减前者|外推|另外还|还想(?:问|知道)|再比较|同时求|并(?:比较|报告|估计|计算)另一|降低量|减少量|低多少",q)):
@@ -107,7 +107,7 @@ def from_materials(case, network, *, extended=False, source_scope=False):
         return contrast.gap("请核准上传关系表的记录时期和完整性。")
     nodes=list(table.nodes)
     if len(nodes)>256:return None
-    if re.search(r"不等权|权重不(?:同|等)|按.{0,10}(?:人数|营收|销售额|规模)(?:比例)?加权",corpus):
+    if evaluation_weights is None and re.search(r"不等权|权重不(?:同|等)|按.{0,10}(?:人数|营收|销售额|规模)(?:比例)?加权",corpus):
         return contrast.gap("请核对评价名册及其权重。")
     group=contrast.group_from_source(q,lines,nodes,None,source_only=True)
     scope_evidence=[]
@@ -116,6 +116,14 @@ def from_materials(case, network, *, extended=False, source_scope=False):
         weights,scope_evidence=focal_reading(lines,nodes)
         if weights:
             group=list(weights)
+    if evaluation_weights is not None:
+        # Supplied only by the source-bound weight-table reader, never an LLM draft.
+        from fractions import Fraction
+        if (not evaluation_weights or not set(evaluation_weights)<=set(nodes)
+                or any(Fraction(w)<=0 for w in evaluation_weights.values())
+                or sum(map(Fraction,evaluation_weights.values()))!=1):
+            raise ValueError('INVALID_EXPLICIT_EVALUATION_WEIGHTS')
+        group=list(evaluation_weights)
     if not group:return contrast.gap("请说明评价的是名册中的哪些单位，以及各单位的权重。")
     design=[r for r in lines if r["source_id"]!="uploaded_network" and
             re.search(r"抽签|投币|概率|机会|分配变量|无放回|固定名额|处理变量",r["quote"])]
@@ -171,7 +179,7 @@ def from_materials(case, network, *, extended=False, source_scope=False):
         from .network_protocol_terms import population_queries
         catalog=population_queries(docs,group)
     bound=contrast.solve_materials(case,table,group,row,pair,rule,law,variable,target_labels,lines,docs,cited,
-                                   population_rows=catalog)
+                                   population_rows=catalog,unit_weights=evaluation_weights)
     if bound and "result" in bound:
         proof=bound["result"]["proof"]
         proof["binding_source"]="uploaded-materials/1"

@@ -4085,5 +4085,101 @@
     "reading_declarations": null,
     "unresolved": [],
     "additional_restrictions": []
+  },
+  "DAG_JOINT_ID": {
+    "version": "dag-joint-id-1",
+    "model": "RECURSIVE_SEMI_MARKOVIAN_DISCRETE",
+    "nodes": [
+      "A",
+      "B",
+      "Y"
+    ],
+    "directed": [
+      [
+        "A",
+        "Y"
+      ],
+      [
+        "B",
+        "Y"
+      ]
+    ],
+    "bidirected": [],
+    "treatments": [
+      "A",
+      "B"
+    ],
+    "outcome": [
+      "Y"
+    ],
+    "context": "本次完整随访人群",
+    "graph_status": "RESEARCHER_CONFIRMED",
+    "graph_source": "研究方案中明确列出的完整因果图",
+    "materials_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "information": "FULL_JOINT_POPULATION_LAW",
+    "information_variables": [
+      "A",
+      "B",
+      "Y"
+    ],
+    "strictly_positive_joint": true,
+    "unresolved": [],
+    "additional_restrictions": []
+  },
+  "FINITE_MEAN_JOINT": {
+    "version": "finite-mean-joint-1",
+    "model": "FINITE_MEANS_WITH_DECLARED_LINEAR_CONSTRAINTS",
+    "outcome_domain": "BINARY",
+    "context": "本次服务方案比较",
+    "target_description": "新方案平均完成率减去原方案平均完成率",
+    "target": {
+      "new": "1",
+      "old": "-1"
+    },
+    "target_offset": "0",
+    "coordinates": [
+      {
+        "id": "new",
+        "description": "新方案总体完成率",
+        "lower": "0",
+        "upper": "1",
+        "known": null,
+        "source_ids": [
+          "protocol"
+        ]
+      },
+      {
+        "id": "old",
+        "description": "原方案总体完成率",
+        "lower": "0",
+        "upper": "1",
+        "known": null,
+        "source_ids": [
+          "protocol"
+        ]
+      }
+    ],
+    "constraints": [
+      {
+        "id": "improvement_at_least_one_fifth",
+        "coefficients": {
+          "new": "1",
+          "old": "-1"
+        },
+        "relation": "GE",
+        "rhs": "1/5",
+        "adoption": "ADOPTED",
+        "source_ids": [
+          "protocol"
+        ]
+      }
+    ],
+    "sources": {
+      "protocol": "这是一道合成研究题，不是实际观测数据。新、原方案的总体完成率都在0到1之间，具体数值未知。本题明确假定新方案比原方案至少提高20个百分点；除范围和这条假定外，不采用其他限制。求这两个总体完成率之差的可能范围。"
+    },
+    "information": "POPULATION_MEANS",
+    "model_complete": true,
+    "unresolved": [],
+    "additional_restrictions": []
   }
 }

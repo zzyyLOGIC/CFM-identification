@@ -12,12 +12,13 @@ from .dag_backdoor_contract import BackdoorProblem,BackdoorReview
 from .dag_backdoor import prepare as math_prepare
 from .research_route_workflow import run_route
 from .research_route_adapters import DagBackdoorRoute
+from . import dag_methods
 
 READING_DECISIONS=('target_meaning','variable_measurements_and_roles','relations_and_omissions','source_entailment_and_scope')
-CLASSICAL_ROUTE='DAG_CLASSICAL_BACKDOOR'
-ADJUSTMENT_ROUTE='DAG_ADJUSTMENT'
-FRONTDOOR_ROUTE='DAG_CLASSICAL_FRONTDOOR'
-ROUTE_IDS=(CLASSICAL_ROUTE,ADJUSTMENT_ROUTE,FRONTDOOR_ROUTE)
+CLASSICAL_ROUTE=dag_methods.BACKDOOR
+ADJUSTMENT_ROUTE=dag_methods.ADJUSTMENT
+FRONTDOOR_ROUTE=dag_methods.FRONTDOOR
+ROUTE_IDS=dag_methods.METHOD_IDS
 FRONTDOOR_READING_DECISIONS=(*READING_DECISIONS,'requested_identification_roles')
 SCOPE_QUESTIONS={
  'static_acyclic':'本次研究是否采用固定的、无时间反馈的有向无环因果模型？',
@@ -54,19 +55,7 @@ def reading_contract(route_id):
 
 def route_contract(route_id):
     """Caller-selected route only; never infer a theorem from candidate wording."""
-    if route_id==CLASSICAL_ROUTE:
-        return BackdoorProblem,BackdoorReview,math_prepare,DagBackdoorRoute,'dag-backdoor-1'
-    if route_id==ADJUSTMENT_ROUTE:
-        from .dag_adjustment_contract import AdjustmentProblem,AdjustmentReview
-        from .dag_adjustment import prepare
-        from .dag_adjustment_adapter import DagAdjustmentRoute
-        return AdjustmentProblem,AdjustmentReview,prepare,DagAdjustmentRoute,'dag-adjustment-1'
-    if route_id==FRONTDOOR_ROUTE:
-        from .dag_frontdoor_contract import FrontdoorProblem,FrontdoorReview
-        from .dag_frontdoor import prepare
-        from .dag_frontdoor_adapter import DagFrontdoorRoute
-        return FrontdoorProblem,FrontdoorReview,prepare,DagFrontdoorRoute,'dag-frontdoor-1'
-    raise ValueError('EXPLICIT_SUPPORTED_DAG_ROUTE_REQUIRED')
+    return dag_methods.resolve(route_id).legacy_contract()
 
 
 def _project(bundle,wire,c,problem_type,version):

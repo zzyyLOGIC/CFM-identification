@@ -116,8 +116,8 @@ def _fixed_policy_business(family):
 
 def _r2_policy_outcome(design):
     s, entry, options, plan = reference.setup(design, 'E1', 'policy')
-    row = next(m for m in plan['methods'] if m['method'] == 'R2_MEAN_SIGNATURE')
-    records = reference.approval_records(plan)['native_reviews']['R2_MEAN_SIGNATURE']
+    row = next(m for m in plan['methods'] if m['method'] == 'network.randomized.signature_policy_mean')
+    records = reference.approval_records(plan)['native_reviews']['network.randomized.signature_policy_mean']
     study, target, sources, assumptions, signature, sufficiency = policy_dispatch._compile(
         plan, row, records, 'SYNTHETIC_TEST')
     inquiry = FixedPolicyInquiryV21(study=study, target=target, assumptions=assumptions,
@@ -139,8 +139,8 @@ def _r2_policy():
 def _r2_contrast():
     for design in ('D7', 'D8'):
         s, entry, options, plan = reference.setup(design, 'E1', 'contrast')
-        row = next(m for m in plan['methods'] if m['method'] == 'R2_ENDPOINT_DIFFERENCE')
-        records = reference.approval_records(plan)['native_reviews']['R2_ENDPOINT_DIFFERENCE']
+        row = next(m for m in plan['methods'] if m['method'] == 'network.randomized.signature_policy_contrast')
+        records = reference.approval_records(plan)['native_reviews']['network.randomized.signature_policy_contrast']
         inquiries, _ = contrast_dispatch._compile_pair(plan, row, records, 'SYNTHETIC_TEST')
         outcomes = {side: business.identify_network_business_query(inquiries[side])
                     for side in ('first', 'second')}

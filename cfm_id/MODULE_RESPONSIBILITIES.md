@@ -7,6 +7,9 @@
 | `project`、`configuration/reading.json` | 新应用与学生唯一推荐起点；复用底层会话 | 旧默认只保留兼容，配置不包含科学批准 |
 | `business_intake`、`business_field_review`、`business_dispatch`、`business_case` | 共同材料、意图审核、分派和整题结果 | 不求数学结论，不生成科学批准 |
 | `capability_registry` | 当前可调用函数、方法与接口配对 | 唯一可执行能力登记；不是定理或用户选项菜单 |
+| `policy_methods`、`local_methods`、`observational_methods`、`finite_policy_methods`、`dag_methods` | 供登记和实际执行共同使用的方法合同 | 目标操作与原生函数对应；不批准条件，不混用不同平均方式，不自动回退 |
+| `policy_execution`、`local_execution`、`native_outcome_execution`、`native_evidence` | 复用原生调用、输入／证据不变性核对及既有快照编码 | 保留各验证器、原有证书和审核摘要；不改数学公式 |
+| `research_route_workflow` | 图、IV 和均值顺序的既有类型化研究执行与核验 | 各适配器保留自己的合同、审核、结论类型和证据；不强行套用网络业务结果 |
 | `method_requirements`、`method_diagnostics`、`contrast_diagnostics`、`effect_diagnostics`、`observational_diagnostics` | 原生条件说明、当前审核缺项及已有执行证据的只读视图；专用模块适配有向政策差值、局部效应或R3观察性完整政策的证据形状 | 不审批、不求解、不签发证书；已接政策均值、两政策差值、局部直接/同伴效应、R3固定背景政策均值，复用原共同审核与执行权限 |
 | `network_policy_dispatch`、`network_contrast_dispatch`、`network_effect_dispatch`、`network_bounded_dispatch`、`network_mean_order_dispatch`、`network_observational_policy_dispatch`、`dag_method_dispatch` | 将来源明确且已审的业务编译成相应原生合同，并核对返回证据 | 保留每个方法的 A4/A5 与适用域；不复制数学求解器 |
 | `reading_*`、`fact_reading_revision`、`intake_reading_revision` | 读取一致性、完整变更审核、显式复查 | 不补答案、不替模型批准来源；Prompt 定义归 `cfm_id_llm` |

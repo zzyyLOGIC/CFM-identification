@@ -7,7 +7,7 @@ from copy import deepcopy
 from functools import partial
 from fractions import Fraction
 from typing import Literal,Annotated,Union
-from pydantic import Field, StrictInt, field_validator
+from pydantic import Field, StrictInt, field_validator, model_serializer
 from .network_policy_reading import (Record, Cited, Declaration, Study, Assignment,
     Exposure, FirstStageExclusion, Assumptions, Information, Note, documents, exact_number)
 from .network_effect_reading import LocalArm, EffectInformation
@@ -45,7 +45,12 @@ class MixtureTarget(Cited):
 class BaseReading(Record):
     reference_context: str = Field(pattern=r'^c[0-9a-f]{12}$')
     study: Study
-    additional_restrictions: list[Note]
+    additional_restrictions: list[Note] = Field(description=(
+        'Only genuine scientific restrictions not already represented by a named field. '
+        'For an assumption with its own field, adopted=true, explicitly not adopted=false, '
+        'and undecided/unstated=null all belong exclusively in that field with its original sources. '
+        'Do not repeat its refusal or pending status here as a new restriction. '
+        'Keep separate additional relations, restrictions and real source conflicts; never discard them to pass validation.'))
     unresolved: list[Note] = Field(description='Genuine unresolved input or interpretation only. A declared symbolic population law or mean need not have numerical values for an identification formula; absent numeric estimates alone are not an unresolved identification condition.')
 
 class ArmReading(BaseReading):
@@ -91,11 +96,21 @@ class ScopedDeclaration(Declaration):
     covered_nodes: list[str]
     scope: Literal['ALL_BINARY_ASSIGNMENTS','OTHER','UNKNOWN'] = Field(description='处理安排的适用范围，不是协变量范围。ALL_BINARY_ASSIGNMENTS表示声明覆盖所定义的全部本人与同伴处理状态/完整二元安排；按声明给定W、B或C_i不使这个范围变成OTHER。仅在历史安排或部分处理状态成立为OTHER；未说明范围为UNKNOWN。保留原文的条件变量，不能扩大为无条件独立。')
 
+class AnnotatedDeclaration(Declaration):
+    """Optional scope is retained and checked, never erased to broaden a claim."""
+    covered_nodes: list[str] | None = None
+    scope: Literal['ALL_BINARY_ASSIGNMENTS','OTHER','UNKNOWN'] | None = None
+
+    @model_serializer(mode='wrap')
+    def serialize(self, handler):
+        out=handler(self)
+        return {k:v for k,v in out.items() if k not in ('covered_nodes','scope') or v is not None}
+
 class ObservationalAssumptions(Record):
-    consistency: Declaration
-    fixed_pretreatment_network: Declaration
-    finite_conditional_first_moments: Declaration
-    full_vector_conditional_exchangeability: Declaration
+    consistency: AnnotatedDeclaration
+    fixed_pretreatment_network: AnnotatedDeclaration
+    finite_conditional_first_moments: AnnotatedDeclaration
+    full_vector_conditional_exchangeability: AnnotatedDeclaration
     potential_outcome_exposure_sufficiency: ScopedDeclaration = Field(description='Individual potential outcomes, not merely their means, depend only on own treatment and the specified exposure, on all binary assignments for covered_nodes. Exposure definition alone does not imply this.')
     exposure_level_conditional_exchangeability: ScopedDeclaration = Field(description='Exposure potential-outcome mean independence from (own treatment, exposure) given the shared pretreatment B and fixed W. A declaration conditioned only on object-specific C_i belongs to local_covariate_exposure_mean_exchangeability; do not duplicate it here or invent shared B.')
     local_covariate_exposure_mean_exchangeability: ScopedDeclaration = Field(description='Exposure potential-outcome mean independence from (own treatment, exposure) given C_i=(own X, all-neighbour positive-X count) and fixed W. Not exchangeability given the full X vector or shared B. Scope describes which treatment states the declaration covers, separately from conditioning on C_i.')
@@ -123,6 +138,13 @@ class ConditionalCell(Record):
     stratum: str | None = None
     own_feature: StrictInt | None = None
     neighbor_feature_count: StrictInt | None = None
+    source_ids: list[str] | None = None
+
+    @model_serializer(mode='wrap')
+    def serialize(self, handler):
+        out=handler(self)
+        if self.source_ids is None:out.pop('source_ids',None)
+        return out
 
 class ObservationalInformation(Cited):
     availability: Literal['SYMBOLIC_POPULATION_OPERATOR','FINITE_SAMPLE','UNKNOWN']
@@ -161,6 +183,13 @@ class OtherInformation(Cited):
     availability: Literal['FINITE_SAMPLE','SYMBOLIC_POPULATION_OPERATOR','UNKNOWN']
     outcome_nodes: list[str]
     description: str = Field(description='What is actually supplied or still unknown; no invented population model. OTHER information is retained and blocks this adapter.')
+    complete_law_and_mean_scope: Declaration | None = None
+    same_study_and_context: Declaration | None = None
+
+    @model_serializer(mode='wrap')
+    def serialize(self,handler):
+        out=handler(self)
+        return {k:v for k,v in out.items() if k not in ('complete_law_and_mean_scope','same_study_and_context') or v is not None}
 
 PopulationInformation=Annotated[Union[FiniteLaw,FactorizedLaw,MixtureLaw,StratifiedLaw,NodewiseLaw,OtherInformation],Field(discriminator='operator')]
 
@@ -181,6 +210,7 @@ class ArmCellWire(Record):
     node: str
     own: StrictInt
     exposure: StrictInt
+    source_ids: list[str] | None = Field(default=None,description='可选逐行引用；给出时必须来自本次来源目录并接受独立核对。未逐行引用时保留上层资料范围的引用。')
 
 class StratumCellWire(ArmCellWire):
     stratum: str
@@ -231,12 +261,21 @@ GUIDANCE={
  MIX:'本题问随机政策的平均结果。target.components逐个记录未来完整处理方案和选择该方案的概率，不是过去试点的分配律。政策分布完整性另读；不能将随机政策换成固定政策、把权重重新归一化或补未提及对象。',
  OBS:'本题是观察性网络的局部效应。target保留第一端减第二端、共同评价范围和averaging的真实含义。OBSERVED_ALLOCATION_CONDITIONAL是在固定W下按实际采用规律对剩余安排平均，不是跨背景平均。另两种averaging问的是暴露潜在结果经过共同B或各自C_i调整后的平均效应，需要分别读取更强的个体暴露充分性与条件均值交换性，不能由暴露定义或其他交换性声明推出。信息中的factorized是观察分布的因子分解，不是随机实验许可。',
 }
+OBSERVATIONAL_OPERATOR_SEMANTICS='''观察性信息字段的数学含义（读取和来源复核共用）：
+FINITE_ASSIGNMENT_LAW：固定背景W下列全实际完整使用名单的正概率质量；各被说明对象的条件均值覆盖这些行。
+FACTORIZED_ARM_LAW：固定W下实际使用联合律是各站Bernoulli分布的乘积，probabilities是该乘积的参数；不只是若干边际比例。
+MIXTURE_ARM_LAW：固定W下完整使用联合律是所列乘积分布的有限混合，mixture_components保留每项质量和各站概率。
+STRATIFIED_ARM_LAW：每个处理前分层B及固定W内，完整使用联合律按站因子分解；strata中的probabilities是每层乘积参数，mass是层的总体质量；covered_cells指分层内本人/同伴状态下的结果均值。
+NODEWISE_ARM_LAW：每个完整处理前X配置及固定W内，使用联合律按站因子分解；profiles保留X的总体质量和各配置内乘积参数。结果均值按局部C_i而非整个X索引。
+NODEWISE_MIXTURE_ARM_LAW：每个完整X配置及固定W内，使用联合律是所列乘积分布的有限混合；结果均值仍按局部C_i索引。
+原文必须支持这些联合律含义，不能从边际比例擅自推导。上述operator和参数已经表达的联合分布/因子分解不再另填additional_restrictions；该字段只容纳合同尚未表达的额外科学限制。复核应按这些定义理解字段，不能要求模型为同一语义再加一条限制。'''
+DECLARATION_STATUS_GUIDANCE='''区分研究采用态度与逻辑推导说明：“本次明确不采用此条件”才是false；“不能由定义推出/不据此假定”只否认推导依据，不等于声明条件为假或本次拒绝采用。如没有另行采用或拒绝声明，value=null。后续明确采用可以解决原先未决定，但不能覆盖明确矛盾。此规则对读取和来源复核相同。'''
 SYSTEM='''读取所选业务目标与原始材料，只返回符合Schema的JSON，不选择数学定理、不判断识别、不批准假设。
 每个有source_ids的对象，其引用须共同支持全部语义字段；只用本次source_catalog的s编号，照抄reference_context。上游定位和模型回答不是证据。
 研究单位的关系网络不是变量DAG；study保留完整对象/边、处理编码、结果及时期。固定背景与调整变量不同；明确的条件不能删掉。
 Declaration.value=true仅指明确采用或拟采用；明确不采用为false，未声明或未决定为null。作用域和采用态度独立。已有专门字段完整表达的内容不重复到additional_restrictions；真正未表达的约束必须保留。unresolved保留未表达的缺项和冲突，不填写助手职责说明。
 information逐来源记录范围。有限记录、样本频率和拟合概率只能是FINITE_SAMPLE，不升级为总体律。总体算子可为符号，不要求编造均值数值。概率和质量用精确有理数字符串；只有原文明确完整时才声明完整，不能补零或重新归一化。表行、覆盖范围和定义均需原文依据。
-未用的列表为空、对象或数值为null，未知类别用UNKNOWN；不为了适配填默认值。'''
+未用的列表为空、对象或数值为null，未知类别用UNKNOWN；不为了适配填默认值。'''+ '\n'+DECLARATION_STATUS_GUIDANCE
 
 def reference_catalog(bundle, *, binding, family):
     return catalog(bundle,documents(bundle),binding=binding,version=MODELS[family].model_fields['version'].annotation.__args__[0])
@@ -247,6 +286,7 @@ def make_request(bundle, *, binding, family):
     result=request_for_model(bundle,refs,ObservationalReadingWire if family==OBS else MODELS[family])
     result['system']=SYSTEM+'\n'+GUIDANCE[family]+'\n'+EXPOSURE_GUIDANCE
     if family!=OBS:result['system']+='\n'+ASSIGNMENT_GUIDANCE+'\n'+STAGE_GUIDANCE
+    else:result['system']+='\n'+OBSERVATIONAL_OPERATOR_SEMANTICS
     return result
 
 def parse(bundle, raw, *, binding, family):
@@ -259,6 +299,17 @@ def parse(bundle, raw, *, binding, family):
     if len({frozenset(e) for e in c.study.edges})!=len(c.study.edges):raise ValueError('DUPLICATE_NETWORK_EDGE')
     if c.target.population is not None and (len(set(c.target.population))!=len(c.target.population) or not set(c.target.population)<=set(nodes)):
         raise ValueError('INVALID_TARGET_POPULATION')
+    if family==OBS:
+        for name,d in c.assumptions:
+            if not isinstance(d,AnnotatedDeclaration):continue
+            if d.covered_nodes is not None:
+                if len(set(d.covered_nodes))!=len(d.covered_nodes) or not set(d.covered_nodes)<=set(nodes):
+                    raise ValueError('INVALID_DECLARATION_NODE_SCOPE:'+name)
+                needed=nodes if name=='fixed_pretreatment_network' else c.target.population
+                if d.value is True and (needed is None or not set(needed)<=set(d.covered_nodes)):
+                    raise ValueError('DECLARATION_DOES_NOT_COVER_TARGET:'+name)
+            if d.value is True and d.scope not in (None,'ALL_BINARY_ASSIGNMENTS'):
+                raise ValueError('RESTRICTED_DECLARATION_SCOPE_NOT_CONNECTED:'+name)
     for s in c.information:
         if len(set(s.outcome_nodes))!=len(s.outcome_nodes) or not set(s.outcome_nodes)<=set(nodes):raise ValueError('INVALID_INFORMATION_ROSTER')
         if (s.operator=='FINITE_SAMPLE')!=(s.availability=='FINITE_SAMPLE'):raise ValueError('SAMPLE_POPULATION_PAIR_MISMATCH')

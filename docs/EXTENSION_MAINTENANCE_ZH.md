@@ -4,7 +4,7 @@
 
 研究规格按六项整理的职责、旧字段对应和分阶段兼容要求见[字段对应表](RESEARCH_SPEC_FIELD_MAPPING_ZH.md)。这份说明尚未更换运行 Schema；维护现有入口仍以实际合同为准。
 
-内部属性和 D/E 模板、字段、原生别名及设计构造入口统一维护在 `cfm_id.research_spec_catalog`。`network_design_reading`、`network_design_adapter` 和六项内部模型都消费该登记，不再分别复制设计表。`research_spec_model` 负责属性和源字段引用，`research_spec_adapters` 负责旧记录格式；新增显示适配不能自动登记数学能力。R 标识仍由现有方法/能力登记承担执行职责。
+内部属性和 D/E 模板、字段、原生别名及设计构造入口统一维护在 `cfm_id.research_spec_catalog`。`network_design_reading`、`network_design_adapter` 和六项内部模型都消费该登记，不再分别复制设计表。`research_spec_model` 负责属性和源字段引用，`research_spec_adapters` 负责旧记录格式；新增显示适配不能自动登记数学能力。方法使用可读标识；基础方法／操作／实现见 `method_definitions`，旧原生编号集中在 `method_compat` 兼容边界。参见[方法标识](METHOD_IDENTITIES_ZH.md)。
 
 ## 当前应用入口与兼容入口
 

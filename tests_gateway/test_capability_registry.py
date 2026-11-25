@@ -55,10 +55,10 @@ def test_session_registry_matches_existing_handlers_and_frozen_acceptance_invent
 
 
 @pytest.mark.parametrize('kind,method,state', [
-    ('r1b','R1B_FULL_ASSIGNMENT','POINT'), ('r2','R2_MEAN_SIGNATURE','POINT'),
+    ('r1b','network.randomized.full_policy_mean','POINT'), ('r2','network.randomized.signature_policy_mean','POINT'),
     ('bounded_point','BOUNDED_POLICY_MEAN_D2_E1','POINT'),
     ('bounded_partial','BOUNDED_POLICY_MEAN_D2_E1','PARTIAL'),
-    ('contrast_point','R1B_ENDPOINT_DIFFERENCE','POINT'),
+    ('contrast_point','network.randomized.full_policy_contrast','POINT'),
     ('contrast_partial','BOUNDED_POLICY_CONTRAST_D2_E1','PARTIAL'),
     ('contrast_cancellation','BOUNDED_POLICY_CONTRAST_D2_E1','POINT')])
 def test_registered_network_plans_execute_existing_certificates(kind,method,state):
@@ -137,7 +137,7 @@ def test_wrong_plan_is_rejected_before_decoder_or_execution(monkeypatch,mutation
     broken = deepcopy(p)
     if mutation=='unknown_family': broken['fact_family'] = 'INVENTED_READER'
     elif mutation=='missing_network_family': broken.pop('fact_family')
-    elif mutation=='cross_family_method': broken['methods'][0]['method'] = 'R1B_ENDPOINT_DIFFERENCE'
+    elif mutation=='cross_family_method': broken['methods'][0]['method'] = 'network.randomized.full_policy_contrast'
     elif mutation=='duplicate_method': broken['methods'].append(deepcopy(broken['methods'][0]))
     elif mutation=='empty_methods': broken['methods'] = []
     with pytest.raises(registry.RegistryError): dispatch.native_reviews_from_json(broken,{})

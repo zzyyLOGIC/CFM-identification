@@ -42,7 +42,7 @@ LABELS = {
     observational.SIGNATURE_SCIENCE_DECISIONS[0]: '全部评价对象在所有完整二元安排下的条件均值签名充分性',
     MATCH_DECISION: '事实阶段的固定背景与已审核业务目标一致，须独立核对原文',
     SCOPE_DECISION: '目标条件仅为处理前固定研究背景W，不包含额外子群筛选、处理后条件或跨背景平均',
-    policy.R2_SCIENCE_DECISIONS[0]: '覆盖目标对象、所有完整安排的均值签名充分性',
+    policy.SIGNATURE_SCIENCE_DECISIONS[0]: '覆盖目标对象、所有完整安排的均值签名充分性',
     bounded.MODEL_DECISIONS[0]: '精确 A4 数值及总体信息范围完整',
     bounded.MODEL_DECISIONS[1]: '科学界限的类型、单位、范围及全体模型对象',
     bounded.MODEL_DECISIONS[2]: '没有额外耦合限制',
@@ -73,34 +73,34 @@ def condition_label(key):
 def catalog(family=FAMILY):
     """Describe registered routes; these templates do not generate approvals."""
     definitions = {
-        observational.SIGNATURE_METHOD: ('固定背景下的观察性均值签名 R3',
+        observational.SIGNATURE_METHOD: ('固定背景下的观察性均值签名',
             (*observational.READING_DECISIONS, *observational.SIGNATURE_READING_DECISIONS,
              *observational.BASE_CONDITIONS, *observational.SIGNATURE_SCIENCE_DECISIONS,
              'a4_population_operator', *observational.A4_DECLARATIONS),
-            '逐评价对象的目标签名正支持、同一固定W下的A4覆盖和独立证书重放',
+            '逐评价对象的目标签名正支持、同一固定W下的A4覆盖和原生证书重放',
             '沿用有限观察性总体表，另审对所有完整二元安排的条件均值充分性。'
             'E1–E5逐题检查适用域；不从暴露定义或总体概率推出充分性、交换性。'),
-        observational.METHOD: ('固定背景下的观察性完整政策均值 R3',
+        observational.METHOD: ('固定背景下的观察性完整政策均值',
             (*observational.READING_DECISIONS, *observational.BASE_CONDITIONS,
              'a4_population_operator', *observational.A4_DECLARATIONS),
             '固定W下完整政策的联合正支持、同一A4覆盖及原生证书重放',
             '当前有限观察性完整安排入口；保留完整政策、评价名单及等权平均。'
             '交换性须独立审核；不是随机化，不以逐对象边际支持替代联合支持。'
             '不跨W平均，不自动改用均值签名或PARTIAL。'),
-        policy.R1B: ('完整政策识别 R1b', policy.BASE_CONDITIONS,
+        policy.FULL_POLICY: ('完整政策识别', policy.BASE_CONDITIONS,
                      '完整政策正支持及该方法所需 A4 覆盖',
                      '固定完整政策均值；不要求均值签名充分性。'),
-        policy.R2: ('均值签名识别 R2', (*policy.BASE_CONDITIONS, *policy.R2_SCIENCE_DECISIONS),
+        policy.SIGNATURE_POLICY: ('均值签名识别', (*policy.BASE_CONDITIONS, *policy.SIGNATURE_SCIENCE_DECISIONS),
                     '评价对象的目标签名正支持及对应 A4 覆盖',
                     '不要求完整政策本身正支持；须另行审核暴露定义、充分性和覆盖范围。'),
         bounded.METHOD: ('有限有界均值模型', (*policy.BASE_CONDITIONS, *bounded.MODEL_DECISIONS),
                          '原生有限模型适用域、可行性及界限证书',
                          '当前 D2/E1 有限完整模型；可能返回 POINT 或 PARTIAL，sharp 相对于该模型。'),
-        contrast.POINT_METHOD: ('两完整政策之差 R1b', (*contrast.PAIR_DECISIONS, *policy.BASE_CONDITIONS),
+        contrast.POINT_METHOD: ('两完整政策之差', (*contrast.PAIR_DECISIONS, *policy.BASE_CONDITIONS),
                                '两端完整政策的支持与 A4；两个端点重放及有向差值组合重放',
                                '同一研究、评价名单和等权平均，第一政策减第二政策；单端成功不识别差值。'),
-        contrast.R2_METHOD: ('两政策均值签名之差 R2',
-                            (*contrast.PAIR_DECISIONS, *policy.BASE_CONDITIONS, *policy.R2_SCIENCE_DECISIONS),
+        contrast.SIGNATURE_METHOD: ('两政策均值签名之差',
+                            (*contrast.PAIR_DECISIONS, *policy.BASE_CONDITIONS, *policy.SIGNATURE_SCIENCE_DECISIONS),
                             '两端目标签名的支持与 A4；两个端点重放及有向差值组合重放',
                             '共同暴露、均值充分性、科学模型和评价范围；不拼接不同方法的单端证明。'),
         contrast.BOUNDED_METHOD: ('有限共同模型中的联合差值界限',
@@ -111,7 +111,7 @@ def catalog(family=FAMILY):
                         (*contrast.PAIR_DECISIONS, *policy.BASE_CONDITIONS, *orders.model_decisions([])),
                         '在同一有限模型中直接求差值；独立重放可达端点、最优性或不可行证书',
                         '现有 D2/E1、至多12个对象；逐对象本人/同伴均值非减或明确不假定。sharp仅相对于审核后的完整模型。'),
-        effects.METHOD: ('原设计条件平均的局部直接／同伴效应 R1a',
+        effects.METHOD: ('原设计条件平均的局部直接／同伴效应',
                          (*effects.READING_DECISIONS, *effects.SCIENCE_DECISIONS),
                          '全部非零局部状态的原设计正支持、同一A4来源覆盖和有向组合证书重放',
                          '直接效应改变自身处理、同伴状态不变；同伴效应改变同伴状态、自身处理不变。'
@@ -121,14 +121,20 @@ def catalog(family=FAMILY):
     rows = []
     if family not in DIAGNOSTIC_SCOPES:
         return rows
+    from .method_catalog import catalog as method_catalog
+    descriptions = {row['method_id']: row for row in method_catalog()['methods']}
     for method in capabilities.business_binding(family).methods:
         definition = definitions.get(method.method_id)
-        label, keys, math, scope = definition or (method.method_id, (), '尚未提供诊断元数据', '查看原生合同')
+        description = descriptions[method.method_id]
+        label, keys, math, scope = definition or (
+            description['label'], (), description['computable_conditions'], description['implementation_limits'])
         rows.append(dict(method=method.method_id, label=label, native_route_ids=list(method.native_route_ids),
             template_documented=definition is not None, scope=scope,
             review_topics=[dict(key=k,label=condition_label(k)) for k in keys],
             a4_requirement='仅使用当前原生计划明确选入的总体信息；不能把样本提升为总体信息。',
-            mathematical_check=math, certificate_requirement='原生证书与已审输入一致并独立重放',
+            mathematical_check=math,
+            certificate_requirement=descriptions[method.method_id]['verification']['label'] + '：' +
+                descriptions[method.method_id]['verification']['detail'],
             template_is_approval=False))
     return rows
 
@@ -185,7 +191,7 @@ REASONS = {
     'NO_REVIEWABLE_POLICY_METHOD':
         ('INSPECT_ENDPOINT_DECLARATIONS', '保留各端原生排除原因，核对总体信息及科学声明，不把未进入计划说成非识别证明。'),
     'TWO_R1B_ENDPOINTS_NOT_IDENTIFIED':
-        ('INSPECT_BOTH_ENDPOINT_RESULTS', 'R1b尚未得到两个可组合的端点结果；单端成功不能报告差值成功。'),
+        ('INSPECT_BOTH_ENDPOINT_RESULTS', '完整政策方法尚未得到两个可组合的端点结果；单端成功不能报告差值成功。'),
     'TWO_R2_ENDPOINTS_NOT_IDENTIFIED':
         ('INSPECT_BOTH_ENDPOINT_RESULTS', 'R2尚未得到两个可组合的端点结果；不自动切换到PARTIAL。'),
     'NETWORK_EFFECT_FACTS_INCOMPLETE':

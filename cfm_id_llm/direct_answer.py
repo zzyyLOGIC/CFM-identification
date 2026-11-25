@@ -22,4 +22,11 @@ def network_request(case, *, network_focus=False):
     result = request(case)
     if network_focus or network_case(case):
         result["system_prompt"] = ANSWER_RULES + NETWORK_FACTS
+    result['system_prompt'] += '\n每份答案另含verification_route，作为待读原文核对的候选提示：DAG_JOINT表示一个问题同时设定多个变量的干预分布；NETWORK_JOINT_MEANS表示网络固定政策均值或差值带有均值等式/线性不等式或均值顺序（包括不采用或待定的关系）；NETWORK_FINITE_POLICY表示随机试验背景下按给定概率选择有限份完整政策、求其平均结果；NETWORK_OBSERVATIONAL_POLICY表示观察性网络中求一份完整政策的平均结果；随机化网络的局部事件效应或其他目标为OTHER。按原问选择，不按能否识别选择。此提示不是科学批准。'
+    result['system_prompt'] += '\n观察性网络的局部直接、同伴或局部总效应另用NETWORK_OBSERVATIONAL_EFFECTS，保留原观察规律平均、共同背景分层平均或逐对象特征调整平均的区别；不要改成完整政策目标。'
+    result['system_prompt'] += '\n原问保留未知总体参数、要求给出参数变化时的上下界，并明确有限均值模型及线性限制时，用SYMBOLIC_MEAN_JOINT；不可把符号参数随意代成数字。原文尚未明确模型完整性仍保留未知，提示不批准模型。'
+    result['system_prompt'] += '\nNETWORK_FINITE_POLICY也包括两套有限随机政策的均值之差；NETWORK_OBSERVATIONAL_POLICY也包括两份固定政策之差或有限份政策混合，必须原样保留两端，不将效应改成政策水平。'
+    result['system_prompt'] += '\n随机试验中只有一份固定完整政策或两份固定政策之差，若资料是完整安排总体律/均值，或本人和同伴状态的总体均值，可提示NETWORK_FINITE_POLICY。均值充分性不等于额外的均值等式或顺序；明确有限均值范围模型及额外联合限制仍提示NETWORK_JOINT_MEANS。未知保持原样，由后续原文核对分派。'
+    result['system_prompt'] += '\nBINARY_IV表示用二元工具（如邀请或资格）、实际处理和二元结果的总体条件概率研究总体ATE或依从者LATE。不可把邀请的ITT改写成实际处理效应；提示仅用于另读原文，不批准排除限制、单调性等前提。'
+    result['system_prompt'] += '\nDAG_GENERAL表示变量因果图中一个处理的干预分布，包括图中明确列出的未观测共同原因；不限制为后门或前门，也不因可能不可识别而换目标。它只选择原文读取，数学库另查适用条件并给公式或见证。'
     return result

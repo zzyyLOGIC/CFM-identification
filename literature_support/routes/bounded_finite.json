@@ -17,7 +17,9 @@
       "role": "Identification/partial identification context; precise finite box assumptions and attainment proof are local."
     }
   ],
-  "scope": "Known D1-D6 randomization, E1-E5 all-arrangement mean sufficiency, complete exact means, node bounds, no additional coupling. <=12 nodes; synthetic reviewed entry. D2/E1 and D2/E4 protocol versions remain compatible.",
+  "scope": "Known D1-D8 randomization, E1-E5 all-arrangement mean sufficiency, declared numeric or symbolic population means, node bounds, no additional coupling. D1-D6 <=12 nodes; D7/D8 <=8 nodes; synthetic reviewed entry. Numeric and symbolic contracts are separate, not arbitrary mixed inputs. D6 separately requires first-stage exclusion. D2/E1 and D2/E4 protocol versions remain compatible.",
+  "scope_checked_on": "2026-11-24",
+  "scope_check_basis": "cfm_id/bounded_finite_contract.py and docs/FINITE_MEAN_BOX_MATH_ZH.md; implementation-scope correction, not an extension of the cited literature theorem.",
   "schema_version": "literature-support-route-1",
   "runtime_coverage_authority": "cfm_id.capability_registry.inventory",
   "literature_scope": {

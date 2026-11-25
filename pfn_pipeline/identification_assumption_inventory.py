@@ -1,4 +1,4 @@
-"""Read-only finite catalog of *implemented* network POINT theorem requirements.
+"""Read-only condition metadata; the v27 API retains its eight-route scope.
 
 NOT a catalog of all scientifically possible assumptions, and NOT a source of
 causal licences.  Never use this metadata to bypass a theorem's native checks.
@@ -21,7 +21,7 @@ _OBSERVATIONAL = (
 _D6 = 'first_stage_profile_no_direct_outcome_effect'
 _SIGNATURE = 'mean_signature_sufficiency'
 
-# Only keys recognized by the deployed formal business-route dispatcher.
+# Frozen v27 compatibility keys, not a complete inventory of current methods.
 _ROUTES = {
     'R1A_RANDOMIZED_ARM': (
         'q_standardized_node_arm', _EXPERIMENT, 'positive_joint_arm_support',
@@ -50,7 +50,7 @@ _ROUTES = {
     'R3_P_STANDARDIZED_EFFECTS': (
         'pobs_standardized_arm_linear_contrasts', _OBSERVATIONAL,
         'positive_pobs_arm_support_for_each_nonzero_term',
-        'Either: exact finite p_obs plus assignment-node population means; or a separately ADMITTED exact nodewise-factorized observational p_obs plus typed population arm means (v2.7 P1).'),
+        'Exact finite p_obs, or a separately admitted factorized/finite-mixture observational law, with the matching typed population mean operators.'),
 }
 
 @dataclass(frozen=True)
@@ -64,7 +64,7 @@ class ImplementedAssumptionV27:
 _ASSUMPTIONS = (
     ImplementedAssumptionV27('known_assignment_law','A4_DESIGN',
         'Exact joint experimental treatment law q(T|W) is specified.',
-        'Randomized experiments D1-D6 only; legacy also records an admission.',
+        'Implemented randomized-design routes; the concrete design/probability adapter determines support. Legacy also records an admission.',
         'Exact protocol syntax and probabilities checkable; real adherence not automatically verifiable.'),
     ImplementedAssumptionV27('full_vector_randomization','A5',
         'The full realized randomized allocation is conditionally independent of all potential outcomes.',
@@ -84,7 +84,7 @@ _ASSUMPTIONS = (
         'Declared integrability, not universally testable from finite samples.'),
     ImplementedAssumptionV27('mean_signature_sufficiency','A5_STRUCTURAL',
         'For each covered node, E[Y_i(t)|W] is constant across full allocations with equal (t_i,g_i(t,W)).',
-        'R2 policy and R3-Signature policy only; signature/node/study bindings required.',
+        'R2, R3-Signature and finite-network mean-based PARTIAL contracts; signature/node/study bindings required.',
         'Typed licence and provenance checks; cannot prove the structural restriction empirically.'),
     ImplementedAssumptionV27('full_vector_conditional_exchangeability','A5_OBSERVATIONAL',
         'Given W, observational allocation is independent of the full potential-outcome vector.',
@@ -102,15 +102,23 @@ def implemented_assumption_catalog_v27() -> dict:
     return {
         'contract': 'CFM-ID-IMPLEMENTED-ASSUMPTIONS-v2.7-P0',
         'universal_finite_catalog': False,
-        'scope': 'Implemented, fixed-network, single-time binary-treatment POINT routes only',
+        'scope': 'The eight v27 fixed-network POINT routes; not all current identification methods',
         'assumptions': [asdict(a) for a in _ASSUMPTIONS],
         'route_ids': list(_ROUTES),
+        'additional_condition_sources': {
+            'legacy_ate': 'legacy_ate_condition_catalog',
+            'observational_exposure_adjustment': 'pfn_pipeline.identification_observational_exposure_adjustment',
+            'observational_nodewise_adjustment': 'pfn_pipeline.identification_observational_nodewise_adjustment',
+            'network_partial': 'cfm_id.bounded_policy_contract / bounded_finite_contract / mean_order_contract',
+            'dag': 'cfm_id.dag_backdoor_contract / dag_id_contract',
+            'iv': 'cfm_id.iv_route_contract',
+        },
         'warning': 'Admitted/provenance/verified software does NOT certify scientific truth.',
     }
 
 
 def requirements_for_route_v27(route: str, *, design_kind: str | None = None) -> dict:
-    """Describe necessary route premises, NEVER assert they are satisfied."""
+    """Describe this route's premises, not globally necessary ID conditions."""
     if route not in _ROUTES:
         raise ValueError(f'Unknown implemented theorem route: {route!r}')
     target, base, support, information = _ROUTES[route]
@@ -131,4 +139,54 @@ def requirements_for_route_v27(route: str, *, design_kind: str | None = None) ->
     }
 
 
-__all__ = ['implemented_assumption_catalog_v27', 'requirements_for_route_v27']
+def legacy_ate_condition_catalog() -> dict:
+    """Describe the legacy contracts without granting admission or a proof."""
+    return {
+        'contract': 'CFM-ID-LEGACY-ATE-CONDITIONS-1',
+        'scientific_validity_certified_by_software': False,
+        'formula_changed': False,
+        'mean_existence': {
+            'required': 'The means used in the returned formula exist and are finite.',
+            'automatic_basis': 'Validated finite numeric outcome support.',
+            'otherwise': 'Explicitly admitted finite_conditional_first_moments with nonblank evidence.',
+            'one_sided_bound_is_not_sufficient': True,
+            'source_is_real_world_proof': False,
+        },
+        'rules': {
+            'RANDOMIZED_ATE_V3': {
+                'required_names': ['random_assignment', 'consistency', 'positivity', 'no_interference'],
+                'support': '0 < assignment_probability < 1',
+                'information': 'experimental population P(T,Y)',
+                'mean_existence_required': True,
+            },
+            'ONE_ARM_ATE_BOUNDS_V2 / ONE_ARM_NO_OUTCOME_RESTRICTION_V2': {
+                'required_names': ['random_assignment', 'consistency', 'no_interference'],
+                'support': 'assignment_probability is 0 or 1',
+                'information': 'experimental population P(T,Y)',
+                'mean_existence_required': True,
+                'closed_model_required': True,
+            },
+            'MANSKI_BINARY_ATE_V2': {
+                'required_names': ['consistency', 'no_interference'],
+                'domain': 'Both binary values 0 and 1 remain allowed for T and Y.',
+                'information': 'observational population P(T,Y) only; duplicate equivalent declarations allowed',
+                'mean_existence_basis': 'finite binary domain',
+                'closed_model_required': True,
+            },
+        },
+        'closed_model': {
+            'unhandled_adopted_or_pending_assumptions': 'BLOCK',
+            'explicitly_not_admitted_extra_assumptions': 'NOT_PART_OF_MODEL',
+            'contradicted_or_inconsistent_records': 'BLOCK',
+            'unhandled_graph_information_or_support_restrictions': 'BLOCK',
+            'redundant_finite_moment_declaration': 'ALLOWED',
+            'failure_is_nonidentification_proof': False,
+        },
+        'checks': {
+            'producer': 'pfn_pipeline._internal.identification.legacy_ate_contract',
+            'replay': 'pfn_pipeline._internal.identification.verifier.IdentificationVerifier',
+        },
+    }
+
+
+__all__ = ['implemented_assumption_catalog_v27', 'requirements_for_route_v27', 'legacy_ate_condition_catalog']

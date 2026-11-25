@@ -15,6 +15,15 @@ def _typed(cls,value):
     return cls.model_validate(value.model_dump())
 
 def run_registered_route(route_id,problem,*,review=None,research_protocol_selected=False):
+    from . import dedicated_entries
+    if dedicated_entries.resolve(route_id) is not None:
+        try:
+            result=dedicated_entries.run(route_id,problem,review if research_protocol_selected is True else None)
+        except (ValueError,TypeError,KeyError,AttributeError):
+            result=_blocked(route_id,'INVALID_ROUTE_PROBLEM_OR_REVIEW')
+            from .entry_diagnostics import summarize
+            result['entry_diagnostics']=summarize(result,operation=route_id)
+        return dict(result,route_id=route_id,input_level='EXPLICIT_MATHEMATICAL_PROBLEM',business_reading_checked=False)
     try:registration=resolve(route_id)
     except ValueError:
         known=type(route_id) is str and any(route_id in [r['entry_id'],*r['route_ids']] for r in separate_entries())
@@ -33,5 +42,7 @@ def run_registered_route(route_id,problem,*,review=None,research_protocol_select
             result=run_route(registration.adapter_type(),p,review=r,
                 research_protocol_selected=research_protocol_selected)
     result.update(input_level='EXPLICIT_MATHEMATICAL_PROBLEM',business_reading_checked=False)
+    from .entry_diagnostics import summarize
+    result['entry_diagnostics']=summarize(result,operation=route_id)
     return result
 

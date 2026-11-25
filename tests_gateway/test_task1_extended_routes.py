@@ -67,7 +67,7 @@ def test_extended_arm_route_accepts_wg(design, kind):
     plan = dispatch.inspect_methods(s, 'q1', **opts)
     result = _execute(s, opts, plan)
     assert result['state'] == 'POINT'
-    assert result['primary_method'] == 'R1A_RANDOMIZED_ARM'
+    assert result['primary_method'] == 'network.randomized.local_mean'
 
 
 def test_extended_finite_policy_route_on_d7():
@@ -79,7 +79,7 @@ def test_extended_finite_policy_route_on_d7():
     plan = dispatch.inspect_methods(s, 'q1', **opts)
     result = _execute(s, opts, plan)
     assert result['state'] == 'POINT'
-    assert result['primary_method'] == 'R1B_FINITE_POLICY'
+    assert result['primary_method'] == 'network.randomized.finite_policy_mean'
 
 
 def test_extended_finite_policy_route_on_d8_reports_off_support_and_accepts_balanced_atoms():

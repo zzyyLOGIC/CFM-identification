@@ -37,9 +37,9 @@ def test_valid_coordinates_and_real_but_insufficient_citations_require_rejection
     elif field=='population':raw['target']['source_ids']=intro
     else:raw['study']['source_ids']=intro
     p=dispatch.inspect_methods(s,'q1',**o);assert p['state']=='REVIEW_REQUIRED'
-    a=approval_records(p);r=a['native_reviews']['R1A_COMPOSITION']['reading_review'].model_dump(mode='json')
+    a=approval_records(p);r=a['native_reviews']['network.randomized.local_contrast']['reading_review'].model_dump(mode='json')
     r['decisions']['source_entailment']='REJECTED';r['evidence']='Explicit synthetic audit rejects local references: an introduction does not specify the requested comparison, population/aggregation or shared background.'
-    a['native_reviews']['R1A_COMPOSITION']['reading_review']=dispatch.DispatchReview.model_validate(r)
+    a['native_reviews']['network.randomized.local_contrast']['reading_review']=dispatch.DispatchReview.model_validate(r)
     before=deepcopy(raw)
     monkeypatch.setattr(effects,'_compile',lambda *a,**kw:pytest.fail('Rejected source review must not reach math'))
     result=dispatch.execute(s,'q1',**o,**a)

@@ -82,7 +82,11 @@ def test_citation_alone_does_not_assert_semantics():
 
 def test_legacy_no_fields_and_nonnetwork():
     c={"business_question":"单个价格政策的销售额水平？","sources":[]}
-    assert network_request(c)==request(c)
+    base, current = request(c), network_request(c)
+    assert current["user_prompt"] == base["user_prompt"]
+    assert current["system_prompt"].startswith(base["system_prompt"])
+    assert "verification_route" in current["system_prompt"]
+    assert "network_facts" not in current["system_prompt"]
     r=verify(CASE,RAW)
     assert r["network_reading"]["origin"]=="source_only" and replay(CASE,RAW,r)
     v6=verify(CASE,RAW,version="direct-verification/6")
@@ -107,7 +111,11 @@ def test_explicit_network_selects_fact_contract_without_keyword_or_approval(monk
     assert not r["scientific_approval"] and not r["estimation_handoff_allowed"]
     calls.clear()
     project.direct_then_verify(c,send)
-    assert calls[0][0]==request(c)
+    assert len(calls) == 1 and calls[0][1] == "direct_draft"
+    assert calls[0][0] == network_request(c)
+    assert calls[0][0]["user_prompt"] == request(c)["user_prompt"]
+    assert "network_facts" not in calls[0][0]["system_prompt"]
+    assert received[-1] == (c, raw, {"network": None, "network_focus": False})
 
 
 def test_wrapped_fact_sheet_and_notation_do_not_change_signed_source_draft():
