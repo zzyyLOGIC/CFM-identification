@@ -1,10 +1,13 @@
 # 同一研究的多个局部问题
 
 只读原文和附件，按给定 JSON 合同输出；不解题、不参考模型原答补资料，不批准科学前提。
+本轮 evidence 只填 source_catalog 中实际给出的 source_id#L 片段编号，不输出 quote；程序会附回完整原句。网络长边表和名单不要再抄成引文。可以同时引用多段，不得自造编号、扩大范围或用引用替代实际事实字段。
 输出直接是 Reading 对象，顶层为 family、study、network、design、exposure、targets、information、conditions、remaining、material_notes；不要把答案包在 reading_feedback_not_evidence 或 output_schema 里。前五项各含 value 和 evidence，分别保存字段值和原文引用。targets 和 information 是带引用对象的数组；每个数组元素的外层只能有 value、evidence 两项。每问的 question、kind、first、second、population、weights、fixed_before_assignment、remaining_assignment、same_outcome_and_context 全部放在该元素的 value 中，不能直接放在数组元素外层。evidence 不可省略，按 Citation 合同引用原文。conditions、remaining、material_notes 则按各自 schema 直接填写，不额外套 value。这里仅说明结构，实际内容必须来自原文。
 共用研究对象、完整关系网、抽签设计、暴露定义、结果定义和时期只写一次。targets 按原问顺序完整保留，可以是一问，不要求编号。不同结果、时期、实验或固定政策问题不能硬改成同一局部目标；相应目标用 OTHER，并保留原问。
+按source_descriptions区分初始材料和用户后续回答。初始材料说“没有说明”，用户随后明确回答了同一问题，是补齐原来的未知，不是两项已知事实冲突；字段按实际补充填写并引用回答。不能因为保留了历史缺项句就继续填null。后续回答只解决其实际覆盖的信息，不能改目标、权重或其他条件；若与先前明确事实冲突、范围不符或只是猜测，仍须保留冲突或未知。
 
 design保留整份名单怎样抽出的规则。“每家有一半机会”“各家分别抽签”只给各家的机会，不证明各家相互独立；本轮恰好开了几家也不证明固定名额。原文明确独立抽签才可填独立伯努利；只给边际概率而未交代联合规则时，design.value留null并保留原句，后续只追问实际抽签方式。完整名单与潜在结果独立属于科学前提，不能当作各对象间独立抽签的依据。
+design.value 表示可以交给计算的完整联合规则，不是部分事实清单。若只给各组名额和组内规则，却未说明组间抽签的关系，保持 null，并在 design.evidence 保留已知事实的原文。这种表示本身不算漏读；复核应指出真正缺少的联合规则并作必要追问，不能一边禁止补造独立性、一边要求填入假定组间独立的完整 Design。反之，原文已经明确给出完整联合规则却仍填 null，才是应当自动重读的遗漏。
 
 每问分别记录：评价名单 population、名单内精确权重 weights、第一端 first、第二端 second。MEAN没有第二端，CONTRAST为第一端减第二端。自己使用/不使用、同伴人数/比例状态不能互换。这里比较原设计下的本人和同伴状态，其余安排在原设计相应条件下平均；不是固定全网名单，也不自动要求暴露充分性。
 
@@ -17,6 +20,8 @@ design保留整份名单怎样抽出的规则。“每家有一半机会”“�
 information记录原材料真实提供的所有来源和覆盖，不随问题倒填格子。NODE_ARM_MEANS需要逐对象/本人/同伴格子；NODE_FULL_LAW是每个Y_i与完整T的总体律，FULL_JOINT_LAW才是全部Y与完整T联合。样本和样本均值必须FINITE_SAMPLE，不能因记录多而改为总体。总体信息可为符号，无需编造数值。same_scope是同一对象、结果、时期和背景，不是询问是否已能识别。来源覆盖可以少于目标，交原库检查。
 
 conditions分别保存 randomization（完整分配与潜在结果独立）、consistency、fixed_network、finite_means；两阶段设计另存 first_stage_exclusion。每条有原文采用态度、适用范围及引用。covered_nodes只列原文明确适用的对象，all_assignments只在明确覆盖完整安排范围时为true，未知null；不能按目标名单补齐。只给抽签概率不是randomization科学许可；不要漏掉原文另行声明。ADOPTED采用，NOT_ADOPTED不采用，UNDECIDED待决定，UNKNOWN未说明，CONTRADICTED冲突。共同条件只在原文确实覆盖全部所问对象和安排时记录为共同采用，局部采用须完整保留范围，不扩大。
+
+各条件所需的范围不同，不要求用户把所有条件都扩大到每一种反事实安排。原文说明“观察结果对应实际完整安排”，用 consistency.local_scope=OBSERVED_CONSISTENCY；说明网络处理前确定且本期固定，用 fixed_network.local_scope=FIXED_PRETREATMENT_NETWORK。原文明确本问各端的总体条件均值存在且有限，用 finite_means.local_scope=TARGET_EVENT_MEANS，并在 target_indices 列出原文实际覆盖的问题下标（从0开始）。这三种范围均保留原文适用的 covered_nodes，all_assignments 无明确全安排声明时仍为 null，不为通过而填 true。均值只覆盖一端、部分对象、另一时期或没有覆盖某问时不能把该问列入 target_indices；不能仅因问题想比较两端就推定两端有限。randomization 和 first_stage_exclusion 不能使用这些局部范围替代其原有完整安排前提。局部范围字段同样须引用原文并由后台逐项复核，不是用户确认或数学许可。
 
 remaining保留专用字段尚不能表达的其他科学条件（包括采用、拒绝和待定）。不把“允许干扰”、数据说明、未知权重重复变成额外假设；明确的均值顺序、无干扰或个体单调性则不能丢。UNKNOWN字段会触发必要追问，不补条件。每项引用给定source_id#L片段；可省略quote，由程序附回原句。追问后的回答只解决它实际回答的内容，不改变其他问题、方向或权重。
 

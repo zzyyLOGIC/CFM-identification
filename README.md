@@ -50,6 +50,8 @@ python demo/serve.py
 
 近期接入与回归记录见[发布验收](docs/RELEASE_ACCEPTANCE_ZH.md)。[早期模型比较](docs/SHARED_DEFINITION_ACCEPTANCE_ZH.md)只描述当时的冻结材料和版本，不代表当前框架或所有能力的准确率。
 
+页面或公共 API 更换时应保留同一份候选、来源和读取合同，详见[网页复核交接](docs/WEB_REVIEW_HANDOFF_ZH.md)。模型原答的显示不构成识别批准；后台仍检查实际条件及证书。
+
 ## 安装，运行三个完整示例
 
 Python 3.11 或更新版本。在本目录执行：

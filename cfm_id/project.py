@@ -23,6 +23,25 @@ def start(case):
     return business_intake.start_configured(case, reading_config())
 
 
+def _proposes_object_network(draft):
+    """A structured draft can request source inspection, never establish facts.
+
+    Missing assignment rules often yield an OTHER hint even when the draft
+    retained the object roster and peer comparison. Inspect the original
+    materials with the network scope reader before trying a no-interference
+    ATE reader. All claims still require its independent source check.
+    """
+    facts=draft.get('network_facts') if isinstance(draft,dict) else None
+    if not isinstance(facts,dict):return False
+    def value(key):
+        claim=facts.get(key)
+        return claim.get('value') if isinstance(claim,dict) else None
+    network=value('network')
+    return (isinstance(network,dict) and isinstance(network.get('nodes'),list)
+            and bool(network['nodes']) and any(
+                isinstance(value(k),dict) and bool(value(k)) for k in ('exposure','contrast')))
+
+
 def direct_then_verify(case, call, *, network=None, network_focus=False, population_ate=False, clarification_handoff=None):
     """Preserve the draft; optionally source-audit plain ATE before native dispatch."""
     from cfm_id_llm.schemas import BusinessCase
@@ -58,7 +77,8 @@ def direct_then_verify(case, call, *, network=None, network_focus=False, populat
             # Keep the stopped attempt; a new reader must recover and audit
             # every premise from the unchanged sources, never discard extras.
             symbolic_fallback=prepared
-        if symbolic_fallback is not None or hints.intersection(network_readers) or report.get('local_targets') or (network is not None and not hints.difference({'OTHER'})):
+        if (symbolic_fallback is not None or hints.intersection(network_readers) or report.get('local_targets')
+                or ((network is not None or _proposes_object_network(draft)) and not hints.difference({'OTHER'}))):
             # A draft can solve a different target and hint at the wrong reader.
             # Independently read scope attributes before exposing its gaps.
             scope=None;feedback=None;route_attempts=[]
@@ -73,7 +93,8 @@ def direct_then_verify(case, call, *, network=None, network_focus=False, populat
             selected=network_source_route.select(scope) if scope else None
             if (selected is None and scope and not report.get('independent_replay')
                     and (report.get('clarification_questions') or any(
-                        c.get('code')=='ANSWER_CONTRACT' and c.get('state')=='CONFLICT'
+                        (c.get('code')=='ANSWER_CONTRACT' and c.get('state')=='CONFLICT')
+                        or (c.get('code')=='UNCONFIRMED_MODEL_GAP' and c.get('state')=='UNCHECKED')
                         for c in report.get('checks',[])))
                     and scope['single_question']['value'] is True
                     and scope['target']['value']=='LOCAL_CONTRAST'
@@ -145,6 +166,16 @@ def direct_then_verify(case, call, *, network=None, network_focus=False, populat
                         'network_source_route_recovery')
                     new_scope=network_source_route.check(case,raw,clarification_handoff)
                     new_selected=network_source_route.select(new_scope)
+                    if (new_selected is None and selected=='NETWORK_LOCAL_BUNDLE'
+                            and new_scope['single_question']['value'] is True
+                            and new_scope['target']['value']=='LOCAL_CONTRAST'
+                            and new_scope['assignment']['value']=='RANDOMIZED'
+                            and not report.get('independent_replay')):
+                        # Correcting UNKNOWN to randomized can select the
+                        # ordinary direct path (represented by None). Retain
+                        # the full local reader already checking this same
+                        # target, with the corrected scope and a fresh audit.
+                        new_selected='NETWORK_LOCAL_BUNDLE'
                     recovery.update(rechecked_scope=new_scope,rechecked_reader=new_selected)
                     # Corrected attributes can still select the same reader
                     # (one subgroup question was mistaken for multiple ones).

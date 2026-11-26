@@ -56,6 +56,50 @@ def test_unknown_assignment_uses_gap_capable_reader_without_assuming_randomizati
     assert route.select(scope) is None
 
 
+@pytest.mark.parametrize('hint',[None,'OTHER'])
+def test_structured_network_without_upload_inspects_sources_before_plain_ate(monkeypatch,hint):
+    from cfm_id import local_bundle_entry, population_ate_entry
+    case=dict(case_id='missing-design',business_question='Compare peer states; roster in the notes.',sources=[])
+    draft=dict(network_facts=dict(
+        network=dict(value=dict(nodes=['A','B'],edges=[['A','B']]),evidence=[]),
+        contrast=dict(value=dict(left=[0,1],right=[0,0]),evidence=[])),
+        answers=[dict(verification_route=hint,target=dict(quantity='difference'))])
+    before=deepcopy(draft);seen=[]
+    monkeypatch.setattr('cfm_id.direct_verification.verify',lambda *a,**k:dict(draft=draft))
+    monkeypatch.setattr(population_ate_entry,'prepare',lambda *a,**k:pytest.fail('network was routed to plain ATE'))
+    def prepare(original,report,call):
+        assert original==case and report['draft']==before
+        seen.append('fresh_source_reader')
+        return dict(report,joint_entry=dict(state='NEEDS_INPUT',reason_code='ASSIGNMENT_UNKNOWN'),
+                    backend_called=False,scientific_approval=False,estimation_handoff_allowed=False)
+    monkeypatch.setattr(local_bundle_entry,'prepare',prepare)
+    def call(request,stage):
+        if stage=='direct_draft':return draft
+        assert stage=='network_source_route'
+        import json
+        assert 'draft' not in json.loads(request['user_prompt'])
+        return source_scope(case,assignment='UNKNOWN')
+    out=project.direct_then_verify(case,call,population_ate=True)
+    assert seen==['fresh_source_reader'] and draft==before
+    assert out['joint_entry']['reason_code']=='ASSIGNMENT_UNKNOWN'
+    assert not out['backend_called'] and not out['scientific_approval']
+    assert not out['estimation_handoff_allowed']
+
+
+@pytest.mark.parametrize('network_facts',[None,{},dict(network=dict(value=None)),
+    dict(network=dict(value=dict(nodes=['A','B'])),contrast=dict(value=None))])
+def test_absent_network_claim_does_not_divert_plain_ate(monkeypatch,network_facts):
+    from cfm_id import population_ate_entry
+    case=dict(case_id='plain',business_question='One treatment contrast.',sources=[])
+    draft=dict(network_facts=network_facts,answers=[dict(verification_route='OTHER',target=dict(quantity='difference'))])
+    monkeypatch.setattr('cfm_id.direct_verification.verify',lambda *a,**k:dict(draft=draft))
+    monkeypatch.setattr(population_ate_entry,'prepare',lambda c,r,call:dict(r,plain_reader_reached=True))
+    def call(request,stage):
+        assert stage=='direct_draft'
+        return draft
+    assert project.direct_then_verify(case,call,population_ate=True)['plain_reader_reached']
+
+
 @pytest.mark.parametrize('hint',['NETWORK_JOINT_MEANS','NETWORK_FINITE_POLICY','NETWORK_OBSERVATIONAL_POLICY',None,'OTHER'])
 def test_wrong_hint_is_overridden_by_original_scope(monkeypatch,hint):
     case=dict(case_id='test',business_question='Self-selected treatment; compare local peer states.',sources=[])
@@ -94,14 +138,15 @@ def test_finite_model_without_extra_relations_is_still_routable():
     assert route.select(s)=='NETWORK_JOINT_MEANS'
 
 
-@pytest.mark.parametrize('draft_problem', ['gap', 'answer_contract'])
+@pytest.mark.parametrize('draft_problem', ['gap', 'answer_contract', 'unconfirmed_model_gap'])
 def test_draft_gap_in_known_randomized_local_study_is_checked_by_source_reader(monkeypatch,draft_problem):
     from cfm_id import local_bundle_entry
     case=dict(case_id='test',business_question='The actual group draw is described in the reply.',sources=[])
     draft=dict(verification_route='NETWORK_JOINT_MEANS')
     report=dict(draft=draft,decision='WITHHELD',clarification_questions=['How was the assignment generated?']
         if draft_problem=='gap' else [],checks=[dict(code='ANSWER_CONTRACT',state='CONFLICT')]
-        if draft_problem=='answer_contract' else [])
+        if draft_problem=='answer_contract' else [dict(code='UNCONFIRMED_MODEL_GAP',state='UNCHECKED')]
+        if draft_problem=='unconfirmed_model_gap' else [])
     monkeypatch.setattr('cfm_id.direct_verification.verify',lambda *a,**k:deepcopy(report))
     seen=[]
     def prepare(original, retained, call):
@@ -175,3 +220,28 @@ def test_same_reader_scope_correction_gets_fresh_audit_once(monkeypatch,correcte
     assert out['joint_entry']['state']==('REVIEW_REQUIRED' if corrected else 'READING_RECHECK_REQUIRED')
     assert out['reader_selection']['reader']=='NETWORK_LOCAL_BUNDLE'
     assert not out.get('backend_called') and not out.get('estimation_handoff_allowed')
+
+
+def test_corrected_randomized_scope_keeps_source_reader_for_actual_missing_rule(monkeypatch):
+    import json
+    from cfm_id import local_bundle_entry
+    case=dict(case_id='scope-randomized',business_question='Original local comparison; draw rule not supplied.',sources=[])
+    draft=dict(verification_route='NETWORK_LOCAL_BUNDLE');seen=[]
+    monkeypatch.setattr('cfm_id.direct_verification.verify',lambda *a,**k:dict(draft=draft,checks=[]))
+    rejected=dict(state='READING_RECHECK_REQUIRED',attempts=[dict(audit=dict(findings=[dict(
+        field='coverage',verdict='READING_ERROR',reason='Random assignment is explicit, its joint rule is missing.')]))])
+    def prepare(original,report,call):
+        assert original==case
+        call(dict(system_prompt='audit',user_prompt=json.dumps(dict(fields={'coverage':{}}))),'joint_source_audit')
+        return dict(report,joint_entry=deepcopy(rejected) if len(seen)==1 else dict(state='NEEDS_INPUT'))
+    monkeypatch.setattr(local_bundle_entry,'prepare',prepare)
+    def call(req,stage):
+        if stage=='direct_draft':return draft
+        if stage.startswith('network_source_route'):
+            return source_scope(case,assignment='RANDOMIZED' if stage.endswith('recovery') else 'UNKNOWN')
+        seen.append(json.loads(req['user_prompt'])['reader_scope_to_verify']['assignment']['value'])
+    result=project.direct_then_verify(case,call,population_ate=True)
+    assert seen==['UNKNOWN','RANDOMIZED']
+    assert result['joint_entry']['state']=='NEEDS_INPUT' and result['draft']==draft
+    assert result['reader_selection']['reader']=='NETWORK_LOCAL_BUNDLE'
+    assert not result.get('backend_called') and not result.get('estimation_handoff_allowed')

@@ -12,7 +12,10 @@ from . import information_scope_audit
 class Study(Strict):
     treatment: str
     outcome: str = Field(description='原文中的结果含义、单位、编码及已给出的好坏方向；不因方向更有利就倒置目标两端。')
-    outcome_kind: Literal['binary','continuous','count','unknown']
+    outcome_kind: Literal['binary','continuous','count','unknown'] = Field(description=
+        'binary为明确0/1结果，count为次数。continuous沿用原生合同名称，表示按原数值尺度处理的实值结果，'
+        '也可包含数值评分；不声明概率分布有密度或无离散取值。结果含义、单位和已知编码必须在outcome保留，'
+        '不能把无数值定义的类别自行编码。数值尺度也未说明时填unknown。此字段不提供均值存在许可。')
     period: str
     fixed_background: str
     regime: Literal['EXPERIMENTAL','OBSERVATIONAL','UNKNOWN']

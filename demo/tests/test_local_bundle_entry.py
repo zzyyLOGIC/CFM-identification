@@ -85,6 +85,59 @@ def test_assumption_scope_not_expanded_and_rejection_saved(tmp_path):
     assert r['review_record']==review
 
 
+def scoped_local_conditions(s):
+    kinds={'consistency':'OBSERVED_CONSISTENCY', 'fixed_network':'FIXED_PRETREATMENT_NETWORK',
+           'finite_means':'TARGET_EVENT_MEANS'}
+    for c in s['conditions']:
+        if c['code'] in kinds:
+            c.update(all_assignments=None,local_scope=kinds[c['code']],
+                     target_indices=list(range(len(s['targets']))) if c['code']=='finite_means' else None)
+
+
+def test_method_specific_scopes_keep_native_targets_and_formulas(tmp_path):
+    c,d,table,s=fixture(tmp_path)
+    old=entry.complete(c,planned(c,d,s,table),approved(planned(c,d,s,table)))
+    scoped_local_conditions(s)
+    p=planned(c,d,s,table);r=entry.complete(c,p,approved(p))
+    assert r['joint_entry']['state']=='BUNDLE_COMPLETE' and flow.replay(c,d,r)
+    for a,b in zip(old['joint_entry']['parts'],r['joint_entry']['parts']):
+        assert a['target']==b['target']
+        assert a['summary']['identified_functional']==b['summary']['identified_functional']
+        assert a['summary']['constituent_arms']==b['summary']['constituent_arms']
+    # Parsed source scopes remain explicit; admission never rewrites them to
+    # universal conditions to obtain the unchanged native formula.
+    assert all(x['all_assignments'] is None for x in r['joint_entry']['reading']['conditions']
+               if x['code']!='randomization')
+
+
+@pytest.mark.parametrize('problem',['other_target','missing_nodes','refusal','randomization_unknown'])
+def test_local_scope_does_not_supply_missing_or_declined_premises(tmp_path,problem):
+    c,d,table,s=fixture(tmp_path);scoped_local_conditions(s)
+    mean=next(x for x in s['conditions'] if x['code']=='finite_means')
+    if problem=='other_target':mean['target_indices']=[0]
+    elif problem=='missing_nodes':mean['covered_nodes']=[table.nodes[0]]
+    elif problem=='refusal':mean['status']='NOT_ADOPTED'
+    else:s['conditions'][0]['all_assignments']=None
+    p=planned(c,d,s,table)
+    parts=p['joint_entry']['parts']
+    if problem=='other_target':
+        r=entry.complete(c,p,approved(p))
+        assert [v['state'] for v in r['joint_entry']['parts']]==['POINT','UNSUPPORTED']
+        assert flow.replay(c,d,r)
+    else:
+        assert any(v['state']!='READY' for v in parts)
+        assert not p.get('proof') and not p.get('backend_called')
+
+
+@pytest.mark.parametrize('scope,indices',[
+    ('FIXED_PRETREATMENT_NETWORK',[0]),('TARGET_EVENT_MEANS',[-1]),
+    ('TARGET_EVENT_MEANS',[9]),('TARGET_EVENT_MEANS',[0,0])])
+def test_wrong_condition_scope_or_target_binding_is_rejected(tmp_path,scope,indices):
+    c,d,table,s=fixture(tmp_path)
+    s['conditions'][-1].update(local_scope=scope,target_indices=indices)
+    with pytest.raises(ValueError,match='LOCAL_CONDITION_'):reader.inspect(c,s)
+
+
 def test_network_and_extra_constraints_preserved(tmp_path):
     c,d,table,s=fixture(tmp_path);s['network']['value']['edges'].pop()
     with pytest.raises(ValueError,match='NETWORK_DIFFERS'):planned(c,d,s,table)
@@ -207,10 +260,14 @@ def test_native_design_constructors_are_reused(tmp_path,kind):
     assert task.estimand=='NETWORK_RANDOMIZED_ARM_MEAN'
 
 
-def test_missing_scope_and_partial_information_are_not_approved(tmp_path):
-    c,d,table,s=fixture(tmp_path);s['conditions'][0]['all_assignments']=None
+@pytest.mark.parametrize('condition',['randomization','consistency','fixed_network','finite_means'])
+def test_missing_scope_and_partial_information_are_not_approved(tmp_path,condition):
+    c,d,table,s=fixture(tmp_path)
+    next(x for x in s['conditions'] if x['code']==condition)['all_assignments']=None
     p=planned(c,d,s,table)
     assert p['joint_entry']['state']=='NEEDS_INPUT' and not p.get('condition_review')
+    assert all('local_scope' not in x and 'target_indices' not in x
+               for x in p['joint_entry']['reading']['conditions'])
     c,d,table,s=fixture(tmp_path)
     s['information'][0]['value']['outcome_nodes']=list(table.nodes[:2])
     p=planned(c,d,s,table);r=entry.complete(c,p,approved(p))

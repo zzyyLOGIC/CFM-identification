@@ -7,7 +7,10 @@ import json
 from importlib.resources import files
 from typing import Literal,Generic,TypeVar,Annotated
 from pydantic import Field, TypeAdapter
-from .population_ate_reading import Strict, SourceAudit, sources as original_sources, check_citations
+from .population_ate_reading import (
+    Strict, SourceAudit as PopulationSourceAudit, AuditFinding as PopulationAuditFinding,
+    sources as original_sources,
+)
 from .compact_study import digest
 from pfn_pipeline._internal.identification.schemas import (
     CompleteRandomizationDesignV1, HeterogeneousBernoulliDesignV1,
@@ -27,6 +30,14 @@ T=TypeVar('T')
 class Citation(Strict):
     source_id: str
     quote: str | None = Field(default=None,description='推荐只填写 #L 原文片段编号，quote省略或null，由程序附回原句。若引用完整文档编号，则必须给连续的逐字原文。')
+
+
+class AuditFinding(PopulationAuditFinding):
+    evidence: list[Citation]
+
+
+class SourceAudit(PopulationSourceAudit):
+    findings: list[AuditFinding]
 
 
 class Claim(Strict,Generic[T]):
@@ -49,7 +60,7 @@ class MaterialNote(Strict):
 
 class CoreCondition(Condition):
     code: Literal['graph_complete','recursive_scm','perfect_intervention','strict_positivity',
-        'randomization','consistency','fixed_network','mean_sufficiency','finite_mean_model_complete','first_stage_exclusion','no_between_unit_interference']
+        'randomization','consistency','fixed_network','mean_sufficiency','finite_mean_model_complete','first_stage_exclusion','no_between_unit_interference','finite_first_moments']
 
 
 class DagTarget(Strict):
@@ -206,7 +217,10 @@ family=NETWORK_JOINT_MEANS：网络固定政策均值或两个固定政策均值
 DAG条件恰好记录graph_complete（直接关系及未观测共同原因完整）、recursive_scm（无环结构模型/独立外生噪声及所列潜在共同原因）、perfect_intervention（同时设定指定变量，其余机制不变）、strict_positivity（所有观测变量联合取值的总体概率严格为正）。没说用UNKNOWN。显式未观测共同原因记bidirected；不能从相关猜因果；有限样本不升级为总体联合律。有限记录保留kind=FINITE_SAMPLE、sample_size，并按原文填写jointly_observed：全部变量在同一批记录中共同测量为true；只有独立边际汇总或不同对象的记录为false；未明确为null。没有取得总体概率的精确数字，不等于不能讨论以观测联合分布为参数的符号公式；勿为得到公式伪造总体信息或正性。
 单变量一般ID还要记录no_between_unit_interference：不同研究对象之间没有相互影响，未说明用UNKNOWN；变量因果图本身不能证明这项条件。单变量和多变量都要保留图中的全部观测变量，未观测共同原因用bidirected表示，不可并入已知观测联合分布。用户指定调整集时仍保留为额外要求，不能偷偷交一般ID改用别的公式。
 graph.variable_definitions按原文记录各变量含义、编码与离散值域；只填写已给内容，不把二元定义或0/1编码写为remaining科学限制。一个处理可对应多个结果的联合分布，保留完整outcome集合；单处理的共同样本也不因此变成额外限制。
+区分混杂背景与额外数学限制：解释处理选择和结果为何有关、为何不能直接比较两组的定性研究背景，在原文明列因果边后可保留于material_notes的STUDY_CONTEXT，不据此新建ADOPTED限制。图边不表达效应正负，也不能从“更容易/更好”等观察关联自行推出逐人潜在结果单调性或干预均值顺序。若原文独立声明本次采用某个均值顺序、逐人单调性、概率等式/不等式、效应符号或数值限制，仍须完整保留为科学限制；不能因为涉及同一组变量就说图已覆盖。
 网络条件恰好记录randomization（完整随机安排独立于全部潜在结果）、consistency（实际结果对应实际完整安排）、fixed_network（处理前固定网络）、mean_sufficiency（每个对象在所有完整安排下的均值只取决于自身处理及所定义的同伴状态）、finite_mean_model_complete（只有所列均值、界和线性限制，没有其他个体层或分布限制）。D6另记first_stage_exclusion。暴露的定义不推出均值充分性。
+网络材料若明确声明本题所需均值存在且有限，另在conditions用finite_first_moments保留采用状态和引用；未说明则不新增。这是已有有限均值模型的有定义条件，不重复写入remaining。不能用它代替范围、均值顺序或更强的分布限制；仅局部均值存在而未覆盖本题所需范围时，仍保留范围缺口。
+finite_mean_model_complete审核的是允许的均值模型是否还受未表达的限制，不要求用户逐字复述字段定义。结合全部材料中“只有哪些总体信息”、取值域、界限和耦合限制的范围判断；不能把没有取得完整联合分布误作闭合声明缺失。单个二元结果的一阶分布由其均值决定，不凭空要求另补这种分布信息；跨对象、跨安排的联合或个体限制并不由均值决定，若明确采用必须保留，闭合范围确实不清时仍留未知。
 网络节点和边按名册/关系文件完整读取；first/second是整个网络的0/1安排，weights覆盖全部节点，未评价节点用0，不能把局部事件改成全网安排。只问一个政策时second=null。方向严格first减second。
 mean_information只记录已给条件总体均值及覆盖；样本平均数用FINITE_SAMPLE。只有符号总体分布用FULL_LAW或UNKNOWN，不能伪造均值数值。bounds区分均值范围和每个结果的范围，保留全安排范围。
 information.matches_target只检查对象、结果、时期及背景口径是否一致。目标政策无支持或其均值格子未知，不代表口径不一致；这些支持问题由程序求界，不要求模型提前判断识别成败。
@@ -221,8 +235,11 @@ scope_matches_question只对EXACT_POPULATION记录原文已说明的范围对应
 AUDIT = '''独立核对源材料与候选，检查字段语义及遗漏，不批准科学假设。
 逐项覆盖fields，返回{binding,scientific_approval:false,findings:[{field,verdict,evidence,reason,question}]}。
 MATCH=忠实原文，包括正确保留未知；READING_ERROR=漏读/误读，question=null；NEEDS_CLARIFICATION=材料本身矛盾或含糊，question写一句具体追问。引文存在不证明支持字段。
+按source_descriptions核对用户后续回答：初始“未说明”与后续明确提供同一事实是补齐信息，不是已知事实冲突。回答已补齐却继续留null/UNKNOWN属于READING_ERROR，指出遗漏的回答与字段；后续只覆盖局部、仍不清楚或与先前明确事实矛盾则不能覆盖。历史缺项句仍在来源目录不表示它仍未解决，也不提供科学批准。
 特别检查联合干预是不是被拆成多个问题、处理集合和结果集合是否交换；全部图边/潜在共同原因、信息范围、否定条件是否保留。
+网络的均值存在且有限声明由conditions.finite_first_moments保留状态、范围和引用，不要求再造remaining限制。未说明不得补造，局部声明不得扩展到全部所需均值；范围、均值顺序及分布限制仍须在各自字段完整核对。
 变量含义和离散编码在graph.variable_definitions核对，不当成额外科学限制。原文“没有其他限制”可以由已完整列出的条件加空remaining/constraints表示，不要求新建一条采用声明或重复文字。仍须逐项核对原文是否确有未表达的限制；空列表本身不证明没有遗漏。
+特别核对背景是否被升级为假设：解释混杂或处理选择的定性研究动机，可由图边加STUDY_CONTEXT保留，不要求另造ADOPTED条件；把这种背景升级成干预均值顺序或逐人单调性是READING_ERROR。反之，原文独立声明采用的概率关系、均值顺序、逐人单调性或效应符号限制，图边并未表达，移入备注或删除也是READING_ERROR。不能仅凭引文出现“更容易”等词判断是否为额外限制，应核对其研究角色与采用声明。
 若有requested_probability/given_probabilities，独立核对干预值、事件值、条件、人群、时期、背景及总体/样本性质；不得把不同范围统一成同一量，也不得以模型自行算出的数值作为材料已给定。仍检查所有额外限制是否保留在完整研究记录中。
 given_probabilities已完整保留的信息不要求在remaining重复。scope_matches_question只评价EXACT_POPULATION与所问量的范围对应；对SAMPLE_ESTIMATE不要求该标记，不将null或未判断当作读取错误，样本仍绝不能进入总体答案。其样本性质、原文给定的具体范围和其他信息仍须如实核对。
 网络必须核对完整节点边、状态算法、政策方向、权重、全部已知均值、界、等式/不等式每个系数和范围；coverage检查任何遗漏的额外限制。constraints已完整保留的关系不必在remaining重复，不能因没有重复而报遗漏。material_notes只可保留非科学性说明，科学限制放进去是READING_ERROR；反过来把数据条数、只求公式等说明写成remaining科学限制也是READING_ERROR。同一数据事实在information和DATA_DESCRIPTION中一致重复本身不是错误；只有矛盾、遗漏或把科学条件降为备注才是不通过理由。不要要求用户修模型错误。所附reading_contract规定字段职责。
@@ -246,6 +263,21 @@ def source_descriptions(case):
     return {s['source_id']:s.get('label','') for s in case.get('sources',[])}
 
 
+def check_citations(items, catalog):
+    """Validate joint-reader evidence, including full source-table fragments.
+
+    Plain ATE's short-quote wire limit is not this reader's contract. Exact
+    fragment resolution can legitimately attach a longer original table.
+    Source identity, nonempty content and verbatim inclusion still apply.
+    """
+    for item in items:
+        citation = Citation.model_validate(item)
+        if citation.source_id not in catalog:
+            raise ValueError('JOINT_CITATION_UNKNOWN_SOURCE_ID: ' + citation.source_id)
+        if not citation.quote or not citation.quote.strip() or citation.quote not in catalog[citation.source_id]:
+            raise ValueError('JOINT_CITATION_NOT_IN_SOURCE')
+
+
 def resolve_evidence(case, evidence):
     catalog=sources(case);original=original_sources(case);out=[]
     for item in evidence:
@@ -256,16 +288,35 @@ def resolve_evidence(case, evidence):
             e['quote']=catalog[e['source_id']]
         try:check_citations([e],catalog)
         except ValueError as exc:
-            raise ValueError('JOINT_CITATION_NOT_IN_SOURCE: '+json.dumps(dict(source_id=e['source_id'],quote=e['quote'],actual_source_excerpt=catalog.get(e['source_id'],'')[:800],instruction='使用实际行号或逐行引用；不要拼接改写原文。'),ensure_ascii=False)) from exc
+            # Keep the repair instruction ahead of bounded excerpts. A copied
+            # edge table can otherwise consume the entire feedback allowance.
+            raise ValueError('JOINT_CITATION_NOT_IN_SOURCE: '+json.dumps(dict(
+                source_id=e['source_id'],
+                instruction='quote不是该编号下连续的逐字原文。请核对实际片段编号；引用source_catalog中的#L编号时可省略quote，由程序附回完整原句。不要重复抄写长表、拼接或改写原文。原来的错误引用仍被拒绝。',
+                submitted_quote_excerpt=e['quote'][:240],submitted_quote_length=len(e['quote']),
+                actual_source_excerpt=catalog.get(e['source_id'],'')[:400]),ensure_ascii=False)) from exc
         out.append(e)
     return out
 
 
+def fragment_citation_schema(schema, case):
+    """New requests select exact original fragments, without recopying tables.
+
+    Persisted quoted answers remain checked by _citations, including rejection
+    of changed quotes. This changes the requested wire shape, not the evidence.
+    """
+    schema['$defs']['Citation'] = dict(type='object', additionalProperties=False,
+        required=['source_id'], properties={'source_id': dict(type='string',
+            enum=sorted(set(sources(case))-set(original_sources(case))),
+            description='选择本轮原文片段编号；程序取回该片段的完整逐字原文，不复制或改写quote。')})
+    return schema
+
+
 def request(case, feedback=None):
     schema=Reading.model_json_schema()
-    schema['$defs']['Citation']['properties']['source_id']['enum']=sorted(sources(case))
+    fragment_citation_schema(schema,case)
     skill=files('cfm_id_llm').joinpath('resources/joint_reading/SKILL.md').read_text('utf8')
-    return dict(system_prompt=skill+'\n'+RULES+'\n推荐evidence只填系统给出的#L原文片段source_id，不写quote；程序按该编号取完整原句。可以同时引用多段。不能自造编号。',user_prompt=json.dumps(dict(source_catalog=sources(case),source_descriptions=source_descriptions(case),
+    return dict(system_prompt=skill+'\n'+RULES+'\n本轮evidence只填系统给出的#L原文片段source_id，不输出quote；程序按该编号取完整原句。可以同时引用多段。不能自造编号。',user_prompt=json.dumps(dict(source_catalog=sources(case),source_descriptions=source_descriptions(case),
         output_schema=schema,reading_feedback_not_evidence=feedback),ensure_ascii=False))
 
 

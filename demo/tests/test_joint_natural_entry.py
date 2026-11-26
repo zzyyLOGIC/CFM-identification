@@ -8,6 +8,37 @@ from cfm_id import joint_natural_entry as entry
 from cfm_id.network_joint_projection import project,replay_projection
 
 
+def test_long_invalid_quote_keeps_actionable_feedback_and_stays_rejected():
+    case=dict(case_id='quote',business_question='比较两种安排',sources=[dict(
+        source_id='table',kind='OTHER',text='原始边表：甲,乙\n乙,丙')],response_language='zh')
+    ref=next(k for k in reader.sources(case) if k.startswith('table#L'))
+    invalid={'source_id':ref,'quote':'错误抄写的边表'*3000}
+    with pytest.raises(ValueError,match='JOINT_CITATION_NOT_IN_SOURCE') as exc:
+        reader.resolve_evidence(case,[invalid])
+    message=str(exc.value)
+    assert len(message)<1200
+    assert '省略quote' in message and '原来的错误引用仍被拒绝' in message
+    # Explicitly choosing the real fragment is supported; invalid quotes are
+    # never silently replaced by the checker.
+    assert reader.resolve_evidence(case,[{'source_id':ref}])[0]['quote']==reader.sources(case)[ref]
+
+
+def test_new_joint_and_local_requests_select_fragments_without_recopying_sources():
+    import json
+    from cfm_id_llm import local_bundle_reading
+    case=dict(case_id='fragments',business_question='比较两种安排',sources=[dict(
+        source_id='network',kind='OTHER',text='完整关系为 A—B。\n所有对象各以一半概率独立抽签。')])
+    for make in (reader.request, local_bundle_reading.request):
+        body=json.loads(make(case)['user_prompt'])
+        citation=body['output_schema']['$defs']['Citation']
+        assert citation['required']==['source_id'] and citation['additionalProperties'] is False
+        assert set(citation['properties'])=={'source_id'}
+        refs=citation['properties']['source_id']['enum']
+        assert 'network#L1' in refs and 'network' not in refs
+        for ref in refs:
+            assert reader.resolve_evidence(case,[dict(source_id=ref)])[0]['quote']==body['source_catalog'][ref]
+
+
 def fixture(family='NETWORK_JOINT_MEANS'):
     text='本次按明确材料采用所列前提；甲乙有完整关系；全部总体信息、目标与线性约束已明确。'
     case=dict(case_id='unit',business_question='本次所列目标是什么范围？',sources=[dict(source_id='s',text=text,kind='OTHER')],response_language='zh')
@@ -76,6 +107,24 @@ def test_constraint_adoption_is_not_dropped(status,expected):
 def test_extra_individual_restriction_blocks():
     case,s=fixture();s['remaining']=[dict(code='individual',statement='每次结果都不能变差',status='ADOPTED',evidence=s['family']['evidence'])]
     r=prepared(case,s);assert r['joint_entry']['state']=='UNSUPPORTED' and not r['backend_called']
+
+
+@pytest.mark.parametrize('status,state',[('ADOPTED','REVIEW_REQUIRED'),('UNDECIDED','NEEDS_INPUT'),
+    ('NOT_ADOPTED','UNSUPPORTED'),('CONTRADICTED','UNSUPPORTED')])
+def test_explicit_mean_existence_preserves_premise_gate(status,state):
+    case,s=fixture()
+    s['conditions'].append(dict(code='finite_first_moments',statement='本题所需均值存在且有限',
+        status=status,evidence=s['family']['evidence']))
+    r=prepared(case,s)
+    assert r['joint_entry']['state']==state
+    if status=='ADOPTED':
+        assert 'finite_first_moments' in [x['code'] for x in r['condition_review']['items']]
+        result=finish(case,s)
+        assert result['joint_entry']['native_result']['certificate']==finish(*fixture())['joint_entry']['native_result']['certificate']
+        assert entry.replay(case,result['draft'],result)
+        s['remaining']=[dict(code='distribution_restriction',statement='每次结果都不能变差',
+            status='ADOPTED',evidence=s['family']['evidence'])]
+        assert prepared(case,s)['joint_entry']['state']=='UNSUPPORTED'
 
 
 def test_sample_does_not_become_population():
@@ -230,6 +279,24 @@ def test_source_fragment_references_expand_only_to_exact_original_text():
     with pytest.raises(ValueError):reader.inspect(case,s)
     s['family']['evidence']=[{'source_id':'s'}]
     with pytest.raises(ValueError):reader.inspect(case,s)
+
+
+def test_long_exact_table_fragment_is_not_rejected_by_plain_ate_quote_limit():
+    case,s=fixture()
+    table='完整关系表：'+','.join(f'A{i}:B{i}' for i in range(1200))
+    case['sources'][0]['text']=table
+    evidence=reader.resolve_evidence(case,[{'source_id':'s#L1'}])
+    assert evidence==[{'source_id':'s#L1','quote':table}]
+    reader.check_citations(evidence,reader.sources(case))
+    finding=dict(field='network',verdict='MATCH',evidence=evidence,
+                 reason='原文关系表逐字对应',question=None)
+    audit=reader.SourceAudit.model_validate(dict(binding='same',scientific_approval=False,findings=[finding]))
+    assert audit.findings[0].evidence[0].quote==table
+    # Both historical explicit quotes and newly resolved fragments retain
+    # exact validation: changing an edge, source ID or content is not allowed.
+    for bad in [dict(source_id='s#L1',quote=table.replace('A0:B0','A0:C0')),
+                dict(source_id='missing',quote=table),dict(source_id='s#L1',quote=' ')]:
+        with pytest.raises(ValueError):reader.resolve_evidence(case,[bad])
 
 
 def test_absent_other_model_slots_are_not_extra_assumptions():

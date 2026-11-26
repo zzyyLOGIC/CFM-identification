@@ -16,17 +16,26 @@ NAMES = dict(randomization='完整抽签安排与潜在结果独立', consistenc
     first_stage_exclusion='第一阶段名额方案不另外影响结果')
 
 
-def condition_scope(records,needed):
+def condition_scope(records,needed,*,code=None,target_index=None):
     """Use only explicitly adopted complete scopes, without extending them."""
-    relevant=[c for c in records if not c['covered_nodes'] or needed.intersection(c['covered_nodes'])]
+    relevant=[c for c in records if (not c['covered_nodes'] or needed.intersection(c['covered_nodes']))
+        and not (c.get('local_scope')=='TARGET_EVENT_MEANS' and c.get('target_indices')
+                 and target_index not in c['target_indices'])]
     if any(c['status'] in ('NOT_ADOPTED','CONTRADICTED') for c in relevant):
         return 'UNSUPPORTED','本次不采用或存在冲突，未用另一条采用记录覆盖这一选择。'
     if records and not relevant:
         return 'UNSUPPORTED','已声明范围未覆盖本问对象，未扩大假设。'
     if not records or any(c['status'] in ('UNKNOWN','UNDECIDED') for c in relevant):
         return 'NEEDS_INPUT','请说明本问所需对象是否采用此项前提。可回答采用、不采用或尚未决定。'
+    def covers(c):
+        if c['all_assignments'] is True:return True
+        scope=c.get('local_scope')
+        if code=='consistency' and scope=='OBSERVED_CONSISTENCY':return True
+        if code=='fixed_network' and scope=='FIXED_PRETREATMENT_NETWORK':return True
+        return (code=='finite_means' and scope=='TARGET_EVENT_MEANS'
+                and target_index is not None and target_index in (c.get('target_indices') or []))
     adopted=set().union(*(set(c['covered_nodes']) for c in relevant
-        if c['status']=='ADOPTED' and c['all_assignments'] is True))
+        if c['status']=='ADOPTED' and covers(c)))
     if needed<=adopted:return 'READY',None
     if any(not c['covered_nodes'] or c['all_assignments'] is None for c in relevant):
         return 'NEEDS_INPUT','请说明这项前提适用于哪些对象和安排。'
@@ -164,7 +173,7 @@ def plan(case, r):
         scope_checks=[]
         for k in required:
             need=set(nodes) if k in ('randomization','fixed_network','first_stage_exclusion') else {n for n in pop if F(weights[n])}
-            state,reason=condition_scope(cs[k],need)
+            state,reason=condition_scope(cs[k],need,code=k,target_index=i)
             if state!='READY':
                 message=('“'+NAMES[k]+'”的已声明范围未覆盖本问所需对象和完整安排，未扩大假设。'
                     if reason.startswith('已声明范围') else '“'+NAMES[k]+'”：'+reason)

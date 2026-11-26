@@ -20,6 +20,7 @@ LABELS={
  'fixed_network':'使用干预前固定的关系网',
  'mean_sufficiency':'相同本人状态和同伴状态对应相同平均结果',
  'finite_mean_model_complete':'已列全均值、范围及限制，没有其他约束',
+ 'finite_first_moments':'本题所需的平均结果存在且有限',
  'first_stage_exclusion':'第一阶段名额方案不直接影响结果'}
 DAG_REQUIRED=('graph_complete','recursive_scm','perfect_intervention','strict_positivity')
 NET_REQUIRED=('randomization','consistency','fixed_network','mean_sufficiency','finite_mean_model_complete')
@@ -315,6 +316,13 @@ def plan(case,r):
     if family=='DAG_JOINT' and len(s['dag_target']['value']['treatments'])==1:required.append('no_between_unit_interference')
     if family=='NETWORK_JOINT_MEANS' and s['design']['value']['kind']=='two_stage_quota_mixture_binary_v2_7':required.append('first_stage_exclusion')
     conditions={x['code']:x for x in s['conditions']}
+    # Finite rational coordinate bounds already require finite means in this
+    # native model. Preserve an explicit existence declaration in the source
+    # audit and scientific review; it is not a new unexpressed restriction.
+    # Absence does not invent a declaration. Rejection/uncertainty still takes
+    # the normal premise gate, and unrelated extra restrictions still block.
+    if family=='NETWORK_JOINT_MEANS' and 'finite_first_moments' in conditions:
+        required.append('finite_first_moments')
     if not set(required)<=conditions.keys():raise ValueError('COMPLETE_JOINT_CONDITION_INVENTORY_REQUIRED')
     # Shared wire slots can explicitly preserve absence of a premise belonging
     # to another model. An uncited UNKNOWN is not an extra scientific claim.

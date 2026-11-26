@@ -241,6 +241,14 @@ function modelOriginalHTML(raw){
  const text=v=>typeof v==='string'||typeof v==='number'?String(v):v&&typeof v==='object'?(v.statement||v.description||v.label||v.name||''):'';
  const status={POINT:'模型认为可点识别',PARTIAL:'模型认为只能确定范围',NO_USEFUL_ID:'模型认为不能给出有效界限',NEEDS_INPUT:'模型认为需要补充信息',NOT_IDENTIFIED:'模型认为不可识别',NOT_COVERED:'模型认为当前方法未覆盖'};
  const mathTextHTML=value=>typeof ModelMath==='object'?ModelMath.render(value):esc(value);
+ const displayValue=(value,depth=0)=>{
+  if(value==null)return '';
+  if(typeof value!=='object')return '<div class="model-formula-text">'+mathTextHTML(String(value))+'</div>';
+  if(depth>=6)return '<pre>'+esc(JSON.stringify(value,null,2))+'</pre>';
+  if(Array.isArray(value))return value.map(item=>displayValue(item,depth+1)).join('');
+  const labels={conditional_identification:'识别表达式',formula:'公式',expression:'表达式',notation:'符号说明',qualification:'适用条件',target_definition:'目标定义'};
+  return Object.entries(value).map(([key,item])=>'<div class="model-answer-part"><h5>'+esc(labels[key]||key)+'</h5>'+displayValue(item,depth+1)+'</div>').join('');
+ };
  const body=answers.map((a,i)=>{
   if(typeof a==='string')return '<div class="model-formula-text">'+mathTextHTML(a)+'</div>';
   if(!a||typeof a!=='object')return '';
@@ -254,9 +262,9 @@ function modelOriginalHTML(raw){
   const assumptions=Array.isArray(a.assumptions)?a.assumptions.map(assumptionText).filter(Boolean):[text(a.assumptions)].filter(Boolean);
   const functional=text(a.functional);
   return (answers.length>1?'<h4>'+esc(a.question_part||('子问题 '+(i+1)))+'</h4>':'')+
-   (goal?'<p>'+esc(goal)+'</p>':'')+
+   (goal?(goal.length>240?'<details><summary>模型理解的问题</summary><p>'+esc(goal)+'</p></details>':'<p>'+esc(goal)+'</p>'):'')+
    (a.status?'<p><b>'+esc(status[a.status]||('模型判断：'+a.status))+'</b></p>':'')+
-   (a.functional?'<h4>模型给出的公式或依据</h4>'+(functional?'<div class="model-formula-text">'+mathTextHTML(functional)+'</div>':'<pre>'+esc(JSON.stringify(a.functional,null,2))+'</pre>'):'')+
+   (a.functional?'<h4>模型给出的公式或依据</h4>'+displayValue(a.functional):'')+
    (a.value!=null?'<p>模型给出的数值：'+esc(typeof a.value==='object'?JSON.stringify(a.value):a.value)+'</p>':'')+
    (assumptions.length?'<details><summary>模型列出的条件</summary><ul>'+assumptions.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ul></details>':'')+
    (a.reason?'<details><summary>模型的解释</summary><div class="model-formula-text">'+mathTextHTML(text(a.reason))+'</div></details>':'');

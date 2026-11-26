@@ -38,6 +38,10 @@ class Cell(Arm):
 class ScopedCondition(Condition):
     covered_nodes: list[str]
     all_assignments: bool | None
+    local_scope: Literal['OBSERVED_CONSISTENCY', 'FIXED_PRETREATMENT_NETWORK', 'TARGET_EVENT_MEANS'] | None = Field(
+        default=None, description='Condition-specific scope explicitly supported by the source: actual outcome versus actual complete assignment; network fixed before treatment and during the study; or finite conditional means for specified target events. Not a substitute for full assignment randomization. Null when unknown.')
+    target_indices: list[StrictInt] | None = Field(default=None,
+        description='Only for TARGET_EVENT_MEANS: zero-based indices of targets whose FIRST and SECOND (if any) conditional means are explicitly covered for covered_nodes. Do not infer coverage from the requested target or from one arm alone.')
 
 
 class Information(Strict):
@@ -52,7 +56,11 @@ class Reading(Strict):
     family: Claim[Literal['NETWORK_LOCAL_BUNDLE', 'OTHER', 'UNKNOWN']]
     study: Claim[Study]
     network: Claim[Network]
-    design: Claim[Design | None]
+    design: Claim[Design | None] = Field(description=(
+        'Complete joint assignment mechanism expressible by Design, or null when not yet specified. '
+        'When only margins, group quotas or within-group rules are given and the joint mechanism is missing, '
+        'keep null and cite those known facts in evidence. Null here does not erase those source facts. '
+        'Do not invent cross-group independence or fill a mathematically different complete Design.'))
     exposure: Claim[Exposure]
     targets: list[Claim[Target]] = Field(min_length=1, max_length=16)
     information: list[Claim[Information]]
@@ -67,7 +75,7 @@ def contract():
 
 def request(case, feedback=None):
     schema = Reading.model_json_schema()
-    schema['$defs']['Citation']['properties']['source_id']['enum'] = list(shared.sources(case))
+    shared.fragment_citation_schema(schema, case)
     return dict(system_prompt=contract(), user_prompt=json.dumps(dict(
         source_catalog=shared.sources(case), source_descriptions=shared.source_descriptions(case),
         output_schema=schema, reading_feedback_not_evidence=feedback), ensure_ascii=False))
@@ -96,7 +104,21 @@ def wire_normalizations(raw):
 
 
 def inspect(case, raw):
-    s = Reading.model_validate(normalize_wire(raw)[0]).model_dump(mode='json')
+    wire = normalize_wire(raw)[0]
+    s = Reading.model_validate(wire).model_dump(mode='json')
+    for c, old in zip(s['conditions'], wire['conditions']):
+        # Existing readings/certificates keep their original binding. New
+        # scopes require an explicit, independently audited source claim.
+        for key in ('local_scope', 'target_indices'):
+            if key not in old:c.pop(key, None)
+        scope=c.get('local_scope');indices=c.get('target_indices')
+        codes={'OBSERVED_CONSISTENCY':'consistency',
+               'FIXED_PRETREATMENT_NETWORK':'fixed_network', 'TARGET_EVENT_MEANS':'finite_means'}
+        if scope is not None and codes[scope]!=c['code']:
+            raise ValueError('LOCAL_CONDITION_SCOPE_KIND_MISMATCH')
+        if indices is not None and (scope!='TARGET_EVENT_MEANS' or not indices
+                or len(indices)!=len(set(indices)) or any(i<0 or i>=len(s['targets']) for i in indices)):
+            raise ValueError('LOCAL_CONDITION_TARGET_SCOPE_INVALID')
     def walk(value):
         if isinstance(value, dict):
             if 'evidence' in value:
