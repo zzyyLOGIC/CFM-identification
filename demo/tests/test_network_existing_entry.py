@@ -8,7 +8,7 @@ from cfm_id_llm.compact_study import digest
 
 
 def fixture(observational=False):
-    text='仅供适配器测试：完整网络、政策概率、总体信息与科学前提均在原材料声明。'
+    text='仅供适配器测试：完整网络、政策概率、总体信息与科学前提均在原材料声明。'+('' if observational else '各店独立抽签，各有一半机会启用。')
     case=dict(case_id='adapter',business_question='政策平均结果',sources=[dict(source_id='s',text=text,kind='OTHER')],response_language='zh')
     ev=[dict(source_id='s',quote=text)];claim=lambda v:dict(value=v,evidence=ev)
     conditions=['consistency','fixed_network','finite_means','full_vector_exchangeability' if observational else 'randomization']

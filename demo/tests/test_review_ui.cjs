@@ -8,6 +8,55 @@ const {test} = require('node:test');
 const app = fs.readFileSync(path.join(__dirname, '../app.js'), 'utf8');
 const clone = x => JSON.parse(JSON.stringify(x));
 
+test('multi-question receipt is shown only for the current delivered bundle',()=>{
+ const h=harness(fixture());
+ h.context.r={estimation_handoff_allowed:true,joint_entry:{operation:'NETWORK_LOCAL_BUNDLE',message:'两问已分别核验',parts:[],reading:{information:[],conditions:[]}}};
+ h.context.receipt={state:'QUEUED',mode:'ESTIMATE_POINT_BUNDLE',target_count:2,query_count:4};
+ assert.match(vm.runInContext('directAnswerHTML(r,receipt)',h.context),/已登记 2 个问题、4 项总体均值查询/);
+ assert.match(vm.runInContext('directAnswerHTML(r,receipt)',h.context),/尚未运行样本估计器/);
+ for(const patch of [{state:'SUPERSEDED'},{state:'QUEUED',mode:'ESTIMATE_POINT'}]){
+  Object.assign(h.context.receipt,patch);
+  assert.doesNotMatch(vm.runInContext('directAnswerHTML(r,receipt)',h.context),/已登记/);
+ }
+ h.context.r.estimation_handoff_allowed=false;
+ h.context.receipt={state:'QUEUED',mode:'ESTIMATE_POINT_BUNDLE',target_count:2,query_count:4};
+ assert.doesNotMatch(vm.runInContext('directAnswerHTML(r,receipt)',h.context),/已登记/);
+});
+
+test('multi-question reading failures show diagnostics without asking for scientific assumptions',()=>{
+ const h=harness(fixture());
+ h.context.report={joint_entry:{operation:'NETWORK_LOCAL_BUNDLE',state:'READING_RECHECK_REQUIRED',
+  message:'后台核对未完成',reading:null,parts:[],failure_details:[{kind:'MODEL_OUTPUT_CONTRACT',reason:'JOINT_AUDIT_QUESTION'}]}};
+ const html=vm.runInContext('directAnswerHTML(report,null)',h.context);
+ assert.match(html,/复核答复格式仍有问题/);assert.match(html,/不需要因此补写研究条件/);
+ assert.doesNotMatch(html,/证书已独立核验|已登记/);
+ h.context.report.joint_entry.failure_details=[{kind:'MODEL_SOURCE_MISMATCH',reason:'遗漏第二问 <script>bad</script>'}];
+ const mismatch=vm.runInContext('directAnswerHTML(report,null)',h.context);
+ assert.match(mismatch,/遗漏第二问 &lt;script&gt;/);assert.doesNotMatch(mismatch,/<script>/);
+});
+
+test('mixed results preserve successful questions without announcing whole-bundle completion',()=>{
+ const h=harness(fixture());h.context.report={joint_entry:{operation:'NETWORK_LOCAL_BUNDLE',message:'逐问结果',parts:[
+  {question:'第一问',state:'POINT',independent_replay:true,target:{weights:{A:'1'}}},
+  {question:'第二问',state:'UNSUPPORTED',target:{weights:{}},message:'处理后的筛选不在本方法范围内'}]}};
+ const original=JSON.stringify(h.context.report),html=vm.runInContext('directAnswerHTML(report,null)',h.context);
+ assert.match(html,/1 个问题已得到公式/);assert.match(html,/整组完成后才交付估计查询/);
+ assert.match(html,/当前方法尚不能处理本问/);assert.match(html,/处理后的筛选/);
+ assert.doesNotMatch(html,/已登记/);assert.equal(JSON.stringify(h.context.report),original);
+});
+
+test('provider diagnosis stays visible and a stopped run no longer says it is analysing',()=>{
+ const view=fixture();view.result=null;view.busy=false;
+ view.error={code:'HTTP_ERROR',http_status:401,message:'模型服务未接受当前 API 密钥（HTTP 401）。不需要为此补写研究条件。'};
+ const h=harness(view);
+ assert.equal(h.element('#workspace-title').textContent,'本次分析已停止');
+ assert.match(h.element('#run-error').innerHTML,/HTTP 401/);assert.match(h.element('#run-error').innerHTML,/不需要为此补写研究条件/);
+ h.context.error={code:'HTTP_ERROR',http_status:429,message:'请求过密或可用额度不足（HTTP 429）。'};
+ assert.match(vm.runInContext('errorExplanation(error)',h.context),/请求过密或可用额度不足/);
+ h.context.error={code:'HTTP_ERROR',message:'untrusted raw error'};
+ assert.doesNotMatch(vm.runInContext('errorExplanation(error)',h.context),/untrusted raw error/);
+});
+
 function harness(view) {
   const elements = new Map(), requests = [];
   function element(selector) {
@@ -200,6 +249,71 @@ test('a general linear target cannot be displayed as a paired difference with in
  const html=vm.runInContext('linearArmMathHTML(terms)',h.context);
  assert.doesNotMatch(html,/<munder>|<script>/);assert.match(html,/&lt;script&gt;/);
  assert.match(html,/<mn>5<\/mn>/);assert.match(html,/<mo>−<\/mo>/);
+});
+
+test('bundle renders means and contrasts separately and does not certify an unsupported subgroup',()=>{
+ const h=harness(fixture());
+ h.context.report={joint_entry:{operation:'NETWORK_LOCAL_BUNDLE',message:'逐问结果',parts:[
+  {question:'平均等待多久',state:'POINT',target:{kind:'MEAN',weights:{'甲<1>':'1'}},independent_replay:true,
+   summary:{constituent_arms:[{node_id:'甲<1>',own_treatment:1,exposure_state:1,coefficient:'1'}]}},
+  {question:'另一个子群的差',state:'UNSUPPORTED',target:{kind:'CONTRAST',weights:{乙:'1'}},message:'前提范围没有覆盖乙'}]}};
+ const html=vm.runInContext('directAnswerHTML(report,null)',h.context);
+ assert.match(html,/<mi>θ<\/mi>/);assert.match(html,/局部均值/);assert.doesNotMatch(html,/<mi>τ<\/mi>/);
+ assert.match(html,/甲&lt;1&gt;/);assert.match(html,/前提范围没有覆盖乙/);
+ assert.equal((html.match(/本问证书已独立核验/g)||[]).length,1);
+});
+
+test('unresolved roster has no empty weight label and keeps the stop reason',()=>{
+ const h=harness(fixture());h.context.report={joint_entry:{operation:'NETWORK_LOCAL_BUNDLE',parts:[
+  {question:'按试验后结果选库',state:'UNSUPPORTED',target:{weights:null},message:'当前方法要求处理前固定对象'}]}};
+ const html=vm.runInContext('directAnswerHTML(report,null)',h.context);
+ assert.doesNotMatch(html,/评价对象与权重/);assert.match(html,/当前方法要求处理前固定对象/);
+});
+
+test('reviewed source entry supersedes preliminary alignment only in display',()=>{
+ const h=harness(fixture());h.context.report={checks:[],draft:{answers:[]},network_alignment:{matched:false,fields:{
+  assignment:{state:'UNRESOLVED',source:{kind:'stratified'},solver:null}}},joint_entry:{
+  operation:'NETWORK_LOCAL_BUNDLE',parts:[],reading:{},audit:{findings:[]}}};
+ const before=JSON.stringify(h.context.report);
+ assert.doesNotMatch(vm.runInContext('directResultHTML(report,null)',h.context),/数学库尚未核准的项目|分层抽签/);
+ assert.equal(JSON.stringify(h.context.report),before);
+ delete h.context.report.joint_entry;
+ assert.match(vm.runInContext('directResultHTML(report,null)',h.context),/数学库尚未核准的项目/);
+});
+
+test('nested original answers display as model opinion without changing the verdict',()=>{
+ const h=harness(fixture());h.context.raw={network_facts:{answers:[{
+  question_part:'原答第一问',status:'NEEDS_INPUT',reason:'模型的判断 <script>bad</script>',functional:'x + y'}]}};
+ const before=JSON.stringify(h.context.raw);const html=vm.runInContext('modelOriginalHTML(raw)',h.context);
+ assert.match(html,/模型认为需要补充信息/);assert.match(html,/模型给出的公式或依据/);
+ assert.match(html,/&lt;script&gt;/);assert.doesNotMatch(html,/<script>/);
+ assert.equal(JSON.stringify(h.context.raw),before);
+});
+
+test('bundle confirmation fills only undecided controls and preserves explicit choices',()=>{
+ const h=harness(fixture()), form=h.element('#network-condition-form');let submitted=0;
+ const button={}, values={targets:{value:''},consistency:{value:'DECLINED'},finite_means:{value:'UNSURE'}};
+ form.dataset={};form.querySelector=()=>button;form.elements={namedItem:k=>values[k]};form.requestSubmit=()=>submitted++;
+ h.context.review={busy:false,result:{joint_entry:{operation:'NETWORK_LOCAL_BUNDLE'},condition_review:{binding:'bundle-one',items:
+   Object.keys(values).map(code=>({code,label:code,quote:'原文前提'}))}}};
+ vm.runInContext('current=review;renderNetworkConditions(review)',h.context);
+ assert.equal(button.type,'button');assert.match(h.element('#network-condition-items').innerHTML,/<details><summary>有不同意见/);
+ button.onclick();assert.equal(submitted,1);assert.equal(values.targets.value,'ADOPTED');
+ assert.equal(values.consistency.value,'DECLINED');assert.equal(values.finite_means.value,'UNSURE');
+ h.context.review.result.joint_entry.operation='OTHER';h.context.review.result.condition_review.binding='other-binding';
+ vm.runInContext('renderNetworkConditions(review)',h.context);
+ assert.equal(button.type,'submit');assert.equal(button.onclick,null);
+});
+
+test('same-code scope records do not display a declined group as adopted',()=>{
+ const h=harness(fixture());h.context.report={review_record:{decisions:{consistency:'ADOPTED'}},joint_entry:{
+  operation:'NETWORK_LOCAL_BUNDLE',message:'分别核验',parts:[],reading:{conditions:[
+   {code:'consistency',status:'ADOPTED',statement:'甲采用',covered_nodes:['甲']},
+   {code:'consistency',status:'NOT_ADOPTED',statement:'乙不采用',covered_nodes:['乙']}]}}};
+ const html=vm.runInContext('directAnswerHTML(report,null)',h.context);
+ const adopted=html.split('本次采用的前提与适用范围')[1].split('</details>')[0];
+ assert.match(adopted,/甲采用/);assert.doesNotMatch(adopted,/乙不采用/);
+ assert.match(html,/乙不采用/); // The complete source record remains downloadable/visible.
 });
 
 test('ATE and interval typesetting preserves signs, parentheses and infinities without treating prose as a formula',()=>{

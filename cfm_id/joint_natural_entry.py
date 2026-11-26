@@ -114,14 +114,18 @@ def prepare(case,report,call,*,reader_module=None,planner=None,gap_resolver=None
                 s=inspect_current(case,raw)
             request=source_reader.audit_request(case,s)
             audit_raw=call(request,'joint_source_audit'+suffix)
-            try:a=source_reader.check_audit(case,s,audit_raw)
+            check_current=getattr(source_reader,'check_audit_current',source_reader.check_audit)
+            try:a=check_current(case,s,audit_raw)
             except ValueError as exc:
-                if audit_repairs:raise
-                audit_repairs.append(dict(raw=audit_raw,error=str(exc)))
+                # At most one audit-format repair per independently read
+                # candidate (two candidates total). An earlier repair must not
+                # exhaust recovery for a different, corrected source reading.
+                audit_repairs.append(dict(raw=audit_raw,error=str(exc),attempt=attempt,
+                    reading_binding=source_reader.binding(case,s)))
                 body=json.loads(request['user_prompt'])
                 body['format_feedback_not_evidence']=str(exc)+' 候选和原文未变，重新逐项核对，不允许默认MATCH。'
                 request=dict(request,user_prompt=json.dumps(body,ensure_ascii=False))
-                a=source_reader.check_audit(case,s,call(request,'joint_audit_format_retry'))
+                a=check_current(case,s,call(request,'joint_audit_format_retry'+suffix))
             original_audit=deepcopy(a)
             if not any(x['verdict']=='READING_ERROR' for x in a['findings']) and hasattr(source_reader,'semantic_request'):
                 semantic_raw=call(source_reader.semantic_request(case,s),'joint_condition_semantics'+suffix)
@@ -155,6 +159,8 @@ def prepare(case,report,call,*,reader_module=None,planner=None,gap_resolver=None
             errors=[x for x in a['findings'] if x['verdict']=='READING_ERROR']
             questions=[x['question'] for x in a['findings'] if x['verdict']=='NEEDS_CLARIFICATION']
             attempts.append(dict(reading=s,audit=a))
+            if hasattr(source_reader,'wire_normalizations'):
+                attempts[-1]['wire_normalizations']=source_reader.wire_normalizations(raw)
             if semantic is not None:
                 attempts[-1].update(original_audit=original_audit,condition_evidence=semantic)
             if errors:feedback=errors;continue
@@ -444,6 +450,9 @@ def plan(case,r):
 
 
 def complete(case,report,review):
+    if report['joint_entry'].get('operation')=='NETWORK_LOCAL_BUNDLE':
+        from .local_bundle_entry import complete as complete_local
+        return complete_local(case,report,review)
     if report['joint_entry'].get('operation')=='DAG_SINGLE_SOURCE':
         from .dag_single_source_entry import complete as complete_single
         return complete_single(case,report,review)
@@ -503,7 +512,7 @@ def _result_contract(report):
     result['joint_entry']={k:entry.get(k) for k in (
         'version','case_sha256','reading','audit','operation','problem','projection',
         'existing_plan','required_conditions','condition_evidence',
-        'state','completed','reason_code','native_result')}
+        'state','completed','reason_code','native_result','parts')}
     return result
 
 
@@ -511,6 +520,8 @@ def replay(case,draft,report):
     try:
         if report['draft']!=draft:return False
         entry=report['joint_entry'];source_reader=reader
+        if entry.get('operation')=='NETWORK_LOCAL_BUNDLE':
+            from cfm_id_llm import local_bundle_reading as source_reader
         if entry.get('operation')=='BINARY_IV_SOURCE':
             from cfm_id_llm import iv_source_reading as source_reader
         if entry.get('operation')=='SYMBOLIC_MEAN_JOINT':
@@ -526,7 +537,7 @@ def replay(case,draft,report):
         if report.get('scientific_approval') and report['review_record']['authority']!='EXTERNAL_RESEARCH_REVIEW':return False
         if report.get('estimation_handoff_allowed') and not (
             rebuilt.get('independent_replay') and rebuilt['joint_entry'].get('completed')
-            and rebuilt['joint_entry']['state'] in ('POINT','PARTIAL','SYMBOLIC_BOUNDS')):return False
+            and rebuilt['joint_entry']['state'] in ('POINT','PARTIAL','SYMBOLIC_BOUNDS','BUNDLE_COMPLETE')):return False
         # Canonical wire comparison permits tuple/list JSON round trips, while
         # binding the outer conclusion to the independently rebuilt problem.
         return digest(_result_contract(rebuilt))==digest(_result_contract(report))

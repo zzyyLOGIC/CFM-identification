@@ -10,7 +10,12 @@ from cfm_id_llm.compact_study import digest
 VERSION='joint-natural-handoff/1'
 
 def operator(report, *, revision=4):
-    e=report['joint_entry'];c=e['native_result']['certificate'];s=e['reading']
+    e=report['joint_entry']
+    if e.get('operation')=='NETWORK_LOCAL_BUNDLE':
+        if revision!=5:raise ValueError('LOCAL_BUNDLE_QUERY_REVISION_REQUIRED')
+        from .local_bundle_exchange import operator as bundle_operator
+        return bundle_operator(report)
+    c=e['native_result']['certificate'];s=e['reading']
     queries=[];weights=[]
     if c.get('kind')=='DAG_SINGLE_SOURCE':
         if c['native']['state']!='POINT':raise ValueError('NONIDENTIFIABLE_DISTRIBUTION_NOT_ESTIMABLE')
@@ -131,12 +136,14 @@ def operator(report, *, revision=4):
         return dict(mode='REGISTER_CAUSAL_DISTRIBUTION',target=target,queries=[query],operator_spec=spec)
     raise ValueError('CERTIFIED_OPERATOR_NOT_CONNECTED')
 
-def packet(case,report,*,operator_revision=4):
+def packet(case,report,*,operator_revision=None):
     from .joint_natural_entry import replay
     if not report.get('independent_replay') or not replay(case,report['draft'],report):raise ValueError('JOINT_REPLAY_REQUIRED')
     review=report['review_record']
     if any(v!='ADOPTED' for v in review['decisions'].values()):raise ValueError('JOINT_EXPLICIT_REVIEW_REQUIRED')
-    if operator_revision not in (1,2,3,4):raise ValueError('UNKNOWN_QUERY_OPERATOR_REVISION')
+    if operator_revision is None:
+        operator_revision=5 if report['joint_entry'].get('operation')=='NETWORK_LOCAL_BUNDLE' else 4
+    if operator_revision not in (1,2,3,4,5):raise ValueError('UNKNOWN_QUERY_OPERATOR_REVISION')
     handoff=operator(report,revision=operator_revision)
     if handoff['mode']=='INCOMPATIBLE':raise ValueError('INCOMPATIBLE_MODEL_NOT_ESTIMABLE')
     value=dict(version=VERSION,run_id=case['case_id'],source_case=deepcopy(case),source_report=deepcopy(report),
@@ -151,13 +158,20 @@ def check_packet(run_id,value):
     rebuilt=packet(value['source_case'],value['source_report'],operator_revision=value.get('operator_revision',1))
     if digest(value)!=digest(rebuilt):raise ValueError('JOINT_HANDOFF_REPLAY_MISMATCH')
     h=value['estimate_handoff']
-    return dict(run_id=run_id,state='RECEIVED',binding=value['source_report']['review_record']['binding'],
+    receipt=dict(run_id=run_id,state='RECEIVED',binding=value['source_report']['review_record']['binding'],
         query_sha256=digest(h),query_count=len(h['queries']),mode=h['mode'],release_scope=value['release_scope'],
         estimator_executed=False,estimator_status='NOT_SELECTED',production_admission=False)
+    if h['mode']=='ESTIMATE_POINT_BUNDLE':
+        receipt['targets']=[dict(id=o['id'],query_count=len(o['operands'])) for o in h['operator_spec']['outputs']]
+        receipt['target_count']=len(receipt['targets'])
+    return receipt
 
 def evaluate(handoff,values):
     """Evaluate a declared functional, not fit an estimator to finite records."""
     mode=handoff['mode']
+    if mode=='ESTIMATE_POINT_BUNDLE':
+        from .local_bundle_exchange import evaluate as evaluate_bundle
+        return evaluate_bundle(handoff,values)
     if mode=='ESTIMATE_POINT':
         from .network_estimate_handoff import execute_handoff
         return execute_handoff(handoff,values)

@@ -339,16 +339,27 @@ def audit_request(case, reading, *, field_catalog=None, reading_contract=None):
     schema['$defs']['Citation']['properties']['source_id']['enum']=sorted(sources(case))
     checked_fields=fields(reading) if field_catalog is None else field_catalog
     schema['$defs']['AuditFinding']['properties']['field']['enum']=list(checked_fields)
+    # Encode the same verdict/question rule enforced below. Correctly retaining
+    # an unknown value can MATCH; the planner will ask about required gaps.
+    schema['$defs']['AuditFinding']['allOf']=[dict(
+        **{'if':dict(properties=dict(verdict=dict(const='NEEDS_CLARIFICATION'))),
+           'then':dict(properties=dict(question=dict(type='string',minLength=1,pattern=r'\S'))),
+           'else':dict(properties=dict(question=dict(type='null')))})]
     schema['properties']['findings'].update(minItems=len(checked_fields),maxItems=len(checked_fields))
-    return dict(system_prompt=AUDIT+'\n引用证据推荐只填系统提供的#L片段source_id，quote省略或null；程序会附回该片段原文。'
+    request = dict(system_prompt=AUDIT+'\nMATCH和READING_ERROR的question均须为null。候选准确保留原文未说明的null时，可以MATCH，不在该条同时追问；后续适用条件检查会提出必要问题。候选已经误填时用READING_ERROR，先后台重读，不请用户修候选。只有原文本身的歧义需要澄清时用NEEDS_CLARIFICATION，并填写具体问题。'
+        +'\n引用证据推荐只填系统提供的#L片段source_id，quote省略或null；程序会附回该片段原文。'
         +'\n区分文字含义冲突与数学不可行：若原文明确定量条件且明确均采用，候选逐项正确保留，即使联立后可能无解也应判MATCH，交数学库核验不可行；不要求用户再次确认是否采用。只有原文对同一条件的取值、范围或采用态度互相矛盾/不明确时才追问。',user_prompt=json.dumps(dict(input_binding=binding(case,reading),
         source_catalog=sources(case),source_descriptions=source_descriptions(case),reading_contract=reading_contract or skill+'\n'+RULES,fields=checked_fields,
         output_schema=schema),ensure_ascii=False))
+    from .design_scope_audit import augment
+    return augment(request, reading)
 
 
-def check_audit(case, reading, raw, *, field_catalog=None):
+def check_audit(case, reading, raw, *, field_catalog=None, current=False):
     from copy import deepcopy
     raw=deepcopy(raw)
+    design_version=raw.pop('design_scope_version',None)
+    design_scope=raw.pop('design_scope',None)
     if isinstance(raw,dict) and isinstance(raw.get('findings'),list):
         for f in raw['findings']:
             if isinstance(f,dict) and isinstance(f.get('evidence'),list):f['evidence']=resolve_evidence(case,f['evidence'])
@@ -360,5 +371,14 @@ def check_audit(case, reading, raw, *, field_catalog=None):
     for x in audit['findings']:
         check_citations(x['evidence'],sources(case))
         if expected[x['field']].get('evidence') and not x['evidence']:raise ValueError('JOINT_AUDIT_EVIDENCE')
-        if (x['verdict']=='NEEDS_CLARIFICATION') != bool(x['question']):raise ValueError('JOINT_AUDIT_QUESTION')
-    return audit
+        if ((x['verdict']=='NEEDS_CLARIFICATION') != bool(x['question'])
+                or (x['verdict']=='NEEDS_CLARIFICATION' and not x['question'].strip())):
+            expected_question='一句具体、非空的追问' if x['verdict']=='NEEDS_CLARIFICATION' else 'null'
+            raise ValueError('JOINT_AUDIT_QUESTION: field='+x['field']+', verdict='+x['verdict']+
+                ', question应为'+expected_question+'。重新对照原文决定判定；不要为了格式通过把读取错误改成MATCH。')
+    from .design_scope_audit import check
+    return check(case,reading,audit,design_version,design_scope,current=current)
+
+
+def check_audit_current(case, reading, raw):
+    return check_audit(case, reading, raw, current=True)

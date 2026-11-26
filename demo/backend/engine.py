@@ -225,6 +225,17 @@ class Engine:
                 # Provider exceptions have deliberately bounded messages. Do not
                 # serialize arbitrary exception text which may include credentials.
                 message=str(exc)[:2000] if isinstance(exc,ValueError) else '本阶段未完成，请查看诊断后重试；不要为处理程序或模型接口错误补写研究条件。'
+                http_status=getattr(exc,'diagnostics',{}).get('http_status')
+                if code=='HTTP_ERROR' and type(http_status) is int:
+                    explanation={
+                        400:'模型服务不接受本次请求，请检查模型和连接参数',
+                        401:'模型服务未接受当前 API 密钥，请核对所选厂商、接口地址和密钥是否对应',
+                        403:'当前账户没有本次请求的访问权限，请检查模型及接口权限',
+                        404:'模型或接口地址未找到，请检查当前连接配置',
+                        429:'模型服务限制了本次请求，可能是请求过密或可用额度不足，请查看账户状态后再试',
+                    }.get(http_status,'模型服务暂时未能完成请求，请稍后再试' if 500<=http_status<=599 else None)
+                    if explanation:
+                        message=explanation+'（HTTP '+str(http_status)+'）。原输入已保留，不需要为此补写研究条件。'
                 if code=='TIMEOUT':
                     message='模型服务未在本次等待时限内返回，请稍后重试。已保留原输入；不需要补充研究条件。'
                 if code=='INCOMPLETE_COMPLETION' and getattr(exc,'diagnostics',{}).get('finish_reason')=='length':
@@ -232,6 +243,8 @@ class Engine:
                 if isinstance(exc,ValueError) and str(exc) in ('JOINT_REPLAY_REQUIRED','JOINT_RESULT_REPLAY_REQUIRED'):
                     message='原材料、研究目标与核验结果未能对应，旧结果和回执已撤回。原输入与检查记录已保留，不需要为此补写研究条件。'
                 run.error=self._clean(dict(code=code,message=message))
+                if code=='HTTP_ERROR' and type(http_status) is int and 400<=http_status<=599:
+                    run.error['http_status']=http_status
                 self.event(run,'STOPPED','本阶段停止，未生成新的识别结论。')
                 self.save(run,'error',run.error)
             finally:
@@ -410,8 +423,14 @@ class Engine:
 
     def _finish_direct_verification(self,run,report):
         from cfm_id import direct_policy_exchange
-        if (report.get('joint_entry',{}).get('completed') and report.get('independent_replay')
-                and report['joint_entry'].get('state') in ('POINT','PARTIAL','SYMBOLIC_BOUNDS')):
+        if (report.get('joint_entry',{}).get('operation')=='NETWORK_LOCAL_BUNDLE' and report['joint_entry'].get('completed')
+                and report['joint_entry'].get('state')!='BUNDLE_COMPLETE'):
+            from cfm_id.joint_natural_entry import replay
+            if report.get('proof') and not replay(run.case,report.get('draft'),report):
+                self._withdraw_joint_result(run,report)
+                raise ValueError('LOCAL_BUNDLE_REPLAY_REQUIRED')
+        elif (report.get('joint_entry',{}).get('completed') and report.get('independent_replay')
+                and report['joint_entry'].get('state') in ('POINT','PARTIAL','SYMBOLIC_BOUNDS','BUNDLE_COMPLETE')):
             from cfm_id import joint_query_exchange
             # Derive from the current source review and independently replayed
             # certificate. A prior inbox receipt can never authorize this run.

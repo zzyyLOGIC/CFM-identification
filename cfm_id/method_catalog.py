@@ -197,12 +197,20 @@ def homepage_entries():
     from . import population_ate_entry as ate
     from . import network_existing_entry as policy, observational_effect_entry as observed
     from . import iv_natural_entry as iv, dag_single_source_entry as single, joint_natural_entry as shared
+    from . import local_bundle_entry as local
     entries = [dict(entry_id='POPULATION_ATE_HOMEPAGE',
         method_ids=['RANDOMIZED_ATE_V3', 'ONE_ARM_ATE_BOUNDS_V2',
                     'ONE_ARM_NO_OUTCOME_RESTRICTION_V2', 'MANSKI_BINARY_ATE_V2'],
         prepare=_name(ate.prepare), complete=_name(ate.complete), replay=_name(ate.replay),
         scope='默认网页显式启用；完整声明人群的无条件1−0，来源审核与科学确认仍必需。公共调用历史默认不变。',
         common_business_reader=False, estimation_handoff_allowed=False)]
+    entries.append(dict(entry_id='RANDOMIZED_LOCAL_BUNDLE_SOURCE',
+        method_ids=['network.randomized.local_mean','network.randomized.local_contrast'],
+        prepare=_name(local.prepare),complete=_name(local.complete),replay=_name(shared.replay),
+        scope='同一研究的1至16个局部均值或比较；逐问处理前名单、权重与条件范围。完整网络不裁剪；真实研究沿用原D1/严格过半及完整资料合同。',
+        common_business_reader=False,estimation_handoff_allowed=True,
+        handoff_scope='整组均通过原文审核、科学确认及证书重放后，登记 ESTIMATE_POINT_BUNDLE；共用均值查询，各问分别输出。单问未完成不交付整组；未运行样本估计器。',
+        estimator_execution=False))
     def source_entry(entry_id, ids, prepare, complete, scope, handoff):
         return dict(entry_id=entry_id, method_ids=ids.split(), prepare=_name(prepare),
                     complete=_name(complete), replay=_name(shared.replay), scope=scope,

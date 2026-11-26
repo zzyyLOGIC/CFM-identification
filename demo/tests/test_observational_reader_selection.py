@@ -107,3 +107,34 @@ def test_source_route_disagreement_recovers_once_without_changing_question(monke
     assert ('joint_source_read_rerouted' in calls)==corrected
     assert out['draft']==draft and not out.get('estimation_handoff_allowed')
     assert out['reader_selection']['recovery']['previous_attempts']==rejected['attempts']
+
+
+@pytest.mark.parametrize('corrected',[True,False])
+def test_same_reader_scope_correction_gets_fresh_audit_once(monkeypatch,corrected):
+    import json
+    from cfm_id import local_bundle_entry
+    case=dict(case_id='scope-recovery',business_question='One weighted contrast for two sites.',sources=[])
+    draft=dict(verification_route='NETWORK_LOCAL_BUNDLE'); calls=[]; seen=[]
+    monkeypatch.setattr('cfm_id.direct_verification.verify',lambda *a,**k:dict(draft=draft,checks=[]))
+    rejected=dict(state='READING_RECHECK_REQUIRED',attempts=[dict(audit=dict(findings=[dict(
+        field='coverage',verdict='READING_ERROR',reason='Two sites are not two questions.')]))])
+    def prepare(original,report,call):
+        assert original==case
+        call(dict(system_prompt='audit',user_prompt=json.dumps(dict(fields={'coverage':{}}))),'joint_source_audit')
+        return dict(report,joint_entry=deepcopy(rejected) if len(seen)==1 else dict(state='REVIEW_REQUIRED'))
+    monkeypatch.setattr(local_bundle_entry,'prepare',prepare)
+    def call(req,stage):
+        calls.append(stage)
+        if stage=='direct_draft':return draft
+        if stage.startswith('network_source_route'):
+            s=source_scope(case,assignment='RANDOMIZED')
+            s['local_scope']=dict(value='SCOPED_OR_MULTIPLE',evidence=s['target']['evidence'])
+            s['single_question']['value']=bool(corrected and stage.endswith('recovery'))
+            return s
+        seen.append(json.loads(req['user_prompt'])['reader_scope_to_verify']['single_question']['value'])
+    out=project.direct_then_verify(case,call,population_ate=True)
+    assert seen==([False,True] if corrected else [False])
+    assert calls.count('network_source_route_recovery')==1
+    assert out['joint_entry']['state']==('REVIEW_REQUIRED' if corrected else 'READING_RECHECK_REQUIRED')
+    assert out['reader_selection']['reader']=='NETWORK_LOCAL_BUNDLE'
+    assert not out.get('backend_called') and not out.get('estimation_handoff_allowed')

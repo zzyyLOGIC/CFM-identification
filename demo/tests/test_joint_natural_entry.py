@@ -136,7 +136,9 @@ def test_identical_questions_are_presented_once_without_losing_different_gaps():
 
 
 def test_audit_format_retry_keeps_original_reading_and_exact_scope():
+    from demo.tests.test_design_scope_audit import audit_fields
     case,s=fixture();p=prepared(case,s);audit=p['joint_entry']['audit'];calls=[]
+    audit.update(audit_fields(s))
     def call(request,stage):
         calls.append(stage)
         if stage=='joint_source_read':return s
@@ -148,6 +150,67 @@ def test_audit_format_retry_keeps_original_reading_and_exact_scope():
     assert r['joint_entry']['state']=='REVIEW_REQUIRED' and not r['backend_called']
     assert calls==['joint_source_read','joint_source_audit','joint_audit_format_retry']
     assert r['joint_entry']['audit_repairs'][0]['raw']['findings'][0]['field']=='wrong_key'
+
+
+def test_new_candidate_gets_one_audit_repair_without_losing_prior_objection():
+    case,correct=fixture('DAG_JOINT');wrong=deepcopy(correct)
+    wrong['dag_target']['value']['period']='另一个被误读的时期'
+    candidates=[reader.inspect(case,x) for x in (wrong,correct)]
+    def audit(s):
+        return dict(binding=reader.binding(case,s),scientific_approval=False,findings=[
+            dict(field=k,verdict='MATCH',evidence=v.get('evidence',[]),reason='来源核对测试',question=None)
+            for k,v in reader.fields(s).items()])
+    calls=[]
+    def call(request,stage):
+        calls.append(stage);i=int(stage.endswith('_retry1'));s=candidates[i]
+        if stage.startswith('joint_source_read'):return s
+        a=audit(s);finding=next(x for x in a['findings'] if x['field']=='dag_target')
+        if stage.startswith('joint_source_audit'):
+            finding['question']='不应直接交给用户的格式矛盾？'
+            return a
+        assert stage.startswith('joint_audit_format_retry')
+        body=json.loads(request['user_prompt'])
+        assert body['input_binding']==reader.binding(case,s)
+        assert 'field=dag_target' in body['format_feedback_not_evidence']
+        assert 'question应为null' in body['format_feedback_not_evidence']
+        if not i:finding.update(verdict='READING_ERROR',reason='候选改变了原问题，必须重新读取')
+        return a
+    report=dict(version='direct-verification/25',draft={},draft_sha256=digest({}),checks=[])
+    r=entry.prepare(case,report,call)
+    assert r['joint_entry']['state']=='REVIEW_REQUIRED' and not r['backend_called']
+    assert r['joint_entry']['reading']==candidates[1] and not r['clarification_questions']
+    assert calls==['joint_source_read','joint_source_audit','joint_audit_format_retry',
+                   'joint_source_read_retry1','joint_source_audit_retry1','joint_audit_format_retry_retry1']
+    assert [x['attempt'] for x in r['joint_entry']['audit_repairs']]==[0,1]
+    assert len({x['reading_binding'] for x in r['joint_entry']['audit_repairs']})==2
+    assert any(x['verdict']=='READING_ERROR' for x in r['joint_entry']['attempts'][0]['audit']['findings'])
+
+
+def test_repeated_audit_contradictions_stop_after_six_calls_without_execution():
+    case,s=fixture('DAG_JOINT');s=reader.inspect(case,s);calls=[]
+    def call(request,stage):
+        calls.append(stage)
+        if stage.startswith('joint_source_read'):return s
+        return dict(binding=reader.binding(case,s),scientific_approval=False,findings=[
+            dict(field=k,verdict='MATCH',evidence=v.get('evidence',[]),reason='格式冲突测试',question='错误追问？')
+            for k,v in reader.fields(s).items()])
+    report=dict(version='direct-verification/25',draft={},draft_sha256=digest({}),checks=[])
+    r=entry.prepare(case,report,call)
+    assert len(calls)==6 and len(r['joint_entry']['audit_repairs'])==2
+    assert r['joint_entry']['state']=='READING_RECHECK_REQUIRED'
+    assert not r['backend_called'] and not r['clarification_questions']
+    assert r['joint_entry']['failure_details'][0]['kind']=='MODEL_OUTPUT_CONTRACT'
+
+
+@pytest.mark.parametrize('verdict,question',[
+    ('MATCH','请补充？'),('READING_ERROR','请修复模型？'),('NEEDS_CLARIFICATION',None),
+    ('NEEDS_CLARIFICATION','  '),('NEEDS_CLARIFICATION','')])
+def test_audit_question_conflict_reports_field_and_does_not_change_verdict(verdict,question):
+    case,s=fixture('DAG_JOINT');a=prepared(case,s)['joint_entry']['audit']
+    a['findings'][0].update(verdict=verdict,question=question);original=deepcopy(a)
+    with pytest.raises(ValueError,match='JOINT_AUDIT_QUESTION: field=family'):
+        reader.check_audit(case,reader.inspect(case,s),a)
+    assert a==original
 
 
 def test_line_endings_are_presented_consistently_without_deleting_rows():

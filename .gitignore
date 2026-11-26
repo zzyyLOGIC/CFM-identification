@@ -27,6 +27,8 @@ showcase*/
 # Both local web launchers save studies and receipts here.
 web_runs/
 local_*/
+# Runtime reading contract, not a local result directory.
+!/cfm_id_llm/resources/local_bundle/
 
 # Internal task assignments and publication-excluded development history
 /docs/student_tasks/

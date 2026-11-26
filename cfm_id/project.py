@@ -43,7 +43,7 @@ def direct_then_verify(case, call, *, network=None, network_focus=False, populat
             if prepared is not None:return prepared
         from cfm_id_llm import network_source_route
         network_readers={'NETWORK_OBSERVATIONAL_EFFECTS','NETWORK_OBSERVATIONAL_POLICY',
-                         'NETWORK_FINITE_POLICY','NETWORK_JOINT_MEANS'}
+                         'NETWORK_FINITE_POLICY','NETWORK_JOINT_MEANS','NETWORK_LOCAL_BUNDLE'}
         hints=joint_natural_entry.route_hints(draft)
         symbolic_fallback=None
         if 'SYMBOLIC_MEAN_JOINT' in hints:
@@ -58,7 +58,7 @@ def direct_then_verify(case, call, *, network=None, network_focus=False, populat
             # Keep the stopped attempt; a new reader must recover and audit
             # every premise from the unchanged sources, never discard extras.
             symbolic_fallback=prepared
-        if symbolic_fallback is not None or hints.intersection(network_readers) or (network is not None and not hints.difference({'OTHER'})):
+        if symbolic_fallback is not None or hints.intersection(network_readers) or report.get('local_targets') or (network is not None and not hints.difference({'OTHER'})):
             # A draft can solve a different target and hint at the wrong reader.
             # Independently read scope attributes before exposing its gaps.
             scope=None;feedback=None;route_attempts=[]
@@ -95,8 +95,9 @@ def direct_then_verify(case, call, *, network=None, network_focus=False, populat
                     '后台尚未将原问题对应到合适的读取入口，未执行识别；不需要为入口选择问题补写研究条件。')
                 r['reader_selection']=dict(source_scope=scope,attempts=route_attempts,scientific_approval=False)
                 return r
-            from . import observational_effect_entry,network_existing_entry
-            module=(observational_effect_entry if selected=='NETWORK_OBSERVATIONAL_EFFECTS' else
+            from . import observational_effect_entry,network_existing_entry,local_bundle_entry
+            module=(local_bundle_entry if selected=='NETWORK_LOCAL_BUNDLE' else
+                    observational_effect_entry if selected=='NETWORK_OBSERVATIONAL_EFFECTS' else
                     network_existing_entry if selected in network_existing_entry.FAMILIES else joint_natural_entry)
             def scoped_call(request,stage):
                 if clarification_handoff and stage.startswith(('joint_source_read','joint_source_format','joint_source_audit','joint_audit_format')):
@@ -132,9 +133,16 @@ def direct_then_verify(case, call, *, network=None, network_focus=False, populat
                     new_scope=network_source_route.check(case,raw,clarification_handoff)
                     new_selected=network_source_route.select(new_scope)
                     recovery.update(rechecked_scope=new_scope,rechecked_reader=new_selected)
-                    if new_selected and new_selected!=selected:
+                    # Corrected attributes can still select the same reader
+                    # (one subgroup question was mistaken for multiple ones).
+                    # Re-audit under the corrected scope once, rather than
+                    # leaving the obsolete scope attached to a sound reading.
+                    attributes=lambda value:{k:v.get('value') for k,v in value.items()
+                        if isinstance(v,dict) and 'value' in v}
+                    if new_selected and (new_selected!=selected or attributes(new_scope)!=attributes(scope)):
                         selected=new_selected;scope=new_scope
-                        module=(observational_effect_entry if selected=='NETWORK_OBSERVATIONAL_EFFECTS' else
+                        module=(local_bundle_entry if selected=='NETWORK_LOCAL_BUNDLE' else
+                            observational_effect_entry if selected=='NETWORK_OBSERVATIONAL_EFFECTS' else
                             network_existing_entry if selected in network_existing_entry.FAMILIES else joint_natural_entry)
                         def recovered_call(request,stage):
                             return scoped_call(request,stage+'_rerouted')

@@ -104,6 +104,25 @@ def test_key_not_persisted_and_owner_isolation(tmp_path):
     engine.credential('a','longcat','');assert not engine.health('a')['configured']
 
 
+@pytest.mark.parametrize('status,expected',[(400,'连接参数'),(401,'API 密钥'),(403,'访问权限'),
+    (404,'接口地址'),(429,'请求过密或可用额度不足'),(503,'稍后再试')])
+def test_provider_status_has_actionable_safe_message_and_no_automatic_retry(tmp_path,status,expected):
+    from cfm_id_llm.providers.base import ProviderError
+    engine=Engine(tmp_path/'runs');run=Run(owner='test',automatic_review=True);engine.runs[run.id]=run
+    calls=[]
+    def fail(r):
+        calls.append(r.id)
+        raise ProviderError('secret-test-marker: raw provider response must not reach the page',
+            code='HTTP_ERROR',diagnostics={'http_status':status,'raw_response':'secret-test-marker'})
+    engine.launch(run,fail);wait(run)
+    assert len(calls)==1 and run.stage=='STOPPED' and run.error['code']=='HTTP_ERROR'
+    assert run.error['http_status']==status
+    assert expected in run.error['message'] and f'HTTP {status}' in run.error['message']
+    assert '不需要为此补写研究条件' in run.error['message']
+    assert 'secret-test-marker' not in json.dumps(engine.view('test',run.id))
+    assert 'secret-test-marker' not in (engine.storage/run.id/'error.json').read_text('utf8')
+
+
 def test_classic_upload_csv_does_not_send_outcome_rows(tmp_path,monkeypatch):
     engine=Engine(tmp_path/'runs')
     def stop(*args):raise ValueError('STOP_BEFORE_REAL_MODEL')

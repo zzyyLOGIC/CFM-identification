@@ -3,7 +3,14 @@ import json
 import pytest
 from cfm_id import joint_natural_entry as entry
 from cfm_id_llm import joint_reading as reader,source_gap_review as gaps
-from test_joint_natural_entry import fixture,prepared
+from test_joint_natural_entry import fixture,prepared as historical_prepared
+
+
+def prepared(case,reading):
+    from demo.tests.test_design_scope_audit import audit_fields
+    report=historical_prepared(case,reading)
+    report['joint_entry']['audit'].update(audit_fields(reading))
+    return report
 
 
 def gap_answer(case,candidate,questions,cause):

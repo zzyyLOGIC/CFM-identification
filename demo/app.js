@@ -161,7 +161,12 @@ function renderNetworkConditions(run){
  if(form.dataset.binding!==sheet.binding){
   form.dataset.binding=sheet.binding;
   $('#network-condition-message').textContent='';
-  $('#network-condition-items').innerHTML=sheet.items.map(item=>`<label><b>${esc(item.label)}</b><span>${esc(item.quote)}</span><select required name="${esc(item.code)}"><option value="">请选择</option><option value="ADOPTED">本次采用</option><option value="UNSURE">暂不确定</option><option value="DECLINED">本次不采用</option></select></label>`).join('');
+  const fields=sheet.items.map(item=>`<label><b>${esc(item.label)}</b><span>${esc(item.quote)}</span><select required name="${esc(item.code)}"><option value="">请选择</option><option value="ADOPTED">本次采用</option><option value="UNSURE">暂不确定</option><option value="DECLINED">本次不采用</option></select></label>`).join('');
+  const bundle=run.result.joint_entry?.operation==='NETWORK_LOCAL_BUNDLE';
+  $('#network-condition-items').innerHTML=bundle?'<p>下方已分别列出每个问题的名单和权重。请确认以下原材料中的研究前提；确认不会扩大它们的适用范围。</p><ul>'+sheet.items.filter(x=>!['targets','information'].includes(x.code)).map(x=>'<li>'+esc(x.quote)+'</li>').join('')+'</ul><details><summary>有不同意见或暂不确定：展开调整</summary>'+fields+'</details>':fields;
+  const submit=form.querySelector?.('button');
+  if(submit){submit.textContent=bundle?'确认以上问题与前提，继续':'提交本次判断';submit.type=bundle?'button':'submit';
+   submit.onclick=bundle?()=>{if(current?.busy)return;for(const item of sheet.items){const select=form.elements.namedItem(item.code);if(!select.value)select.value='ADOPTED';}form.requestSubmit();}:null;}
   for(const [key,value] of Object.entries(run.result.review_record?.decisions||{}))form.elements.namedItem(key).value=value;
  }
  // A submitted decision can change without changing the source-sheet binding.
@@ -229,7 +234,10 @@ function networkAlignmentHTML(alignment){
 function modelOriginalHTML(raw){
  if(raw==null||typeof raw==='object'&&!Object.keys(raw).length)return '<p class="muted">本次没有保存模型原答。</p>';
  const answer=raw.answer??raw;
- const answers=Array.isArray(answer)?answer:Array.isArray(answer.answers)?answer.answers:[answer];
+ // Some unvalidated original replies nest answers beside the network facts.
+ // Display them only as model text; never turn this wrapper into approval.
+ const answers=Array.isArray(answer)?answer:Array.isArray(answer.answers)?answer.answers:
+  Array.isArray(answer.network_facts?.answers)?answer.network_facts.answers:[answer];
  const text=v=>typeof v==='string'||typeof v==='number'?String(v):v&&typeof v==='object'?(v.statement||v.description||v.label||v.name||''):'';
  const status={POINT:'模型认为可点识别',PARTIAL:'模型认为只能确定范围',NO_USEFUL_ID:'模型认为不能给出有效界限',NEEDS_INPUT:'模型认为需要补充信息',NOT_IDENTIFIED:'模型认为不可识别',NOT_COVERED:'模型认为当前方法未覆盖'};
  const mathTextHTML=value=>typeof ModelMath==='object'?ModelMath.render(value):esc(value);
@@ -256,8 +264,12 @@ function modelOriginalHTML(raw){
  return body+'<details class="model-draft"><summary>查看模型原答（供对照）</summary><pre>'+esc(JSON.stringify(raw,null,2))+'</pre></details>';
 }
 function directResultHTML(report,receipt){
+  // Once the source entry has supplied its reviewed reading, its per-question
+  // diagnostics supersede the initial draft projection. Keep the latter in
+  // the raw report, not as a second, potentially contradictory final verdict.
+  const alignment=report.joint_entry?.reading&&report.joint_entry?.audit?'':networkAlignmentHTML(report.network_alignment);
   return '<div class="answer-comparison"><section class="model-answer" aria-label="LLM 原答"><h3>LLM 原答</h3><p class="muted">保留本轮读取的模型原答。右侧给出数学库的独立结果，二者可能不同。</p>'+modelOriginalHTML(report.draft)+
-  '</section><section class="library-answer" aria-label="数学库核验"><h3>数学库核验</h3><p class="muted">按本次目标和确认的条件计算；未通过的地方会说明原因。</p>'+directAnswerHTML(report,receipt)+networkAlignmentHTML(report.network_alignment)+'</section></div>';
+  '</section><section class="library-answer" aria-label="数学库核验"><h3>数学库核验</h3><p class="muted">按本次目标和确认的条件计算；未通过的地方会说明原因。</p>'+directAnswerHTML(report,receipt)+alignment+'</section></div>';
 }
 function jointCertificateHTML(c,problem=null){
  const math=tex=>ModelMath.render('\\['+tex+'\\]');
@@ -325,7 +337,35 @@ function jointCertificateHTML(c,problem=null){
     (c.information_basis?.output_kind==='SYMBOLIC_FUNCTIONAL_ONLY'?'<p>现有资料是有限样本。这里给出总体分布的符号公式，没有把样本频率当作总体概率，也尚未计算效果数值。</p>':'');
  }catch{return '<p>请展开证书查看完整公式结构。</p>';}
 }
+function sourceReadingDiagnosisHTML(entry){
+ const problems=[...(entry.failure_details||[]).filter(x=>x.kind==='MODEL_SOURCE_MISMATCH').map(x=>'后台复核指出：'+x.reason),
+  ...(entry.input_diagnostics||[]).filter(x=>x.cause==='READING_OMISSION').map(x=>'原文已有说明，但模型未完整保留：'+x.reason)];
+ if(problems.length)return '<ul class="reading-diagnostics">'+[...new Set(problems)].slice(0,3).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';
+ if((entry.failure_details||[]).some(x=>x.kind==='MODEL_OUTPUT_CONTRACT'))return '<p class="reading-diagnostics">模型的读取或复核答复格式仍有问题，后台重试未能解决。本次尚未完成识别，不需要因此补写研究条件。具体错误保存在下方记录中。</p>';
+ return '';
+}
 function directAnswerHTML(report,receipt){
+ if(report.joint_entry?.operation==='NETWORK_LOCAL_BUNDLE'){
+  const e=report.joint_entry,s=e.reading,labels={POINT:'可点识别',READY:'等待确认研究前提',NEEDS_INPUT:'需要补充信息',UNSUPPORTED:'当前方法尚不能处理本问',READING_RECHECK_REQUIRED:'本问读取尚未通过复核',RECHECK_REQUIRED:'本问结果需要重新核对'};
+  const parts=(e.parts||[]).map((p,i)=>{
+   const t=p.target,terms=p.summary?.constituent_arms;
+   return '<section class="local-target"><h4>问题 '+(i+1)+'：'+esc(p.question)+'</h4><p><b>'+esc(labels[p.state]||'本问尚未完成')+'</b></p>'+
+    (Object.keys(t.weights||{}).length?'<p>评价对象与权重：'+Object.entries(t.weights).map(([n,w])=>esc(n)+' '+esc(w)).join('；')+'。</p>':'')+
+    (terms&&p.independent_replay?'<h4>识别公式</h4>'+linearArmMathHTML(terms,t.kind)+'<p>本问证书已独立核验。其他对象仍保留在完整关系网中。</p>':'')+
+    (p.message?'<p>'+esc(p.message)+'</p>':'')+'</section>';
+  }).join('');
+  const adopted=(s?.conditions||[]).filter(c=>c.status==='ADOPTED'&&report.review_record?.decisions[c.code]==='ADOPTED');
+  const infoLabels={NODE_ARM_MEANS:'逐对象、本人和同伴状态的总体均值',NODE_FULL_LAW:'每个对象的结果与完整处理安排的总体分布',FULL_JOINT_LAW:'所有对象的结果与完整处理安排的联合总体分布',FINITE_SAMPLE:'有限样本记录',OTHER:'其他资料',UNKNOWN:'资料形式尚不明确'};
+  const info=(s?.information||[]).map(c=>esc(infoLabels[c.value.operator]||c.value.operator)+'（'+c.value.outcome_nodes.length+' 个结果对象）').join('；');
+  const verified=(e.parts||[]).filter(p=>p.state==='POINT'&&p.independent_replay).length;
+  const overview=verified&&verified<(e.parts||[]).length?'<p class="bundle-summary">'+verified+' 个问题已得到公式，其余问题的停止原因分别列在下面。已完成的结果会保留；整组完成后才交付估计查询。</p>':'';
+  return '<section><h3>'+esc(e.message)+'</h3>'+sourceReadingDiagnosisHTML(e)+overview+(info?'<p><b>读取到的资料：</b>'+info+'</p>':'')+parts+
+   (adopted.length?'<details><summary>本次采用的前提与适用范围</summary><ul>'+adopted.map(c=>'<li>'+esc(c.statement)+'（'+esc(c.covered_nodes.join('、'))+'）</li>').join('')+'</ul></details>':'')+
+   '<details><summary>各问来源、公式和证书</summary><pre>'+esc(JSON.stringify(e,null,2))+'</pre></details><p class="muted">'+
+   (report.estimation_handoff_allowed&&receipt?.state==='QUEUED'&&receipt?.mode==='ESTIMATE_POINT_BUNDLE'
+    ?'已登记 '+esc(receipt.target_count)+' 个问题、'+esc(receipt.query_count)+' 项总体均值查询。各问分别保留系数和证书；尚未运行样本估计器。'
+    :'各问分别核验，当前未向估计端交付查询。')+'</p></section>';
+ }
  if(report.joint_entry){
   const entry=report.joint_entry,s=entry.reading,c=entry.native_result?.certificate;
   const supplied=entry.given_probability_source;
@@ -339,10 +379,7 @@ function directAnswerHTML(report,receipt){
   const conditions=observed?(report.condition_review?.items||[]).filter(x=>x.code!=='target').map(x=>'<li>'+esc(x.quote)+(decisionLabel(x.code)?'（'+esc(decisionLabel(x.code))+'）':'')+'</li>').join(''):(s?.conditions||[]).filter(x=>x.status!=='UNKNOWN').map(x=>'<li>'+esc(x.statement)+'（'+esc(decisionLabel(x.code)||{ADOPTED:'原文采用',NOT_ADOPTED:'原文不采用',UNDECIDED:'尚未决定',CONTRADICTED:'冲突'}[x.status]||x.status)+'）</li>').join('');
   const constraints=[...(s?.constraints||[]),...(s?.mean_orders||[])].map(x=>'<li>'+esc(x.description)+'（'+esc({ADOPTED:'采用',NOT_ADOPTED:'不采用',UNDECIDED:'尚未决定'}[x.status]||x.status)+'）</li>').join('');
   const values=Object.entries(target?.intervention_values||{}).map(([k,v])=>esc(k)+'='+esc(v)).join('，');
-  const problems=[...(entry.failure_details||[]).filter(x=>x.kind==='MODEL_SOURCE_MISMATCH').map(x=>'后台复核指出：'+x.reason),
-   ...(entry.input_diagnostics||[]).filter(x=>x.cause==='READING_OMISSION').map(x=>'原文已有说明，但模型未完整保留：'+x.reason)];
-  const diagnosis=problems.length?'<ul class="reading-diagnostics">'+[...new Set(problems)].slice(0,3).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':
-   (entry.failure_details||[]).some(x=>x.kind==='MODEL_OUTPUT_CONTRACT')?'<p>模型返回的字段或引用仍不符合接口要求，后台重读未能修复。具体错误保存在下方记录中。</p>':'';
+  const diagnosis=sourceReadingDiagnosisHTML(entry);
   return '<section><h3>'+esc(entry.reason_code==='REVIEW_PREMISE_DECLINED'?'本路线已停止':titles[entry.state]||entry.state)+'</h3><p>'+esc(entry.message)+'</p>'+ (target||observedTarget?'<p>'+esc(observedTarget||target.description||target.context)+'</p>':'')+
    diagnosis+sourceValue+
    (c&&report.independent_replay?jointCertificateHTML(c,entry.problem)+'<p>'+esc(note)+'证书核验通过。</p>':'')+
@@ -475,7 +512,7 @@ function directAnswerHTML(report,receipt){
 function renderRun(r){
  $('#steps').hidden=!!r.automatic_review;
  renderStudyReview(r);
- $('#workspace-title').textContent=r.result?'本次分析结果':'正在分析你的问题';
+ $('#workspace-title').textContent=r.result?'本次分析结果':r.error?'本次分析已停止':'正在分析你的问题';
  $('#run-label').textContent=(r.synthetic?'合成研究':'研究审核')+' · '+r.provider+' · '+r.id.slice(0,8);
  const last=r.events.at(-1),elapsed=Math.round((Date.now()/1000)-(last?.time||r.created));$('#progress').innerHTML=(r.busy?'<span class="spinner"></span>':'')+esc(last?.message||stageNames[r.stage])+ (r.busy?` <span class="muted">本阶段 ${elapsed} 秒</span>`:'');
  const level=r.stage==='ESTIMATING'||r.estimate||r.review_kind==='data'?3:r.stage==='IDENTIFYING'||r.result?.backend_called||r.review_kind==='science'||r.review_kind==='information'?2:r.queries.length?1:0;$('#steps').querySelectorAll('li').forEach((e,i)=>e.classList.toggle('active',i<=level));
@@ -640,6 +677,7 @@ function renderClarification(r){
 }
 function errorExplanation(error){
  const text=error.code+' '+error.message;
+ if(error.code==='HTTP_ERROR'&&Number.isInteger(error.http_status)&&error.http_status>=400&&error.http_status<=599&&typeof error.message==='string')return error.message;
  if(error.code==='READING_REVIEW_DISAGREEMENT')return '模型对原文的理解仍有冲突，识别尚未开始。可点击“重新核对”；无需改写已明确的条件。';
  if(error.code==='INCOMPLETE_COMPLETION')return '模型回复被截断，核对未完成。请点击“重新核对”；无需修改研究问题。';
  if(error.code==='LOCAL_API_CALL_LIMIT')return '已达到本地演示服务设置的 API 调用次数上限，本次未继续发送模型请求。输入和已有结果仍保留。';
@@ -1008,7 +1046,7 @@ function numberMath(x){const s=String(x);return /^-?\d+\/\d+$/.test(s)?'<mfrac>'
 // Render executed coordinates, never infer a certified formula from model prose.
 // The factored form is used only when every pair has opposite exact coefficients
 // and the same two states. Otherwise display the actual term list without factoring.
-function linearArmMathHTML(terms){
+function linearArmMathHTML(terms,quantity='CONTRAST'){
  if(!Array.isArray(terms)||!terms.length||terms.some(t=>!t.node_id||
    !/^-?\d+(?:\/[1-9]\d*)?$/.test(String(t.coefficient))||
    !Number.isInteger(t.own_treatment)||!Number.isInteger(t.exposure_state)))return '';
@@ -1021,7 +1059,7 @@ function linearArmMathHTML(terms){
    String(p.negative.coefficient)==='-'+String(p.positive.coefficient))&&
    pairs.every(p=>equalState(p.positive,pairs[0].positive)&&equalState(p.negative,pairs[0].negative));
  const mu=(i,a,s)=>'<mrow><msub><mi>μ</mi>'+mathText(i)+'</msub><mo stretchy="false">(</mo>'+numberMath(a)+'<mo>,</mo>'+numberMath(s)+'<mo stretchy="false">)</mo></mrow>';
- let body='<mi>τ</mi><mo>=</mo>';
+ let body='<mi>'+(quantity==='MEAN'?'θ':'τ')+'</mi><mo>=</mo>';
  if(pairable){
   const p=pairs[0];
   body+='<munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>V</mi></mrow></munder><msub><mi>w</mi><mi>i</mi></msub><mrow><mo>[</mo>'+mu('i',p.positive.own_treatment,p.positive.exposure_state)+'<mo>−</mo>'+mu('i',p.negative.own_treatment,p.negative.exposure_state)+'<mo>]</mo></mrow>';
@@ -1031,9 +1069,9 @@ function linearArmMathHTML(terms){
   }).join('');
  }
  const weights=pairable?'<div class="formula-weight-list">'+nodes.map((n,i)=>'<span>'+esc(n)+'：<math><msub><mi>w</mi><mn>'+(i+1)+'</mn></msub><mo>=</mo>'+numberMath(pairs[i].positive.coefficient)+'</math></span>').join('')+'</div>':'<p>'+nodes.map((n,i)=>(i+1)+'：'+esc(n)).join('；')+'</p>';
- return '<div class="formula native-linear-formula"><math display="block" aria-label="按已验证系数合成的局部效应"><mrow>'+body+'</mrow></math></div>'+
+ return '<div class="formula native-linear-formula"><math display="block" aria-label="按已验证系数合成的'+(quantity==='MEAN'?'局部均值':'局部效应')+'"><mrow>'+body+'</mrow></math></div>'+
   (nodes.length>8?'<details><summary>查看评价名单与权重</summary>'+weights+'</details>':weights)+
-  '<details class="formula-guide"><summary>符号含义</summary><p>τ 是本问的平均结果差；i 按所列名单顺序编号。'+(pairable?'V 是参与平均的对象，wᵢ 是评价权重。':'各项系数按识别库原式保留。')+'</p><div class="formula"><math display="block"><mrow>'+mu('i','a','s')+'<mo>=</mo>'+expectation('a','s')+'</mrow></math></div><p>μᵢ(a,s) 是本人状态为 a、同伴状态为 s 时的总体条件均值；Y 是结果，T 是本人处理状态，S 是同伴状态，W 是本次固定背景。其余安排按原分配规则在该情形下平均。</p></details>';
+  '<details class="formula-guide"><summary>符号含义</summary><p>'+(quantity==='MEAN'?'θ 是本问的平均结果':'τ 是本问的平均结果差')+'；i 按所列名单顺序编号。'+(pairable?'V 是参与平均的对象，wᵢ 是评价权重。':'各项系数按识别库原式保留。')+'</p><div class="formula"><math display="block"><mrow>'+mu('i','a','s')+'<mo>=</mo>'+expectation('a','s')+'</mrow></math></div><p>μᵢ(a,s) 是本人状态为 a、同伴状态为 s 时的总体条件均值；Y 是结果，T 是本人处理状态，S 是同伴状态，W 是本次固定背景。其余安排按原分配规则在该情形下平均。</p></details>';
 }
 function localTargetFormulaHTML(part){
  const n=part.native?.summary;if(!n)return '';

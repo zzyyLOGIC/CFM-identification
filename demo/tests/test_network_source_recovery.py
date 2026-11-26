@@ -19,7 +19,12 @@ def exercise(case, initial, repaired=None, cause='READING_OMISSION'):
         if stage.startswith('joint_source_read'):
             return deepcopy(repaired if stage.endswith('retry1') and repaired is not None else initial)
         if stage.startswith('joint_source_audit'):
-            return dict(binding=body['input_binding'],scientific_approval=False,
+            from demo.tests.test_design_scope_audit import audit_fields
+            return dict(**audit_fields(initial),binding=body['input_binding'],scientific_approval=False,
+                information_scope_version='network-information-scope-audit/1',
+                information_scopes=[dict(field='information',nature='POPULATION',statistic='MEANS',
+                    results='SEPARATE_OUTCOMES',treatments='FULL_ASSIGNMENT',outcome_nodes=['A','B'],
+                    evidence=initial['information']['evidence'])],
                 findings=[dict(field=k,verdict='MATCH',evidence=v.get('evidence',[]),
                     reason='Deterministic source-audit fixture, not LLM evidence.',question=None)
                     for k,v in body['fields'].items()])

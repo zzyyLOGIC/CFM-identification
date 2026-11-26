@@ -6,6 +6,7 @@ from pydantic import Field,StrictInt
 from . import joint_reading as shared
 from .joint_reading import Strict,Claim,Network,Exposure,Design,Condition,MaterialNote
 from .information_semantics import GUIDANCE as INFORMATION_SCOPE_GUIDANCE
+from . import information_scope_audit
 
 
 class Study(Strict):
@@ -122,11 +123,16 @@ def fields(s):
 
 
 def audit_request(case,s):
-    return shared.audit_request(case,s,field_catalog=fields(s),reading_contract=contract())
+    return information_scope_audit.augment_request(
+        shared.audit_request(case,s,field_catalog=fields(s),reading_contract=contract()),s)
 
 
 def check_audit(case,s,raw):
-    return shared.check_audit(case,s,raw,field_catalog=fields(s))
+    return information_scope_audit.check(case,s,raw,fields(s))
+
+
+def check_audit_current(case,s,raw):
+    return information_scope_audit.check(case,s,raw,fields(s),current=True)
 
 
 binding=shared.binding

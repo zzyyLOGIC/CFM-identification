@@ -111,8 +111,8 @@
 
 | 方法 | 共同读取 | 专用研究入口 | 普通 ATE 默认网页适配 |
 | --- | --- | --- | --- |
-| network.randomized.local_mean | NETWORK_RANDOMIZED_ARM_FACTS | — | — |
-| network.randomized.local_contrast | NETWORK_RANDOMIZED_EFFECT_FACTS | — | — |
+| network.randomized.local_mean | NETWORK_RANDOMIZED_ARM_FACTS | — | 已接入；不自动交接估计 |
+| network.randomized.local_contrast | NETWORK_RANDOMIZED_EFFECT_FACTS | — | 已接入；不自动交接估计 |
 | network.randomized.full_policy_mean | NETWORK_FIXED_POLICY_FACTS | — | 已接入；不自动交接估计 |
 | network.randomized.finite_policy_mean | NETWORK_FINITE_POLICY_FACTS | — | 已接入；不自动交接估计 |
 | network.randomized.full_policy_contrast | NETWORK_POLICY_CONTRAST_FACTS | — | 已接入；不自动交接估计 |
