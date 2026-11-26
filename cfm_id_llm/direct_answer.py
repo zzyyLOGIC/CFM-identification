@@ -27,6 +27,7 @@ def network_request(case, *, network_focus=False):
     result['system_prompt'] += '\n原问保留未知总体参数、要求给出参数变化时的上下界，并明确有限均值模型及线性限制时，用SYMBOLIC_MEAN_JOINT；不可把符号参数随意代成数字。原文尚未明确模型完整性仍保留未知，提示不批准模型。'
     result['system_prompt'] += '\nNETWORK_FINITE_POLICY也包括两套有限随机政策的均值之差；NETWORK_OBSERVATIONAL_POLICY也包括两份固定政策之差或有限份政策混合，必须原样保留两端，不将效应改成政策水平。'
     result['system_prompt'] += '\n随机试验中只有一份固定完整政策或两份固定政策之差，若资料是完整安排总体律/均值，或本人和同伴状态的总体均值，可提示NETWORK_FINITE_POLICY。均值充分性不等于额外的均值等式或顺序；明确有限均值范围模型及额外联合限制仍提示NETWORK_JOINT_MEANS。未知保持原样，由后续原文核对分派。'
+    result['system_prompt'] += '\n上述随机化局部目标的OTHER有以下专用入口：原问同时要求多个局部状态均值或效应，或指定评价子群、非等权对象权重时，用NETWORK_LOCAL_BUNDLE。每问保留自己的评价名单、权重和比较方向，不合并成全体等权目标。一个问题涉及多个对象不等于多个问题。该提示不要求上传关系文件；文字中的关系也须由后续读取和来源审核核对。子群或权重尚未明确仍保留未知，不能自行确定。'
     result['system_prompt'] += '\nBINARY_IV表示用二元工具（如邀请或资格）、实际处理和二元结果的总体条件概率研究总体ATE或依从者LATE。不可把邀请的ITT改写成实际处理效应；提示仅用于另读原文，不批准排除限制、单调性等前提。'
     result['system_prompt'] += '\nDAG_GENERAL表示变量因果图中一个处理的干预分布，包括图中明确列出的未观测共同原因；不限制为后门或前门，也不因可能不可识别而换目标。它只选择原文读取，数学库另查适用条件并给公式或见证。'
     return result

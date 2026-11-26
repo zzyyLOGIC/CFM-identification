@@ -42,6 +42,33 @@ def test_policy_mean_and_multiple_questions_are_not_recast_as_single_effect():
     assert effect.reader_selection({'answers':[dict(difference,verification_route='NETWORK_FINITE_POLICY')]}) is None
 
 
+def test_inline_multi_target_hint_is_independently_checked_without_upload(monkeypatch):
+    from cfm_id import local_bundle_entry
+    from cfm_id_llm.direct_answer import network_request
+    case=dict(case_id='inline-bundle',business_question='Two weighted local comparisons, with relations in the text.',sources=[])
+    assert 'NETWORK_LOCAL_BUNDLE' in network_request(case)['system_prompt']
+    draft={'answers':[{'verification_route':'NETWORK_LOCAL_BUNDLE','question_part':q} for q in ('first','second')]}
+    before=deepcopy(draft);seen=[]
+    monkeypatch.setattr('cfm_id.direct_verification.verify',lambda *a,**k:dict(draft=draft))
+    def prepare(original,report,call):
+        assert original==case and report['draft']==before
+        seen.append('source_reader')
+        return dict(report,joint_entry=dict(state='NEEDS_INPUT'),scientific_approval=False,estimation_handoff_allowed=False)
+    monkeypatch.setattr(local_bundle_entry,'prepare',prepare)
+    def call(request,stage):
+        if stage=='direct_draft':return draft
+        assert stage=='network_source_route'
+        scope=source_scope(case,assignment='RANDOMIZED')
+        scope['single_question']['value']=False
+        scope['local_scope']=dict(value='SCOPED_OR_MULTIPLE',evidence=scope['target']['evidence'])
+        return scope
+    out=project.direct_then_verify(case,call,population_ate=True)
+    assert seen==['source_reader'] and draft==before
+    assert out['reader_selection']['reader']=='NETWORK_LOCAL_BUNDLE'
+    assert out['joint_entry']['state']=='NEEDS_INPUT'
+    assert not out['scientific_approval'] and not out['estimation_handoff_allowed']
+
+
 def test_unknown_assignment_uses_gap_capable_reader_without_assuming_randomization():
     case = dict(case_id='gap', business_question='Compare peer states; assignment rule is unknown.', sources=[])
     scope = source_scope(case, assignment='UNKNOWN')
