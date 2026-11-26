@@ -793,9 +793,11 @@ function reviewSummary(r){
  if(facts.design_facts?.network_fixed_before_treatment?.value===true)conditions.push('使用试点前固定的关系网络');
  if(!conditions.length)conditions.push('依据原研究方案；具体科学条件尚待读取，不在此默认批准。');
  const data=r.attachment_report?.factual_data;
+ // Network readers use rows; graph readers carry a joint-information object.
+ const informationRows=Array.isArray(facts.information)?facts.information:[];
  let dataText=data?`${data.nodes??'未知'} 个对象，${data.observed??'未知'} 条结果记录，${data.features??'未知'} 项特征。`:'以本次材料声明的总体信息为准。';
- dataText+=(facts.information||[]).some(x=>x.availability==='SYMBOLIC_POPULATION_OPERATOR')?'识别依据材料另行声明的总体信息；有限记录仅用于估计。':data?'有限记录不自动变为已知总体信息。':'';
- if((facts.information||[]).some(x=>x.operator==='ALL_OUTCOMES_TOGETHER_WITH_FULL_ASSIGNMENT'&&x.availability==='SYMBOLIC_POPULATION_OPERATOR'))dataText+=' 本次声明可用：全体对象的结果与完整使用安排的联合总体分布（符号形式）。';
+ dataText+=informationRows.some(x=>x.availability==='SYMBOLIC_POPULATION_OPERATOR')?'识别依据材料另行声明的总体信息；有限记录仅用于估计。':data?'有限记录不自动变为已知总体信息。':'';
+ if(informationRows.some(x=>x.operator==='ALL_OUTCOMES_TOGETHER_WITH_FULL_ASSIGNMENT'&&x.availability==='SYMBOLIC_POPULATION_OPERATOR'))dataText+=' 本次声明可用：全体对象的结果与完整使用安排的联合总体分布（符号形式）。';
  const fallbackCards=[{title:'要比较什么',lines:[comparison,scope+' · '+aggregation,outcome]},
   {title:'按什么条件计算',lines:conditions},{title:'用什么数据估计',lines:[dataText]}];
  const supplied=r.review_summary;

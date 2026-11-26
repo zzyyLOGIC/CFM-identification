@@ -98,7 +98,11 @@ def continuation(case,previous_case,report):
 
 def select(scope):
     if (scope['target']['value'] in ('LOCAL_MEAN','LOCAL_CONTRAST') and scope['assignment']['value'] in ('RANDOMIZED','UNKNOWN')
-            and (scope['target']['value']=='LOCAL_MEAN' or scope['single_question']['value'] is False or (scope.get('local_scope') or {}).get('value')=='SCOPED_OR_MULTIPLE')):
+            and (scope['assignment']['value']=='UNKNOWN' or scope['target']['value']=='LOCAL_MEAN'
+                 or scope['single_question']['value'] is False or (scope.get('local_scope') or {}).get('value')=='SCOPED_OR_MULTIPLE')):
+        # The local source reader can retain an unknown design and obtain a
+        # source-audited clarification. Selecting it does not assert randomization;
+        # its planner blocks until the actual assignment and premises are known.
         return 'NETWORK_LOCAL_BUNDLE'
     if scope['single_question']['value'] is not True:return None
     t=scope['target']['value'];a=scope['assignment']['value']

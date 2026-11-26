@@ -35,7 +35,7 @@ def test_shared_phase_limit_includes_source_reread_and_audit_format_retry(tmp_pa
 
 @pytest.mark.parametrize('code,reason',[
     ('INCOMPLETE_COMPLETION','content_filter'),('INCOMPLETE_COMPLETION',None),
-    ('MODEL_REFUSAL','stop'),('TIMEOUT',None),('HTTP_ERROR',None)])
+    ('MODEL_REFUSAL','stop'),('HTTP_ERROR',None)])
 def test_other_failures_not_retried(tmp_path,monkeypatch,code,reason):
     e=Engine(tmp_path);r=Run(owner='offline');calls=[]
     def call(*args):
@@ -43,6 +43,22 @@ def test_other_failures_not_retried(tmp_path,monkeypatch,code,reason):
     monkeypatch.setattr(e,'call',call)
     with pytest.raises(ProviderError):e._call_direct(r,{},'direct_draft')
     assert len(calls)==1 and not r.automatic_direct_length_retries
+
+
+def test_timeout_retries_exact_request_once_and_keeps_an_adverse_answer(tmp_path, monkeypatch):
+    e=Engine(tmp_path);r=Run(owner='offline');seen=[]
+    request=dict(system_prompt='Complete contract',user_prompt='Unchanged original materials')
+    adverse={'status':'NEEDS_INPUT'}
+    def call(run, req, stage):
+        seen.append((deepcopy(req),stage))
+        if len(seen)!=2:raise ProviderError('timeout',code='TIMEOUT')
+        return adverse
+    monkeypatch.setattr(e,'call',call)
+    assert e._call_direct(r,request,'direct_draft')==adverse
+    assert seen==[(request,'direct_draft'),(request,'direct_draft_timeout_retry')]
+    with pytest.raises(ProviderError):e._call_direct(r,request,'joint_source_read')
+    assert len(seen)==3 and r.automatic_direct_transport_retries==1
+    assert not r.reviews and r.result is None
 
 
 def test_default_workflow_callback_uses_recovery(tmp_path,monkeypatch):

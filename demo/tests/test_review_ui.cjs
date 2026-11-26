@@ -385,6 +385,16 @@ test('the natural-language result displays the probability of each ordered event
   assert.doesNotMatch(html,/估计端已收到/);
 });
 
+test('graph information objects do not interrupt background review or grant approval',async()=>{
+ const view=fixture('source');view.review_kind='dag_source';view.stage='REVIEWING_READING';view.busy=true;
+ view.plan.reading_candidate.information={kind:'OBSERVED_JOINT',variables:['X','M','Y']};
+ const before=JSON.stringify(view.plan.reading_candidate);
+ const h=harness(view);
+ assert.equal(h.summary().compact_confirmation_available,false);
+ await h.confirm();assert.equal(h.requests.length,0);
+ assert.equal(JSON.stringify(h.context.fixture.plan.reading_candidate),before);
+});
+
 function fixture(kind='query') {
   const dimension={field_role:'PENDING',value_state:'PENDING',source_coverage:'PENDING'};
   const candidate={version:'network-randomized-effect-reading-1',

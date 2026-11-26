@@ -71,6 +71,19 @@ def direct_then_verify(case, call, *, network=None, network_focus=False, populat
                 except (ValueError,TypeError,KeyError) as exc:
                     feedback=str(exc)[:2000];route_attempts.append(dict(error=feedback))
             selected=network_source_route.select(scope) if scope else None
+            if (selected is None and scope and not report.get('independent_replay')
+                    and (report.get('clarification_questions') or any(
+                        c.get('code')=='ANSWER_CONTRACT' and c.get('state')=='CONFLICT'
+                        for c in report.get('checks',[])))
+                    and scope['single_question']['value'] is True
+                    and scope['target']['value']=='LOCAL_CONTRAST'
+                    and scope['assignment']['value']=='RANDOMIZED'):
+                # A draft-level gap or malformed answer is not a source verdict.
+                # The independent scope found an actual randomized local study;
+                # use the existing full reader to audit the design and remaining
+                # gaps before asking the user to repeat a fact already supplied.
+                # This neither repairs the draft nor grants scientific approval.
+                selected='NETWORK_LOCAL_BUNDLE'
             if selected is None:
                 if symbolic_fallback is not None:
                     symbolic_fallback['reader_selection']=dict(reader='SYMBOLIC_MEAN_JOINT',

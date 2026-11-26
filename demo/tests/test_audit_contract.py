@@ -273,6 +273,10 @@ def test_fact_schema_retry_keeps_both_answers_and_still_requires_review(tmp_path
     def reply(r,e,stage):
         requests.append(deepcopy(e))
         raw=bad if len(requests)==1 else good
+        if stage=='facts_field_patch':
+            body=json.loads(e['request']['user'])
+            return dict(binding_sha256=body['output_schema']['properties']['binding_sha256']['const'],
+                fields={name:deepcopy(raw[name]) for name in body['fields_to_reread']})
         engine.save(r,'facts_candidate',raw)
         return deepcopy(raw)
     monkeypatch.setattr(engine,'call',reply)
@@ -307,6 +311,10 @@ def test_balance_axes_get_one_located_retry_without_silent_repair(tmp_path,monke
     before=deepcopy(run.entry);calls=[]
     def reply(r,e,stage):
         calls.append(deepcopy(e));raw=bad if len(calls)==1 else good
+        if stage=='facts_field_patch':
+            body=json.loads(e['request']['user'])
+            return dict(binding_sha256=body['output_schema']['properties']['binding_sha256']['const'],
+                fields={name:deepcopy(raw[name]) for name in body['fields_to_reread']})
         engine.save(r,'facts_candidate',raw);return deepcopy(raw)
     monkeypatch.setattr(engine,'call',reply)
     assert engine._read_facts(run,run.entry)==good
@@ -317,7 +325,12 @@ def test_balance_axes_get_one_located_retry_without_silent_repair(tmp_path,monke
     # A second invalid answer remains blocked, never transposed by the program.
     run.automatic_fact_format_repairs=0;calls.clear()
     def always_bad(r,e,stage):
-        calls.append(e);engine.save(r,'facts_candidate',bad);return deepcopy(bad)
+        calls.append(e)
+        if stage=='facts_field_patch':
+            body=json.loads(e['request']['user'])
+            return dict(binding_sha256=body['output_schema']['properties']['binding_sha256']['const'],
+                fields={name:deepcopy(bad[name]) for name in body['fields_to_reread']})
+        engine.save(r,'facts_candidate',bad);return deepcopy(bad)
     monkeypatch.setattr(engine,'call',always_bad)
     with pytest.raises(ComponentStructureError):engine._read_facts(run,run.entry)
     assert len(calls)==2 and run.result is None

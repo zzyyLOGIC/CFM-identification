@@ -93,6 +93,17 @@ def test_network_and_extra_constraints_preserved(tmp_path):
     assert p['joint_entry']['reason_code']=='LOCAL_ADDITIONAL_RESTRICTIONS' and not p.get('proof')
 
 
+def test_unknown_design_remains_a_gap_not_an_inferred_randomized_law(tmp_path):
+    c, d, table, s = fixture(tmp_path)
+    s['study']['value']['regime'] = 'UNKNOWN'
+    s['design']['value'] = None
+    p = planned(c, d, s, table)
+    assert p['joint_entry']['state'] == 'NEEDS_INPUT'
+    assert p['joint_entry']['reading']['design']['value'] is None
+    assert 'design' in p['joint_entry']['missing_fields']
+    assert not p.get('proof') and not p.get('estimation_handoff_allowed')
+
+
 def test_finite_sample_and_incomplete_information_not_upgraded(tmp_path):
     c,d,table,s=fixture(tmp_path);s['information'][0]['value'].update(operator='FINITE_SAMPLE',availability='FINITE_SAMPLE')
     r=planned(c,d,s,table)

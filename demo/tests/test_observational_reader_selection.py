@@ -42,6 +42,20 @@ def test_policy_mean_and_multiple_questions_are_not_recast_as_single_effect():
     assert effect.reader_selection({'answers':[dict(difference,verification_route='NETWORK_FINITE_POLICY')]}) is None
 
 
+def test_unknown_assignment_uses_gap_capable_reader_without_assuming_randomization():
+    case = dict(case_id='gap', business_question='Compare peer states; assignment rule is unknown.', sources=[])
+    scope = source_scope(case, assignment='UNKNOWN')
+    scope['local_scope'] = dict(value='STANDARD', evidence=[])
+    before = deepcopy(scope)
+    assert route.select(scope) == 'NETWORK_LOCAL_BUNDLE'
+    assert scope == before
+    scope['assignment']['value'] = 'SELF_SELECTED'
+    assert route.select(scope) == 'NETWORK_OBSERVATIONAL_EFFECTS'
+    scope['target']['value'] = 'FIXED_POLICY_LEVEL'
+    scope['assignment']['value'] = 'UNKNOWN'
+    assert route.select(scope) is None
+
+
 @pytest.mark.parametrize('hint',['NETWORK_JOINT_MEANS','NETWORK_FINITE_POLICY','NETWORK_OBSERVATIONAL_POLICY',None,'OTHER'])
 def test_wrong_hint_is_overridden_by_original_scope(monkeypatch,hint):
     case=dict(case_id='test',business_question='Self-selected treatment; compare local peer states.',sources=[])
@@ -78,6 +92,29 @@ def test_finite_model_without_extra_relations_is_still_routable():
     c=dict(case_id='test',business_question='complete randomized policy',sources=[])
     s=route.check(c,source_scope(c,'FIXED_POLICY_CONTRAST','RANDOMIZED'))
     assert route.select(s)=='NETWORK_JOINT_MEANS'
+
+
+@pytest.mark.parametrize('draft_problem', ['gap', 'answer_contract'])
+def test_draft_gap_in_known_randomized_local_study_is_checked_by_source_reader(monkeypatch,draft_problem):
+    from cfm_id import local_bundle_entry
+    case=dict(case_id='test',business_question='The actual group draw is described in the reply.',sources=[])
+    draft=dict(verification_route='NETWORK_JOINT_MEANS')
+    report=dict(draft=draft,decision='WITHHELD',clarification_questions=['How was the assignment generated?']
+        if draft_problem=='gap' else [],checks=[dict(code='ANSWER_CONTRACT',state='CONFLICT')]
+        if draft_problem=='answer_contract' else [])
+    monkeypatch.setattr('cfm_id.direct_verification.verify',lambda *a,**k:deepcopy(report))
+    seen=[]
+    def prepare(original, retained, call):
+        seen.append((original,deepcopy(retained['draft'])))
+        # The source reader may still find a real gap. Routing is not approval.
+        return dict(retained,joint_entry={'state':'NEEDS_INPUT','completed':False})
+    monkeypatch.setattr(local_bundle_entry,'prepare',prepare)
+    out=project.direct_then_verify(case,lambda req,stage:draft if stage=='direct_draft'
+        else source_scope(case,assignment='RANDOMIZED'),population_ate=True)
+    assert seen==[(case,draft)] and out['draft']==draft
+    assert out['reader_selection']['reader']=='NETWORK_LOCAL_BUNDLE'
+    assert out['reader_selection']['scientific_approval'] is False
+    assert out['joint_entry']['state']=='NEEDS_INPUT'
 
 
 @pytest.mark.parametrize('corrected',[True,False])

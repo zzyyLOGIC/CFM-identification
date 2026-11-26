@@ -87,6 +87,8 @@ class Run:
     synthetic: bool = False
     provider: str = 'longcat'
     model_settings: dict = field(default_factory=dict)
+    pending_fact_recheck: dict | None = None
+    automatic_fact_transport_retries: int = 0
     automatic_review: bool = False
     reading_mode: str = 'classic'
     automatic_rechecks: int = 0
@@ -96,6 +98,7 @@ class Run:
     automatic_focused_stages: set = field(default_factory=set)
     automatic_audit_length_retries: set = field(default_factory=set)
     automatic_direct_length_retries: set = field(default_factory=set)
+    automatic_direct_transport_retries: int = 0
     user_question: dict | None = None
     clarification_handoff: dict | None = None
     lock: object = field(default_factory=threading.RLock)
@@ -152,7 +155,7 @@ class Engine:
             return dict(ready=True, configured=credential is not None,
                 provider=credential[0] if credential else 'longcat', providers=provider_catalog(),
                 model_settings=deepcopy(self.connection_settings.get(owner,{})) if credential else {},
-                features=['located_fact_recheck','background_reading_review','typed_assumption_choices','typed_reading_audit',
+                features=['fact_field_recovery','located_fact_recheck','background_reading_review','typed_assumption_choices','typed_reading_audit',
                           'information_data_descriptions','explicit_audit_findings','network_file_input','local_input_preview'],
                 reading_config=capabilities.reading_config().model_dump(mode='json'),
                 identification_capabilities=self.web_capabilities,
@@ -658,7 +661,7 @@ class Engine:
             limit=max(DEFAULT_OUTPUT_TOKENS, self.longcat_fact_max_tokens)
         client=self.provider_factory(**options,api_key=key,timeout=300,max_tokens=limit,observer=observe)
         try:
-            value=generate(client,request,fact=stage=='facts')
+            value=generate(client,request,fact=stage=='facts' or stage.startswith('facts_field_patch'))
             value=self._clean(value,(key,));self.save(run,stage+'_candidate',value);return value
         finally:
             self.save(run,stage+'_transport',dict(provider=alias,model=options['model'],base_url=options['base_url'],
@@ -676,6 +679,12 @@ class Engine:
         from cfm_id_llm.providers.base import ProviderError
         try:return self.call(run,request,stage)
         except ProviderError as exc:
+            if exc.code == 'TIMEOUT' and run.automatic_direct_transport_retries < 1:
+                run.automatic_direct_transport_retries += 1
+                self.save(run,stage+'_transport_recovery',dict(reason='TIMEOUT',attempts=1,
+                    same_request=True,possible_duplicate_provider_charge=True,scientific_approval=False))
+                self.event(run,'READING','模型请求超时，后台按原请求重试一次。')
+                return self.call(run,request,stage+'_timeout_retry')
             if exc.code!='INCOMPLETE_COMPLETION' or exc.diagnostics.get('finish_reason')!='length':raise
             scope=stage
             for phase in ('joint_source_read','joint_source_audit','joint_gap_review','joint_condition_semantics','network_source_route'):
@@ -863,6 +872,9 @@ class Engine:
 
     def _retry_reading(self,run):
         self.event(run,'PREPARING','正在重新核对原材料')
+        if run.pending_fact_recheck is not None:
+            pending=deepcopy(run.pending_fact_recheck)
+            self._recheck(run,pending['entry'],pending['feedback'])
 
     def _clarify(self,run,text):
         self._revoke_network_delivery(run)
@@ -888,6 +900,7 @@ class Engine:
         run.review_kind=None;run.review_sheets={};run.review_templates={};run.user_question=None
         run.automatic_rechecks=0;run.automatic_audit_repairs=0;run.automatic_a0_format_repairs=0;run.automatic_fact_format_repairs=0
         run.automatic_focused_stages.clear()
+        run.pending_fact_recheck=None;run.automatic_fact_transport_retries=0
         self.event(run,'PREPARING','已保存补充说明，正在重新检查')
         if run.reading_mode in ('direct_verify','network_direct_verify','network_local_review'):
             reuse=None
@@ -931,31 +944,62 @@ class Engine:
         for name in ('facts_request','facts_candidate','facts_raw_response','facts_transport'):
             if name in run.artifacts:self.save(run,f'{name}_before_recheck_{number}',run.artifacts[name])
         self.event(run,'READING_RECHECK','正在核对标出的说明')
-        raw=self._read_facts(run,entry)
+        run.pending_fact_recheck=dict(entry=deepcopy(entry),feedback=deepcopy(feedback))
+        raw=self._read_facts(run,entry,feedback=feedback)
         # New candidate invalidates old source/science/change approvals.
         run.entry=entry
         run.submission=dict(query_review=run.query_review,candidate=raw,
             request_sha256=entry['request_sha256'],reading_revision=entry['reading_revision'])
         run.reviews={};run.result=None;run.estimate=None
+        run.pending_fact_recheck=None
         self._plan(run)
 
-    def _read_facts(self,run,entry):
+    def _read_facts(self,run,entry,*,feedback=None):
         """One explicit schema retry; never edit candidate data or grant review."""
         from pydantic import ValidationError
         from cfm_id_llm.fact_wire_models import model_for
-        from cfm_id_llm.network_design_reading import check_component_structure, ComponentStructureError
         from cfm_id_llm import file_coordinates as fact_coordinates
+        from cfm_id_llm.network_design_reading import check_component_structure, ComponentStructureError
         from cfm_id_llm import network_file_binding
         from cfm_id_llm.network_files import NetworkFileError
+        from . import fact_wire_recovery as field_wire
+        from cfm_id_llm.providers.base import ProviderError
         tables=None
         if run.network is not None:
             entry,tables=fact_coordinates.prepare_for_graph(entry,list(run.network.nodes),run.network.edges)
         entry,network_binding=network_file_binding.prepare(entry,run.network)
+        entry=field_wire.prepare(entry)
+        previous=deepcopy((run.submission or {}).get('candidate')) if feedback else None
+        field_feedback=feedback
+        wire_feedback=None
         def read(request):
-            answer=self.call(run,request,'facts')
+            patch=field_wire.field_request(request,previous,field_feedback,wire_feedback)
+            if patch is None:
+                answer=self.call(run,request,'facts')
+            else:
+                wire,receipt=patch
+                attempt=1+sum(k.startswith('facts_field_patch_attempt_') and k.endswith('_request') for k in run.artifacts)
+                for suffix in ('request','candidate','raw_response','transport'):
+                    name='facts_field_patch_'+suffix
+                    if name in run.artifacts:self.save(run,f'facts_field_patch_attempt_{attempt}_{suffix}',run.artifacts[name])
+                self.save(run,'facts_field_recovery',dict(binding_sha256=receipt['binding_sha256'],
+                    fields=receipt['fields'],previous_candidate_sha256=receipt['candidate_sha256'],
+                    scientific_approval=False,requires_full_source_review=True))
+                try:
+                    answer=self.call(run,wire,'facts_field_patch')
+                except ProviderError as exc:
+                    if exc.code!='TIMEOUT' or run.automatic_fact_transport_retries>=1:raise
+                    run.automatic_fact_transport_retries+=1
+                    self.save(run,'facts_field_transport_recovery',dict(code='TIMEOUT',attempts=1,
+                        same_request=True,scientific_approval=False))
+                    self.event(run,'READING_RECHECK','这次字段重读未及时返回，后台重试一次；原问题和条件保持不变')
+                    answer=self.call(run,wire,'facts_field_patch_timeout_retry')
+                answer=field_wire.merge(answer,receipt)
+                self.save(run,'facts_candidate',answer)
             candidate=fact_coordinates.expand(answer,tables)
             candidate=network_file_binding.expand(candidate,network_binding)
-            if tables is not None or network_binding is not None:
+            candidate=field_wire.expand(candidate)
+            if tables is not None or network_binding is not None or candidate!=answer:
                 self.save(run,'facts_expanded',candidate)
             if network_binding is not None:
                 self.save(run,'network_file_binding',dict(reference=run.network.token,
@@ -972,6 +1016,9 @@ class Engine:
         except (fact_coordinates.CoordinateError,NetworkFileError) as exc:
             raw=run.artifacts['facts_candidate']
             diagnostics=[dict(code=str(exc),path='/study or /information/arm_cells')]
+        except field_wire.FactWireError as exc:
+            raw=run.artifacts.get('facts_candidate',previous)
+            diagnostics=[dict(code=str(exc),path=exc.path)]
         except ValidationError as exc:
             if tables is not None or network_binding is not None:
                 raw=run.artifacts['facts_candidate']
@@ -981,6 +1028,12 @@ class Engine:
         if run.automatic_fact_format_repairs>=1:
             raise ValueError('FACT_READING_FORMAT_INVALID_AFTER_RETRY')
         run.automatic_fact_format_repairs+=1
+        wire_feedback=dict(errors=diagnostics,previous_response=run.artifacts.get('facts_field_patch_candidate',raw))
+        if field_feedback is None:
+            previous=deepcopy(raw)
+            field_feedback=dict(issues=[dict(field_path=d.get('path',d.get('field_path')),
+                reason=d.get('message',d.get('constraint',d.get('code',d.get('error_code')))))
+                for d in diagnostics])
         for name in ('facts_request','facts_candidate','facts_raw_response','facts_transport'):
             if name in run.artifacts:self.save(run,name+'_before_format_retry',run.artifacts[name])
         repair=deepcopy(entry);request=repair['request']
