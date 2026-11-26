@@ -126,7 +126,7 @@ class MeanInformation(Strict):
 class Bounds(Strict):
     outcome_domain: Literal['BINARY','REAL','UNKNOWN']
     kind: Literal['CONDITIONAL_MEAN','ALMOST_SURE_OUTCOME','UNKNOWN']
-    by_node: dict[str, list[str]]
+    by_node: dict[str, list[str]] = Field(description='逐对象记录原文给定的[下限,上限]，覆盖完整研究名单。全体对象、所有安排的二元0/1结果已明确时，各对象仍填写["0","1"]，不能只写outcome_domain=BINARY而把本表留空；更紧的已给范围必须原样保留。')
     all_assignments: bool | None
 
 
@@ -225,7 +225,8 @@ MATCH=忠实原文，包括正确保留未知；READING_ERROR=漏读/误读，qu
 变量含义和离散编码在graph.variable_definitions核对，不当成额外科学限制。原文“没有其他限制”可以由已完整列出的条件加空remaining/constraints表示，不要求新建一条采用声明或重复文字。仍须逐项核对原文是否确有未表达的限制；空列表本身不证明没有遗漏。
 若有requested_probability/given_probabilities，独立核对干预值、事件值、条件、人群、时期、背景及总体/样本性质；不得把不同范围统一成同一量，也不得以模型自行算出的数值作为材料已给定。仍检查所有额外限制是否保留在完整研究记录中。
 given_probabilities已完整保留的信息不要求在remaining重复。scope_matches_question只评价EXACT_POPULATION与所问量的范围对应；对SAMPLE_ESTIMATE不要求该标记，不将null或未判断当作读取错误，样本仍绝不能进入总体答案。其样本性质、原文给定的具体范围和其他信息仍须如实核对。
-网络必须核对完整节点边、状态算法、政策方向、权重、全部已知均值、界、等式/不等式每个系数和范围；coverage检查任何遗漏的额外限制。constraints已完整保留的关系不必在remaining重复，不能因没有重复而报遗漏。material_notes只可保留非科学性说明，科学限制放进去是READING_ERROR；反过来把数据条数、只求公式等说明写成remaining科学限制也是READING_ERROR。同一数据事实在information和DATA_DESCRIPTION中一致重复本身不是错误；只有矛盾、遗漏或把科学条件降为备注才是不通过理由。不要要求用户修模型错误。所附reading_contract规定字段职责。'''
+网络必须核对完整节点边、状态算法、政策方向、权重、全部已知均值、界、等式/不等式每个系数和范围；coverage检查任何遗漏的额外限制。constraints已完整保留的关系不必在remaining重复，不能因没有重复而报遗漏。material_notes只可保留非科学性说明，科学限制放进去是READING_ERROR；反过来把数据条数、只求公式等说明写成remaining科学限制也是READING_ERROR。同一数据事实在information和DATA_DESCRIPTION中一致重复本身不是错误；只有矛盾、遗漏或把科学条件降为备注才是不通过理由。不要要求用户修模型错误。所附reading_contract规定字段职责。
+区分允许干扰与限制干扰：仅说明可以相互影响、未限制影响形式，不会缩小允许的模型集合，网络研究可在STUDY_CONTEXT保留；不能因未另列ADOPTED条件而报遗漏。无干扰、仅限某些关系的影响、同一状态下均值相等等声明则是限制，仍须逐项审核。完整安排政策未采用充分性时不需要暴露分组，不能为未使用的定义制造缺项。原文已给信息范围和缺项须在专用字段核对，不得把逐对象分布扩大为全体结果联合分布，也不得将design的未知重复成待采用假设。'''
 
 
 def sources(case):

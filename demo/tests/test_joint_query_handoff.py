@@ -61,7 +61,8 @@ def test_engine_delivers_and_revokes_without_fitting(tmp_path):
     engine._finish_direct_verification(run,out)
     assert run.result['estimation_handoff_allowed']
     assert (tmp_path/'estimate_inbox').exists()
-    blocked=deepcopy(out);blocked['independent_replay']=False;blocked['joint_entry']['completed']=False
+    review=deepcopy(out['review_record']);review['decisions']['consistency']='DECLINED'
+    blocked=workflow.complete(case,out,review)
     engine._finish_direct_verification(run,blocked)
     assert not run.result['estimation_handoff_allowed']
 

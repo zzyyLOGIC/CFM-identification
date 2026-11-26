@@ -501,6 +501,18 @@ if (require.main === module) {
 }
 module.exports={harness};
 
+test('withdrawn result shows no certified conclusion, formula or active delivery',()=>{
+ const h=harness(fixture());
+ h.context.withdrawn={decision:'WITHHELD',independent_replay:false,estimation_handoff_allowed:false,
+  joint_entry:{state:'RECHECK_REQUIRED',reason_code:'JOINT_RESULT_REPLAY_REQUIRED',reading:null,
+   message:'本次结果或交接未通过核对，旧回执已撤回；尚未交付可用结论。'}};
+ const html=vm.runInContext('directAnswerHTML(withdrawn,null)',h.context);
+ assert.match(html,/结果需要重新核对/);
+ assert.match(html,/旧回执已撤回/);
+ assert.match(html,/尚未交付估计查询/);
+ assert.doesNotMatch(html,/证书核验通过|<math\b|可点识别|已验证不可识别/);
+});
+
 function registeredFixture(){
  const v=fixture('science');v.plan={state:'REVIEW_REQUIRED',plan_sha256:'p'.repeat(64),methods:[{method:'DAG_CLASSICAL_FRONTDOOR'}]};
  const sheet={version:'dag-frontdoor-1',problem_sha256:'d'.repeat(64),decisions:{complete_causal_graph_and_latents:'PENDING'}};

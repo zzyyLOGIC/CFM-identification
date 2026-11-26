@@ -229,6 +229,8 @@ class Engine:
                     message='模型服务未在本次等待时限内返回，请稍后重试。已保留原输入；不需要补充研究条件。'
                 if code=='INCOMPLETE_COMPLETION' and getattr(exc,'diagnostics',{}).get('finish_reason')=='length':
                     message='模型回复达到长度上限，未形成完整答复，本次没有据此执行识别。已保留输入和诊断；这不是研究条件缺失，不需要补写条件。'
+                if isinstance(exc,ValueError) and str(exc) in ('JOINT_REPLAY_REQUIRED','JOINT_RESULT_REPLAY_REQUIRED'):
+                    message='原材料、研究目标与核验结果未能对应，旧结果和回执已撤回。原输入与检查记录已保留，不需要为此补写研究条件。'
                 run.error=self._clean(dict(code=code,message=message))
                 self.event(run,'STOPPED','本阶段停止，未生成新的识别结论。')
                 self.save(run,'error',run.error)
@@ -413,17 +415,26 @@ class Engine:
             from cfm_id import joint_query_exchange
             # Derive from the current source review and independently replayed
             # certificate. A prior inbox receipt can never authorize this run.
-            packet=joint_query_exchange.packet(run.case,report)
             try:
+                packet=joint_query_exchange.packet(run.case,report)
                 receipt=self.estimate_inbox.receive(run.id,packet)
                 self.save(run,'identification_handoff',packet)
                 self.save(run,'estimate_intake_receipt',receipt)
             except Exception:
+                self._withdraw_joint_result(run,report)
                 self.estimate_inbox.revoke(run.id)
                 self.save(run,'estimate_intake_receipt',dict(run_id=run.id,state='DELIVERY_FAILED'))
                 raise
             report=deepcopy(report)
             report.update(estimation_handoff_allowed=True,scientific_approval=run.authority=='EXTERNAL_RESEARCH_REVIEW')
+        elif report.get('joint_entry') and (report.get('independent_replay') or report.get('proof')
+                or report['joint_entry'].get('state') in ('POINT','PARTIAL','SYMBOLIC_BOUNDS','NONIDENTIFIABLE')):
+            # Nonidentification witnesses and incompatible models are displayed
+            # without estimation delivery, but require the same source binding.
+            from cfm_id.joint_natural_entry import replay
+            if not report.get('independent_replay') or not replay(run.case,report.get('draft'),report):
+                self._withdraw_joint_result(run,report)
+                raise ValueError('JOINT_RESULT_REPLAY_REQUIRED')
         if not report.get('estimation_handoff_allowed'):
             self._revoke_network_delivery(run)
         proof=report.get('proof') or {}
@@ -784,6 +795,17 @@ class Engine:
         report=complete(run.case,run.result,record)
         self.save(run,'joint_scientific_review',record)
         self._finish_direct_verification(run,report)
+
+    def _withdraw_joint_result(self,run,report):
+        """Do not leave an earlier receipt/result visible after failed binding."""
+        from cfm_id.joint_natural_entry import base,stop
+        self._revoke_network_delivery(run)
+        self.save(run,'rejected_direct_verification',report)
+        cleared=stop(base(report,run.case),'RECHECK_REQUIRED','JOINT_RESULT_REPLAY_REQUIRED',
+            '本次结果或交接未通过核对，旧回执已撤回；尚未交付可用结论。')
+        run.result=cleared
+        run.user_question=None
+        self.save(run,'direct_verification',cleared)
 
     def _revoke_network_delivery(self,run):
         if run.artifacts.get('estimate_intake_receipt',{}).get('state') in ('RECEIVED','QUEUED','DELIVERY_FAILED'):

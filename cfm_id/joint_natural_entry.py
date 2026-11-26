@@ -397,10 +397,19 @@ def plan(case,r):
         if info['kind']!='POPULATION_MEANS_ONLY' or info['matches_target'] is not True:
             return stop(r,'NEEDS_INPUT','EXACT_MEAN_INFORMATION_REQUIRED','不能把有限记录或更丰富的分布信息简化成已知均值表。',
                 ['所列数字是本题同一时期的总体条件均值，还是样本平均数？是否还有其他总体信息？'])
-        if (bounds['all_assignments'] is not True or bounds['kind']=='UNKNOWN' or bounds['outcome_domain']=='UNKNOWN'
-                or set(bounds['by_node'])!=set(net['nodes']) or any(len(v)!=2 for v in bounds['by_node'].values())):
+        if bounds['all_assignments'] is not True or bounds['kind']=='UNKNOWN' or bounds['outcome_domain']=='UNKNOWN':
             return stop(r,'NEEDS_INPUT','BOUND_SCOPE_REQUIRED','需要知道给定范围约束的是结果还是均值，以及是否适用于全部安排。',
                 ['给出的上下限约束每个结果，还是条件平均结果？是否适用于所有可能的使用名单？'])
+        missing_bounds=[n for n in net['nodes'] if len(bounds['by_node'].get(n,[]))!=2]
+        extra_bounds=[n for n in bounds['by_node'] if n not in net['nodes']]
+        if missing_bounds or extra_bounds:
+            # Send the actual missing coordinate to the existing source-gap
+            # review. Do not ask again about a correctly supplied bound kind,
+            # and do not fill limits from the requested answer or model label.
+            questions=[]
+            if missing_bounds:questions.append('这些对象各自的下限和上限是多少：'+'、'.join(missing_bounds)+'？若使用同一范围，可以一起说明。')
+            if extra_bounds:questions.append('范围表中这些对象不在当前研究名单内，请核对对应关系：'+'、'.join(extra_bounds)+'。')
+            return stop(r,'NEEDS_INPUT','BOUND_SCOPE_REQUIRED','逐对象的上下限记录不完整或与研究名单不一致；先核对原文是否已经给出。',questions)
         from .network_joint_projection import project,replay_projection
         if any(o['status']=='ADOPTED' and (not o['nodes'] or o['axis']=='UNKNOWN' or o['direction']=='UNKNOWN' or o['all_other_states'] is not True) for o in s.get('mean_orders',[])):
             return stop(r,'NEEDS_INPUT','MEAN_ORDER_SCOPE_REQUIRED','均值顺序的适用范围尚未明确。',
@@ -478,6 +487,26 @@ def complete(case,report,review):
     return r
 
 
+def _result_contract(report):
+    """Content used as a result, excluding retry logs and presentation wording.
+
+    A native certificate alone does not bind the surrounding result status,
+    selected operation, projection or displayed answer. Reconstruct and compare
+    those fields too. Delivery flags are checked separately because the web
+    server sets them only after a successful intake receipt.
+    """
+    result={k:report.get(k) for k in (
+        'decision','backend_called','independent_replay','proof',
+        'effective_answer','conditional_answer','condition_review','review_record',
+        'clarification_questions')}
+    entry=report['joint_entry']
+    result['joint_entry']={k:entry.get(k) for k in (
+        'version','case_sha256','reading','audit','operation','problem','projection',
+        'existing_plan','required_conditions','condition_evidence',
+        'state','completed','reason_code','native_result')}
+    return result
+
+
 def replay(case,draft,report):
     try:
         if report['draft']!=draft:return False
@@ -493,10 +522,12 @@ def replay(case,draft,report):
         s=source_reader.inspect(case,entry['reading']);a=source_reader.check_audit(case,s,entry['audit'])
         if any(x['verdict']!='MATCH' for x in a['findings']):return False
         rebuilt=complete(case,report,report['review_record'])
-        # Native graph edges can be tuples in memory and lists after JSON
-        # storage. Compare their canonical wire content; complete() above
-        # still rebuilds the exact bound problem and independently checks its
-        # native certificate. Do not mistake JSON round-tripping for tampering.
-        return (digest(rebuilt.get('proof'))==digest(report.get('proof')) and
-                digest(rebuilt['joint_entry'].get('native_result'))==digest(entry.get('native_result')))
+        if report.get('production_admission') is not False:return False
+        if report.get('scientific_approval') and report['review_record']['authority']!='EXTERNAL_RESEARCH_REVIEW':return False
+        if report.get('estimation_handoff_allowed') and not (
+            rebuilt.get('independent_replay') and rebuilt['joint_entry'].get('completed')
+            and rebuilt['joint_entry']['state'] in ('POINT','PARTIAL','SYMBOLIC_BOUNDS')):return False
+        # Canonical wire comparison permits tuple/list JSON round trips, while
+        # binding the outer conclusion to the independently rebuilt problem.
+        return digest(_result_contract(rebuilt))==digest(_result_contract(report))
     except (KeyError,ValueError,TypeError,ArithmeticError):return False

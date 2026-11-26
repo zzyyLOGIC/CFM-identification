@@ -45,10 +45,20 @@ def direct_then_verify(case, call, *, network=None, network_focus=False, populat
         network_readers={'NETWORK_OBSERVATIONAL_EFFECTS','NETWORK_OBSERVATIONAL_POLICY',
                          'NETWORK_FINITE_POLICY','NETWORK_JOINT_MEANS'}
         hints=joint_natural_entry.route_hints(draft)
+        symbolic_fallback=None
         if 'SYMBOLIC_MEAN_JOINT' in hints:
             from . import symbolic_mean_entry
-            return symbolic_mean_entry.prepare(case,report,call)
-        if hints.intersection(network_readers) or (network is not None and not hints.difference({'OTHER'})):
+            prepared=symbolic_mean_entry.prepare(case,report,call)
+            entry=(prepared or {}).get('joint_entry',{})
+            if network is None or entry.get('reason_code')!='ADDITIONAL_RESTRICTIONS_NOT_EXPRESSED':
+                return prepared
+            # An imported object network may have been sent to the abstract
+            # mean reader by a mistaken draft hint. Inspect source attributes
+            # before treating its network premises as unsupported restrictions.
+            # Keep the stopped attempt; a new reader must recover and audit
+            # every premise from the unchanged sources, never discard extras.
+            symbolic_fallback=prepared
+        if symbolic_fallback is not None or hints.intersection(network_readers) or (network is not None and not hints.difference({'OTHER'})):
             # A draft can solve a different target and hint at the wrong reader.
             # Independently read scope attributes before exposing its gaps.
             scope=None;feedback=None;route_attempts=[]
@@ -62,6 +72,11 @@ def direct_then_verify(case, call, *, network=None, network_focus=False, populat
                     feedback=str(exc)[:2000];route_attempts.append(dict(error=feedback))
             selected=network_source_route.select(scope) if scope else None
             if selected is None:
+                if symbolic_fallback is not None:
+                    symbolic_fallback['reader_selection']=dict(reader='SYMBOLIC_MEAN_JOINT',
+                        reason='NO_SOURCE_SUPPORTED_NETWORK_REPLACEMENT',source_scope=scope,
+                        attempts=route_attempts,scientific_approval=False)
+                    return symbolic_fallback
                 if scope and scope['single_question']['value'] is True and scope['target']['value']=='LOCAL_CONTRAST' and scope['assignment']['value']=='RANDOMIZED':
                     # This is the existing direct-verification network route,
                     # not one of the additional dedicated reading contracts.
@@ -134,6 +149,8 @@ def direct_then_verify(case, call, *, network=None, network_focus=False, populat
                 original_hints=sorted(joint_natural_entry.route_hints(draft)),source_scope=scope,
                 attempts=route_attempts,scientific_approval=False)
             if recovery is not None:prepared['reader_selection']['recovery']=recovery
+            if symbolic_fallback is not None:
+                prepared['reader_selection']['previous_symbolic_entry']=symbolic_fallback['joint_entry']
             return prepared
         from . import observational_effect_entry
         if observational_effect_entry.proposed(case,draft):

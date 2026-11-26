@@ -5,11 +5,12 @@ from typing import Literal
 from pydantic import Field,StrictInt
 from . import joint_reading as shared
 from .joint_reading import Strict,Claim,Network,Exposure,Design,Condition,MaterialNote
+from .information_semantics import GUIDANCE as INFORMATION_SCOPE_GUIDANCE
 
 
 class Study(Strict):
     treatment: str
-    outcome: str
+    outcome: str = Field(description='原文中的结果含义、单位、编码及已给出的好坏方向；不因方向更有利就倒置目标两端。')
     outcome_kind: Literal['binary','continuous','count','unknown']
     period: str
     fixed_background: str
@@ -50,7 +51,8 @@ class SufficiencyScope(Strict):
 class Information(Strict):
     availability: Literal['SYMBOLIC_POPULATION_OPERATOR','FINITE_SAMPLE','UNKNOWN']
     operator: Literal['NODE_FULL_LAW','FULL_JOINT_LAW','ASSIGNMENT_NODE_MEANS','NODE_SIGNATURE_MEANS',
-                      'OBSERVATIONAL_ASSIGNMENT_NODE_CONDITIONAL_MEANS','OTHER','UNKNOWN']
+                      'OBSERVATIONAL_ASSIGNMENT_NODE_CONDITIONAL_MEANS','OTHER','UNKNOWN'] = Field(
+        description='NODE_FULL_LAW是逐对象的P(Y_i,完整T)，FULL_JOINT_LAW是P(全部Y,完整T)。区别在结果是否联合，不在T是否完整；分别覆盖所有对象不等于知道全部结果的联合依赖。只有均值不能升级为分布，范围不明用UNKNOWN。')
     outcome_nodes: list[str]
     assignment_cells: list[dict[str,StrictInt]] = Field(description='实验的ASSIGNMENT_NODE_MEANS所覆盖的完整安排。观察性算子的覆盖已随assignment_masses逐行记录，本字段留空。')
     assignment_masses: list[Mass]
@@ -74,7 +76,9 @@ class Reading(Strict):
 
 
 def contract():
-    return files('cfm_id_llm').joinpath('resources/network_existing/SKILL.md').read_text('utf8')
+    # Reuse the same information semantics as the maintained A4 reader. Both
+    # the fresh reading and its independent source audit receive this contract.
+    return files('cfm_id_llm').joinpath('resources/network_existing/SKILL.md').read_text('utf8')+'\n'+INFORMATION_SCOPE_GUIDANCE
 
 
 def request(case,feedback=None):

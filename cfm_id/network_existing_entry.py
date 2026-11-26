@@ -39,6 +39,18 @@ def prepare(case,report,call):
 
 def gaps(r):
     e=r['joint_entry']
+    reason=e.get('reason_code')
+    if reason in ('UNEXPRESSED_ADDITIONAL_RESTRICTION','UNDECIDED_RESTRICTION'):
+        # A source audit may accept a data gap or a permissive model description
+        # as an extra assumption. Reuse the bounded source-gap review, never
+        # delete the declaration or reinterpret it as scientific permission.
+        s=e['reading']
+        gap=dict(candidate=s['remaining'],related_conditions=s['conditions'],
+            unhandled_declarations=e.get('unhandled_declarations',[]),reason_code=reason,
+            proposed_questions=r.get('clarification_questions',[]),
+            instruction='核对是否确有额外限制或待决定的科学条件；专用字段已经表达的事实缺口、未使用的可选定义、单纯允许干扰的描述不能重复成为额外假设。误读须完整重读并重新审核，不能直接删除或批准。')
+        if reason=='UNEXPRESSED_ADDITIONAL_RESTRICTION':gap['declaration_stop']=True
+        return {'remaining':gap}
     if not r.get('clarification_questions'):return {}
     return {k:dict(candidate=e['reading'].get(k),reason_code=e.get('reason_code'),
         proposed_questions=r['clarification_questions']) for k in e.get('missing_fields',[])}
